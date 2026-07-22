@@ -1,49 +1,71 @@
 """
-Application Configuration
+GetHired Configuration
 """
 
 from pathlib import Path
 
-# --------------------------------------------------
-# Application Information
-# --------------------------------------------------
 
-APP_NAME = "gethired"
-APP_VERSION = "1.0.0"
+class Config:
 
-WINDOW_WIDTH = 1400
-WINDOW_HEIGHT = 850
+    # -----------------------------
+    # APP INFO
+    # -----------------------------
 
-# --------------------------------------------------
-# Theme
-# --------------------------------------------------
+    APP_NAME = "GetHired"
 
-APPEARANCE_MODE = "dark"
-COLOR_THEME = "blue"
+    APP_VERSION = "1.0.0"
 
-# --------------------------------------------------
-# Base Directories
-# --------------------------------------------------
+    COMPANY = "GetHired"
 
-BASE_DIR = Path(__file__).resolve().parent
+    # -----------------------------
+    # WINDOW
+    # -----------------------------
 
-UPLOADS_DIR = BASE_DIR / "uploads"
-OUTPUTS_DIR = BASE_DIR / "outputs"
-LOGS_DIR = BASE_DIR / "logs"
-ASSETS_DIR = BASE_DIR / "assets"
-TEMP_DIR = BASE_DIR / "temp"
+    WIDTH = 1450
 
-# --------------------------------------------------
-# Supported Files
-# --------------------------------------------------
+    HEIGHT = 900
 
-SUPPORTED_RESUME_TYPES = [
-    ".pdf",
-    ".docx"
-]
+    MIN_WIDTH = 1200
 
-SUPPORTED_JD_TYPES = [
-    ".pdf",
-    ".docx",
-    ".txt"
-]
+    MIN_HEIGHT = 700
+
+    # -----------------------------
+    # THEME
+    # -----------------------------
+
+    APPEARANCE = "dark"
+
+    COLOR_THEME = "blue"
+
+    FONT = "Segoe UI"
+
+    # -----------------------------
+    # DIRECTORIES
+    # -----------------------------
+
+    ROOT = Path(__file__).parent
+
+    ASSETS = ROOT / "assets"
+
+    OUTPUTS = ROOT / "outputs"
+
+    UPLOADS = ROOT / "uploads"
+
+    LOGS = ROOT / "logs"
+
+    TEMP = ROOT / "temp"
+
+    # -----------------------------
+    # FILE TYPES
+    # -----------------------------
+
+    RESUME_TYPES = (
+        ".pdf",
+        ".docx"
+    )
+
+    JD_TYPES = (
+        ".pdf",
+        ".docx",
+        ".txt"
+    )
