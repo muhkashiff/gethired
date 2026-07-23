@@ -2,27 +2,138 @@
 
 {% block content %}
 
-<div class="text-center">
+<div class="container">
 
-<h1>
+    <div class="row">
 
-Welcome to GetHired
+        <div class="col-lg-8">
 
-</h1>
+            <h2 class="mb-4">
 
-<p>
+                My Projects
 
-AI Resume Optimizer
+            </h2>
 
-</p>
+        </div>
 
-<hr>
+        <div class="col-lg-4 text-end">
 
-<p>
+            <button
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#projectModal">
 
-Milestone 1 Started Successfully
+                New Project
 
-</p>
+            </button>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="row">
+
+        {% for project in projects %}
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-body">
+
+                    <h5>
+
+                        {{ project.project_name }}
+
+                    </h5>
+
+                    <p>
+
+                        Status
+
+                        <strong>
+
+                            {{ project.status }}
+
+                        </strong>
+
+                    </p>
+
+                    <p>
+
+                        ATS Score
+
+                        {{ project.ats_score }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div
+class="modal fade"
+id="projectModal">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<form
+action="{{ url_for('project.new_project') }}"
+method="POST">
+
+<div class="modal-header">
+
+<h5>
+
+Create Project
+
+</h5>
+
+</div>
+
+<div class="modal-body">
+
+<input
+
+class="form-control"
+
+name="project_name"
+
+placeholder="Project Name">
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-success"
+
+type="submit">
+
+Create
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
 
 </div>
 

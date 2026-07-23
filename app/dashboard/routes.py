@@ -10,6 +10,13 @@ dashboard_bp = Blueprint(
 @dashboard_bp.route("/")
 def home():
 
+    from app.models import Project
+
+    projects = Project.query.order_by(
+        Project.created_at.desc()
+    ).all()
+
     return render_template(
-        "dashboard.html"
+        "dashboard.html",
+        projects=projects
     )
