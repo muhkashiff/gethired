@@ -49,7 +49,30 @@ class Project(db.Model):
         db.String(50),
         default="New"
     )
+    resume_uploaded = db.Column(
+    db.Boolean,
+    default=False,
+    )
 
+    jd_uploaded = db.Column(
+    db.Boolean,
+    default=False,
+    )
+
+    ats_completed = db.Column(
+        db.Boolean,
+        default=False,
+    )
+
+    resume_generated = db.Column(
+        db.Boolean,
+        default=False,
+    )
+
+    coverletter_generated = db.Column(
+        db.Boolean,
+        default=False,
+    )
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow

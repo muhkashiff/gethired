@@ -17,6 +17,10 @@ class Config:
 
     MAX_CONTENT_LENGTH = 25 * 1024 * 1024
 
-    UPLOAD_FOLDER = "uploads"
+    from pathlib import Path
 
-    OUTPUT_FOLDER = "outputs"
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    UPLOAD_FOLDER = BASE_DIR / "uploads"
+
+    OUTPUT_FOLDER = BASE_DIR / "outputs"

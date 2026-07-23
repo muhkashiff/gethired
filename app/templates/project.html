@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <!-- ========================= -->
+    <!-- Project Header            -->
+    <!-- ========================= -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h2 class="fw-bold">
+
+                        {{ project.project_name }}
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Project ID : {{ project.id }}
+
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <a
+                        href="{{ url_for('dashboard.home') }}"
+                        class="btn btn-outline-secondary">
+
+                        ← Dashboard
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Progress                  -->
+    <!-- ========================= -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h5>
+
+                Project Progress
+
+            </h5>
+
+            <div class="progress mt-3"
+                style="height:28px;">
+
+                <div
+                    class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+
+                    role="progressbar"
+
+                    style="width: {{ progress }}%;">
+
+                    {{ progress }}%
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Status Cards              -->
+    <!-- ========================= -->
+
+    <div class="row">
+
+        <!-- Resume -->
+
+        <div class="col-lg-4 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h4>
+
+                        Resume
+
+                    </h4>
+
+                    <hr>
+
+                    {% if project.resume_uploaded %}
+
+                    <span class="badge bg-success">
+
+                        Uploaded
+
+                    </span>
+
+                    <p class="mt-3">
+
+                        {{ project.resume_filename }}
+
+                    </p>
+
+                    {% else %}
+
+                    <span class="badge bg-danger">
+
+                        Not Uploaded
+
+                    </span>
+
+                    {% endif %}
+
+                    <hr>
+
+                    <button
+                        class="btn btn-primary w-100">
+
+                        Upload Resume
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Job Description -->
+
+        <div class="col-lg-4 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h4>
+
+                        Job Description
+
+                    </h4>
+
+                    <hr>
+
+                    {% if project.jd_uploaded %}
+
+                    <span class="badge bg-success">
+
+                        Uploaded
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-danger">
+
+                        Not Uploaded
+
+                    </span>
+
+                    {% endif %}
+
+                    <hr>
+
+                    <button
+                        class="btn btn-primary w-100">
+
+                        Upload Job Description
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ATS -->
+
+        <div class="col-lg-4 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h4>
+
+                        ATS Score
+
+                    </h4>
+
+                    <hr>
+
+                    <h1 class="display-4 text-success">
+
+                        {{ project.ats_score }}%
+
+                    </h1>
+
+                    <p>
+
+                        Status
+
+                    </p>
+
+                    <span class="badge bg-info">
+
+                        {{ project.status }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- Generate Section          -->
+    <!-- ========================= -->
+
+    <div class="card shadow mb-4">
+
+        <div class="card-body">
+
+            <h4>
+
+                Resume Optimization
+
+            </h4>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <button
+                        class="btn btn-success w-100 btn-lg"
+
+                        disabled>
+
+                        Generate Optimized Resume
+
+                    </button>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <button
+                        class="btn btn-dark w-100 btn-lg"
+
+                        disabled>
+
+                        Generate Cover Letter
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- Downloads                 -->
+    <!-- ========================= -->
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <h4>
+
+                Downloads
+
+            </h4>
+
+            <hr>
+
+            <button
+                class="btn btn-outline-primary me-2"
+
+                disabled>
+
+                Resume
+
+            </button>
+
+            <button
+                class="btn btn-outline-success"
+
+                disabled>
+
+                Cover Letter
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
