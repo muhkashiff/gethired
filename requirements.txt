@@ -1,21 +1,23 @@
-customtkinter==5.2.2
-Pillow==11.0.0
-darkdetect==0.8.0
+Flask==3.1.0
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7
+python-dotenv==1.0.1
+Bootstrap-Flask==2.4.1
 
 python-docx
-pdfplumber
+docxtpl
+
 PyMuPDF
+pdfplumber
 
 spacy
-
 sentence-transformers
+rapidfuzz
 
 scikit-learn
 
 numpy
-
 pandas
 
-openpyxl
-
-pyinstaller
+Pillow
+gunicorn
