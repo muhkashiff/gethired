@@ -1,0 +1,24 @@
+[
+    {
+        "name": "Bachelor's Degree",
+        "aliases": [
+            "Bachelor",
+            "BSc",
+            "BS",
+            "Bachelor of Science"
+        ]
+    },
+    {
+        "name": "Master's Degree",
+        "aliases": [
+            "MSc",
+            "Master of Science"
+        ]
+    },
+    {
+        "name": "MBA",
+        "aliases": [
+            "Master of Business Administration"
+        ]
+    }
+]

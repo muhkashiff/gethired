@@ -1,0 +1,33 @@
+[
+    {
+        "name": "PCQI",
+        "aliases": [
+            "Preventive Controls Qualified Individual"
+        ]
+    },
+    {
+        "name": "FSSC 22000",
+        "aliases": [
+            "FSSC22000"
+        ]
+    },
+    {
+        "name": "ISO 9001 Lead Auditor",
+        "aliases": [
+            "ISO9001 Lead Auditor",
+            "CQI IRCA Lead Auditor"
+        ]
+    },
+    {
+        "name": "Lean Six Sigma Green Belt",
+        "aliases": [
+            "Six Sigma Green Belt"
+        ]
+    },
+    {
+        "name": "Lean Six Sigma Black Belt",
+        "aliases": [
+            "Six Sigma Black Belt"
+        ]
+    }
+]

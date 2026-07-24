@@ -1,0 +1,57 @@
+[
+    {
+        "name": "Quality Assurance",
+        "aliases": [
+            "QA",
+            "Quality Control",
+            "QC"
+        ],
+        "category": "Quality"
+    },
+    {
+        "name": "Food Safety",
+        "aliases": [
+            "Food Safety Management System",
+            "FSMS"
+        ],
+        "category": "Food Safety"
+    },
+    {
+        "name": "HACCP",
+        "aliases": [
+            "Hazard Analysis Critical Control Point",
+            "Hazard Analysis and Critical Control Points"
+        ],
+        "category": "Food Safety"
+    },
+    {
+        "name": "GMP",
+        "aliases": [
+            "Good Manufacturing Practices",
+            "CGMP",
+            "Current Good Manufacturing Practices"
+        ],
+        "category": "Manufacturing"
+    },
+    {
+        "name": "Power BI",
+        "aliases": [
+            "Microsoft Power BI"
+        ],
+        "category": "Analytics"
+    },
+    {
+        "name": "Python",
+        "aliases": [
+            "Python Programming"
+        ],
+        "category": "Programming"
+    },
+    {
+        "name": "SAP QM",
+        "aliases": [
+            "SAP Quality Management"
+        ],
+        "category": "ERP"
+    }
+]

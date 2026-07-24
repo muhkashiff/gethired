@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Power BI",
+        "aliases": [
+            "Microsoft Power BI"
+        ]
+    },
+    {
+        "name": "Excel",
+        "aliases": [
+            "Microsoft Excel"
+        ]
+    },
+    {
+        "name": "SAP",
+        "aliases": [
+            "SAP QM"
+        ]
+    },
+    {
+        "name": "Python",
+        "aliases": [
+            "Python Programming"
+        ]
+    },
+    {
+        "name": "SQL",
+        "aliases": [
+            "Structured Query Language"
+        ]
+    }
+]
