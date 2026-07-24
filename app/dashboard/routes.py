@@ -10,7 +10,7 @@ dashboard_bp = Blueprint(
 @dashboard_bp.route("/")
 def home():
 
-    from app.models import Project
+    from app.database import Project
 
     projects = Project.query.order_by(
         Project.created_at.desc()

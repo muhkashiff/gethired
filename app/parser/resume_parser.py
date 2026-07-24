@@ -1,44 +1,67 @@
-from pathlib import Path
+"""
+GetHired Resume Parser
 
+Reads DOCX resumes and detects logical resume sections.
+"""
+
+from pathlib import Path
 from docx import Document
+
 from .section_detector import SectionDetector
+
 
 class ResumeParser:
     """
-    Reads DOCX resume and extracts
-    paragraphs for further processing.
+    Production Resume Parser
+
+    Stateless parser:
+    parser = ResumeParser()
+    sections = parser.parse("resume.docx")
     """
 
-    def __init__(self, file_path):
+    def __init__(self):
 
-        self.file_path = Path(file_path)
+        self.detector = SectionDetector()
 
-        self.document = Document(self.file_path)
+    # ==========================================================
+    # Read DOCX Paragraphs
+    # ==========================================================
 
-    def paragraphs(self):
+    def paragraphs(self, file_path):
 
-        data = []
+        file_path = Path(file_path)
 
-        for paragraph in self.document.paragraphs:
+        document = Document(file_path)
+
+        paragraphs = []
+
+        for paragraph in document.paragraphs:
 
             text = paragraph.text.strip()
 
             if text:
+                paragraphs.append(text)
 
-                data.append(text)
+        return paragraphs
 
-        return data
+    # ==========================================================
+    # Complete Resume Text
+    # ==========================================================
 
-    def full_text(self):
+    def full_text(self, file_path):
 
-        return "\n".join(self.paragraphs())
-    def sections(self):
-        """
-        Return resume grouped into sections.
-        """
+        return "\n".join(
+            self.paragraphs(file_path)
+        )
 
-        detector = SectionDetector()
+    # ==========================================================
+    # Detect Resume Sections
+    # ==========================================================
 
-        return detector.detect(
-            self.paragraphs()
+    def parse(self, file_path):
+
+        paragraphs = self.paragraphs(file_path)
+
+        return self.detector.detect(
+            paragraphs
         )

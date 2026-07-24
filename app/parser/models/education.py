@@ -1,14 +1,20 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List, Optional
+
 
 @dataclass
 class Education:
 
     degree: str = ""
 
-    institute: str = ""
+    major: str = ""
+
+    institution: str = ""
 
     location: str = ""
 
-    year: str = ""
+    graduation_year: int = 0
 
-    description: str = ""
+    level: str = ""
+
+    keywords: List[str] = field(default_factory=list)

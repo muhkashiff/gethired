@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class PersonalInformation:
 
@@ -13,4 +14,14 @@ class PersonalInformation:
 
     github: str = ""
 
-    location: str = ""
+    website: str = ""
+
+    address: str = ""
+
+    city: str = ""
+
+    province: str = ""
+
+    country: str = ""
+
+    postal_code: str = ""

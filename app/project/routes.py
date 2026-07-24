@@ -23,7 +23,7 @@ from flask import (
 )
 
 from app.extensions import db
-from app.models import Project
+from app.database import Project
 
 project_bp = Blueprint(
     "project",

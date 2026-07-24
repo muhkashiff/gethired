@@ -4,7 +4,7 @@ from app.config import Config
 from app.extensions import db, migrate
 
 # Import Models
-from app.models import Project
+from app.database import Project
 
 # Import Blueprints
 from app.dashboard import dashboard_bp

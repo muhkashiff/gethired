@@ -1,4 +1,11 @@
+"""
+GetHired Parser Package
+"""
+
 from .resume_parser import ResumeParser
 from .resume_builder import ResumeBuilder
-from .resume_model import Resume
-from .skill_extractor import SkillExtractor
+
+__all__ = [
+    "ResumeParser",
+    "ResumeBuilder",
+]

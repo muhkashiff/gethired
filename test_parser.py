@@ -1,91 +1,64 @@
-from app.parser import ResumeParser
-from app.parser import ResumeBuilder
+from app.parser import ResumeParser, ResumeBuilder
 
-parser = ResumeParser(
-    "uploads/project_2/resume_original.docx"
-)
+# Path to your resume
+resume_path = r"D:\Self Projects\gethired\gethired\uploads\project_2\resume_original.docx"
 
-sections = parser.sections()
+# Parse Resume
+parser = ResumeParser()
+sections = parser.parse(resume_path)
 
-print("=" * 70)
-print("SECTIONS DETECTED")
-print("=" * 70)
-
-for key, value in sections.items():
-
-    print(f"\n[{key.upper()}]")
-
-    print("-" * 40)
-
-    for line in value:
-        print(line)
-
+# Build Resume Object
 builder = ResumeBuilder()
-
 resume = builder.build(sections)
 
-print("\n")
-print("=" * 70)
+print("=" * 60)
 print("PERSONAL INFORMATION")
-print("=" * 70)
+print("=" * 60)
 
-print(f"Name      : {resume.personal_information.name}")
-print(f"Email     : {resume.personal_information.email}")
-print(f"Phone     : {resume.personal_information.phone}")
-print(f"LinkedIn  : {resume.personal_information.linkedin}")
-print(f"GitHub    : {resume.personal_information.github}")
-print(f"Location  : {resume.personal_information.address}")
+print("Name :", resume.personal_information.name)
+print("Email:", resume.personal_information.email)
+print("Phone:", resume.personal_information.phone)
 
-print("\n")
-print("=" * 70)
+print()
+
+print("=" * 60)
 print("SUMMARY")
-print("=" * 70)
+print("=" * 60)
+
 print(resume.summary)
 
-print("\n")
-print("=" * 70)
+print()
+
+print("=" * 60)
 print("SKILLS")
-print("=" * 70)
+print("=" * 60)
 
 for skill in resume.skills:
-    print(f"• {skill}")
+    print(skill)
 
-print("\n")
-print("=" * 70)
+print()
+
+print("=" * 60)
 print("EXPERIENCE")
-print("=" * 70)
+print("=" * 60)
 
 for exp in resume.experience:
-    print(f"• {exp}")
+    print(exp)
 
-print("\n")
-print("=" * 70)
+print()
+
+print("=" * 60)
 print("EDUCATION")
-print("=" * 70)
+print("=" * 60)
 
 for edu in resume.education:
-    print(f"• {edu}")
+    print(edu)
 
-print("\n")
-print("=" * 70)
+print()
+
+print("=" * 60)
 print("CERTIFICATIONS")
-print("=" * 70)
+print("=" * 60)
 
 for cert in resume.certifications:
-    print(f"• {cert}")
-
-print("\n")
-print("=" * 70)
-print("PROJECTS")
-print("=" * 70)
-
-for project in resume.projects:
-    print(f"• {project}")
-
-print("\n")
-print("=" * 70)
-print("LANGUAGES")
-print("=" * 70)
-
-for language in resume.languages:
-    print(f"• {language}")
+    print(cert)

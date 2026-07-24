@@ -21,7 +21,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 
 from app.extensions import db
-from app.models import Project
+from app.database import Project
 
 upload_bp = Blueprint(
     "upload",

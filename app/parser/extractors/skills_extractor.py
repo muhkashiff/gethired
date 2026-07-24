@@ -1,23 +1,95 @@
+"""
+GetHired
+Production Skills Extractor
+
+Extracts skills from resume sections and converts them
+into enterprise Skill objects.
+"""
+
 from .base_extractor import BaseExtractor
-import re
+
+from app.parser.models import Skill
+
+from app.knowledge.skill_categories import SKILL_CATEGORIES
 
 
 class SkillsExtractor(BaseExtractor):
+    """
+    Converts the raw Skills section into Skill objects.
+    """
 
     def extract(self, lines):
 
         skills = []
 
-        text = "\n".join(lines)
+        seen = set()
 
-        # split on commas, semicolons, newlines or bullets
-        chunks = re.split(r"[,;\n•]+", text)
+        for line in lines:
 
-        for chunk in chunks:
+            # Normalize separators
+            line = (
+                line.replace("•", ",")
+                    .replace(";", ",")
+                    .replace("|", ",")
+                    .replace("/", ",")
+            )
 
-            skill = chunk.strip()
+            for chunk in line.split(","):
 
-            if skill:
+                name = chunk.strip()
+
+                if not name:
+                    continue
+
+                key = name.lower()
+
+                if key in seen:
+                    continue
+
+                seen.add(key)
+
+                category = SKILL_CATEGORIES.get(
+                    key,
+                    "Other"
+                )
+
+                skill = Skill(
+
+                    # Required
+                    name=name,
+
+                    # Classification
+                    category=category,
+
+                    # ATS
+                    importance=1,
+
+                    # Experience
+                    years=0.0,
+
+                    # Beginner / Intermediate / Advanced / Expert
+                    level="",
+
+                    # Resume section
+                    source="Skills",
+
+                    # Parser confidence
+                    confidence=1.0,
+
+                    # ATS matching
+                    matched=False,
+
+                    score=0.0,
+
+                    # Future enrichment
+                    aliases=[],
+
+                    found_in_jobs=[],
+
+                    evidence=[],
+
+                    normalized_name=None,
+                )
 
                 skills.append(skill)
 

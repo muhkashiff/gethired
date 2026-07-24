@@ -1,30 +1,33 @@
-from app.parser import ResumeParser
-from app.parser import ResumeBuilder
+from app.parser.parsers.experience_parser import ExperienceParser
 
-from app.ats.analyzers.experience_analyzer import ExperienceAnalyzer
+lines = [
 
+    "QA Chemist | Coca-Cola Beverages Pakistan Ltd. | 2010 - 2016 | Lahore",
 
-# Parse resume
-parser = ResumeParser(
-    "uploads/project_2/resume_original.docx"
-)
+    "Managed quality system.",
 
-sections = parser.sections()
+    "Improved yield.",
 
+    "Key Accomplishments",
 
-# Build Resume object
-builder = ResumeBuilder()
+    "Reduced waste by 20%.",
 
-resume = builder.build(sections)
+    "Implemented HACCP.",
 
+    "Retail Store Manager | Shell | 2016 - 2024 | Canada",
 
-# Analyze experience
-analyzer = ExperienceAnalyzer()
+    "Managed retail store.",
 
-result = analyzer.analyze(resume)
+    "Increased sales.",
 
-print("=" * 60)
-print("EXPERIENCE ANALYSIS")
-print("=" * 60)
+    "Achievements",
 
-print(result)
+    "100% Mystery Shopper Score",
+
+]
+
+parser = ExperienceParser()
+
+jobs = parser.parse(lines)
+
+parser.print_jobs(jobs)

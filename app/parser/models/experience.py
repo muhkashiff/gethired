@@ -1,28 +1,32 @@
 from dataclasses import dataclass, field
+from typing import List
+
 
 @dataclass
 class Experience:
 
-    job_title: str = ""
+    title: str = ""
 
     company: str = ""
 
     location: str = ""
 
-    start_date: str = ""
+    start_year: int = 0
 
-    end_date: str = ""
+    end_year: int = 0
 
-    duration_years: float = 0
+    duration: float = 0
+
+    responsibilities: List[str] = field(default_factory=list)
+
+    achievements: List[str] = field(default_factory=list)
+
+    skills: List[str] = field(default_factory=list)
+
+    technologies: List[str] = field(default_factory=list)
+
+    keywords: List[str] = field(default_factory=list)
 
     industry: str = ""
 
-    management_level: bool = False
-
-    responsibilities: list = field(default_factory=list)
-
-    achievements: list = field(default_factory=list)
-
-    technologies: list = field(default_factory=list)
-
-    skills: list = field(default_factory=list)
+    seniority: str = ""
