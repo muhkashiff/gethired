@@ -412,5 +412,13 @@
       "keywords": [
         "operations management"
       ]
-    }
+    },
+    {
+  "canonical_name":"Outlook",
+  "category":"Microsoft Office",
+  "keywords":[
+      "outlook",
+      "microsoft outlook"
+  ]
+}
   ]
