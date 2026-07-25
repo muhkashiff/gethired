@@ -5,8 +5,8 @@ Resume Builder
 Converts detected resume sections into a strongly typed Resume object.
 """
 
-from .models.resume import Resume
-from .models.reference import Reference
+from .parsed_models.resume import Resume
+from .parsed_models.reference import Reference
 
 from .extractors import (
     ContactExtractor,

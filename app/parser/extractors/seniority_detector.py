@@ -5,7 +5,7 @@ Seniority Detector
 
 import re
 
-from app.parser.models.seniority import Seniority
+from app.parser.parsed_models.seniority import Seniority
 from app.knowledge.seniority_loader import SeniorityKnowledge
 
 

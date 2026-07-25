@@ -9,7 +9,7 @@ Certification section of a resume.
 import re
 
 from .base_extractor import BaseExtractor
-from app.parser.models import Certification
+from app.parser.parsed_models import Certification
 from app.knowledge.certification_loader import CertificationKnowledge
 
 

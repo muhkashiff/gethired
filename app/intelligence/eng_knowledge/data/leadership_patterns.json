@@ -1,0 +1,117 @@
+[
+    {
+        "keywords":[
+            "led",
+            "lead",
+            "leading"
+        ],
+
+        "dimensions":[
+            "people_management",
+            "operational_leadership"
+        ],
+
+        "base_weight":12
+    },
+
+    {
+        "keywords":[
+            "managed",
+            "management"
+        ],
+
+        "dimensions":[
+            "people_management",
+            "stakeholder_management"
+        ],
+
+        "base_weight":10
+    },
+
+    {
+        "keywords":[
+            "implemented",
+            "implementation"
+        ],
+
+        "dimensions":[
+            "change_management",
+            "project_leadership"
+        ],
+
+        "base_weight":9
+    },
+
+    {
+        "keywords":[
+            "food safety",
+            "haccp",
+            "fssc",
+            "iso 22000",
+            "brcgs"
+        ],
+
+        "dimensions":[
+            "technical_leadership",
+            "quality_leadership",
+            "food_safety_leadership"
+        ],
+
+        "base_weight":14
+    },
+
+    {
+        "keywords":[
+            "continuous improvement",
+            "lean",
+            "six sigma",
+            "kaizen"
+        ],
+
+        "dimensions":[
+            "continuous_improvement"
+        ],
+
+        "base_weight":13
+    },
+
+    {
+        "keywords":[
+            "strategy",
+            "strategic"
+        ],
+
+        "dimensions":[
+            "strategic_leadership"
+        ],
+
+        "base_weight":12
+    },
+
+    {
+        "keywords":[
+            "supplier",
+            "vendor"
+        ],
+
+        "dimensions":[
+            "commercial_leadership"
+        ],
+
+        "base_weight":8
+    },
+
+    {
+        "keywords":[
+            "production",
+            "manufacturing",
+            "operations"
+        ],
+
+        "dimensions":[
+            "operational_leadership"
+        ],
+
+        "base_weight":10
+    }
+]

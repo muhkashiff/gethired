@@ -11,7 +11,7 @@ import re
 
 from .base_extractor import BaseExtractor
 
-from app.parser.models import Technology
+from app.parser.parsed_models import Technology
 from app.knowledge.technology_loader import TechnologyKnowledge
 
 

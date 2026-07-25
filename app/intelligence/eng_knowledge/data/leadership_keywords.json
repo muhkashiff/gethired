@@ -1,0 +1,131 @@
+[
+    {
+        "dimension": "people_management",
+        "weight": 10,
+        "keywords": [
+            "managed team",
+            "led team",
+            "team leadership",
+            "people management",
+            "staff supervision",
+            "employee management",
+            "workforce development",
+            "mentoring",
+            "coaching",
+            "supervised"
+        ]
+    },
+
+    {
+        "dimension": "strategic_leadership",
+        "weight": 10,
+        "keywords": [
+            "strategy",
+            "strategic",
+            "vision",
+            "business planning",
+            "growth strategy",
+            "roadmap",
+            "business transformation",
+            "organizational development"
+        ]
+    },
+
+    {
+        "dimension": "operational_leadership",
+        "weight": 10,
+        "keywords": [
+            "operations",
+            "manufacturing",
+            "production",
+            "plant",
+            "warehouse",
+            "distribution",
+            "supply chain",
+            "facility"
+        ]
+    },
+
+    {
+        "dimension": "technical_leadership",
+        "weight": 10,
+        "keywords": [
+            "quality management",
+            "food safety",
+            "haccp",
+            "fssc",
+            "iso",
+            "brcgs",
+            "validation",
+            "verification",
+            "technical leadership"
+        ]
+    },
+
+    {
+        "dimension": "financial_leadership",
+        "weight": 10,
+        "keywords": [
+            "budget",
+            "cost reduction",
+            "cost saving",
+            "profit",
+            "p&l",
+            "forecast",
+            "financial planning"
+        ]
+    },
+
+    {
+        "dimension": "commercial_leadership",
+        "weight": 10,
+        "keywords": [
+            "sales",
+            "marketing",
+            "customer",
+            "supplier",
+            "vendor",
+            "business development",
+            "commercial"
+        ]
+    },
+
+    {
+        "dimension": "change_management",
+        "weight": 8,
+        "keywords": [
+            "implemented",
+            "improved",
+            "transformed",
+            "optimized",
+            "continuous improvement",
+            "lean",
+            "six sigma"
+        ]
+    },
+
+    {
+        "dimension": "stakeholder_management",
+        "weight": 8,
+        "keywords": [
+            "cross functional",
+            "stakeholder",
+            "customer",
+            "supplier",
+            "management committee",
+            "executive"
+        ]
+    },
+
+    {
+        "dimension": "project_management",
+        "weight": 8,
+        "keywords": [
+            "project",
+            "implementation",
+            "rollout",
+            "deployment",
+            "milestone"
+        ]
+    }
+]

@@ -6,7 +6,7 @@ Converts the Experience section into structured Experience objects.
 
 import re
 
-from app.parser.models import Experience
+from app.parser.parsed_models import Experience
 
 
 class ExperienceExtractor:

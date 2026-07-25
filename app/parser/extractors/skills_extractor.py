@@ -7,7 +7,7 @@ import re
 
 from .base_extractor import BaseExtractor
 
-from app.parser.models import Skill
+from app.parser.parsed_models import Skill
 from app.knowledge.skill_loader import SkillKnowledge
 
 

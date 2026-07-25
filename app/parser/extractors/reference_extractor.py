@@ -2,7 +2,7 @@
 Reference Extractor
 """
 
-from app.parser.models import Reference
+from app.parser.parsed_models import Reference
 
 
 class ReferenceExtractor:

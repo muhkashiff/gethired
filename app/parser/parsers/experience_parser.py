@@ -8,7 +8,7 @@ No large regex.
 
 from datetime import datetime
 
-from app.parser.models.experience import Experience
+from app.parser.parsed_models.experience import Experience
 
 
 class ExperienceParser:
