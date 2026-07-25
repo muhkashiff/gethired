@@ -1,22 +1,25 @@
 """
 GetHired
 Production Skills Extractor
-
-Extracts skills from resume sections and converts them
-into enterprise Skill objects.
 """
+
+import re
 
 from .base_extractor import BaseExtractor
 
 from app.parser.models import Skill
-
-from app.knowledge.skill_categories import SKILL_CATEGORIES
+from app.knowledge.skill_loader import SkillKnowledge
 
 
 class SkillsExtractor(BaseExtractor):
-    """
-    Converts the raw Skills section into Skill objects.
-    """
+
+    def __init__(self):
+
+        self.knowledge = SkillKnowledge()
+
+    # =====================================================
+    # Main Extractor
+    # =====================================================
 
     def extract(self, lines):
 
@@ -24,73 +27,207 @@ class SkillsExtractor(BaseExtractor):
 
         seen = set()
 
-        for line in lines:
+        for line in self.clean(lines):
 
-            # Normalize separators
-            line = (
-                line.replace("•", ",")
-                    .replace(";", ",")
-                    .replace("|", ",")
-                    .replace("/", ",")
-            )
+            # Split while preserving commas inside ()
+            parts = self.smart_split(line)
 
-            for chunk in line.split(","):
+            for part in parts:
 
-                name = chunk.strip()
+                skill_text = part.strip()
 
-                if not name:
+                if not skill_text:
                     continue
 
-                key = name.lower()
+                # ---------------------------------------
+                # Find ALL matching skills
+                # ---------------------------------------
 
-                if key in seen:
-                    continue
+                matches = self.knowledge.lookup_all(skill_text)
 
-                seen.add(key)
+                # ---------------------------------------
+                # Known Skills
+                # ---------------------------------------
 
-                category = SKILL_CATEGORIES.get(
-                    key,
-                    "Other"
-                )
+                if matches:
 
-                skill = Skill(
+                    for knowledge in matches:
 
-                    # Required
-                    name=name,
+                        name = (
+                            knowledge.get("canonical_name")
+                            or skill_text
+                        )
 
-                    # Classification
-                    category=category,
+                        normalized = self.normalize_name(name)
 
-                    # ATS
-                    importance=1,
+                        if normalized in seen:
+                            continue
 
-                    # Experience
-                    years=0.0,
+                        seen.add(normalized)
 
-                    # Beginner / Intermediate / Advanced / Expert
-                    level="",
+                        skill = Skill(
 
-                    # Resume section
-                    source="Skills",
+                            name=name,
 
-                    # Parser confidence
-                    confidence=1.0,
+                            category=knowledge.get(
+                                "category",
+                                "Other"
+                            ),
 
-                    # ATS matching
-                    matched=False,
+                            level=knowledge.get(
+                                "level"
+                            ) or self.detect_level(skill_text),
 
-                    score=0.0,
+                            years=self.detect_years(skill_text),
 
-                    # Future enrichment
-                    aliases=[],
+                            confidence=knowledge.get(
+                                "confidence",
+                                0.95
+                            ),
 
-                    found_in_jobs=[],
+                            matched=False,
 
-                    evidence=[],
+                            score=0.0,
 
-                    normalized_name=None,
-                )
+                            raw_text=skill_text,
 
-                skills.append(skill)
+                            normalized_name=normalized
+
+                        )
+
+                        skills.append(skill)
+
+                # ---------------------------------------
+                # Unknown Skill
+                # ---------------------------------------
+
+                else:
+
+                    normalized = self.normalize_name(skill_text)
+
+                    if normalized in seen:
+                        continue
+
+                    seen.add(normalized)
+
+                    skill = Skill(
+
+                        name=skill_text,
+
+                        category="Other",
+
+                        level=self.detect_level(skill_text),
+
+                        years=self.detect_years(skill_text),
+
+                        confidence=0.50,
+
+                        matched=False,
+
+                        score=0.0,
+
+                        raw_text=skill_text,
+
+                        normalized_name=normalized
+
+                    )
+
+                    skills.append(skill)
 
         return skills
+
+    # =====================================================
+    # Smart Split
+    # =====================================================
+
+    def smart_split(self, line):
+
+        results = []
+
+        current = ""
+
+        depth = 0
+
+        for ch in line:
+
+            if ch == "(":
+                depth += 1
+
+            elif ch == ")":
+                depth -= 1
+
+            if ch in [",", ";", "|"] and depth == 0:
+
+                if current.strip():
+
+                    results.append(current.strip())
+
+                current = ""
+
+            else:
+
+                current += ch
+
+        if current.strip():
+
+            results.append(current.strip())
+
+        return results
+
+    # =====================================================
+    # Detect Level
+    # =====================================================
+
+    def detect_level(self, text):
+
+        lower = text.lower()
+
+        if "expert" in lower:
+            return "Expert"
+
+        if "advanced" in lower:
+            return "Advanced"
+
+        if "intermediate" in lower:
+            return "Intermediate"
+
+        if "beginner" in lower:
+            return "Beginner"
+
+        return ""
+
+    # =====================================================
+    # Detect Years
+    # =====================================================
+
+    def detect_years(self, text):
+
+        match = re.search(
+
+            r"(\d+(?:\.\d+)?)\+?\s*years?",
+
+            text,
+
+            re.I
+
+        )
+
+        if match:
+
+            return float(match.group(1))
+
+        return None
+
+    # =====================================================
+    # Normalize
+    # =====================================================
+
+    def normalize_name(self, text):
+
+        text = text.lower()
+
+        text = re.sub(r"[^a-z0-9 ]", " ", text)
+
+        text = re.sub(r"\s+", " ", text)
+
+        return text.strip()

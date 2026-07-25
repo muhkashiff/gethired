@@ -45,4 +45,50 @@ SKILL_CATEGORIES = {
     # Leadership
     "leadership": "Leadership",
     "project management": "Leadership",
+
+    #Advance Quality
+
+    "qms implementation": "Quality Management",
+
+    "food safety governance": "Food Safety",
+
+    "quality leadership": "Leadership",
+
+    "internal audit": "Auditing",
+
+    "third party audit": "Auditing",
+
+    "yield maximization": "Continuous Improvement",
+
+    "predictive modeling": "Data Analytics",
+
+    "stakeholder management": "Management",
+
+    "control charts": "Statistical Analysis",
+
+    "vendor management": "Supply Chain",
+
+    "team leadership": "Leadership",
+
+    "coaching": "Leadership",
+
+    "workforce development": "Leadership",
+
+    "root cause analysis": "Quality",
+
+    "capa": "Quality",
+
+    "fmea": "Quality",
+
+    "continuous improvement": "Lean",
+
+    "crm": "Sales",
+
+    "power bi": "Business Intelligence",
+
+    "excel": "Spreadsheet",
+
+    "sap qm": "ERP",
+
+    "minitab": "Statistical Analysis"
 }
