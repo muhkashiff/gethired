@@ -103,11 +103,19 @@ class ResumeBuilder:
         # =====================================================
         # CERTIFICATIONS
         # =====================================================
+        print("\n==========================")
+        print("CERTIFICATION SECTION")
+        print("==========================")
 
+        print(sections.get("certifications", []))
         resume.certifications = self.certification_extractor.extract(
             sections.get("certifications", [])
         )
 
+        print("\nEXTRACTED CERTIFICATIONS")
+        print("==========================")
+
+        print(resume.certifications)
         # =====================================================
         # PROJECTS
         # =====================================================

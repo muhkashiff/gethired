@@ -1,147 +1,70 @@
 """
-Section Detector
+GetHired
 
-Detects common resume sections and organizes
-content into structured categories.
+Production Section Detector
 """
 
-import re
+from collections import defaultdict
 
-import re
-
-def detect(self, paragraphs):
-
-    sections = {}
-
-    current_section = "header"
-
-    sections[current_section] = []
-
-    for paragraph in paragraphs:
-
-        text = paragraph.strip()
-
-        # Normalize heading
-        normalized = re.sub(
-            r"[^a-z0-9 ]",
-            "",
-            text.lower()
-        ).strip()
-
-        found = False
-
-        for section, names in self.HEADINGS.items():
-
-            if normalized in names:
-
-                current_section = section
-
-                if current_section not in sections:
-                    sections[current_section] = []
-
-                found = True
-
-                break
-
-        if not found:
-
-            sections[current_section].append(text)
-
-    return sections
+from .normalize import normalize_heading
+from .section_dictionary import SECTION_HEADERS
 
 
 class SectionDetector:
-    """
-    Detect resume sections.
-    """
 
-    HEADINGS = {
+    def __init__(self):
 
-    "summary": [
-        "summary",
-        "professional summary",
-        "career summary",
-        "profile",
-        "objective"
-    ],
+        # Build lookup table once
+        self.lookup = {}
 
-    "skills": [
-        "skills",
-        "technical skills",
-        "technical expertise",
-        "core competencies",
-        "core leadership competencies",
-        "key skills",
-        "technical proficiencies",
-        "technology",
-        "software",
-        "tools"
-    ],
+        for section, headings in SECTION_HEADERS.items():
 
-    "experience": [
-        "experience",
-        "professional experience",
-        "work experience",
-        "employment history",
-        "career history",
-        "employment"
-    ],
+            for heading in headings:
 
-    "education": [
-        "education",
-        "academic background",
-        "academic qualifications"
-    ],
+                self.lookup[
+                    normalize_heading(heading)
+                ] = section
 
-    "certifications": [
-        "certifications",
-        "professional certifications",
-        "professional certifications accreditations",
-        "licenses",
-        "training",
-        "accreditations"
-    ],
+    # ==========================================================
+    # Check if line is a section heading
+    # ==========================================================
 
-    "projects": [
-        "projects",
-        "key projects"
-    ],
+    def is_heading(self, line):
 
-    "languages": [
-        "languages"
-    ]
-}
+        normalized = normalize_heading(line)
+
+        return self.lookup.get(normalized)
+
+    # ==========================================================
+    # Detect Sections
+    # ==========================================================
 
     def detect(self, paragraphs):
 
-        sections = {}
+        sections = defaultdict(list)
 
         current_section = "header"
 
-        sections[current_section] = []
+        for line in paragraphs:
 
-        for paragraph in paragraphs:
+            text = line.strip()
 
-            text = paragraph.strip()
+            if not text:
+                continue
 
-            lower = text.lower()
+            section = self.is_heading(text)
 
-            found = False
+            print("--------------------------------")
+            print("TEXT:", repr(text))
+            print("SECTION:", section)
 
-            for section, names in self.HEADINGS.items():
+            if section:
 
-                if lower in names:
+                print(">>> SWITCHING TO:", section)
 
-                    current_section = section
+                current_section = section
+                continue
 
-                    sections[current_section] = []
+            sections[current_section].append(text)
 
-                    found = True
-
-                    break
-
-            if not found:
-
-                sections[current_section].append(text)
-
-        return sections
+        return dict(sections)

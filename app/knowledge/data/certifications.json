@@ -1,33 +1,67 @@
 [
     {
-        "name": "PCQI",
-        "aliases": [
-            "Preventive Controls Qualified Individual"
-        ]
+        "keywords": ["iso 9001", "lead auditor", "cqi", "irca"],
+        "category": "Food Safety",
+        "level": "Lead Auditor"
     },
+
     {
-        "name": "FSSC 22000",
-        "aliases": [
-            "FSSC22000"
-        ]
+        "keywords": ["brc", "brcgs"],
+        "category": "Food Safety",
+        "level": "Lead Auditor"
     },
+
     {
-        "name": "ISO 9001 Lead Auditor",
-        "aliases": [
-            "ISO9001 Lead Auditor",
-            "CQI IRCA Lead Auditor"
-        ]
+        "keywords": ["pcqi", "fspca"],
+        "category": "Food Safety",
+        "level": "Professional"
     },
+
     {
-        "name": "Lean Six Sigma Green Belt",
-        "aliases": [
-            "Six Sigma Green Belt"
-        ]
+        "keywords": ["haccp"],
+        "category": "Food Safety",
+        "level": "Professional"
     },
+
     {
-        "name": "Lean Six Sigma Black Belt",
-        "aliases": [
-            "Six Sigma Black Belt"
-        ]
+        "keywords": ["highfield"],
+        "category": "Food Safety",
+        "level": "Level 4"
+    },
+
+    {
+        "keywords": ["six sigma green belt"],
+        "category": "Quality",
+        "level": "Green Belt"
+    },
+
+    {
+        "keywords": ["six sigma black belt"],
+        "category": "Quality",
+        "level": "Black Belt"
+    },
+
+    {
+        "keywords": ["power bi"],
+        "category": "Analytics",
+        "level": ""
+    },
+
+    {
+        "keywords": ["python"],
+        "category": "Analytics",
+        "level": ""
+    },
+
+    {
+        "keywords": ["aws"],
+        "category": "Cloud",
+        "level": "Professional"
+    },
+
+    {
+        "keywords": ["azure"],
+        "category": "Cloud",
+        "level": "Associate"
     }
 ]

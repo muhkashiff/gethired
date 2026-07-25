@@ -5,7 +5,7 @@ Reads DOCX resumes and detects logical resume sections.
 """
 
 from pathlib import Path
-from docx import Document
+from .readers import ResumeReader
 
 from .section_detector import SectionDetector
 
@@ -22,27 +22,14 @@ class ResumeParser:
     def __init__(self):
 
         self.detector = SectionDetector()
-
+        self.reader = ResumeReader()
     # ==========================================================
     # Read DOCX Paragraphs
     # ==========================================================
 
     def paragraphs(self, file_path):
 
-        file_path = Path(file_path)
-
-        document = Document(file_path)
-
-        paragraphs = []
-
-        for paragraph in document.paragraphs:
-
-            text = paragraph.text.strip()
-
-            if text:
-                paragraphs.append(text)
-
-        return paragraphs
+        return self.reader.read(file_path)
 
     # ==========================================================
     # Complete Resume Text
@@ -65,3 +52,10 @@ class ResumeParser:
         return self.detector.detect(
             paragraphs
         )
+    # ==========================================================
+    # Alias
+    # ==========================================================
+
+    def sections(self, file_path):
+
+        return self.parse(file_path)
