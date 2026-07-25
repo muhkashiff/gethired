@@ -1,0 +1,47 @@
+[
+  {
+    "canonical_name": "Coca-Cola Beverages Pakistan",
+    "aliases": [
+      "coca cola beverages pakistan ltd",
+      "coca-cola beverages pakistan",
+      "ccbpl",
+      "coca cola",
+      "coke"
+    ],
+    "industry": "Food & Beverage"
+  },
+  {
+    "canonical_name": "PepsiCo",
+    "aliases": [
+      "pepsi",
+      "pepsi cola",
+      "pepsico"
+    ],
+    "industry": "Food & Beverage"
+  },
+  {
+    "canonical_name": "Nestlé",
+    "aliases": [
+      "nestle",
+      "nestlé pakistan"
+    ],
+    "industry": "Food & Beverage"
+  },
+  {
+    "canonical_name": "Shell",
+    "aliases": [
+      "shell",
+      "shell canada",
+      "shell gas station"
+    ],
+    "industry": "Retail"
+  },
+  {
+    "canonical_name": "Nutrain Pvt Ltd",
+    "aliases": [
+      "nutrain",
+      "nutrain pvt ltd"
+    ],
+    "industry": "Food & Beverage"
+  }
+]

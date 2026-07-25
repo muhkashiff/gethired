@@ -11,6 +11,9 @@ from .publication import Publication
 from .achievement import Achievement
 from .membership import Membership
 from .reference import Reference
+from .technology import Technology
+from .industry import Industry
+from .seniority import Seniority
 
 __all__ = [
     "Resume",
@@ -26,4 +29,7 @@ __all__ = [
     "Achievement",
     "Membership",
     "Reference",
+    "Technology",
+    "Industry",
+    "Seniority",
 ]

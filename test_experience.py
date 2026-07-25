@@ -1,33 +1,45 @@
-from app.parser.parsers.experience_parser import ExperienceParser
+from app.parser.readers.resume_reader import ResumeReader
+from app.parser.section_detector import SectionDetector
+from app.parser.experience.job_splitter import JobSplitter
 
-lines = [
 
-    "QA Chemist | Coca-Cola Beverages Pakistan Ltd. | 2010 - 2016 | Lahore",
+reader = ResumeReader()
 
-    "Managed quality system.",
+lines = reader.read(
+    r"D:\Self Projects\gethired\gethired\uploads\project_2\resume_original.docx"
+)
 
-    "Improved yield.",
+detector = SectionDetector()
 
-    "Key Accomplishments",
+sections = detector.detect(lines)
 
-    "Reduced waste by 20%.",
+experience = sections.get("experience", [])
 
-    "Implemented HACCP.",
+print("=" * 70)
+print("EXPERIENCE SECTION")
+print("=" * 70)
 
-    "Retail Store Manager | Shell | 2016 - 2024 | Canada",
+for line in experience:
+    print(line)
 
-    "Managed retail store.",
+print()
 
-    "Increased sales.",
+splitter = JobSplitter()
 
-    "Achievements",
+jobs = splitter.split(experience)
 
-    "100% Mystery Shopper Score",
+print("=" * 70)
+print("TOTAL JOBS:", len(jobs))
+print("=" * 70)
 
-]
+for i, job in enumerate(jobs, 1):
 
-parser = ExperienceParser()
+    print()
 
-jobs = parser.parse(lines)
+    print(f"JOB #{i}")
 
-parser.print_jobs(jobs)
+    print("-" * 50)
+
+    for line in job:
+
+        print(line)

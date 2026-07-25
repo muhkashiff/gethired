@@ -1,0 +1,118 @@
+[
+    {
+        "name": "Executive",
+        "level": 10,
+        "keywords": [
+            "chief executive officer",
+            "ceo",
+            "chief operating officer",
+            "coo",
+            "chief financial officer",
+            "cfo",
+            "managing director",
+            "executive director",
+            "president",
+            "owner",
+            "founder",
+            "partner"
+        ]
+    },
+
+    {
+        "name": "Director",
+        "level": 9,
+        "keywords": [
+            "director",
+            "head of",
+            "head",
+            "general manager"
+        ]
+    },
+
+    {
+        "name": "Senior Manager",
+        "level": 8,
+        "keywords": [
+            "senior manager",
+            "sr manager"
+        ]
+    },
+
+    {
+        "name": "Manager",
+        "level": 7,
+        "keywords": [
+            "manager",
+            "store manager",
+            "operations manager",
+            "quality manager",
+            "production manager"
+        ]
+    },
+
+    {
+        "name": "Supervisor",
+        "level": 6,
+        "keywords": [
+            "supervisor",
+            "team lead",
+            "team leader",
+            "shift supervisor"
+        ]
+    },
+
+    {
+        "name": "Lead",
+        "level": 5,
+        "keywords": [
+            "lead",
+            "lead auditor",
+            "technical lead"
+        ]
+    },
+
+    {
+        "name": "Senior Professional",
+        "level": 4,
+        "keywords": [
+            "senior engineer",
+            "senior analyst",
+            "senior chemist",
+            "senior specialist"
+        ]
+    },
+
+    {
+        "name": "Professional",
+        "level": 3,
+        "keywords": [
+            "chemist",
+            "analyst",
+            "engineer",
+            "specialist",
+            "officer",
+            "coordinator",
+            "consultant"
+        ]
+    },
+
+    {
+        "name": "Associate",
+        "level": 2,
+        "keywords": [
+            "associate",
+            "assistant"
+        ]
+    },
+
+    {
+        "name": "Entry Level",
+        "level": 1,
+        "keywords": [
+            "intern",
+            "trainee",
+            "graduate",
+            "student"
+        ]
+    }
+]

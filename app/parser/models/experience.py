@@ -5,17 +5,31 @@ from typing import List
 @dataclass
 class Experience:
 
+    # ==========================================
+    # Header Information
+    # ==========================================
+
     title: str = ""
 
     company: str = ""
 
     location: str = ""
 
+    # ==========================================
+    # Employment Dates
+    # ==========================================
+
     start_year: int = 0
 
     end_year: int = 0
 
-    duration: float = 0
+    current_job: bool = False
+
+    duration: float = 0.0
+
+    # ==========================================
+    # Experience Content
+    # ==========================================
 
     responsibilities: List[str] = field(default_factory=list)
 
@@ -27,6 +41,16 @@ class Experience:
 
     keywords: List[str] = field(default_factory=list)
 
+    # ==========================================
+    # Classification
+    # ==========================================
+
     industry: str = ""
 
     seniority: str = ""
+
+    confidence: float = 0.0
+
+    raw_header: str = ""
+
+    raw_lines: List[str] = field(default_factory=list)
