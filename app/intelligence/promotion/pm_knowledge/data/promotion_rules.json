@@ -1,0 +1,17 @@
+{
+    "fast_track_years": 3,
+
+    "executive_level": 10,
+
+    "director_level": 9,
+
+    "manager_level": 7,
+
+    "promotion_jump_bonus": 5,
+
+    "executive_bonus": 20,
+
+    "director_bonus": 10,
+
+    "manager_bonus": 5
+}
