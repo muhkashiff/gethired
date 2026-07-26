@@ -1,0 +1,14 @@
+{
+    "excellent": 90,
+    "very_good": 80,
+    "good": 70,
+    "average": 60,
+
+    "leadership_weight": 0.22,
+    "promotion_weight": 0.15,
+    "stability_weight": 0.18,
+    "trajectory_weight": 0.20,
+    "executive_weight": 0.25,
+
+    "max_score": 100
+}
