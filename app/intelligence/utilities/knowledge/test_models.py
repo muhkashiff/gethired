@@ -2,49 +2,55 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
-
 sys.path.append(str(ROOT))
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.modifier_extractor import (
-    ModifierExtractor,
-)
+from app.intelligence.utilities.knowledge.knowledge_parser.clause_segmenter import ClauseSegmenter
+from app.intelligence.utilities.knowledge.knowledge_parser.clause_rebuilder import ClauseRebuilder
+from app.intelligence.utilities.knowledge.knowledge_parser.clause_normalizer import ClauseNormalizer
 
-extractor = ModifierExtractor()
+from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor import ActionExtractor
+from app.intelligence.utilities.knowledge.knowledge_extractors.modifier_extractor import ModifierExtractor
+
+segmenter = ClauseSegmenter()
+rebuilder = ClauseRebuilder()
+normalizer = ClauseNormalizer()
+
+action_extractor = ActionExtractor()
+modifier_extractor = ModifierExtractor()
 
 examples = [
 
-    "Successfully implemented FSSC 22000.",
+    "Implemented ISO 9001, trained staff and improved productivity by 25%.",
 
-    "Strategically led cross-functional teams.",
+    "Managed supplier quality while reducing downtime by 40 hours.",
 
-    "Globally managed supplier quality.",
-
-    "Consistently improved production yield.",
-
-    "Rapidly reduced customer complaints.",
-
-    "Independently conducted ISO audits.",
-
-    "Successfully and strategically led cross-functional teams globally.",
+    "Successfully implemented FSSC 22000 reducing customer complaints by 60%.",
 
 ]
 
 for sentence in examples:
 
-    print("\n" + "=" * 80)
+    print("=" * 80)
 
     print(sentence)
 
-    print("-" * 80)
+    actions = action_extractor.extract_all(sentence)
 
-    modifiers = extractor.extract(sentence)
+    modifiers = modifier_extractor.extract(sentence)
 
-    if not modifiers:
+    clauses = segmenter.segment(sentence, actions)
 
-        print("No modifiers found.")
+    clauses = rebuilder.rebuild(
+        sentence,
+        clauses,
+        modifiers,
+    )
 
-    else:
+    clauses = normalizer.normalize(
+        clauses,
+        actions,
+    )
 
-        for modifier in modifiers:
+    for clause in clauses:
 
-            print(modifier)
+        print(clause.text)

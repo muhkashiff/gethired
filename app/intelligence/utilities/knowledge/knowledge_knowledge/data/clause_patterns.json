@@ -1,0 +1,29 @@
+{
+    "split_words": [
+        "and",
+        "while",
+        "before",
+        "after",
+        "then",
+        "thereby",
+        "thus",
+        "resulting in",
+        "leading to",
+        "allowing",
+        "enabling",
+        "which",
+        "that",
+        "while also"
+    ],
+
+    "preserve_phrases": [
+        "quality assurance",
+        "food safety",
+        "cross-functional",
+        "customer complaints",
+        "production yield",
+        "supplier quality",
+        "fssc 22000",
+        "iso 9001"
+    ]
+}

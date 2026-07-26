@@ -69,5 +69,63 @@
     "base":"train",
     "gerund":"training",
     "category":"people_development"
+  },
+  "reducing": {
+  "base": "reduce",
+  "gerund": "reducing",
+  "category": "optimization"
+},
+
+"improving": {
+  "base": "improve",
+  "gerund": "improving",
+  "category": "improvement"
+},
+
+"implementing": {
+  "base": "implement",
+  "gerund": "implementing",
+  "category": "implementation"
+},
+
+"managing": {
+  "base": "manage",
+  "gerund": "managing",
+  "category": "management"
+},
+
+"leading": {
+  "base": "lead",
+  "gerund": "leading",
+  "category": "leadership"
+},
+
+"training": {
+  "base": "train",
+  "gerund": "training",
+  "category": "people_development"
+},
+  "implement": {
+    "category": "implementation"
+  },
+
+  "improve": {
+    "category": "improvement"
+  },
+
+  "reduce": {
+    "category": "optimization"
+  },
+
+  "lead": {
+    "category": "leadership"
+  },
+
+  "manage": {
+    "category": "management"
+  },
+
+  "train": {
+    "category": "people_development"
   }
 }
