@@ -1,0 +1,103 @@
+{
+    "yield": {
+        "canonical": "Production Yield",
+        "category": "operations",
+        "unit": "%"
+    },
+
+    "productivity": {
+        "canonical": "Productivity",
+        "category": "operations",
+        "unit": "%"
+    },
+
+    "efficiency": {
+        "canonical": "Efficiency",
+        "category": "operations",
+        "unit": "%"
+    },
+
+    "complaints": {
+        "canonical": "Customer Complaints",
+        "category": "quality",
+        "unit": "%"
+    },
+
+    "audit": {
+        "canonical": "Audit",
+        "category": "quality",
+        "unit": "count"
+    },
+
+    "audits": {
+        "canonical": "Audit",
+        "category": "quality",
+        "unit": "count"
+    },
+
+    "defects": {
+        "canonical": "Defect Rate",
+        "category": "quality",
+        "unit": "%"
+    },
+
+    "waste": {
+        "canonical": "Production Waste",
+        "category": "operations",
+        "unit": "%"
+    },
+
+    "downtime": {
+        "canonical": "Downtime",
+        "category": "operations",
+        "unit": "hours"
+    },
+
+    "cost": {
+        "canonical": "Cost",
+        "category": "finance",
+        "unit": "$"
+    },
+
+    "savings": {
+        "canonical": "Cost Savings",
+        "category": "finance",
+        "unit": "$"
+    },
+
+    "revenue": {
+        "canonical": "Revenue",
+        "category": "finance",
+        "unit": "$"
+    },
+
+    "inventory": {
+        "canonical": "Inventory",
+        "category": "operations",
+        "unit": "units"
+    },
+
+    "stock": {
+        "canonical": "Inventory",
+        "category": "operations",
+        "unit": "units"
+    },
+
+    "training": {
+        "canonical": "Training",
+        "category": "people",
+        "unit": "hours"
+    },
+
+    "certification": {
+        "canonical": "Certification",
+        "category": "quality",
+        "unit": "count"
+    },
+
+    "customer satisfaction": {
+        "canonical": "Customer Satisfaction",
+        "category": "quality",
+        "unit": "%"
+    }
+}

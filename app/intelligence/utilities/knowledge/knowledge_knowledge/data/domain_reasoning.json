@@ -1,0 +1,49 @@
+{
+    "leadership": {
+        "people": "leadership",
+        "operations": "operational_leadership",
+        "quality": "quality_leadership",
+        "food_safety": "food_safety_leadership"
+    },
+
+    "management": {
+        "people": "people_management",
+        "quality": "quality_management",
+        "operations": "operations_management",
+        "facility": "facility_management"
+    },
+
+    "implementation": {
+        "food_safety": "food_safety",
+        "quality": "quality",
+        "operations": "operations",
+        "continuous_improvement": "continuous_improvement"
+    },
+
+    "improvement": {
+        "operations": "operational_excellence",
+        "quality": "quality_improvement",
+        "people": "people_development"
+    },
+
+    "optimization": {
+        "operations": "operational_excellence",
+        "quality": "quality_improvement"
+    },
+
+    "achievement": {
+        "quality": "quality_excellence",
+        "food_safety": "food_safety_excellence",
+        "operations": "operational_excellence"
+    },
+
+    "certification": {
+        "quality": "quality_systems",
+        "food_safety": "food_safety_systems"
+    },
+
+    "development": {
+        "people": "people_development",
+        "operations": "process_development"
+    }
+}

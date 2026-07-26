@@ -1,0 +1,71 @@
+{
+  "successfully": {
+    "canonical": "Successfully",
+    "category": "achievement",
+    "strength": 0.90,
+    "executive_weight": 0.80
+  },
+
+  "strategically": {
+    "canonical": "Strategically",
+    "category": "strategy",
+    "strength": 1.00,
+    "executive_weight": 1.00
+  },
+
+  "cross-functional": {
+    "canonical": "Cross Functional",
+    "category": "leadership",
+    "strength": 1.00,
+    "executive_weight": 1.00
+  },
+
+  "enterprise-wide": {
+    "canonical": "Enterprise Wide",
+    "category": "executive_scope",
+    "strength": 1.00,
+    "executive_weight": 1.00
+  },
+
+  "globally": {
+    "canonical": "Global",
+    "category": "scope",
+    "strength": 0.95,
+    "executive_weight": 0.95
+  },
+
+  "independently": {
+    "canonical": "Independent",
+    "category": "ownership",
+    "strength": 0.85,
+    "executive_weight": 0.70
+  },
+
+  "consistently": {
+    "canonical": "Consistent",
+    "category": "performance",
+    "strength": 0.80,
+    "executive_weight": 0.70
+  },
+
+  "significantly": {
+    "canonical": "Significant",
+    "category": "impact",
+    "strength": 0.95,
+    "executive_weight": 0.85
+  },
+
+  "rapidly": {
+    "canonical": "Rapid",
+    "category": "speed",
+    "strength": 0.80,
+    "executive_weight": 0.60
+  },
+
+  "efficiently": {
+    "canonical": "Efficient",
+    "category": "efficiency",
+    "strength": 0.85,
+    "executive_weight": 0.70
+  }
+}

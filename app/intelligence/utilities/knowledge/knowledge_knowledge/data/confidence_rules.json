@@ -1,0 +1,15 @@
+{
+  "verb_found":0.25,
+
+  "object_found":0.20,
+
+  "domain_found":0.20,
+
+  "metric_found":0.15,
+
+  "numeric_value":0.10,
+
+  "modifier_found":0.10,
+
+  "max_confidence":1.0
+}

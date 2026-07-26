@@ -1,0 +1,273 @@
+{
+    "Production Yield": {
+        "category": "operations",
+        "positive": [
+            "increase",
+            "improve",
+            "maximize",
+            "optimize",
+            "achieve"
+        ],
+        "negative": [
+            "reduce",
+            "decrease",
+            "drop",
+            "lose"
+        ]
+    },
+
+    "Productivity": {
+        "category": "operations",
+        "positive": [
+            "increase",
+            "improve",
+            "optimize",
+            "maximize"
+        ],
+        "negative": [
+            "reduce",
+            "decrease"
+        ]
+    },
+
+    "Efficiency": {
+        "category": "operations",
+        "positive": [
+            "increase",
+            "improve",
+            "optimize"
+        ],
+        "negative": [
+            "reduce",
+            "decrease"
+        ]
+    },
+
+    "Production Waste": {
+        "category": "operations",
+        "positive": [
+            "reduce",
+            "decrease",
+            "eliminate"
+        ],
+        "negative": [
+            "increase",
+            "grow"
+        ]
+    },
+
+    "Downtime": {
+        "category": "operations",
+        "positive": [
+            "reduce",
+            "decrease",
+            "eliminate"
+        ],
+        "negative": [
+            "increase",
+            "grow"
+        ]
+    },
+
+    "Inventory": {
+        "category": "operations",
+        "positive": [
+            "increase",
+            "optimize",
+            "improve"
+        ],
+        "negative": [
+            "reduce"
+        ]
+    },
+
+    "Inventory Accuracy": {
+        "category": "operations",
+        "positive": [
+            "increase",
+            "improve"
+        ],
+        "negative": [
+            "reduce",
+            "decrease"
+        ]
+    },
+
+    "Customer Complaints": {
+        "category": "quality",
+        "positive": [
+            "reduce",
+            "decrease",
+            "eliminate"
+        ],
+        "negative": [
+            "increase",
+            "grow"
+        ]
+    },
+
+    "Defect Rate": {
+        "category": "quality",
+        "positive": [
+            "reduce",
+            "decrease",
+            "eliminate"
+        ],
+        "negative": [
+            "increase"
+        ]
+    },
+
+    "Audit": {
+        "category": "quality",
+        "positive": [
+            "increase",
+            "complete",
+            "conduct",
+            "achieve"
+        ],
+        "negative": []
+    },
+
+    "Certification": {
+        "category": "quality",
+        "positive": [
+            "achieve",
+            "obtain",
+            "complete",
+            "maintain"
+        ],
+        "negative": [
+            "lose",
+            "fail"
+        ]
+    },
+
+    "Customer Satisfaction": {
+        "category": "quality",
+        "positive": [
+            "increase",
+            "improve"
+        ],
+        "negative": [
+            "reduce",
+            "decrease"
+        ]
+    },
+
+    "Cost": {
+        "category": "finance",
+        "positive": [
+            "reduce",
+            "save",
+            "optimize"
+        ],
+        "negative": [
+            "increase",
+            "raise"
+        ]
+    },
+
+    "Cost Savings": {
+        "category": "finance",
+        "positive": [
+            "increase",
+            "achieve",
+            "generate"
+        ],
+        "negative": [
+            "reduce"
+        ]
+    },
+
+    "Revenue": {
+        "category": "finance",
+        "positive": [
+            "increase",
+            "grow",
+            "improve"
+        ],
+        "negative": [
+            "reduce",
+            "decrease"
+        ]
+    },
+
+    "Profit": {
+        "category": "finance",
+        "positive": [
+            "increase",
+            "grow"
+        ],
+        "negative": [
+            "reduce",
+            "decrease"
+        ]
+    },
+
+    "Training": {
+        "category": "people",
+        "positive": [
+            "conduct",
+            "deliver",
+            "increase",
+            "complete"
+        ],
+        "negative": []
+    },
+
+    "Team Size": {
+        "category": "people",
+        "positive": [
+            "lead",
+            "manage",
+            "supervise"
+        ],
+        "negative": []
+    },
+
+    "Supplier Performance": {
+        "category": "supply_chain",
+        "positive": [
+            "improve",
+            "increase",
+            "optimize"
+        ],
+        "negative": [
+            "reduce"
+        ]
+    },
+
+    "On-Time Delivery": {
+        "category": "supply_chain",
+        "positive": [
+            "increase",
+            "improve"
+        ],
+        "negative": [
+            "reduce"
+        ]
+    },
+
+    "Safety Incidents": {
+        "category": "safety",
+        "positive": [
+            "reduce",
+            "eliminate"
+        ],
+        "negative": [
+            "increase"
+        ]
+    },
+
+    "Lost Time Injury": {
+        "category": "safety",
+        "positive": [
+            "reduce",
+            "eliminate"
+        ],
+        "negative": [
+            "increase"
+        ]
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "operators": [
+
+        "to",
+
+        "by",
+
+        "of",
+
+        "over",
+
+        "under",
+
+        "within"
+
+    ],
+
+    "currency": [
+
+        "$",
+
+        "usd"
+
+    ],
+
+    "multipliers": {
+
+        "k":1000,
+
+        "m":1000000,
+
+        "b":1000000000
+
+    }
+}
