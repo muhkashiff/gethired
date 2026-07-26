@@ -1,26 +1,18 @@
 from app.intelligence.leadership_pattern_detector import LeadershipPatternDetector
-
 from app.intelligence.leadership_weight_engine import LeadershipWeightEngine
-
 from app.intelligence.leadership_dimension_scorer import LeadershipDimensionScorer
-
-
-detector = LeadershipPatternDetector()
-
-weight_engine = LeadershipWeightEngine()
-
-dimension_engine = LeadershipDimensionScorer()
-
+from app.intelligence.leadership_summary_builder import LeadershipSummaryBuilder
 
 sentence = (
-
-    "Led cross functional teams "
-
-    "implemented FSSC 22000 "
-
-    "achieving 99% product yield."
-
+    "Led cross functional teams, "
+    "implemented FSSC 22000, "
+    "achieved 99% product yield."
 )
+
+detector = LeadershipPatternDetector()
+weight_engine = LeadershipWeightEngine()
+dimension_engine = LeadershipDimensionScorer()
+summary_builder = LeadershipSummaryBuilder()
 
 patterns = detector.detect(sentence)
 
@@ -29,39 +21,28 @@ weighted = []
 for p in patterns:
 
     weighted.append(
-
         weight_engine.calculate(
-
             p,
-
             seniority_level=7,
-
             years_experience=15
-
         )
-
     )
 
 profile = dimension_engine.score(weighted)
 
-print()
+summary = summary_builder.build(profile)
 
 print("=" * 70)
-
-print("DIMENSION SCORES")
-
+print("LEADERSHIP SUMMARY")
 print("=" * 70)
 
-for k, v in profile["scores"].items():
+print(summary)
 
-    print(f"{k:35} {round(v,2)}")
+print("\nTop Strengths")
+print(summary.strongest_dimensions)
 
-print()
+print("\nWeak Areas")
+print(summary.weakest_dimensions)
 
-print("=" * 70)
-
-print("CONFIDENCE")
-
-print("=" * 70)
-
-print(profile["confidence"])
+print("\nNarrative")
+print(summary.summary)

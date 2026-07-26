@@ -1,0 +1,19 @@
+{
+    "leadership": {
+        "high": "The candidate demonstrates strong leadership capability supported by measurable evidence.",
+        "medium": "The candidate demonstrates good leadership capability with opportunities for further development.",
+        "low": "Leadership experience is currently limited."
+    },
+
+    "career_health": {
+        "high": "The candidate has maintained a healthy career progression with good promotion history and career stability.",
+        "medium": "The candidate has a developing career profile with moderate progression.",
+        "low": "Career progression requires improvement."
+    },
+
+    "market": {
+        "high": "The candidate appears highly competitive in today's employment market.",
+        "medium": "The candidate is competitive but can further improve market positioning.",
+        "low": "Additional experience and achievements would improve competitiveness."
+    }
+}

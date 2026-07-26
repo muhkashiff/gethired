@@ -49,6 +49,8 @@ class Experience:
 
     seniority: str = ""
 
+    seniority_level: int = 0
+
     confidence: float = 0.0
 
     raw_header: str = ""

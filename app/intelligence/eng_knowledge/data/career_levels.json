@@ -1,0 +1,10 @@
+{
+    "Entry Level": 1,
+    "Professional": 3,
+    "Senior Professional": 5,
+    "Supervisor": 6,
+    "Manager": 7,
+    "Senior Manager": 8,
+    "Director": 9,
+    "Executive": 10
+}

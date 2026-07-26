@@ -1,0 +1,170 @@
+{
+  "leadership": {
+
+    "intro": [
+
+      "Leadership capability is demonstrated through",
+
+      "The candidate has shown leadership by",
+
+      "Evidence indicates leadership through",
+
+      "Leadership experience is supported by"
+
+    ],
+
+    "ending": [
+
+      "which supports executive readiness.",
+
+      "demonstrating strong people leadership.",
+
+      "indicating readiness for larger responsibilities.",
+
+      "highlighting operational leadership capability."
+
+    ]
+
+  },
+
+  "promotion": {
+
+    "intro": [
+
+      "Career progression includes",
+
+      "Promotion history demonstrates",
+
+      "Professional advancement reflects",
+
+      "Career growth is evidenced by"
+
+    ],
+
+    "ending": [
+
+      "indicating continuous advancement.",
+
+      "reflecting increasing responsibility.",
+
+      "showing sustained professional growth.",
+
+      "supporting long-term career progression."
+
+    ]
+
+  },
+
+  "stability": {
+
+    "intro": [
+
+      "Career stability is reflected by",
+
+      "Employment consistency is demonstrated through",
+
+      "Long-term commitment is supported by",
+
+      "Career tenure indicates"
+
+    ],
+
+    "ending": [
+
+      "which supports organisational loyalty.",
+
+      "indicating reliable employment history.",
+
+      "demonstrating career consistency.",
+
+      "supporting long-term organisational value."
+
+    ]
+
+  },
+
+  "trajectory": {
+
+    "intro": [
+
+      "Career trajectory demonstrates",
+
+      "Professional development indicates",
+
+      "Career evolution reflects",
+
+      "Overall progression shows"
+
+    ],
+
+    "ending": [
+
+      "toward executive leadership.",
+
+      "strong long-term career momentum.",
+
+      "excellent future leadership potential.",
+
+      "continued upward progression."
+
+    ]
+
+  },
+
+  "executive": {
+
+    "intro": [
+
+      "Executive readiness is supported by",
+
+      "Senior leadership capability is demonstrated through",
+
+      "Executive potential is evidenced by",
+
+      "Leadership maturity indicates"
+
+    ],
+
+    "ending": [
+
+      "making the candidate suitable for Director-level roles.",
+
+      "supporting executive-level opportunities.",
+
+      "indicating readiness for strategic leadership.",
+
+      "demonstrating executive capability."
+
+    ]
+
+  },
+
+  "market": {
+
+    "intro": [
+
+      "Current market competitiveness is supported by",
+
+      "Professional profile indicates",
+
+      "Market readiness reflects",
+
+      "Recruiter attractiveness is strengthened by"
+
+    ],
+
+    "ending": [
+
+      "which strengthens employability.",
+
+      "making the profile highly competitive.",
+
+      "supporting strong hiring potential.",
+
+      "improving market positioning."
+
+    ]
+
+  }
+
+}
