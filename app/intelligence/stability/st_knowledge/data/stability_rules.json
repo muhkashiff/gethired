@@ -1,0 +1,13 @@
+{
+    "excellent_average_tenure": 5,
+    "good_average_tenure": 3,
+    "acceptable_average_tenure": 2,
+
+    "job_hopper_limit": 1.5,
+
+    "excellent_score": 90,
+    "good_score": 75,
+    "average_score": 60,
+
+    "max_score": 100
+}
