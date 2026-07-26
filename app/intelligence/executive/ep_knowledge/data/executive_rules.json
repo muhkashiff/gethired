@@ -1,0 +1,14 @@
+{
+    "executive_ready": 90,
+    "director_ready": 80,
+    "senior_manager_ready": 70,
+    "manager_ready": 60,
+
+    "leadership_weight": 0.30,
+    "promotion_weight": 0.15,
+    "stability_weight": 0.15,
+    "trajectory_weight": 0.20,
+    "business_weight": 0.20,
+
+    "max_score": 100
+}
