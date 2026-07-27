@@ -1,0 +1,372 @@
+{
+  "customer complaints": {
+    "canonical": "Customer Complaints",
+    "aliases": [
+      "customer complaints",
+      "complaints",
+      "consumer complaints"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "decrease",
+    "impact_weight": 100,
+    "measurement_type": "count",
+    "units": [
+      "%",
+      "count",
+      "cases"
+    ],
+    "business_meaning": "Reduce customer complaints",
+    "positive_verbs": [
+      "reduce",
+      "eliminate",
+      "minimize"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "customer satisfaction": {
+    "canonical": "Customer Satisfaction",
+    "aliases": [
+      "customer satisfaction",
+      "csat"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "increase",
+    "impact_weight": 98,
+    "measurement_type": "percentage",
+    "units": [
+      "%",
+      "score"
+    ],
+    "business_meaning": "Increase customer satisfaction",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "defect rate": {
+    "canonical": "Defect Rate",
+    "aliases": [
+      "defect rate",
+      "defects",
+      "product defects"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "decrease",
+    "impact_weight": 99,
+    "measurement_type": "percentage",
+    "units": [
+      "%",
+      "ppm"
+    ],
+    "business_meaning": "Reduce defects",
+    "positive_verbs": [
+      "reduce",
+      "eliminate"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "rework": {
+    "canonical": "Rework",
+    "aliases": [
+      "rework"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "decrease",
+    "impact_weight": 95,
+    "measurement_type": "percentage",
+    "units": [
+      "%",
+      "hours"
+    ],
+    "business_meaning": "Reduce rework",
+    "positive_verbs": [
+      "reduce"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "non conformity": {
+    "canonical": "Non Conformities",
+    "aliases": [
+      "non conformity",
+      "non conformities",
+      "ncr",
+      "nonconformance",
+      "nonconformity"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "decrease",
+    "impact_weight": 99,
+    "measurement_type": "count",
+    "units": [
+      "count",
+      "%"
+    ],
+    "business_meaning": "Reduce non-conformities",
+    "positive_verbs": [
+      "reduce",
+      "close"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "root cause": {
+    "canonical": "Root Cause Analysis",
+    "aliases": [
+      "root cause",
+      "root cause analysis",
+      "rca"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "perform",
+    "impact_weight": 90,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Root cause analysis",
+    "positive_verbs": [
+      "conduct",
+      "perform",
+      "lead",
+      "complete"
+    ],
+    "negative_verbs": []
+  },
+
+  "capa": {
+    "canonical": "CAPA",
+    "aliases": [
+      "capa",
+      "corrective action",
+      "preventive action",
+      "corrective and preventive action"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "implement",
+    "impact_weight": 98,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Implement CAPA",
+    "positive_verbs": [
+      "implement",
+      "lead",
+      "complete",
+      "manage"
+    ],
+    "negative_verbs": []
+  },
+
+  "audit": {
+    "canonical": "Audit",
+    "aliases": [
+      "audit",
+      "internal audit",
+      "external audit",
+      "supplier audit"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "conduct",
+    "impact_weight": 96,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Conduct audits",
+    "positive_verbs": [
+      "conduct",
+      "lead",
+      "perform",
+      "complete"
+    ],
+    "negative_verbs": []
+  },
+
+  "supplier quality": {
+    "canonical": "Supplier Quality",
+    "aliases": [
+      "supplier quality",
+      "vendor quality"
+    ],
+    "business_area": "Supply Chain",
+    "preferred_direction": "improve",
+    "impact_weight": 95,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Improve supplier quality",
+    "positive_verbs": [
+      "improve",
+      "manage",
+      "develop"
+    ],
+    "negative_verbs": []
+  },
+
+  "inspection": {
+    "canonical": "Inspection",
+    "aliases": [
+      "inspection",
+      "incoming inspection",
+      "final inspection",
+      "quality inspection"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "perform",
+    "impact_weight": 88,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Inspection activities",
+    "positive_verbs": [
+      "inspect",
+      "perform",
+      "conduct"
+    ],
+    "negative_verbs": []
+  },
+
+  "first pass yield": {
+    "canonical": "First Pass Yield",
+    "aliases": [
+      "first pass yield",
+      "fpy"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "increase",
+    "impact_weight": 98,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Increase first pass yield",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "right first time": {
+    "canonical": "Right First Time",
+    "aliases": [
+      "right first time",
+      "rft"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "increase",
+    "impact_weight": 99,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Increase right first time",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "copq": {
+    "canonical": "Cost of Poor Quality",
+    "aliases": [
+      "copq",
+      "cost of poor quality"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "decrease",
+    "impact_weight": 100,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "%",
+      "USD"
+    ],
+    "business_meaning": "Reduce cost of poor quality",
+    "positive_verbs": [
+      "reduce",
+      "save"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "quality score": {
+    "canonical": "Quality Score",
+    "aliases": [
+      "quality score",
+      "quality index"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "increase",
+    "impact_weight": 95,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Increase quality score",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "complaint closure": {
+    "canonical": "Complaint Closure",
+    "aliases": [
+      "complaint closure",
+      "complaint resolution"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "increase",
+    "impact_weight": 94,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Improve complaint closure",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": []
+  },
+
+  "quality culture": {
+    "canonical": "Quality Culture",
+    "aliases": [
+      "quality culture",
+      "quality mindset"
+    ],
+    "business_area": "Quality",
+    "preferred_direction": "develop",
+    "impact_weight": 90,
+    "measurement_type": "program",
+    "units": [],
+    "business_meaning": "Develop quality culture",
+    "positive_verbs": [
+      "develop",
+      "promote",
+      "build",
+      "lead"
+    ],
+    "negative_verbs": []
+  }
+}

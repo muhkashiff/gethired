@@ -32,7 +32,7 @@ class ModifierExtractor:
         path = (
             Path(__file__).resolve().parent.parent
             / "knowledge_knowledge"
-            / "data"
+            / "config"
             / "modifier_dictionary.json"
         )
 

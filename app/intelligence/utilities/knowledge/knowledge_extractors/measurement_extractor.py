@@ -21,7 +21,7 @@ class MeasurementExtractor:
         path = (
             Path(__file__).resolve().parent.parent
             / "knowledge_knowledge"
-            / "data"
+            / "config"
             / "measurement_patterns.json"
         )
 

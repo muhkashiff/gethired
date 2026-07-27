@@ -1,0 +1,371 @@
+{
+  "cost savings": {
+    "canonical": "Cost Savings",
+    "aliases": [
+      "cost savings",
+      "cost reduction",
+      "saved costs",
+      "reduced costs",
+      "cost optimization",
+      "cost avoidance"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "increase",
+    "impact_weight": 100,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "%",
+      "USD"
+    ],
+    "business_meaning": "Generate cost savings",
+    "positive_verbs": [
+      "save",
+      "reduce",
+      "optimize",
+      "eliminate"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "revenue": {
+    "canonical": "Revenue",
+    "aliases": [
+      "revenue",
+      "sales revenue",
+      "turnover"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "increase",
+    "impact_weight": 100,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "%",
+      "USD"
+    ],
+    "business_meaning": "Increase revenue",
+    "positive_verbs": [
+      "increase",
+      "grow",
+      "boost"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "profit": {
+    "canonical": "Profit",
+    "aliases": [
+      "profit",
+      "profitability",
+      "gross profit",
+      "net profit"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "increase",
+    "impact_weight": 100,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "%",
+      "USD"
+    ],
+    "business_meaning": "Increase profitability",
+    "positive_verbs": [
+      "increase",
+      "improve",
+      "maximize"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "budget": {
+    "canonical": "Budget",
+    "aliases": [
+      "budget",
+      "annual budget",
+      "department budget"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "manage",
+    "impact_weight": 95,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "USD"
+    ],
+    "business_meaning": "Budget management",
+    "positive_verbs": [
+      "manage",
+      "control",
+      "monitor"
+    ],
+    "negative_verbs": []
+  },
+
+  "inventory": {
+    "canonical": "Inventory",
+    "aliases": [
+      "inventory",
+      "stock",
+      "inventory levels"
+    ],
+    "business_area": "Supply Chain",
+    "preferred_direction": "optimize",
+    "impact_weight": 95,
+    "measurement_type": "count",
+    "units": [
+      "%",
+      "units"
+    ],
+    "business_meaning": "Inventory optimization",
+    "positive_verbs": [
+      "optimize",
+      "reduce",
+      "improve"
+    ],
+    "negative_verbs": []
+  },
+
+  "inventory accuracy": {
+    "canonical": "Inventory Accuracy",
+    "aliases": [
+      "inventory accuracy",
+      "stock accuracy"
+    ],
+    "business_area": "Supply Chain",
+    "preferred_direction": "increase",
+    "impact_weight": 96,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Improve inventory accuracy",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "waste": {
+    "canonical": "Waste",
+    "aliases": [
+      "waste",
+      "material waste",
+      "food waste",
+      "scrap"
+    ],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 98,
+    "measurement_type": "percentage",
+    "units": [
+      "%",
+      "kg",
+      "tons"
+    ],
+    "business_meaning": "Reduce waste",
+    "positive_verbs": [
+      "reduce",
+      "eliminate",
+      "minimize"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "yield": {
+    "canonical": "Yield",
+    "aliases": [
+      "yield",
+      "production yield",
+      "manufacturing yield",
+      "line yield"
+    ],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 99,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Increase manufacturing yield",
+    "positive_verbs": [
+      "increase",
+      "improve",
+      "maximize"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "roi": {
+    "canonical": "Return on Investment",
+    "aliases": [
+      "roi",
+      "return on investment"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "increase",
+    "impact_weight": 99,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Increase ROI",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "working capital": {
+    "canonical": "Working Capital",
+    "aliases": [
+      "working capital"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "optimize",
+    "impact_weight": 97,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "USD"
+    ],
+    "business_meaning": "Optimize working capital",
+    "positive_verbs": [
+      "optimize",
+      "improve"
+    ],
+    "negative_verbs": []
+  },
+
+  "procurement savings": {
+    "canonical": "Procurement Savings",
+    "aliases": [
+      "procurement savings",
+      "purchasing savings",
+      "vendor savings"
+    ],
+    "business_area": "Procurement",
+    "preferred_direction": "increase",
+    "impact_weight": 97,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "%"
+    ],
+    "business_meaning": "Generate procurement savings",
+    "positive_verbs": [
+      "save",
+      "reduce",
+      "negotiate"
+    ],
+    "negative_verbs": []
+  },
+
+  "cash flow": {
+    "canonical": "Cash Flow",
+    "aliases": [
+      "cash flow"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "improve",
+    "impact_weight": 98,
+    "measurement_type": "currency",
+    "units": [
+      "$"
+    ],
+    "business_meaning": "Improve cash flow",
+    "positive_verbs": [
+      "improve",
+      "increase"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "forecast accuracy": {
+    "canonical": "Forecast Accuracy",
+    "aliases": [
+      "forecast accuracy"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "increase",
+    "impact_weight": 94,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Improve forecasting",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": []
+  },
+
+  "operating cost": {
+    "canonical": "Operating Cost",
+    "aliases": [
+      "operating cost",
+      "operational cost"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "decrease",
+    "impact_weight": 99,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "%"
+    ],
+    "business_meaning": "Reduce operating costs",
+    "positive_verbs": [
+      "reduce",
+      "optimize",
+      "lower"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "asset utilization": {
+    "canonical": "Asset Utilization",
+    "aliases": [
+      "asset utilization",
+      "asset utilisation"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 94,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Improve asset utilization",
+    "positive_verbs": [
+      "increase",
+      "improve",
+      "maximize"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  }
+}

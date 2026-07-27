@@ -1,0 +1,21 @@
+"""
+Evidence Weights
+
+Single source of truth.
+"""
+
+LEADERSHIP = 15
+
+ACHIEVEMENT = 20
+
+QUANTIFIED = 20
+
+BUSINESS_IMPACT = 20
+
+EXECUTIVE = 10
+
+CERTIFICATION = 15
+
+CONTINUOUS_IMPROVEMENT = 10
+
+MAX_SCORE = 100

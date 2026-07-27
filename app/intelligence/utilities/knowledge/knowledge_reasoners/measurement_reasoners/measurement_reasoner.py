@@ -25,12 +25,13 @@ class MeasurementReasoner:
         path = (
             Path(__file__).resolve().parent.parent
             / "knowledge_knowledge"
-            / "data"
+            / "semantics"
             / "measurement_semantics.json"
         )
 
-        with open(path, encoding="utf8") as f:
-            self.rules = json.load(f)
+        from app.intelligence.utilities.knowledge.repository import repository
+
+        self.rules = repository.measurement_semantics()
 
     # ----------------------------------------------------------
 

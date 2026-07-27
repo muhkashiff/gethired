@@ -269,5 +269,26 @@
         "negative": [
             "increase"
         ]
-    }
+    },
+    
+  "complaints": {
+    "preferred_direction": "decrease",
+    "positive_effect": "decrease",
+    "business_meaning": "Customer Satisfaction",
+    "impact": 95
+  },
+
+  "yield": {
+    "preferred_direction": "increase",
+    "positive_effect": "increase",
+    "business_meaning": "Production Efficiency",
+    "impact": 90
+  },
+
+  "downtime": {
+    "preferred_direction": "decrease",
+    "positive_effect": "decrease",
+    "business_meaning": "Operational Efficiency",
+    "impact": 85
+  }
 }

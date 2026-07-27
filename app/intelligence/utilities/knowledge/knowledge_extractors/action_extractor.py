@@ -26,7 +26,7 @@ class ActionExtractor:
         path = (
             Path(__file__).resolve().parent.parent
             / "knowledge_knowledge"
-            / "data"
+            / "ontology"
             / "actions.json"
         )
 

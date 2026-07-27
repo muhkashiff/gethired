@@ -1,0 +1,366 @@
+{
+  "productivity": {
+    "canonical": "Productivity",
+    "aliases": [
+      "productivity",
+      "productive output"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 95,
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "business_meaning": "Increase productivity",
+    "positive_verbs": [
+      "improve",
+      "increase",
+      "optimize",
+      "boost",
+      "maximize"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "yield": {
+    "canonical": "Production Yield",
+    "aliases": [
+      "yield",
+      "production yield",
+      "process yield"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 98,
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "business_meaning": "Increase production yield",
+    "positive_verbs": [
+      "increase",
+      "improve",
+      "maximize"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "efficiency": {
+    "canonical": "Operational Efficiency",
+    "aliases": [
+      "efficiency",
+      "operational efficiency"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 95,
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "business_meaning": "Improve efficiency",
+    "positive_verbs": [
+      "increase",
+      "improve",
+      "optimize"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "downtime": {
+    "canonical": "Downtime",
+    "aliases": [
+      "downtime",
+      "machine downtime",
+      "production downtime"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "decrease",
+    "impact_weight": 97,
+    "measurement_type": "time",
+    "units": [
+      "hours",
+      "minutes",
+      "%"
+    ],
+    "business_meaning": "Reduce downtime",
+    "positive_verbs": [
+      "reduce",
+      "eliminate",
+      "minimize"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "throughput": {
+    "canonical": "Throughput",
+    "aliases": [
+      "throughput",
+      "production throughput"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 96,
+    "measurement_type": "count",
+    "units": [
+      "units",
+      "bottles",
+      "cases",
+      "cartons"
+    ],
+    "business_meaning": "Increase throughput",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "waste": {
+    "canonical": "Waste",
+    "aliases": [
+      "waste",
+      "production waste",
+      "material waste"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "decrease",
+    "impact_weight": 97,
+    "measurement_type": "percentage",
+    "units": [
+      "%",
+      "kg",
+      "tons"
+    ],
+    "business_meaning": "Reduce waste",
+    "positive_verbs": [
+      "reduce",
+      "eliminate"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "scrap": {
+    "canonical": "Scrap",
+    "aliases": [
+      "scrap",
+      "scrap rate"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "decrease",
+    "impact_weight": 94,
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "business_meaning": "Reduce scrap",
+    "positive_verbs": [
+      "reduce"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "capacity": {
+    "canonical": "Production Capacity",
+    "aliases": [
+      "capacity",
+      "production capacity"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 94,
+    "measurement_type": "percentage",
+    "units": [
+      "%",
+      "tons",
+      "units"
+    ],
+    "business_meaning": "Increase capacity",
+    "positive_verbs": [
+      "increase",
+      "expand"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "utilization": {
+    "canonical": "Equipment Utilization",
+    "aliases": [
+      "utilization",
+      "equipment utilization",
+      "machine utilization"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 95,
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "business_meaning": "Increase utilization",
+    "positive_verbs": [
+      "increase",
+      "maximize"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "cycle_time": {
+    "canonical": "Cycle Time",
+    "aliases": [
+      "cycle time",
+      "processing time"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "decrease",
+    "impact_weight": 96,
+    "measurement_type": "time",
+    "units": [
+      "seconds",
+      "minutes",
+      "hours"
+    ],
+    "business_meaning": "Reduce cycle time",
+    "positive_verbs": [
+      "reduce",
+      "shorten"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  },
+
+  "oee": {
+    "canonical": "Overall Equipment Effectiveness",
+    "aliases": [
+      "oee",
+      "overall equipment effectiveness"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 100,
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "business_meaning": "Improve OEE",
+    "positive_verbs": [
+      "increase",
+      "improve"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "lean": {
+    "canonical": "Lean Manufacturing",
+    "aliases": [
+      "lean",
+      "lean manufacturing"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "implement",
+    "impact_weight": 93,
+    "measurement_type": "program",
+    "units": [],
+    "business_meaning": "Lean implementation",
+    "positive_verbs": [
+      "implement",
+      "lead",
+      "deploy"
+    ],
+    "negative_verbs": []
+  },
+
+  "kaizen": {
+    "canonical": "Kaizen",
+    "aliases": [
+      "kaizen"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "implement",
+    "impact_weight": 92,
+    "measurement_type": "program",
+    "units": [],
+    "business_meaning": "Continuous Improvement",
+    "positive_verbs": [
+      "implement",
+      "lead"
+    ],
+    "negative_verbs": []
+  },
+
+  "5s": {
+    "canonical": "5S",
+    "aliases": [
+      "5s",
+      "five s"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "implement",
+    "impact_weight": 90,
+    "measurement_type": "program",
+    "units": [],
+    "business_meaning": "Workplace Organization",
+    "positive_verbs": [
+      "implement",
+      "maintain"
+    ],
+    "negative_verbs": []
+  },
+
+  "six_sigma": {
+    "canonical": "Six Sigma",
+    "aliases": [
+      "six sigma",
+      "green belt",
+      "black belt"
+    ],
+    "business_area": "Operations",
+    "preferred_direction": "implement",
+    "impact_weight": 97,
+    "measurement_type": "methodology",
+    "units": [],
+    "business_meaning": "Variation Reduction",
+    "positive_verbs": [
+      "implement",
+      "lead",
+      "complete"
+    ],
+    "negative_verbs": []
+  },
+
+  "cost": {
+    "canonical": "Cost",
+    "aliases": [
+      "cost",
+      "operating cost",
+      "manufacturing cost"
+    ],
+    "business_area": "Finance",
+    "preferred_direction": "decrease",
+    "impact_weight": 98,
+    "measurement_type": "currency",
+    "units": [
+      "$",
+      "%",
+      "USD"
+    ],
+    "business_meaning": "Reduce operating cost",
+    "positive_verbs": [
+      "reduce",
+      "save"
+    ],
+    "negative_verbs": [
+      "increase"
+    ]
+  }
+}

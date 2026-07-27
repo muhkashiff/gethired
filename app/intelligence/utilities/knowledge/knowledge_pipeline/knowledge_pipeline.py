@@ -15,8 +15,6 @@ ClauseNormalizer
     ↓
 ActionSegmenter
     ↓
-ClauseNormalizer
-    ↓
 SentenceParser
     ↓
 KnowledgeDocument
@@ -24,6 +22,8 @@ KnowledgeDocument
 
 from app.intelligence.utilities.knowledge.knowledge_models import (
     KnowledgeDocument,
+    KnowledgeSentence,
+    KnowledgeClause,
 )
 
 from app.intelligence.utilities.knowledge.knowledge_parser.clause_parser import (
@@ -63,29 +63,22 @@ class KnowledgePipeline:
 
     # ----------------------------------------------------------
 
-    def process(
-        self,
-        sentence: str,
-    ) -> KnowledgeDocument:
+    def process(self, sentence: str) -> KnowledgeDocument:
 
         document = KnowledgeDocument()
 
         # --------------------------------------------------
-        # Parse clauses
+        # Parse Clauses
         # --------------------------------------------------
 
         clauses = self.clause_parser.parse(sentence)
-
-        # --------------------------------------------------
-        # Cleanup
-        # --------------------------------------------------
 
         clauses = self.clause_rebuilder.rebuild(clauses)
 
         clauses = self.clause_normalizer.normalize(clauses)
 
         # --------------------------------------------------
-        # Split multiple actions
+        # Split Multiple Actions
         # --------------------------------------------------
 
         segmented = []
@@ -98,23 +91,91 @@ class KnowledgePipeline:
 
             )
 
-        # --------------------------------------------------
-        # Normalize again
-        # --------------------------------------------------
-
         segmented = self.clause_normalizer.normalize(segmented)
 
         # --------------------------------------------------
-        # Parse every action clause
+        # Build Sentence Object
         # --------------------------------------------------
+
+        sentence_obj = KnowledgeSentence(
+
+            original_text=sentence
+
+        )
+
+        # --------------------------------------------------
+        # Parse Every Clause
+        # --------------------------------------------------
+
+        all_sentence_facts = []
+
+        clause_confidences = []
 
         for clause in segmented:
 
-            parsed = self.sentence_parser.parse(clause.text)
+            clause_obj = KnowledgeClause(
 
-            document.sentences.append(parsed)
+                original_text=clause.text
 
-            document.facts.extend(parsed.facts)
+            )
+
+            parsed_sentence = self.sentence_parser.parse(
+
+                clause.text
+
+            )
+
+            clause_obj.facts = parsed_sentence.facts
+
+            clause_obj.confidence = parsed_sentence.confidence
+
+            sentence_obj.clauses.append(clause_obj)
+
+            all_sentence_facts.extend(
+
+                parsed_sentence.facts
+
+            )
+
+            clause_confidences.append(
+
+                parsed_sentence.confidence
+
+            )
+
+        # --------------------------------------------------
+        # Sentence Summary
+        # --------------------------------------------------
+
+        sentence_obj.facts = all_sentence_facts
+
+        if clause_confidences:
+
+            sentence_obj.confidence = round(
+
+                sum(clause_confidences)
+
+                / len(clause_confidences),
+
+                2,
+
+            )
+
+        # --------------------------------------------------
+        # Document
+        # --------------------------------------------------
+
+        document.sentences.append(
+
+            sentence_obj
+
+        )
+
+        document.facts.extend(
+
+            all_sentence_facts
+
+        )
 
         # --------------------------------------------------
         # Statistics
@@ -124,14 +185,14 @@ class KnowledgePipeline:
 
             "input_sentences": 1,
 
-            "clauses": len(segmented),
+            "clauses": len(sentence_obj.clauses),
 
             "facts": len(document.facts),
 
         }
 
         # --------------------------------------------------
-        # Confidence
+        # Document Confidence
         # --------------------------------------------------
 
         if document.sentences:

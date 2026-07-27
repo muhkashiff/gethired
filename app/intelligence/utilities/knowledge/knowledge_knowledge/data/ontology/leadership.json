@@ -1,0 +1,316 @@
+{
+  "team leadership": {
+    "canonical": "Team Leadership",
+    "aliases": [
+      "team leadership",
+      "leadership",
+      "leading teams",
+      "led team",
+      "team lead",
+      "led cross functional teams",
+      "led cross-functional teams"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "lead",
+    "impact_weight": 100,
+    "measurement_type": "leadership",
+    "units": [],
+    "business_meaning": "Lead teams successfully",
+    "positive_verbs": [
+      "lead",
+      "manage",
+      "direct",
+      "supervise"
+    ],
+    "negative_verbs": []
+  },
+
+  "people development": {
+    "canonical": "People Development",
+    "aliases": [
+      "people development",
+      "employee development",
+      "staff development"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "develop",
+    "impact_weight": 98,
+    "measurement_type": "leadership",
+    "units": [],
+    "business_meaning": "Develop employees",
+    "positive_verbs": [
+      "develop",
+      "mentor",
+      "coach",
+      "train"
+    ],
+    "negative_verbs": []
+  },
+
+  "training": {
+    "canonical": "Training",
+    "aliases": [
+      "training",
+      "trained staff",
+      "trained employees",
+      "conducted training",
+      "staff training",
+      "employee training"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "deliver",
+    "impact_weight": 96,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Deliver employee training",
+    "positive_verbs": [
+      "train",
+      "coach",
+      "educate",
+      "conduct"
+    ],
+    "negative_verbs": []
+  },
+
+  "mentoring": {
+    "canonical": "Mentoring",
+    "aliases": [
+      "mentoring",
+      "mentor",
+      "mentored"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "mentor",
+    "impact_weight": 95,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Mentor employees",
+    "positive_verbs": [
+      "mentor",
+      "coach",
+      "guide"
+    ],
+    "negative_verbs": []
+  },
+
+  "coaching": {
+    "canonical": "Coaching",
+    "aliases": [
+      "coaching",
+      "coach",
+      "coached"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "coach",
+    "impact_weight": 95,
+    "measurement_type": "activity",
+    "units": [],
+    "business_meaning": "Coach employees",
+    "positive_verbs": [
+      "coach",
+      "guide",
+      "develop"
+    ],
+    "negative_verbs": []
+  },
+
+  "cross functional collaboration": {
+    "canonical": "Cross Functional Collaboration",
+    "aliases": [
+      "cross functional",
+      "cross-functional",
+      "cross functional collaboration",
+      "cross functional teams",
+      "cross-functional teams"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "collaborate",
+    "impact_weight": 96,
+    "measurement_type": "leadership",
+    "units": [],
+    "business_meaning": "Collaborate across departments",
+    "positive_verbs": [
+      "lead",
+      "coordinate",
+      "collaborate",
+      "manage"
+    ],
+    "negative_verbs": []
+  },
+
+  "stakeholder management": {
+    "canonical": "Stakeholder Management",
+    "aliases": [
+      "stakeholder",
+      "stakeholder management",
+      "customer stakeholder",
+      "executive stakeholder"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "manage",
+    "impact_weight": 97,
+    "measurement_type": "leadership",
+    "units": [],
+    "business_meaning": "Manage stakeholders",
+    "positive_verbs": [
+      "manage",
+      "coordinate",
+      "communicate"
+    ],
+    "negative_verbs": []
+  },
+
+  "project management": {
+    "canonical": "Project Management",
+    "aliases": [
+      "project",
+      "project management",
+      "managed project",
+      "led project"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "lead",
+    "impact_weight": 98,
+    "measurement_type": "project",
+    "units": [],
+    "business_meaning": "Manage projects",
+    "positive_verbs": [
+      "lead",
+      "manage",
+      "deliver"
+    ],
+    "negative_verbs": []
+  },
+
+  "change management": {
+    "canonical": "Change Management",
+    "aliases": [
+      "change management",
+      "organizational change",
+      "change implementation"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "implement",
+    "impact_weight": 97,
+    "measurement_type": "leadership",
+    "units": [],
+    "business_meaning": "Lead organizational change",
+    "positive_verbs": [
+      "implement",
+      "lead",
+      "manage"
+    ],
+    "negative_verbs": []
+  },
+
+  "strategic planning": {
+    "canonical": "Strategic Planning",
+    "aliases": [
+      "strategy",
+      "strategic planning",
+      "business strategy"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "develop",
+    "impact_weight": 99,
+    "measurement_type": "strategy",
+    "units": [],
+    "business_meaning": "Develop business strategy",
+    "positive_verbs": [
+      "develop",
+      "create",
+      "lead"
+    ],
+    "negative_verbs": []
+  },
+
+  "performance management": {
+    "canonical": "Performance Management",
+    "aliases": [
+      "performance management",
+      "performance review",
+      "performance evaluation"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "improve",
+    "impact_weight": 95,
+    "measurement_type": "leadership",
+    "units": [],
+    "business_meaning": "Improve employee performance",
+    "positive_verbs": [
+      "improve",
+      "manage",
+      "evaluate"
+    ],
+    "negative_verbs": []
+  },
+
+  "employee engagement": {
+    "canonical": "Employee Engagement",
+    "aliases": [
+      "employee engagement",
+      "staff engagement",
+      "team engagement"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "increase",
+    "impact_weight": 94,
+    "measurement_type": "percentage",
+    "units": [
+      "%"
+    ],
+    "business_meaning": "Increase employee engagement",
+    "positive_verbs": [
+      "increase",
+      "improve",
+      "develop"
+    ],
+    "negative_verbs": [
+      "reduce"
+    ]
+  },
+
+  "decision making": {
+    "canonical": "Decision Making",
+    "aliases": [
+      "decision making",
+      "data driven decision making",
+      "data-based decision making"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "improve",
+    "impact_weight": 94,
+    "measurement_type": "leadership",
+    "units": [],
+    "business_meaning": "Improve organizational decisions",
+    "positive_verbs": [
+      "lead",
+      "improve",
+      "drive"
+    ],
+    "negative_verbs": []
+  },
+
+  "continuous improvement": {
+    "canonical": "Continuous Improvement",
+    "aliases": [
+      "continuous improvement",
+      "ci",
+      "process improvement",
+      "operational excellence"
+    ],
+    "business_area": "Leadership",
+    "preferred_direction": "improve",
+    "impact_weight": 98,
+    "measurement_type": "program",
+    "units": [],
+    "business_meaning": "Drive continuous improvement",
+    "positive_verbs": [
+      "lead",
+      "implement",
+      "improve",
+      "drive"
+    ],
+    "negative_verbs": []
+  }
+}

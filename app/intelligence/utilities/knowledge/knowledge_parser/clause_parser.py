@@ -19,7 +19,7 @@ class ClauseParser:
         path = (
             Path(__file__).resolve().parent.parent
             / "knowledge_knowledge"
-            / "data"
+            / "semantics"
             / "clause_patterns.json"
         )
 

@@ -1,13 +1,20 @@
 """
 Sentence Parser
 
-Converts one resume sentence into a fully
-interpreted KnowledgeSentence.
+Converts a single semantic clause into a KnowledgeSentence.
 
-This is the core semantic parser used
-throughout the GetHired Intelligence Engine.
+NOTE:
+This parser parses ONE semantic clause.
 
+KnowledgePipeline is responsible for creating:
+Document
+    -> Sentence
+        -> Clause
+
+SentenceParser only returns a temporary KnowledgeSentence
+containing the extracted KnowledgeFacts.
 """
+
 from app.intelligence.utilities.knowledge.knowledge_parser.parser_utils import (
     ParserUtils,
 )
@@ -45,7 +52,7 @@ from app.intelligence.utilities.knowledge.knowledge_reasoners.domain_reasoner im
     DomainReasoner,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_reasoners.measurement_reasoner import (
+from app.intelligence.utilities.knowledge.knowledge_reasoners.measurement_reasoners.measurement_reasoner import (
     MeasurementReasoner,
 )
 
@@ -72,29 +79,34 @@ class SentenceParser:
 
     # ----------------------------------------------------------
 
-    def parse(self, sentence: str):
-
+    def parse(self, text: str) -> KnowledgeSentence:
         """
-        Parse a single resume sentence.
+        Parse ONE semantic clause.
+
+        Returns a temporary KnowledgeSentence containing
+        the extracted KnowledgeFact(s).
+
+        KnowledgePipeline later inserts these facts
+        into KnowledgeClause objects.
         """
 
-        # ------------------------------------------------------
+        # --------------------------------------------------
         # Extraction
-        # ------------------------------------------------------
+        # --------------------------------------------------
 
-        action = self.action_extractor.extract(sentence)
+        action = self.action_extractor.extract(text)
 
-        obj = self.object_extractor.extract(sentence)
+        obj = self.object_extractor.extract(text)
 
         domain = self.domain_reasoner.reason(
             action,
             obj
         )
 
-        metric = self.metric_extractor.extract(sentence)
+        metric = self.metric_extractor.extract(text)
 
         measurement = self.measurement_extractor.extract(
-            sentence,
+            text,
             metric
         )
 
@@ -103,11 +115,11 @@ class SentenceParser:
             measurement
         )
 
-        modifiers = self.modifier_extractor.extract(sentence)
+        modifiers = self.modifier_extractor.extract(text)
 
-        # ------------------------------------------------------
+        # --------------------------------------------------
         # Interpretation
-        # ------------------------------------------------------
+        # --------------------------------------------------
 
         interpretation = KnowledgeInterpretation(
 
@@ -150,19 +162,19 @@ class SentenceParser:
 
                 measurement,
 
-                modifiers
+                modifiers,
 
-            )
+            ),
 
         )
 
-        # ------------------------------------------------------
+        # --------------------------------------------------
         # Knowledge Fact
-        # ------------------------------------------------------
+        # --------------------------------------------------
 
         fact = KnowledgeFact(
 
-            text=sentence,
+            text=text,
 
             interpretation=interpretation,
 
@@ -172,22 +184,22 @@ class SentenceParser:
 
             confidence=interpretation.confidence,
 
-            source="resume"
+            source="resume",
 
         )
 
-        # ------------------------------------------------------
-        # Sentence
-        # ------------------------------------------------------
+        # --------------------------------------------------
+        # Temporary Sentence
+        # --------------------------------------------------
 
-        return KnowledgeSentence(
+        sentence = KnowledgeSentence(
 
-            original_text=sentence,
+            original_text=text,
 
             facts=[fact],
 
-            confidence=fact.confidence
+            confidence=fact.confidence,
 
         )
 
-    
+        return sentence

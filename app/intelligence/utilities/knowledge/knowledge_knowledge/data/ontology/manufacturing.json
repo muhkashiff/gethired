@@ -1,0 +1,226 @@
+{
+  "yield": {
+    "canonical": "Production Yield",
+    "aliases": ["yield", "production yield", "line yield", "manufacturing yield"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 95,
+    "business_meaning": "Production Efficiency",
+    "measurement_type": "percentage",
+    "units": ["%", "percent"],
+    "positive_verbs": ["increase", "improve", "maximize", "optimize"],
+    "negative_verbs": ["reduce", "decrease"],
+    "industry": ["Manufacturing", "Food", "FMCG"],
+    "related_metrics": ["downtime", "throughput", "productivity"]
+  },
+
+  "throughput": {
+    "canonical": "Production Throughput",
+    "aliases": ["throughput", "output rate"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 90,
+    "business_meaning": "Production Capacity",
+    "measurement_type": "rate",
+    "units": ["units/hr", "cases/hr"],
+    "positive_verbs": ["increase", "improve"],
+    "negative_verbs": ["reduce"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["yield", "capacity"]
+  },
+
+  "downtime": {
+    "canonical": "Downtime",
+    "aliases": ["downtime", "machine downtime", "line downtime"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 94,
+    "business_meaning": "Equipment Availability",
+    "measurement_type": "time",
+    "units": ["hours", "minutes"],
+    "positive_verbs": ["reduce", "minimize"],
+    "negative_verbs": ["increase"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["availability", "oee"]
+  },
+
+  "availability": {
+    "canonical": "Equipment Availability",
+    "aliases": ["availability", "line availability"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 92,
+    "business_meaning": "Equipment Performance",
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "positive_verbs": ["increase", "improve"],
+    "negative_verbs": ["reduce"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["downtime", "oee"]
+  },
+
+  "oee": {
+    "canonical": "Overall Equipment Effectiveness",
+    "aliases": ["oee", "overall equipment effectiveness"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 100,
+    "business_meaning": "Manufacturing Excellence",
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "positive_verbs": ["increase", "improve", "optimize"],
+    "negative_verbs": ["reduce"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["availability", "performance", "quality"]
+  },
+
+  "capacity": {
+    "canonical": "Production Capacity",
+    "aliases": ["capacity", "plant capacity"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 85,
+    "business_meaning": "Production Capability",
+    "measurement_type": "quantity",
+    "units": ["units", "cases"],
+    "positive_verbs": ["increase", "expand"],
+    "negative_verbs": ["reduce"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["throughput"]
+  },
+
+  "cycle_time": {
+    "canonical": "Cycle Time",
+    "aliases": ["cycle time", "process cycle time"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 90,
+    "business_meaning": "Process Efficiency",
+    "measurement_type": "time",
+    "units": ["seconds", "minutes"],
+    "positive_verbs": ["reduce", "shorten"],
+    "negative_verbs": ["increase"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["throughput"]
+  },
+
+  "changeover_time": {
+    "canonical": "Changeover Time",
+    "aliases": ["changeover", "setup time"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 85,
+    "business_meaning": "Operational Flexibility",
+    "measurement_type": "time",
+    "units": ["minutes", "hours"],
+    "positive_verbs": ["reduce"],
+    "negative_verbs": ["increase"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["cycle_time"]
+  },
+
+  "waste": {
+    "canonical": "Manufacturing Waste",
+    "aliases": ["waste", "material waste", "process waste"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 92,
+    "business_meaning": "Cost Optimization",
+    "measurement_type": "quantity",
+    "units": ["kg", "%"],
+    "positive_verbs": ["reduce", "eliminate"],
+    "negative_verbs": ["increase"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["scrap", "yield"]
+  },
+
+  "scrap": {
+    "canonical": "Scrap",
+    "aliases": ["scrap", "scrap rate"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 91,
+    "business_meaning": "Material Utilization",
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "positive_verbs": ["reduce"],
+    "negative_verbs": ["increase"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["waste", "rework"]
+  },
+
+  "rework": {
+    "canonical": "Rework",
+    "aliases": ["rework", "rework rate"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 89,
+    "business_meaning": "Process Quality",
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "positive_verbs": ["reduce"],
+    "negative_verbs": ["increase"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["scrap", "defects"]
+  },
+
+  "productivity": {
+    "canonical": "Productivity",
+    "aliases": ["productivity", "labor productivity"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 95,
+    "business_meaning": "Operational Efficiency",
+    "measurement_type": "ratio",
+    "units": ["%", "units/hour"],
+    "positive_verbs": ["increase", "improve", "optimize"],
+    "negative_verbs": ["reduce"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["yield", "throughput"]
+  },
+
+  "utilization": {
+    "canonical": "Machine Utilization",
+    "aliases": ["utilization", "equipment utilization"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 88,
+    "business_meaning": "Asset Efficiency",
+    "measurement_type": "percentage",
+    "units": ["%"],
+    "positive_verbs": ["increase"],
+    "negative_verbs": ["reduce"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["availability"]
+  },
+
+  "output": {
+    "canonical": "Production Output",
+    "aliases": ["output", "production output"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 90,
+    "business_meaning": "Production Performance",
+    "measurement_type": "quantity",
+    "units": ["units", "cases", "tons"],
+    "positive_verbs": ["increase"],
+    "negative_verbs": ["reduce"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["throughput", "capacity"]
+  },
+
+  "bottleneck": {
+    "canonical": "Production Bottleneck",
+    "aliases": ["bottleneck", "process bottleneck"],
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 84,
+    "business_meaning": "Flow Optimization",
+    "measurement_type": "process",
+    "units": [],
+    "positive_verbs": ["eliminate", "reduce"],
+    "negative_verbs": ["increase"],
+    "industry": ["Manufacturing"],
+    "related_metrics": ["cycle_time", "throughput"]
+  }
+}

@@ -12,7 +12,6 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretat
     KnowledgeInterpretation,
 )
 
-
 # ---------------------------------------------------------
 # Atomic Knowledge
 # ---------------------------------------------------------
@@ -21,22 +20,6 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretat
 class KnowledgeFact:
     """
     Smallest reusable unit of knowledge.
-
-    One resume bullet may produce one or more KnowledgeFacts.
-
-    Example
-
-    Led cross-functional teams and implemented FSSC22000.
-
-    ↓
-
-    KnowledgeFact 1
-
-    Leadership
-
-    KnowledgeFact 2
-
-    Food Safety
     """
 
     text: str = ""
@@ -55,15 +38,21 @@ class KnowledgeFact:
 
 
 # ---------------------------------------------------------
-# Parsed Sentence
+# Knowledge Clause
 # ---------------------------------------------------------
 
 @dataclass
-class KnowledgeSentence:
+class KnowledgeClause:
     """
-    Represents one parsed sentence.
+    Represents one semantic clause.
 
-    A sentence can contain multiple KnowledgeFacts.
+    Example
+
+    Implemented ISO9001,
+    trained staff,
+    improved productivity.
+
+    One sentence may contain multiple clauses.
     """
 
     original_text: str = ""
@@ -74,7 +63,28 @@ class KnowledgeSentence:
 
 
 # ---------------------------------------------------------
-# Knowledge Collection
+# Parsed Sentence
+# ---------------------------------------------------------
+
+@dataclass
+class KnowledgeSentence:
+    """
+    One parsed sentence.
+
+    Contains one or more semantic clauses.
+    """
+
+    original_text: str = ""
+
+    clauses: List[KnowledgeClause] = field(default_factory=list)
+
+    facts: List[KnowledgeFact] = field(default_factory=list)
+
+    confidence: float = 0.0
+
+
+# ---------------------------------------------------------
+# Knowledge Document
 # ---------------------------------------------------------
 
 @dataclass
@@ -84,14 +94,15 @@ class KnowledgeDocument:
 
     Resume
     Job Description
-    Interview Transcript
+    Interview
     Recruiter Notes
 
-    All become KnowledgeDocuments.
+    Everything becomes a KnowledgeDocument.
     """
 
     sentences: List[KnowledgeSentence] = field(default_factory=list)
 
+    # Flattened index of every fact
     facts: List[KnowledgeFact] = field(default_factory=list)
 
     statistics: Dict = field(default_factory=dict)

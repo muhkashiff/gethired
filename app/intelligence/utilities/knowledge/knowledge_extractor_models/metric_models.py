@@ -3,14 +3,10 @@ Metric Knowledge Model
 """
 
 from dataclasses import dataclass
-
+from dataclasses import dataclass, field
 
 @dataclass
 class MetricKnowledge:
-    """
-    Represents a business KPI or measurable metric
-    extracted from a sentence.
-    """
 
     found: bool = False
 
@@ -23,3 +19,12 @@ class MetricKnowledge:
     unit: str = ""
 
     confidence: float = 0.0
+
+    # ---------- Ontology ----------
+    entity_id: str = ""
+
+    business_area: str = ""
+
+    source: str = ""
+
+    metadata: dict = field(default_factory=dict)

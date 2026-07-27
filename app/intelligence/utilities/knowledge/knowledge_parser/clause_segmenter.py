@@ -33,7 +33,7 @@ from app.intelligence.utilities.knowledge.knowledge_extractors.measurement_extra
 from app.intelligence.utilities.knowledge.knowledge_extractors.modifier_extractor import ModifierExtractor
 
 from app.intelligence.utilities.knowledge.knowledge_reasoners.domain_reasoner import DomainReasoner
-from app.intelligence.utilities.knowledge.knowledge_reasoners.measurement_reasoner import MeasurementReasoner
+from app.intelligence.utilities.knowledge.knowledge_reasoners.measurement_reasoners.measurement_reasoner import MeasurementReasoner
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretation_models import (
     KnowledgeInterpretation,

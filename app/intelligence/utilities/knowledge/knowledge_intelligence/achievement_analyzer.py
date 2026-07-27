@@ -1,7 +1,7 @@
 """
 Achievement Analyzer
 
-Evaluates the strength of KnowledgeFacts.
+Evaluates the strength of extracted KnowledgeFacts.
 
 Input
 -----
@@ -9,7 +9,7 @@ KnowledgeDocument
 
 Output
 ------
-AchievementAnalysis objects
+List[AchievementAnalysis]
 """
 
 from app.intelligence.utilities.knowledge.knowledge_intelligence.achievement_models import (
@@ -23,21 +23,30 @@ class AchievementAnalyzer:
         pass
 
     # --------------------------------------------------------
+    # Public
+    # --------------------------------------------------------
 
     def analyze(self, document):
 
         analyses = []
 
-        for fact in document.facts:
+        # Traverse complete hierarchy
+        for sentence in document.sentences:
 
-            analyses.append(
+            for clause in sentence.clauses:
 
-                self._analyze_fact(fact)
+                for fact in clause.facts:
 
-            )
+                    analyses.append(
+
+                        self._analyze_fact(fact)
+
+                    )
 
         return analyses
 
+    # --------------------------------------------------------
+    # Private
     # --------------------------------------------------------
 
     def _analyze_fact(self, fact):
@@ -46,32 +55,53 @@ class AchievementAnalyzer:
 
         analysis = AchievementAnalysis()
 
-        analysis.found = fact.achievement
+        # --------------------------------------------------
+        # Is this an achievement?
+        # --------------------------------------------------
 
-        if not fact.achievement:
+        analysis.found = interpretation.achievement
+
+        if not interpretation.achievement:
+
             return analysis
 
-        # -----------------------------------------
-        # Title
-        # -----------------------------------------
+        # --------------------------------------------------
+        # Basic Information
+        # --------------------------------------------------
 
         analysis.title = fact.text
 
-        # -----------------------------------------
-        # Category
-        # -----------------------------------------
+        if interpretation.domain.found:
 
-        analysis.category = interpretation.domain.domain
+            analysis.category = interpretation.domain.domain
 
-        # -----------------------------------------
+        else:
+
+            analysis.category = "general"
+
+        # --------------------------------------------------
         # Quantified
-        # -----------------------------------------
+        # --------------------------------------------------
 
         analysis.quantified = interpretation.quantified
 
-        # -----------------------------------------
-        # Leadership
-        # -----------------------------------------
+        # --------------------------------------------------
+        # Leadership Detection
+        # --------------------------------------------------
+
+        leadership_actions = {
+
+            "lead",
+            "manage",
+            "coach",
+            "mentor",
+            "train",
+            "direct",
+            "supervise",
+            "coordinate",
+            "guide",
+
+        }
 
         leadership_domains = {
 
@@ -81,34 +111,37 @@ class AchievementAnalyzer:
 
         }
 
-        if interpretation.action.base in {
-
-            "lead",
-            "manage",
-            "coach",
-            "train",
-
-        }:
+        if (
+            interpretation.action.found
+            and interpretation.action.base in leadership_actions
+        ):
 
             analysis.leadership = True
 
-        if interpretation.domain.domain in leadership_domains:
+        if (
+            interpretation.domain.found
+            and interpretation.domain.domain in leadership_domains
+        ):
 
             analysis.leadership = True
 
-        # -----------------------------------------
-        # Executive
-        # -----------------------------------------
+        # --------------------------------------------------
+        # Executive Signal
+        # --------------------------------------------------
 
         analysis.executive = getattr(
-                    fact,
-                    "executive_signal",
-                    False,
-                )
 
-        # -----------------------------------------
+            fact,
+
+            "executive_signal",
+
+            False,
+
+        )
+
+        # --------------------------------------------------
         # Business Impact
-        # -----------------------------------------
+        # --------------------------------------------------
 
         if interpretation.measurement.found:
 
@@ -116,52 +149,114 @@ class AchievementAnalyzer:
 
                 analysis.business_impact = True
 
-        # -----------------------------------------
+        if interpretation.metric.found:
+
+            analysis.business_impact = True
+
+        # --------------------------------------------------
+        # Certification Achievement
+        # --------------------------------------------------
+
+        analysis.certification = False
+
+        if interpretation.object.found:
+
+            if interpretation.object.category in {
+
+                "certification",
+
+                "food_safety",
+
+                "quality",
+
+            }:
+
+                analysis.certification = True
+
+        # --------------------------------------------------
+        # Improvement Achievement
+        # --------------------------------------------------
+
+        analysis.improvement = False
+
+        if interpretation.action.found:
+
+            if interpretation.action.base in {
+
+                "improve",
+
+                "reduce",
+
+                "increase",
+
+                "optimize",
+
+                "enhance",
+
+                "implement",
+
+            }:
+
+                analysis.improvement = True
+
+        # --------------------------------------------------
         # Score
-        # -----------------------------------------
+        # --------------------------------------------------
 
         score = 0
 
         if analysis.quantified:
-            score += 30
+            score += 25
 
         if analysis.business_impact:
-            score += 30
+            score += 25
 
         if analysis.leadership:
-            score += 20
+            score += 15
 
         if analysis.executive:
-            score += 20
+            score += 10
 
-        analysis.score = score
+        if analysis.certification:
+            score += 15
 
-        # -----------------------------------------
+        if analysis.improvement:
+            score += 10
+
+        analysis.score = min(score, 100)
+
+        # --------------------------------------------------
         # Confidence
-        # -----------------------------------------
+        # --------------------------------------------------
 
         analysis.confidence = interpretation.confidence
 
-        # -----------------------------------------
+        # --------------------------------------------------
         # Recommendation
-        # -----------------------------------------
+        # --------------------------------------------------
 
-        if score >= 90:
+        if analysis.score >= 90:
 
-            analysis.recommendation = "Exceptional achievement."
+            analysis.recommendation = (
+                "Exceptional executive-level achievement."
+            )
 
-        elif score >= 70:
+        elif analysis.score >= 75:
 
-            analysis.recommendation = "Strong achievement."
+            analysis.recommendation = (
+                "Strong measurable achievement."
+            )
 
-        elif score >= 50:
+        elif analysis.score >= 60:
 
-            analysis.recommendation = "Moderate achievement."
+            analysis.recommendation = (
+                "Good achievement. Add more quantified business impact."
+            )
 
         else:
 
             analysis.recommendation = (
-                "Consider adding measurable business impact."
+                "Add measurable KPIs, business impact and quantified improvements."
             )
 
         return analysis

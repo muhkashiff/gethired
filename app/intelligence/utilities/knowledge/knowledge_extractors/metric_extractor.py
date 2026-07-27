@@ -23,7 +23,7 @@ class MetricExtractor:
 
             / "knowledge_knowledge"
 
-            / "data"
+            / "ontology"
 
             / "metrics_dictionary.json"
 

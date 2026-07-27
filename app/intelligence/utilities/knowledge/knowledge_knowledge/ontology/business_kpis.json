@@ -1,0 +1,81 @@
+{
+  "complaints": {
+    "canonical": "Customer Complaints",
+    "business_area": "Quality",
+    "preferred_direction": "decrease",
+    "impact_weight": 95,
+    "business_meaning": "Customer Satisfaction"
+  },
+
+  "yield": {
+    "canonical": "Production Yield",
+    "business_area": "Manufacturing",
+    "preferred_direction": "increase",
+    "impact_weight": 90,
+    "business_meaning": "Production Efficiency"
+  },
+
+  "downtime": {
+    "canonical": "Downtime",
+    "business_area": "Operations",
+    "preferred_direction": "decrease",
+    "impact_weight": 85,
+    "business_meaning": "Operational Efficiency"
+  },
+
+  "productivity": {
+    "canonical": "Productivity",
+    "business_area": "Operations",
+    "preferred_direction": "increase",
+    "impact_weight": 90,
+    "business_meaning": "Operational Excellence"
+  },
+
+  "waste": {
+    "canonical": "Waste",
+    "business_area": "Manufacturing",
+    "preferred_direction": "decrease",
+    "impact_weight": 85,
+    "business_meaning": "Cost Optimization"
+  },
+
+  "defects": {
+    "canonical": "Product Defects",
+    "business_area": "Quality",
+    "preferred_direction": "decrease",
+    "impact_weight": 92,
+    "business_meaning": "Product Quality"
+  },
+
+  "cost": {
+    "canonical": "Operating Cost",
+    "business_area": "Finance",
+    "preferred_direction": "decrease",
+    "impact_weight": 88,
+    "business_meaning": "Cost Reduction"
+  },
+
+  "revenue": {
+    "canonical": "Revenue",
+    "business_area": "Finance",
+    "preferred_direction": "increase",
+    "impact_weight": 100,
+    "business_meaning": "Business Growth"
+  },
+
+  "sales": {
+    "canonical": "Sales",
+    "business_area": "Commercial",
+    "preferred_direction": "increase",
+    "impact_weight": 98,
+    "business_meaning": "Revenue Growth"
+  },
+
+  "inventory": {
+    "canonical": "Inventory",
+    "business_area": "Supply Chain",
+    "preferred_direction": "optimize",
+    "impact_weight": 80,
+    "business_meaning": "Inventory Efficiency"
+  }
+}

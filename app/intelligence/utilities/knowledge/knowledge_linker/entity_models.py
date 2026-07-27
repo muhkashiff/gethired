@@ -1,28 +1,23 @@
-"""
-Object Knowledge Model
-"""
-
-from dataclasses import dataclass
 from dataclasses import dataclass, field
 
+
 @dataclass
-class ObjectKnowledge:
+class LinkedEntity:
 
     found: bool = False
 
-    original: str = ""
+    entity_id: str = ""
 
     canonical: str = ""
 
     category: str = ""
 
-    confidence: float = 0.0
-
-    # ---------- Ontology ----------
-    entity_id: str = ""
-
     business_area: str = ""
 
     source: str = ""
+
+    confidence: float = 0.0
+
+    aliases: list = field(default_factory=list)
 
     metadata: dict = field(default_factory=dict)
