@@ -1,49 +1,121 @@
 {
     "leadership": {
-        "people": "leadership",
-        "operations": "operational_leadership",
-        "quality": "quality_leadership",
-        "food_safety": "food_safety_leadership"
+        "people": {
+            "domain_id": "DOMAIN_LEADERSHIP",
+            "canonical": "leadership"
+        },
+        "operations": {
+            "domain_id": "DOMAIN_OPERATIONAL_LEADERSHIP",
+            "canonical": "operational_leadership"
+        },
+        "quality": {
+            "domain_id": "DOMAIN_QUALITY_LEADERSHIP",
+            "canonical": "quality_leadership"
+        },
+        "food_safety": {
+            "domain_id": "DOMAIN_FOOD_SAFETY_LEADERSHIP",
+            "canonical": "food_safety_leadership"
+        }
     },
 
     "management": {
-        "people": "people_management",
-        "quality": "quality_management",
-        "operations": "operations_management",
-        "facility": "facility_management"
+        "people": {
+            "domain_id": "DOMAIN_PEOPLE_MANAGEMENT",
+            "canonical": "people_management"
+        },
+        "quality": {
+            "domain_id": "DOMAIN_QUALITY_MANAGEMENT",
+            "canonical": "quality_management"
+        },
+        "operations": {
+            "domain_id": "DOMAIN_OPERATIONS_MANAGEMENT",
+            "canonical": "operations_management"
+        },
+        "facility": {
+            "domain_id": "DOMAIN_FACILITY_MANAGEMENT",
+            "canonical": "facility_management"
+        }
     },
 
     "implementation": {
-        "food_safety": "food_safety",
-        "quality": "quality",
-        "operations": "operations",
-        "continuous_improvement": "continuous_improvement"
+        "food_safety": {
+            "domain_id": "DOMAIN_FOOD_SAFETY",
+            "canonical": "food_safety"
+        },
+        "quality": {
+            "domain_id": "DOMAIN_QUALITY",
+            "canonical": "quality"
+        },
+        "operations": {
+            "domain_id": "DOMAIN_OPERATIONS",
+            "canonical": "operations"
+        },
+        "continuous_improvement": {
+            "domain_id": "DOMAIN_CONTINUOUS_IMPROVEMENT",
+            "canonical": "continuous_improvement"
+        }
     },
 
     "improvement": {
-        "operations": "operational_excellence",
-        "quality": "quality_improvement",
-        "people": "people_development"
+        "operations": {
+            "domain_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
+            "canonical": "operational_excellence"
+        },
+        "quality": {
+            "domain_id": "DOMAIN_QUALITY_IMPROVEMENT",
+            "canonical": "quality_improvement"
+        },
+        "people": {
+            "domain_id": "DOMAIN_PEOPLE_DEVELOPMENT",
+            "canonical": "people_development"
+        }
     },
 
     "optimization": {
-        "operations": "operational_excellence",
-        "quality": "quality_improvement"
+        "operations": {
+            "domain_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
+            "canonical": "operational_excellence"
+        },
+        "quality": {
+            "domain_id": "DOMAIN_QUALITY_IMPROVEMENT",
+            "canonical": "quality_improvement"
+        }
     },
 
     "achievement": {
-        "quality": "quality_excellence",
-        "food_safety": "food_safety_excellence",
-        "operations": "operational_excellence"
+        "quality": {
+            "domain_id": "DOMAIN_QUALITY_EXCELLENCE",
+            "canonical": "quality_excellence"
+        },
+        "food_safety": {
+            "domain_id": "DOMAIN_FOOD_SAFETY_EXCELLENCE",
+            "canonical": "food_safety_excellence"
+        },
+        "operations": {
+            "domain_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
+            "canonical": "operational_excellence"
+        }
     },
 
     "certification": {
-        "quality": "quality_systems",
-        "food_safety": "food_safety_systems"
+        "quality": {
+            "domain_id": "DOMAIN_QUALITY_SYSTEMS",
+            "canonical": "quality_systems"
+        },
+        "food_safety": {
+            "domain_id": "DOMAIN_FOOD_SAFETY_SYSTEMS",
+            "canonical": "food_safety_systems"
+        }
     },
 
     "development": {
-        "people": "people_development",
-        "operations": "process_development"
+        "people": {
+            "domain_id": "DOMAIN_PEOPLE_DEVELOPMENT",
+            "canonical": "people_development"
+        },
+        "operations": {
+            "domain_id": "DOMAIN_PROCESS_DEVELOPMENT",
+            "canonical": "process_development"
+        }
     }
 }

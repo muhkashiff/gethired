@@ -1,1 +1,25 @@
-{}
+{
+  "ISO 9001": {
+    "entity_id": "ISO_9001",
+    "canonical": "ISO 9001",
+    "category": "quality"
+  },
+
+  "FSSC 22000": {
+    "entity_id": "FSSC_22000",
+    "canonical": "FSSC 22000",
+    "category": "food_safety"
+  },
+
+  "BRCGS": {
+    "entity_id": "BRCGS",
+    "canonical": "BRCGS",
+    "category": "food_safety"
+  },
+
+  "HACCP": {
+    "entity_id": "HACCP",
+    "canonical": "HACCP",
+    "category": "food_safety"
+  }
+}

@@ -1,81 +1,120 @@
 {
-  "complaints": {
-    "canonical": "Customer Complaints",
-    "business_area": "Quality",
-    "preferred_direction": "decrease",
-    "impact_weight": 95,
-    "business_meaning": "Customer Satisfaction"
-  },
+    "yield": {
+        "entity_id": "KPI_PRODUCTION_YIELD",
+        "canonical": "Production Yield",
+        "category": "operations",
+        "unit": "%"
+    },
 
-  "yield": {
-    "canonical": "Production Yield",
-    "business_area": "Manufacturing",
-    "preferred_direction": "increase",
-    "impact_weight": 90,
-    "business_meaning": "Production Efficiency"
-  },
+    "productivity": {
+        "entity_id": "KPI_PRODUCTIVITY",
+        "canonical": "Productivity",
+        "category": "operations",
+        "unit": "%"
+    },
 
-  "downtime": {
-    "canonical": "Downtime",
-    "business_area": "Operations",
-    "preferred_direction": "decrease",
-    "impact_weight": 85,
-    "business_meaning": "Operational Efficiency"
-  },
+    "efficiency": {
+        "entity_id": "KPI_EFFICIENCY",
+        "canonical": "Efficiency",
+        "category": "operations",
+        "unit": "%"
+    },
 
-  "productivity": {
-    "canonical": "Productivity",
-    "business_area": "Operations",
-    "preferred_direction": "increase",
-    "impact_weight": 90,
-    "business_meaning": "Operational Excellence"
-  },
+    "complaints": {
+        "entity_id": "KPI_CUSTOMER_COMPLAINTS",
+        "canonical": "Customer Complaints",
+        "category": "quality",
+        "unit": "%"
+    },
 
-  "waste": {
-    "canonical": "Waste",
-    "business_area": "Manufacturing",
-    "preferred_direction": "decrease",
-    "impact_weight": 85,
-    "business_meaning": "Cost Optimization"
-  },
+    "audit": {
+        "entity_id": "KPI_AUDIT",
+        "canonical": "Audit",
+        "category": "quality",
+        "unit": "count"
+    },
 
-  "defects": {
-    "canonical": "Product Defects",
-    "business_area": "Quality",
-    "preferred_direction": "decrease",
-    "impact_weight": 92,
-    "business_meaning": "Product Quality"
-  },
+    "audits": {
+        "entity_id": "KPI_AUDIT",
+        "canonical": "Audit",
+        "category": "quality",
+        "unit": "count"
+    },
 
-  "cost": {
-    "canonical": "Operating Cost",
-    "business_area": "Finance",
-    "preferred_direction": "decrease",
-    "impact_weight": 88,
-    "business_meaning": "Cost Reduction"
-  },
+    "defects": {
+        "entity_id": "KPI_DEFECT_RATE",
+        "canonical": "Defect Rate",
+        "category": "quality",
+        "unit": "%"
+    },
 
-  "revenue": {
-    "canonical": "Revenue",
-    "business_area": "Finance",
-    "preferred_direction": "increase",
-    "impact_weight": 100,
-    "business_meaning": "Business Growth"
-  },
+    "waste": {
+        "entity_id": "KPI_PRODUCTION_WASTE",
+        "canonical": "Production Waste",
+        "category": "operations",
+        "unit": "%"
+    },
 
-  "sales": {
-    "canonical": "Sales",
-    "business_area": "Commercial",
-    "preferred_direction": "increase",
-    "impact_weight": 98,
-    "business_meaning": "Revenue Growth"
-  },
+    "downtime": {
+        "entity_id": "KPI_DOWNTIME",
+        "canonical": "Downtime",
+        "category": "operations",
+        "unit": "hours"
+    },
 
-  "inventory": {
-    "canonical": "Inventory",
-    "business_area": "Supply Chain",
-    "preferred_direction": "optimize",
-    "impact_weight": 80,
-    "business_meaning": "Inventory Efficiency"
-  }
+    "cost": {
+        "entity_id": "KPI_COST",
+        "canonical": "Cost",
+        "category": "finance",
+        "unit": "$"
+    },
+
+    "savings": {
+        "entity_id": "KPI_COST_SAVINGS",
+        "canonical": "Cost Savings",
+        "category": "finance",
+        "unit": "$"
+    },
+
+    "revenue": {
+        "entity_id": "KPI_REVENUE",
+        "canonical": "Revenue",
+        "category": "finance",
+        "unit": "$"
+    },
+
+    "inventory": {
+        "entity_id": "KPI_INVENTORY",
+        "canonical": "Inventory",
+        "category": "operations",
+        "unit": "units"
+    },
+
+    "stock": {
+        "entity_id": "KPI_INVENTORY",
+        "canonical": "Inventory",
+        "category": "operations",
+        "unit": "units"
+    },
+
+    "training": {
+        "entity_id": "KPI_TRAINING",
+        "canonical": "Training",
+        "category": "people",
+        "unit": "hours"
+    },
+
+    "certification": {
+        "entity_id": "KPI_CERTIFICATION",
+        "canonical": "Certification",
+        "category": "quality",
+        "unit": "count"
+    },
+
+    "customer satisfaction": {
+        "entity_id": "KPI_CUSTOMER_SATISFACTION",
+        "canonical": "Customer Satisfaction",
+        "category": "quality",
+        "unit": "%"
+    }
 }

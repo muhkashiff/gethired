@@ -1,0 +1,62 @@
+{
+  "verb_replacements": {
+    "Led": "leading",
+    "Lead": "leading",
+    "Managed": "managing",
+    "Manage": "managing",
+    "Implemented": "implementing",
+    "Implement": "implementing",
+    "Developed": "developing",
+    "Develop": "developing",
+    "Created": "creating",
+    "Create": "creating",
+    "Designed": "designing",
+    "Design": "designing",
+    "Directed": "directing",
+    "Direct": "directing",
+    "Supervised": "supervising",
+    "Supervise": "supervising",
+    "Coached": "coaching",
+    "Coach": "coaching",
+    "Mentored": "mentoring",
+    "Mentor": "mentoring",
+    "Improved": "improving",
+    "Improve": "improving",
+    "Reduced": "reducing",
+    "Reduce": "reducing",
+    "Increased": "increasing",
+    "Increase": "increasing",
+    "Optimized": "optimizing",
+    "Optimize": "optimizing",
+    "Established": "establishing",
+    "Establish": "establishing",
+    "Built": "building",
+    "Build": "building",
+    "Achieved": "achieving",
+    "Achieve": "achieving",
+    "Certified": "achieving certification for",
+    "Resolved": "resolving",
+    "Performed": "performing",
+    "Conducted": "conducting",
+    "Executed": "executing",
+    "Delivered": "delivering",
+    "Introduced": "introducing",
+    "Standardized": "standardizing",
+    "Validated": "validating",
+    "Verified": "verifying"
+  },
+
+  "phrase_replacements": {
+    "FSSC 22000": "FSSC 22000 implementation",
+    "ISO 9001": "ISO 9001 implementation",
+    "Lean Manufacturing": "Lean Manufacturing initiatives",
+    "Six Sigma": "Six Sigma projects",
+    "Food Safety": "food safety systems",
+    "Supplier Quality": "supplier quality management"
+  },
+
+  "cleanup": {
+    "remove_period": true,
+    "capitalize": false
+  }
+}

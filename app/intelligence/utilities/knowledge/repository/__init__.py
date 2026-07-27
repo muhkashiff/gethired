@@ -1,7 +1,3 @@
-"""
-Knowledge Repository
-"""
+from .repository import Repository
 
-from .repository import KnowledgeRepository
-
-repository = KnowledgeRepository()
+repository = Repository()

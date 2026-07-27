@@ -1,83 +1,115 @@
 {
   "staff": {
-    "canonical": "staff",
+    "entity_id": "OBJ_STAFF",
+    "canonical": "Staff",
     "category": "people"
   },
+
   "employees": {
-    "canonical": "staff",
+    "entity_id": "OBJ_STAFF",
+    "canonical": "Staff",
     "category": "people"
   },
+
   "team": {
-    "canonical": "team",
+    "entity_id": "OBJ_TEAM",
+    "canonical": "Team",
     "category": "people"
   },
+
   "teams": {
-    "canonical": "team",
+    "entity_id": "OBJ_TEAM",
+    "canonical": "Team",
     "category": "people"
   },
+
   "supplier": {
-    "canonical": "supplier",
+    "entity_id": "OBJ_SUPPLIER",
+    "canonical": "Supplier",
     "category": "supply_chain"
   },
+
   "suppliers": {
-    "canonical": "supplier",
+    "entity_id": "OBJ_SUPPLIER",
+    "canonical": "Supplier",
     "category": "supply_chain"
   },
+
   "customer complaints": {
-    "canonical": "customer complaints",
+    "entity_id": "OBJ_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
     "category": "quality"
   },
+
   "complaints": {
-    "canonical": "customer complaints",
+    "entity_id": "OBJ_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
     "category": "quality"
   },
+
   "production": {
-    "canonical": "production",
+    "entity_id": "OBJ_PRODUCTION",
+    "canonical": "Production",
     "category": "manufacturing"
   },
+
   "yield": {
-    "canonical": "yield",
+    "entity_id": "OBJ_PRODUCTION_YIELD",
+    "canonical": "Production Yield",
     "category": "manufacturing"
   },
+
+  "production yield": {
+    "entity_id": "OBJ_PRODUCTION_YIELD",
+    "canonical": "Production Yield",
+    "category": "manufacturing"
+  },
+
   "productivity": {
-    "canonical": "productivity",
+    "entity_id": "OBJ_PRODUCTIVITY",
+    "canonical": "Productivity",
     "category": "operations"
   },
+
   "downtime": {
-    "canonical": "downtime",
+    "entity_id": "OBJ_DOWNTIME",
+    "canonical": "Downtime",
     "category": "operations"
   },
-  "iso 9001": {
+
+  "ISO 9001": {
+    "entity_id": "OBJ_ISO_9001",
     "canonical": "ISO 9001",
     "category": "quality"
   },
-  "fssc 22000": {
+
+  "iso 9001": {
+    "entity_id": "OBJ_ISO_9001",
+    "canonical": "ISO 9001",
+    "category": "quality"
+  },
+
+  "FSSC 22000": {
+    "entity_id": "OBJ_FSSC_22000",
     "canonical": "FSSC 22000",
     "category": "food_safety"
   },
-  "haccp": {
+
+  "fssc 22000": {
+    "entity_id": "OBJ_FSSC_22000",
+    "canonical": "FSSC 22000",
+    "category": "food_safety"
+  },
+
+  "HACCP": {
+    "entity_id": "OBJ_HACCP",
     "canonical": "HACCP",
     "category": "food_safety"
   },
-  "production yield": {
-    "canonical": "production yield",
-    "category": "manufacturing"
-},
-"optimized": {
-  "base": "optimize",
-  "gerund": "optimizing",
-  "category": "optimization"
-},
 
-"optimize": {
-  "base": "optimize",
-  "gerund": "optimizing",
-  "category": "optimization"
-},
-
-"optimizing": {
-  "base": "optimize",
-  "gerund": "optimizing",
-  "category": "optimization"
-}
+  "haccp": {
+    "entity_id": "OBJ_HACCP",
+    "canonical": "HACCP",
+    "category": "food_safety"
+  }
 }

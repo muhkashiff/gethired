@@ -1,121 +1,296 @@
 """
 Knowledge Repository
 
-Loads all dictionaries once.
-
-Every parser/reasoner/linker
-should use this instead of json.load().
+Single source of truth
+for the entire AI engine.
 """
 
 import json
+from pathlib import Path
 
-from .paths import CONFIG
-from .paths import ONTOLOGY
-from .paths import SEMANTICS
+from .cache import RepositoryCache
+from .entity_record import EntityRecord
 
 
-class KnowledgeRepository:
+ROOT = Path(__file__).resolve().parents[1]
+
+ONTOLOGY = ROOT / "knowledge_knowledge" / "ontology"
+SEMANTICS = ROOT / "knowledge_knowledge" / "semantics"
+CONFIG = ROOT / "knowledge_knowledge" / "config"
+
+
+class Repository:
 
     def __init__(self):
 
-        self._cache = {}
+        self.cache = RepositoryCache()
 
-    # ---------------------------------------------------------
+        self.load_all()
 
-    def _load(self, folder, filename):
+    # -------------------------------------------------------
+    # Utilities
+    # -------------------------------------------------------
 
-        key = f"{folder.name}/{filename}"
+    def normalize_key(self, text: str) -> str:
+        """
+        Normalize keys for reliable lookups.
+        """
 
-        if key not in self._cache:
+        return (
+            text.lower()
+            .strip()
+            .replace("_", " ")
+        )
 
-            path = folder / filename
+    # -------------------------------------------------------
 
-            with open(path, encoding="utf8") as f:
+    def _load_json(self, folder: Path, filename: str):
 
-                self._cache[key] = json.load(f)
+        path = folder / filename
 
-        return self._cache[key]
+        if not path.exists():
+            return {}
 
-    # =========================================================
-    # CONFIG
-    # =========================================================
+        with open(path, encoding="utf8") as f:
+            return json.load(f)
 
-    def clause_patterns(self):
+    # -------------------------------------------------------
+    # Load Everything
+    # -------------------------------------------------------
 
-        return self._load(CONFIG, "clause_patterns.json")
+    def load_all(self):
 
-    def measurement_patterns(self):
-    
-            return self._load(CONFIG, "measurement_patterns.json")
+        self.cache.actions = self._load_json(
+            ONTOLOGY,
+            "actions.json"
+        )
 
-    def confidence_rules(self):
+        self.cache.objects = self._load_json(
+            ONTOLOGY,
+            "objects.json"
+        )
 
-        return self._load(CONFIG, "confidence_rules.json")
+        self.cache.metrics = self._load_json(
+            ONTOLOGY,
+            "business_kpis.json"
+        )
 
-    def parser_rules(self):
+        self.cache.certifications = self._load_json(
+            ONTOLOGY,
+            "certifications.json"
+        )
 
-        return self._load(CONFIG, "parser_rules.json")
+        self.cache.technologies = self._load_json(
+            ONTOLOGY,
+            "technologies.json"
+        )
 
-    def modifier_dictionary(self):
+        self.cache.aliases = self._load_json(
+            ONTOLOGY,
+            "aliases.json"
+        )
 
-        return self._load(CONFIG, "modifier_dictionary.json")
+        self.cache.domains = self._load_json(
+            ONTOLOGY,
+            "domains.json"
+        )
 
-    def scoring_rules(self):
+        self.cache.semantics = self._load_json(
+            SEMANTICS,
+            "measurement_semantics.json"
+        )
 
-        return self._load(CONFIG, "scoring_rules.json")
+        self.cache.config = {}
 
-    # =========================================================
-    # SEMANTICS
-    # =========================================================
+    # -------------------------------------------------------
 
-    def measurement_semantics(self):
+    def reload(self):
 
-        return self._load(SEMANTICS, "measurement_semantics.json")
+        self.load_all()
 
-    def achievement_patterns(self):
+    # -------------------------------------------------------
+    # Generic Access
+    # -------------------------------------------------------
 
-        return self._load(SEMANTICS, "achievement_patterns.json")
+    def get_dictionary(self, name):
 
-    def executive_patterns(self):
+        return getattr(self.cache, name)
 
-        return self._load(SEMANTICS, "executive_patterns.json")
+    # -------------------------------------------------------
 
-    def direction_semantics(self):
+    def get_object(self, key):
 
-        return self._load(SEMANTICS, "direction_semantics.json")
+        return self.cache.objects.get(
+            self.normalize_key(key)
+        )
 
-    def impact_rules(self):
+    # -------------------------------------------------------
 
-        return self._load(SEMANTICS, "impact_rules.json")
+    def get_metric(self, key):
 
-    # =========================================================
-    # ONTOLOGY
-    # =========================================================
+        return self.cache.metrics.get(
+            self.normalize_key(key)
+        )
 
-    def actions(self):
+    # -------------------------------------------------------
 
-        return self._load(ONTOLOGY, "actions.json")
+    def get_action(self, key):
 
-    def objects(self):
+        return self.cache.actions.get(
+            self.normalize_key(key)
+        )
 
-        return self._load(ONTOLOGY, "objects.json")
+    # -------------------------------------------------------
 
-    def certifications(self):
+    def get_certification(self, key):
 
-        return self._load(ONTOLOGY, "certifications.json")
+        return self.cache.certifications.get(
+            self.normalize_key(key)
+        )
 
-    def technologies(self):
+    # -------------------------------------------------------
 
-        return self._load(ONTOLOGY, "technologies.json")
+    def get_technology(self, key):
 
-    def business_kpis(self):
+        return self.cache.technologies.get(
+            self.normalize_key(key)
+        )
 
-        return self._load(ONTOLOGY, "business_kpis.json")
+    # -------------------------------------------------------
 
-    def metrics(self):
+    def get_semantics(self):
 
-        return self._load(ONTOLOGY, "metrics_dictionary.json")
+        return self.cache.semantics
 
-    def domains(self):
+    # -------------------------------------------------------
+    # Alias Search
+    # -------------------------------------------------------
 
-        return self._load(ONTOLOGY, "domains_reasonings.json")
+    def search_alias(self, text):
+
+        text = self.normalize_key(text)
+
+        alias = self.cache.aliases.get(text)
+
+        if alias is None:
+            return None
+
+        if isinstance(alias, dict):
+            return alias.get("canonical", text)
+
+        return alias
+
+    # -------------------------------------------------------
+    # Universal Entity Lookup
+    # -------------------------------------------------------
+
+    def get_entity(self, canonical):
+
+        canonical = self.normalize_key(canonical)
+
+        entity = {}
+
+        # ------------------------
+        # Merge Objects
+        # ------------------------
+
+        if canonical in self.cache.objects:
+
+            entity.update(
+                self.cache.objects[canonical]
+            )
+
+        # ------------------------
+        # Merge KPIs
+        # ------------------------
+
+        if canonical in self.cache.metrics:
+
+            entity.update(
+                self.cache.metrics[canonical]
+            )
+
+        # ------------------------
+        # Merge Certifications
+        # ------------------------
+
+        if canonical in self.cache.certifications:
+
+            entity.update(
+                self.cache.certifications[canonical]
+            )
+
+        # ------------------------
+        # Merge Technologies
+        # ------------------------
+
+        if canonical in self.cache.technologies:
+
+            entity.update(
+                self.cache.technologies[canonical]
+            )
+
+        # ------------------------
+
+        if not entity:
+
+            return None
+
+        return self.merge_entity(
+            canonical,
+            entity
+        )
+
+    # -------------------------------------------------------
+    # Merge Into Universal Entity
+    # -------------------------------------------------------
+
+    def merge_entity(self, key, entity):
+
+        record = EntityRecord()
+
+        record.entity_id = entity.get(
+            "entity_id",
+            key.upper().replace(" ", "_")
+        )
+
+        record.canonical = entity.get(
+            "canonical",
+            key.title()
+        )
+
+        record.category = entity.get(
+            "category",
+            ""
+        )
+
+        record.business_area = entity.get(
+            "business_area",
+            ""
+        )
+
+        record.preferred_direction = entity.get(
+            "preferred_direction",
+            ""
+        )
+
+        record.impact_weight = entity.get(
+            "impact_weight",
+            0
+        )
+
+        record.business_meaning = entity.get(
+            "business_meaning",
+            ""
+        )
+
+        record.aliases = entity.get(
+            "aliases",
+            []
+        )
+
+        record.source = "ontology"
+
+        record.metadata = entity
+
+        return record

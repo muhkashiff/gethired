@@ -61,7 +61,7 @@ class ActionExtractor:
         Returns every detected action in the sentence.
 
         Each ActionKnowledge contains positional information
-        that will later be used by the Clause Parser.
+        used later by the Clause Parser.
         """
 
         results = []
@@ -82,6 +82,18 @@ class ActionExtractor:
 
             data = self.actions[word]
 
+            # -----------------------------
+            # Safe defaults
+            # -----------------------------
+
+            base = data.get("base", word)
+
+            gerund = data.get("gerund", base + "ing")
+
+            category = data.get("category", "")
+
+            entity_id = data.get("entity_id", "")
+
             results.append(
 
                 ActionKnowledge(
@@ -90,11 +102,13 @@ class ActionExtractor:
 
                     original=word,
 
-                    base=data["base"],
+                    base=base,
 
-                    gerund=data["gerund"],
+                    gerund=gerund,
 
-                    category=data["category"],
+                    category=category,
+
+                    entity_id=entity_id,
 
                     confidence=0.95,
 

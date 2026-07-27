@@ -5,23 +5,9 @@ from pprint import pprint
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
-"""
-Semantic Knowledge Engine Integration Test
-
-Pipeline
-
-Sentence
-    ↓
-Knowledge Pipeline
-    ↓
-Ontology Enricher
-    ↓
-Resume Intelligence
-    ↓
-Achievement Intelligence
-"""
-
-from app.intelligence.utilities.knowledge.knowledge_pipeline import KnowledgePipeline
+from app.intelligence.utilities.knowledge.knowledge_pipeline import (
+    KnowledgePipeline,
+)
 
 from app.intelligence.utilities.knowledge.knowledge_knowledge.ontology_enricher import (
     OntologyEnricher,
@@ -35,27 +21,37 @@ from app.intelligence.utilities.knowledge.knowledge_intelligence.achievement_ana
     AchievementAnalyzer,
 )
 
-# ----------------------------------------------------------------------
+# ---------------------------------------------------------
+# Resume Sample
+# ---------------------------------------------------------
 
-TEST_SENTENCES = [
+RESUME_TEXT = """
+Lead the facility by implementing FSSC 22000 requirements and achieved certification.
 
-    "Successfully implemented FSSC 22000 requirements and reduced customer complaints by 60%.",
+Increased production yield from 70% to 99%.
 
-    "Implemented ISO 9001 quality management system.",
+Reduced customer complaints by 60%.
 
-    "Improved production yield from 70% to 99%.",
+Managed supplier quality.
 
-    "Reduced downtime by 40 hours per month.",
+Optimized productivity by 25%.
 
-    "Managed supplier quality and trained staff.",
+Reduced production waste by 35%.
 
-    "Optimized productivity by 25%.",
+Trained 120 production staff.
 
-    "Reduced waste by 35%.",
+Implemented ISO 9001 Quality Management System.
 
-]
+Conducted GMP inspections.
 
-# ----------------------------------------------------------------------
+Reduced downtime by 40 hours per month.
+
+Improved efficiency by 18%.
+
+Managed cross-functional teams.
+"""
+
+# ---------------------------------------------------------
 
 pipeline = KnowledgePipeline()
 
@@ -65,109 +61,166 @@ resume_analyzer = ResumeIntelligenceEngine()
 
 achievement_analyzer = AchievementAnalyzer()
 
-# ----------------------------------------------------------------------
+# ---------------------------------------------------------
 
-print("=" * 100)
-print("SEMANTIC KNOWLEDGE ENGINE")
-print("=" * 100)
+print("=" * 120)
+print("END TO END RESUME TEST")
+print("=" * 120)
 
-for sentence in TEST_SENTENCES:
+document = None
 
-    print()
-    print("=" * 100)
-    print(sentence)
-    print("=" * 100)
+for sentence in RESUME_TEXT.split("\n"):
 
-    # -------------------------------------------------
-    # Pipeline
-    # -------------------------------------------------
+    sentence = sentence.strip()
 
-    document = pipeline.process(sentence)
+    if not sentence:
+        continue
 
-    document = enricher.enrich(document)
+    parsed = pipeline.process(sentence)
 
-    # -------------------------------------------------
-    # Facts
-    # -------------------------------------------------
+    parsed = enricher.enrich(parsed)
 
-    for i, fact in enumerate(document.facts, start=1):
+    if document is None:
 
-        print()
-        print(f"FACT {i}")
-        print("-" * 80)
+        document = parsed
 
-        interp = fact.interpretation
+    else:
 
-        print("\nAction")
-        pprint(interp.action)
+        document.sentences.extend(parsed.sentences)
 
-        print("\nObject")
-        pprint(interp.object)
+        document.facts.extend(parsed.facts)
 
-        print("\nDomain")
-        pprint(interp.domain)
-
-        print("\nMetric")
-        pprint(interp.metric)
-
-        print("\nMeasurement")
-        pprint(interp.measurement)
-
-        # ---------------------------------------------
-        # Ontology
-        # ---------------------------------------------
-
-        if interp.object.found:
-
-            print("\nObject Ontology")
-
-            print("Entity ID     :", getattr(interp.object, "entity_id", ""))
-
-            print("Business Area :", getattr(interp.object, "business_area", ""))
-
-            print("Source        :", getattr(interp.object, "source", ""))
-
-            print("Metadata      :", getattr(interp.object, "metadata", {}))
-
-        if interp.metric.found:
-
-            print("\nMetric Ontology")
-
-            print("Entity ID     :", getattr(interp.metric, "entity_id", ""))
-
-            print("Business Area :", getattr(interp.metric, "business_area", ""))
-
-            print("Source        :", getattr(interp.metric, "source", ""))
-
-            print("Metadata      :", getattr(interp.metric, "metadata", {}))
-
-    # -------------------------------------------------
-    # Resume Intelligence
-    # -------------------------------------------------
-
-    print()
-    print("-" * 80)
-    print("RESUME INTELLIGENCE")
-    print("-" * 80)
-
-    profile = resume_analyzer.analyze(document)
-
-    pprint(profile)
-
-    # -------------------------------------------------
-    # Achievement Intelligence
-    # -------------------------------------------------
-
-    print()
-    print("-" * 80)
-    print("ACHIEVEMENT INTELLIGENCE")
-    print("-" * 80)
-
-    achievements = achievement_analyzer.analyze(document)
-
-    pprint(achievements)
+# ---------------------------------------------------------
+# Statistics
+# ---------------------------------------------------------
 
 print()
-print("=" * 100)
-print("SEMANTIC ENGINE TEST COMPLETED")
-print("=" * 100)
+print("=" * 120)
+print("DOCUMENT STATISTICS")
+print("=" * 120)
+
+print("Sentences :", len(document.sentences))
+print("Facts     :", len(document.facts))
+
+# ---------------------------------------------------------
+# Facts
+# ---------------------------------------------------------
+
+print()
+print("=" * 120)
+print("FACTS")
+print("=" * 120)
+
+for i, fact in enumerate(document.facts, start=1):
+
+    interp = fact.interpretation
+
+    print()
+    print(f"FACT {i}")
+    print("-" * 100)
+
+    print("TEXT :", fact.text)
+
+    if interp.action.found:
+        print("ACTION :", interp.action.base)
+
+    if interp.object.found:
+        print("OBJECT :", interp.object.canonical)
+
+        print("OBJECT ENTITY :", interp.object.entity_id)
+
+        print("BUSINESS AREA :", interp.object.business_area)
+
+    if interp.metric.found:
+        print("METRIC :", interp.metric.canonical)
+
+        print("METRIC ENTITY :", interp.metric.entity_id)
+
+        print("BUSINESS AREA :", interp.metric.business_area)
+
+        print("IMPACT WEIGHT :", getattr(interp.metric, "impact_weight", ""))
+
+    if interp.measurement.found:
+        print("VALUE :", interp.measurement.numeric_value)
+
+        print("UNIT :", interp.measurement.unit)
+
+        print("DIRECTION :", interp.measurement.direction)
+
+    if interp.domain.found:
+        print("DOMAIN :", interp.domain.domain)
+
+# ---------------------------------------------------------
+# Resume Intelligence
+# ---------------------------------------------------------
+
+print()
+print("=" * 120)
+print("RESUME INTELLIGENCE")
+print("=" * 120)
+
+profile = resume_analyzer.analyze(document)
+
+pprint(profile)
+
+# ---------------------------------------------------------
+# Achievement Intelligence
+# ---------------------------------------------------------
+
+print()
+print("=" * 120)
+print("ACHIEVEMENTS")
+print("=" * 120)
+
+achievements = achievement_analyzer.analyze(document)
+
+for achievement in achievements:
+
+    pprint(achievement)
+
+# ---------------------------------------------------------
+# Summary
+# ---------------------------------------------------------
+
+print()
+print("=" * 120)
+print("SUMMARY")
+print("=" * 120)
+
+leadership = 0
+quality = 0
+food = 0
+manufacturing = 0
+operations = 0
+
+for fact in document.facts:
+
+    if fact.interpretation.domain.found:
+
+        d = fact.interpretation.domain.domain
+
+        if "lead" in d:
+            leadership += 1
+
+        elif "quality" in d:
+            quality += 1
+
+        elif "food" in d:
+            food += 1
+
+        elif "manufacturing" in d:
+            manufacturing += 1
+
+        elif "operation" in d:
+            operations += 1
+
+print(f"Leadership Facts     : {leadership}")
+print(f"Quality Facts        : {quality}")
+print(f"Food Safety Facts    : {food}")
+print(f"Manufacturing Facts  : {manufacturing}")
+print(f"Operations Facts     : {operations}")
+
+print()
+print("=" * 120)
+print("TEST COMPLETED")
+print("=" * 120)

@@ -1,1 +1,19 @@
-{}
+{
+  "python": {
+    "entity_id": "PYTHON",
+    "canonical": "Python",
+    "category": "programming_language"
+  },
+
+  "sql": {
+    "entity_id": "SQL",
+    "canonical": "SQL",
+    "category": "database"
+  },
+
+  "tableau": {
+    "entity_id": "TABLEAU",
+    "canonical": "Tableau",
+    "category": "analytics"
+  }
+}

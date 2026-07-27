@@ -1,148 +1,286 @@
 {
-  "led":{
-    "base":"lead",
-    "gerund":"leading",
-    "category":"leadership"
-  },
-
-  "managed":{
-    "base":"manage",
-    "gerund":"managing",
-    "category":"management"
-  },
-
-  "implemented":{
-    "base":"implement",
-    "gerund":"implementing",
-    "category":"implementation"
-  },
-
-  "developed":{
-    "base":"develop",
-    "gerund":"developing",
-    "category":"development"
-  },
-
-  "created":{
-    "base":"create",
-    "gerund":"creating",
-    "category":"creation"
-  },
-
-  "designed":{
-    "base":"design",
-    "gerund":"designing",
-    "category":"design"
-  },
-
-  "improved":{
-    "base":"improve",
-    "gerund":"improving",
-    "category":"improvement"
-  },
-
-  "reduced":{
-    "base":"reduce",
-    "gerund":"reducing",
-    "category":"optimization"
-  },
-
-  "increased":{
-    "base":"increase",
-    "gerund":"increasing",
-    "category":"optimization"
-  },
-
-  "achieved":{
-    "base":"achieve",
-    "gerund":"achieving",
-    "category":"achievement"
-  },
-
-  "certified":{
-    "base":"certify",
-    "gerund":"achieving certification",
-    "category":"certification"
-  },
-
-  "trained":{
-    "base":"train",
-    "gerund":"training",
-    "category":"people_development"
-  },
-  "reducing": {
-  "base": "reduce",
-  "gerund": "reducing",
-  "category": "optimization"
-},
-
-"improving": {
-  "base": "improve",
-  "gerund": "improving",
-  "category": "improvement"
-},
-
-"implementing": {
-  "base": "implement",
-  "gerund": "implementing",
-  "category": "implementation"
-},
-
-"managing": {
-  "base": "manage",
-  "gerund": "managing",
-  "category": "management"
-},
-
-"leading": {
-  "base": "lead",
-  "gerund": "leading",
-  "category": "leadership"
-},
-
-"training": {
-  "base": "train",
-  "gerund": "training",
-  "category": "people_development"
-},
-  "implement": {
-    "category": "implementation"
-  },
-
-  "improve": {
-    "category": "improvement"
-  },
-
-  "reduce": {
-    "category": "optimization"
-  },
-
   "lead": {
+    "entity_id": "ACT_LEAD",
+    "base": "lead",
+    "gerund": "leading",
+    "category": "leadership"
+  },
+  "leading": {
+    "entity_id": "ACT_LEAD",
+    "base": "lead",
+    "gerund": "leading",
+    "category": "leadership"
+  },
+  "led": {
+    "entity_id": "ACT_LEAD",
+    "base": "lead",
+    "gerund": "leading",
     "category": "leadership"
   },
 
   "manage": {
+    "entity_id": "ACT_MANAGE",
+    "base": "manage",
+    "gerund": "managing",
+    "category": "management"
+  },
+  "managing": {
+    "entity_id": "ACT_MANAGE",
+    "base": "manage",
+    "gerund": "managing",
+    "category": "management"
+  },
+  "managed": {
+    "entity_id": "ACT_MANAGE",
+    "base": "manage",
+    "gerund": "managing",
     "category": "management"
   },
 
-  "train": {
-    "category": "people_development"
+  "implement": {
+    "entity_id": "ACT_IMPLEMENT",
+    "base": "implement",
+    "gerund": "implementing",
+    "category": "implementation"
+  },
+  "implementing": {
+    "entity_id": "ACT_IMPLEMENT",
+    "base": "implement",
+    "gerund": "implementing",
+    "category": "implementation"
+  },
+  "implemented": {
+    "entity_id": "ACT_IMPLEMENT",
+    "base": "implement",
+    "gerund": "implementing",
+    "category": "implementation"
+  },
+
+  "develop": {
+    "entity_id": "ACT_DEVELOP",
+    "base": "develop",
+    "gerund": "developing",
+    "category": "development"
+  },
+  "developing": {
+    "entity_id": "ACT_DEVELOP",
+    "base": "develop",
+    "gerund": "developing",
+    "category": "development"
+  },
+  "developed": {
+    "entity_id": "ACT_DEVELOP",
+    "base": "develop",
+    "gerund": "developing",
+    "category": "development"
+  },
+
+  "create": {
+    "entity_id": "ACT_CREATE",
+    "base": "create",
+    "gerund": "creating",
+    "category": "creation"
+  },
+  "creating": {
+    "entity_id": "ACT_CREATE",
+    "base": "create",
+    "gerund": "creating",
+    "category": "creation"
+  },
+  "created": {
+    "entity_id": "ACT_CREATE",
+    "base": "create",
+    "gerund": "creating",
+    "category": "creation"
+  },
+
+  "design": {
+    "entity_id": "ACT_DESIGN",
+    "base": "design",
+    "gerund": "designing",
+    "category": "design"
+  },
+  "designing": {
+    "entity_id": "ACT_DESIGN",
+    "base": "design",
+    "gerund": "designing",
+    "category": "design"
+  },
+  "designed": {
+    "entity_id": "ACT_DESIGN",
+    "base": "design",
+    "gerund": "designing",
+    "category": "design"
+  },
+
+  "improve": {
+    "entity_id": "ACT_IMPROVE",
+    "base": "improve",
+    "gerund": "improving",
+    "category": "improvement"
+  },
+  "improving": {
+    "entity_id": "ACT_IMPROVE",
+    "base": "improve",
+    "gerund": "improving",
+    "category": "improvement"
+  },
+  "improved": {
+    "entity_id": "ACT_IMPROVE",
+    "base": "improve",
+    "gerund": "improving",
+    "category": "improvement"
+  },
+
+  "reduce": {
+    "entity_id": "ACT_REDUCE",
+    "base": "reduce",
+    "gerund": "reducing",
+    "category": "optimization"
+  },
+  "reducing": {
+    "entity_id": "ACT_REDUCE",
+    "base": "reduce",
+    "gerund": "reducing",
+    "category": "optimization"
+  },
+  "reduced": {
+    "entity_id": "ACT_REDUCE",
+    "base": "reduce",
+    "gerund": "reducing",
+    "category": "optimization"
+  },
+
+  "increase": {
+    "entity_id": "ACT_INCREASE",
+    "base": "increase",
+    "gerund": "increasing",
+    "category": "optimization"
+  },
+  "increasing": {
+    "entity_id": "ACT_INCREASE",
+    "base": "increase",
+    "gerund": "increasing",
+    "category": "optimization"
+  },
+  "increased": {
+    "entity_id": "ACT_INCREASE",
+    "base": "increase",
+    "gerund": "increasing",
+    "category": "optimization"
+  },
+
+  "optimize": {
+    "entity_id": "ACT_OPTIMIZE",
+    "base": "optimize",
+    "gerund": "optimizing",
+    "category": "optimization"
+  },
+  "optimizing": {
+    "entity_id": "ACT_OPTIMIZE",
+    "base": "optimize",
+    "gerund": "optimizing",
+    "category": "optimization"
   },
   "optimized": {
-  "base": "optimize",
-  "gerund": "optimizing",
-  "category": "optimization"
-},
+    "entity_id": "ACT_OPTIMIZE",
+    "base": "optimize",
+    "gerund": "optimizing",
+    "category": "optimization"
+  },
 
-"optimize": {
-  "base": "optimize",
-  "gerund": "optimizing",
-  "category": "optimization"
-},
+  "achieve": {
+    "entity_id": "ACT_ACHIEVE",
+    "base": "achieve",
+    "gerund": "achieving",
+    "category": "achievement"
+  },
+  "achieving": {
+    "entity_id": "ACT_ACHIEVE",
+    "base": "achieve",
+    "gerund": "achieving",
+    "category": "achievement"
+  },
+  "achieved": {
+    "entity_id": "ACT_ACHIEVE",
+    "base": "achieve",
+    "gerund": "achieving",
+    "category": "achievement"
+  },
 
-"optimizing": {
-  "base": "optimize",
-  "gerund": "optimizing",
-  "category": "optimization"
-}
+  "certify": {
+    "entity_id": "ACT_CERTIFY",
+    "base": "certify",
+    "gerund": "certifying",
+    "category": "certification"
+  },
+  "certifying": {
+    "entity_id": "ACT_CERTIFY",
+    "base": "certify",
+    "gerund": "certifying",
+    "category": "certification"
+  },
+  "certified": {
+    "entity_id": "ACT_CERTIFY",
+    "base": "certify",
+    "gerund": "certifying",
+    "category": "certification"
+  },
+
+  "train": {
+    "entity_id": "ACT_TRAIN",
+    "base": "train",
+    "gerund": "training",
+    "category": "people_development"
+  },
+  "training": {
+    "entity_id": "ACT_TRAIN",
+    "base": "train",
+    "gerund": "training",
+    "category": "people_development"
+  },
+  "trained": {
+    "entity_id": "ACT_TRAIN",
+    "base": "train",
+    "gerund": "training",
+    "category": "people_development"
+  },
+
+  "coach": {
+    "entity_id": "ACT_COACH",
+    "base": "coach",
+    "gerund": "coaching",
+    "category": "people_development"
+  },
+  "coaching": {
+    "entity_id": "ACT_COACH",
+    "base": "coach",
+    "gerund": "coaching",
+    "category": "people_development"
+  },
+  "coached": {
+    "entity_id": "ACT_COACH",
+    "base": "coach",
+    "gerund": "coaching",
+    "category": "people_development"
+  },
+
+  "mentor": {
+    "entity_id": "ACT_MENTOR",
+    "base": "mentor",
+    "gerund": "mentoring",
+    "category": "people_development"
+  },
+  "mentoring": {
+    "entity_id": "ACT_MENTOR",
+    "base": "mentor",
+    "gerund": "mentoring",
+    "category": "people_development"
+  },
+  "mentored": {
+    "entity_id": "ACT_MENTOR",
+    "base": "mentor",
+    "gerund": "mentoring",
+    "category": "people_development"
+  }
 }

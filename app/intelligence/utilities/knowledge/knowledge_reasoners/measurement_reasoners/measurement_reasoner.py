@@ -31,7 +31,7 @@ class MeasurementReasoner:
 
         from app.intelligence.utilities.knowledge.repository import repository
 
-        self.rules = repository.measurement_semantics()
+        self.rules = repository.get_semantics()
 
     # ----------------------------------------------------------
 

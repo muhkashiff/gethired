@@ -1,25 +1,30 @@
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 
 sys.path.append(str(ROOT))
 
+from evidence_humanizer import EvidenceHumanizer
 
-from narrative_templates import NarrativeTemplates
+humanizer = EvidenceHumanizer()
 
-engine = NarrativeTemplates()
+examples = [
 
-print()
+    "Led cross-functional teams.",
 
-for i in range(5):
+    "Implemented FSSC 22000.",
 
-    print(
+    "Managed Supplier Quality.",
 
-        engine.intro("leadership"),
+    "Improved production yield to 99%.",
 
-        "...",
+    "Reduced complaints by 60%.",
 
-        engine.ending("leadership")
+    "Certified facility to FSSC 22000."
 
-    )
+]
+
+for item in examples:
+
+    print(humanizer.humanize(item))

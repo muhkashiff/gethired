@@ -1,117 +1,76 @@
 """
 Entity Linker
 
-Normalizes extracted entities into one canonical ontology.
-
-Responsibilities
-----------------
-1. Resolve aliases.
-2. Assign stable IDs.
-3. Remove duplicate spellings.
-4. Attach ontology metadata.
+Links text to ontology using Repository.
 """
 
-from app.intelligence.utilities.knowledge.knowledge_linker.alias_repository import (
-    AliasRepository,
-)
+from app.intelligence.utilities.knowledge.repository import repository
 
-from app.intelligence.utilities.knowledge.knowledge_linker.entity_models import (
-    LinkedEntity,
-)
+from .linked_entity import LinkedEntity
 
 
 class EntityLinker:
 
     def __init__(self):
 
-        self.repository = AliasRepository()
+        self.repository = repository
 
-    # ------------------------------------------------------
+    # ----------------------------------------------------------
 
-    def link(self, knowledge):
+    def link(self, text):
 
-        """
-        Accepts one extracted knowledge object.
-
-        Returns
-        -------
-        LinkedEntity
-        """
-
-        if not getattr(knowledge, "found", False):
+        if not text:
 
             return LinkedEntity()
 
-        original = ""
+        text = text.strip().lower()
 
-        if hasattr(knowledge, "canonical") and knowledge.canonical:
+        # ---------------------------------------
+        # Alias lookup
+        # ---------------------------------------
 
-            original = knowledge.canonical
+        alias = self.repository.search_alias(text)
 
-        elif hasattr(knowledge, "original"):
+        if alias:
 
-            original = knowledge.original
+            entity = self.repository.get_entity(alias)
 
-        elif hasattr(knowledge, "metric"):
+        else:
 
-            original = knowledge.metric
+            entity = self.repository.get_entity(text)
 
-        if not original:
-
-            return LinkedEntity()
-
-        entity = self.repository.lookup(original)
+        # ---------------------------------------
 
         if entity is None:
 
-            return LinkedEntity(
+            return LinkedEntity()
 
-                found=True,
+        # ---------------------------------------
 
-                entity_id=original.upper().replace(" ", "_"),
+        linked = LinkedEntity()
 
-                canonical=original,
+        linked.found = True
 
-                category=getattr(knowledge, "category", ""),
+        linked.entity_id = entity.entity_id
 
-                business_area="",
+        linked.canonical = entity.canonical
 
-                confidence=getattr(knowledge, "confidence", 0.8),
+        linked.category = entity.category
 
-            )
+        linked.business_area = entity.business_area
 
-        return LinkedEntity(
+        linked.preferred_direction = entity.preferred_direction
 
-            found=True,
+        linked.impact_weight = entity.impact_weight
 
-            entity_id=entity.get("id", entity["canonical"]),
+        linked.business_meaning = entity.business_meaning
 
-            canonical=entity["canonical"],
+        linked.aliases = entity.aliases
 
-            category=entity.get("category", ""),
+        linked.metadata = entity.metadata
 
-            business_area=entity.get("business_area", ""),
+        linked.source = "ontology"
 
-            confidence=getattr(knowledge, "confidence", 0.95),
+        linked.confidence = 1.0
 
-            aliases=entity.get("aliases", []),
-
-            metadata=entity,
-
-        )
-
-    # ------------------------------------------------------
-
-    def link_fact(self, fact):
-
-        """
-        Link every entity inside a KnowledgeFact.
-        """
-
-        fact.linked_action = self.link(fact.action)
-
-        fact.linked_object = self.link(fact.object)
-
-        fact.linked_metric = self.link(fact.metric)
-
-        return fact
+        return linked
