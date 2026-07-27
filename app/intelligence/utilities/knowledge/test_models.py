@@ -3,93 +3,90 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
-"""
-Test Domain Reasoner
+from pprint import pprint
 
-Tests
+from app.intelligence.utilities.knowledge.knowledge_pipeline.semantic_pipeline import (
+    SemanticPipeline,
+)
 
-Action Extraction
-Object Extraction
-Domain Reasoning
+pipeline = SemanticPipeline()
 
-Run
-
-python test_domain_reasoner.py
+text = """
+Implemented ISO 9001, trained staff and improved productivity by 25%.
 """
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor import (
-    ActionExtractor,
-)
+document = pipeline.process(text)
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.object_extractor import (
-    ObjectExtractor,
-)
+print("=" * 80)
 
-from app.intelligence.utilities.knowledge.knowledge_reasoners.domain_reasoner import (
-    DomainReasoner,
-)
+print("SEMANTIC DOCUMENT")
 
+print("=" * 80)
 
-action_extractor = ActionExtractor()
+print()
 
-object_extractor = ObjectExtractor()
+print(document.statistics)
 
-reasoner = DomainReasoner()
+print()
 
+for sentence in document.sentences:
 
-sentences = [
-
-    "Trained staff",
-
-    "Managed supplier quality",
-
-    "Implemented ISO 9001",
-
-    "Successfully implemented FSSC 22000",
-
-    "Reduced customer complaints",
-
-    "Improved production yield",
-
-    "Optimized productivity",
-
-    "Reduced downtime by 40 hours",
-
-]
-
-
-print("=" * 90)
-print("DOMAIN REASONER TEST")
-print("=" * 90)
-
-for sentence in sentences:
-
-    action = action_extractor.extract(sentence)
-
-    obj = object_extractor.extract(sentence)
-
-    domain = reasoner.reason(
-        action,
-        obj,
-    )
+    print(sentence.original_text)
 
     print()
 
-    print(sentence)
+    for clause in sentence.clauses:
 
-    print("-" * 60)
+        print("-" * 60)
 
-    print("Action")
-    print(action)
+        print(clause.text)
 
-    print()
+        print()
 
-    print("Object")
-    print(obj)
+        print("Action")
 
-    print()
+        pprint(clause.action)
 
-    print("Domain")
-    print(domain)
+        print()
 
-    print("-" * 60)
+        print("Object")
+
+        pprint(clause.object)
+
+        print()
+
+        print("Domain")
+
+        pprint(clause.domain)
+
+        print()
+
+        print("Metric")
+
+        pprint(clause.metric)
+
+        print()
+
+        print("Measurement")
+
+        pprint(clause.measurement)
+
+        print()
+
+        print("Achievement")
+
+        print(clause.achievement)
+
+        print()
+
+        print("Business Area")
+
+        print(clause.business_area)
+
+        print()
+
+        print("Confidence")
+
+        print(clause.confidence)
+
+        print()
