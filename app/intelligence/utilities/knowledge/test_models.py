@@ -5,6 +5,8 @@ ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
 from app.intelligence.utilities.knowledge.knowledge_pipeline.knowledge_pipeline import KnowledgePipeline
+from app.intelligence.utilities.knowledge.knowledge_graph.graph_builder import GraphBuilder
+from app.intelligence.utilities.knowledge.knowledge_graph.graph_query import GraphQuery
 
 pipeline = KnowledgePipeline()
 
@@ -14,30 +16,28 @@ doc = pipeline.process(
 
 )
 
+graph = GraphBuilder().build(doc)
+
+query = GraphQuery(graph)
+
+query.print_graph()
+
 print()
 
-print("DOCUMENT")
-
-print(doc.statistics)
+print(query.metrics())
 
 print()
 
-for sentence in doc.sentences:
+print(query.measurements())
 
-    print(sentence.original_text)
+print()
 
-    print(sentence.confidence)
+print(query.domains())
 
-    print()
+print()
 
-for fact in doc.facts:
+print(query.actions_in_domain("quality"))
 
-    print(fact.interpretation.action.base)
+print()
 
-    print(fact.interpretation.object.canonical)
-
-    print(fact.interpretation.metric.canonical)
-
-    print(fact.interpretation.measurement.value)
-
-    print("-" * 60)
+print(query.metric_value("Productivity"))
