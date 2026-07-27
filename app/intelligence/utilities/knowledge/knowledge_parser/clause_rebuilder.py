@@ -1,15 +1,23 @@
 """
 Clause Rebuilder
 
-Repairs raw clauses produced by ClauseSegmenter.
+Repairs raw clauses produced by the Clause Parser.
 
 Responsibilities
 ----------------
-1. Remove leading/trailing connectors.
-2. Remove trailing commas and punctuation.
-3. Restore modifiers that appear before the first action.
+1. Remove leading connectors.
+2. Remove trailing connectors.
+3. Remove trailing commas.
 4. Normalize whitespace.
 5. Capitalize first character.
+
+NOTE
+----
+The previous version attempted to reconstruct modifiers from the
+original sentence.
+
+That responsibility now belongs to the Clause Parser, therefore
+the rebuilder only performs cleanup.
 """
 
 import re
@@ -27,7 +35,6 @@ class ClauseRebuilder:
             "then",
             "also",
             "including",
-            "including the",
             "using",
             "via",
             "through",
@@ -46,82 +53,89 @@ class ClauseRebuilder:
 
     def rebuild(
         self,
-        sentence,
         clauses,
         modifiers=None,
     ):
         """
-        Rebuild raw clauses.
+        Clean parser output.
 
         Parameters
         ----------
-        sentence : str
+        clauses : list[Clause]
 
-        clauses : List[Clause]
-
-        modifiers : List[ModifierKnowledge]
+        modifiers : optional
+            Reserved for future use.
 
         Returns
         -------
-        List[Clause]
+        list[Clause]
         """
 
         rebuilt = []
 
-        for i, clause in enumerate(clauses):
+        for clause in clauses:
 
             new_clause = deepcopy(clause)
 
             text = new_clause.text
 
-            # --------------------------------------------
-            # Remove commas
-            # --------------------------------------------
+            # ---------------------------------------
+            # Remove surrounding whitespace
+            # ---------------------------------------
 
             text = text.strip()
 
+            # ---------------------------------------
+            # Remove trailing commas
+            # ---------------------------------------
+
             text = re.sub(r"[,\s]+$", "", text)
 
-            # --------------------------------------------
+            # ---------------------------------------
             # Remove leading connectors
-            # --------------------------------------------
+            # ---------------------------------------
 
             text = self._remove_leading_connector(text)
 
-            # --------------------------------------------
+            # ---------------------------------------
             # Remove trailing connectors
-            # --------------------------------------------
+            # ---------------------------------------
 
             text = self._remove_trailing_connector(text)
 
-            # --------------------------------------------
-            # Normalize whitespace
-            # --------------------------------------------
+            # ---------------------------------------
+            # Normalize spaces
+            # ---------------------------------------
 
             text = re.sub(r"\s+", " ", text).strip()
 
-            # --------------------------------------------
-            # Recover leading modifiers
-            # Only first clause
-            # --------------------------------------------
+            # ---------------------------------------
+            # Preserve punctuation
+            # ---------------------------------------
 
-            if i == 0:
+            if (
+                clause.text.endswith(".")
+                and not text.endswith(".")
+            ):
+                text += "."
 
-                text = self._prepend_modifiers(
-                    sentence,
-                    text,
-                    modifiers,
-                )
-
-            # --------------------------------------------
+            # ---------------------------------------
             # Capitalize
-            # --------------------------------------------
+            # ---------------------------------------
 
             if text:
 
                 text = text[0].upper() + text[1:]
 
+            # ---------------------------------------
+            # Preserve normalized text
+            # ---------------------------------------
+
             new_clause.text = text
+
+            if hasattr(new_clause, "normalized_text"):
+
+                new_clause.normalized_text = text
 
             rebuilt.append(new_clause)
 
@@ -129,15 +143,16 @@ class ClauseRebuilder:
 
     # ---------------------------------------------------------
 
-    def _remove_leading_connector(self, text):
+    def _remove_leading_connector(
+        self,
+        text,
+    ):
 
         words = text.split()
 
         while words:
 
-            first = words[0].lower()
-
-            if first in self.leading_connectors:
+            if words[0].lower() in self.leading_connectors:
 
                 words.pop(0)
 
@@ -149,15 +164,16 @@ class ClauseRebuilder:
 
     # ---------------------------------------------------------
 
-    def _remove_trailing_connector(self, text):
+    def _remove_trailing_connector(
+        self,
+        text,
+    ):
 
         words = text.split()
 
         while words:
 
-            last = words[-1].lower()
-
-            if last in self.trailing_connectors:
+            if words[-1].lower() in self.trailing_connectors:
 
                 words.pop()
 
@@ -171,46 +187,14 @@ class ClauseRebuilder:
 
     def _prepend_modifiers(
         self,
-        sentence,
-        clause,
-        modifiers,
+        clause_text,
+        modifiers=None,
     ):
         """
-        Recover modifiers before first action.
+        Reserved for future versions.
 
-        Example
-
-        Successfully implemented...
-
-        ↓
-
-        Successfully implemented...
+        The new parser already keeps modifiers attached
+        to the correct clause, so no rebuilding is required.
         """
 
-        if not modifiers:
-
-            return clause
-
-        sentence_lower = sentence.lower()
-
-        clause_lower = clause.lower()
-
-        clause_pos = sentence_lower.find(clause_lower)
-
-        if clause_pos <= 0:
-
-            return clause
-
-        prefix = sentence[:clause_pos].strip()
-
-        if not prefix:
-
-            return clause
-
-        prefix = prefix.rstrip(", ")
-
-        if prefix:
-
-            return f"{prefix} {clause}"
-
-        return clause
+        return clause_text

@@ -1,140 +1,202 @@
 """
 Clause Segmenter
 
-Splits a sentence into raw semantic clauses using
-detected action positions.
+The ClauseSegmenter is the orchestration layer for clause processing.
 
-Responsibilities
-----------------
-1. Receive a sentence.
-2. Receive ActionKnowledge list.
-3. Split sentence at each action.
-4. Return raw clause strings.
+Pipeline
 
-NOTE:
-Cleaning and repairing clauses is handled by
-ClauseRebuilder.
+Sentence
+    ↓
+ClauseParser
+    ↓
+ClauseRebuilder
+    ↓
+ClauseNormalizer
+    ↓
+Extractors
+    ↓
+Reasoners
+    ↓
+Rich Clause objects
 """
 
-from typing import List
+from copy import deepcopy
 
-from app.intelligence.utilities.knowledge.knowledge_models.clause_models import (
-    Clause,
+from app.intelligence.utilities.knowledge.knowledge_parser.clause_parser import ClauseParser
+from app.intelligence.utilities.knowledge.knowledge_parser.clause_rebuilder import ClauseRebuilder
+from app.intelligence.utilities.knowledge.knowledge_parser.clause_normalizer import ClauseNormalizer
+
+from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor import ActionExtractor
+from app.intelligence.utilities.knowledge.knowledge_extractors.object_extractor import ObjectExtractor
+from app.intelligence.utilities.knowledge.knowledge_extractors.metric_extractor import MetricExtractor
+from app.intelligence.utilities.knowledge.knowledge_extractors.measurement_extractor import MeasurementExtractor
+from app.intelligence.utilities.knowledge.knowledge_extractors.modifier_extractor import ModifierExtractor
+
+from app.intelligence.utilities.knowledge.knowledge_reasoners.domain_reasoner import DomainReasoner
+from app.intelligence.utilities.knowledge.knowledge_reasoners.measurement_reasoner import MeasurementReasoner
+
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretation_models import (
+    KnowledgeInterpretation,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_parser.parser_utils import (
+    ParserUtils,
 )
 
 
 class ClauseSegmenter:
 
     def __init__(self):
-        pass
 
-    # ---------------------------------------------------------
-    # Public
-    # ---------------------------------------------------------
+        self.parser = ClauseParser()
 
-    def segment(
-        self,
-        sentence: str,
-        actions: List,
-    ) -> List[Clause]:
-        """
-        Split sentence into raw clauses.
+        self.rebuilder = ClauseRebuilder()
 
-        Parameters
-        ----------
-        sentence : str
+        self.normalizer = ClauseNormalizer()
 
-        actions : List[ActionKnowledge]
+        self.action_extractor = ActionExtractor()
 
-        Returns
-        -------
-        List[Clause]
-        """
+        self.object_extractor = ObjectExtractor()
 
-        if not sentence.strip():
+        self.metric_extractor = MetricExtractor()
 
-            return []
+        self.measurement_extractor = MeasurementExtractor()
 
-        # -----------------------------------------------------
-        # No actions
-        # -----------------------------------------------------
+        self.modifier_extractor = ModifierExtractor()
 
-        if not actions:
+        self.domain_reasoner = DomainReasoner()
 
-            return [
+        self.measurement_reasoner = MeasurementReasoner()
 
-                Clause(
+        self.utils = ParserUtils()
 
-                    text=sentence.strip(),
+    # ----------------------------------------------------------
 
-                    index=1,
+    def segment(self, sentence):
 
-                    parent_sentence=sentence,
+        # -------------------------
+        # Parse
+        # -------------------------
 
-                    confidence=0.95,
+        clauses = self.parser.parse(sentence)
 
-                    is_independent=True,
+        # -------------------------
+        # Rebuild
+        # -------------------------
 
-                    connector="",
+        clauses = self.rebuilder.rebuild(clauses)
 
-                )
+        # -------------------------
+        # Normalize
+        # -------------------------
 
-            ]
+        actions = self.action_extractor.extract_all(sentence)
 
-        # -----------------------------------------------------
-        # Sort actions
-        # -----------------------------------------------------
-
-        actions = sorted(
-
+        clauses = self.normalizer.normalize(
+            clauses,
             actions,
-
-            key=lambda x: x.start_char,
-
         )
 
-        clauses = []
+        # -------------------------
+        # Enrich every clause
+        # -------------------------
 
-        # -----------------------------------------------------
-        # Build clauses
-        # -----------------------------------------------------
+        enriched = []
 
-        for i, action in enumerate(actions):
+        for clause in clauses:
 
-            start = action.start_char
+            new_clause = deepcopy(clause)
 
-            if i == len(actions) - 1:
+            action = self.action_extractor.extract(new_clause.text)
 
-                end = len(sentence)
+            obj = self.object_extractor.extract(new_clause.text)
 
-            else:
-
-                end = actions[i + 1].start_char
-
-            text = sentence[start:end].strip()
-
-            if not text:
-
-                continue
-
-            clauses.append(
-
-                Clause(
-
-                    text=text,
-
-                    index=len(clauses) + 1,
-
-                    parent_sentence=sentence,
-
-                    confidence=action.confidence,
-
-                    is_independent=True,
-
-                    connector="",
-
-                )
-
+            domain = self.domain_reasoner.reason(
+                action,
+                obj,
             )
 
-        return clauses
+            metric = self.metric_extractor.extract(
+                new_clause.text,
+            )
+
+            measurement = self.measurement_extractor.extract(
+                new_clause.text,
+                metric,
+            )
+
+            measurement = self.measurement_reasoner.reason(
+                action,
+                measurement,
+            )
+
+            modifiers = self.modifier_extractor.extract(
+                new_clause.text,
+            )
+
+            interpretation = KnowledgeInterpretation(
+
+                action=action,
+
+                object=obj,
+
+                domain=domain,
+
+                metric=metric,
+
+                measurement=measurement,
+
+                modifiers=modifiers,
+
+                achievement=self.utils.is_achievement(
+                    action,
+                    measurement,
+                ),
+
+                quantified=measurement.found,
+
+                semantic_type=self.utils.semantic_type(
+                    domain,
+                ),
+
+                business_area=self.utils.business_area(
+                    domain,
+                ),
+
+                confidence=self.utils.calculate_confidence(
+                    action,
+                    obj,
+                    domain,
+                    metric,
+                    measurement,
+                    modifiers,
+                ),
+            )
+
+            new_clause.action = action
+
+            new_clause.object = obj
+
+            new_clause.domain = domain
+
+            new_clause.metric = metric
+
+            new_clause.measurement = measurement
+
+            new_clause.modifiers = modifiers
+
+            new_clause.interpretation = interpretation
+
+            new_clause.achievement = interpretation.achievement
+
+            new_clause.quantified = interpretation.quantified
+
+            new_clause.semantic_type = interpretation.semantic_type
+
+            new_clause.business_area = interpretation.business_area
+
+            new_clause.confidence = interpretation.confidence
+
+            enriched.append(new_clause)
+
+        return enriched

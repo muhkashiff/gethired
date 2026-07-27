@@ -4,53 +4,40 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
-from app.intelligence.utilities.knowledge.knowledge_parser.clause_segmenter import ClauseSegmenter
-from app.intelligence.utilities.knowledge.knowledge_parser.clause_rebuilder import ClauseRebuilder
-from app.intelligence.utilities.knowledge.knowledge_parser.clause_normalizer import ClauseNormalizer
+from app.intelligence.utilities.knowledge.knowledge_pipeline.knowledge_pipeline import KnowledgePipeline
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor import ActionExtractor
-from app.intelligence.utilities.knowledge.knowledge_extractors.modifier_extractor import ModifierExtractor
+pipeline = KnowledgePipeline()
 
-segmenter = ClauseSegmenter()
-rebuilder = ClauseRebuilder()
-normalizer = ClauseNormalizer()
+doc = pipeline.process(
 
-action_extractor = ActionExtractor()
-modifier_extractor = ModifierExtractor()
+    "Implemented ISO 9001, trained staff and improved productivity by 25%."
 
-examples = [
+)
 
-    "Implemented ISO 9001, trained staff and improved productivity by 25%.",
+print()
 
-    "Managed supplier quality while reducing downtime by 40 hours.",
+print("DOCUMENT")
 
-    "Successfully implemented FSSC 22000 reducing customer complaints by 60%.",
+print(doc.statistics)
 
-]
+print()
 
-for sentence in examples:
+for sentence in doc.sentences:
 
-    print("=" * 80)
+    print(sentence.original_text)
 
-    print(sentence)
+    print(sentence.confidence)
 
-    actions = action_extractor.extract_all(sentence)
+    print()
 
-    modifiers = modifier_extractor.extract(sentence)
+for fact in doc.facts:
 
-    clauses = segmenter.segment(sentence, actions)
+    print(fact.interpretation.action.base)
 
-    clauses = rebuilder.rebuild(
-        sentence,
-        clauses,
-        modifiers,
-    )
+    print(fact.interpretation.object.canonical)
 
-    clauses = normalizer.normalize(
-        clauses,
-        actions,
-    )
+    print(fact.interpretation.metric.canonical)
 
-    for clause in clauses:
+    print(fact.interpretation.measurement.value)
 
-        print(clause.text)
+    print("-" * 60)
