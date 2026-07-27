@@ -127,5 +127,22 @@
 
   "train": {
     "category": "people_development"
-  }
+  },
+  "optimized": {
+  "base": "optimize",
+  "gerund": "optimizing",
+  "category": "optimization"
+},
+
+"optimize": {
+  "base": "optimize",
+  "gerund": "optimizing",
+  "category": "optimization"
+},
+
+"optimizing": {
+  "base": "optimize",
+  "gerund": "optimizing",
+  "category": "optimization"
+}
 }

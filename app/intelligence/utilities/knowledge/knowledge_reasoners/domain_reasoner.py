@@ -1,12 +1,20 @@
 """
 Domain Reasoner
 
-Combines Action + Object
-to determine business domain.
-"""
+Determines the business domain of a clause by combining
+Action + Object.
 
-import json
-from pathlib import Path
+Reasoning priority
+
+1. Food Safety
+2. Quality
+3. Manufacturing
+4. Operations
+5. Supply Chain
+6. Leadership (fallback)
+
+Specific business objects always override generic verbs.
+"""
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_models import (
     DomainKnowledge,
@@ -16,82 +24,236 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_mode
 class DomainReasoner:
 
     def __init__(self):
+        pass
 
-        path = (
-
-            Path(__file__).resolve().parent.parent
-            / "knowledge_knowledge"
-            / "data"
-            / "domain_reasoning.json"
-
-        )
-
-        with open(path, encoding="utf8") as f:
-
-            self.rules = json.load(f)
-
-    # ---------------------------------------------------------
+    # ----------------------------------------------------------
 
     def reason(
-
         self,
-
         action,
-
-        obj
-
+        obj,
     ):
 
         if not action.found:
-
             return DomainKnowledge()
 
-        if not obj.found:
+        action_base = action.base.lower()
 
-            return DomainKnowledge()
+        object_category = ""
 
-        category = action.category
+        if obj.found:
+            object_category = obj.category.lower()
 
-        object_type = obj.category
+        # ======================================================
+        # OBJECT-BASED REASONING (Highest Priority)
+        # ======================================================
 
-        if category not in self.rules:
+        # -------------------------
+        # Food Safety
+        # -------------------------
+
+        if object_category == "food_safety":
 
             return DomainKnowledge(
 
                 found=True,
 
-                domain=object_type,
+                domain="food_safety",
 
-                reasoning="Object only",
+                reasoning="food safety object",
 
-                confidence=0.60
+                confidence=0.95,
 
             )
 
-        mapping = self.rules[category]
+        # -------------------------
+        # Quality
+        # -------------------------
 
-        if object_type not in mapping:
+        if object_category == "quality":
 
             return DomainKnowledge(
 
                 found=True,
 
-                domain=object_type,
+                domain="quality",
 
-                reasoning="Object only",
+                reasoning="quality object",
 
-                confidence=0.70
+                confidence=0.95,
 
             )
 
-        return DomainKnowledge(
+        # -------------------------
+        # Manufacturing
+        # -------------------------
 
-            found=True,
+        if object_category == "manufacturing":
 
-            domain=mapping[object_type],
+            return DomainKnowledge(
 
-            reasoning=f"{category} + {object_type}",
+                found=True,
 
-            confidence=0.95
+                domain="manufacturing",
 
-        )
+                reasoning="manufacturing object",
+
+                confidence=0.95,
+
+            )
+
+        # -------------------------
+        # Operations
+        # -------------------------
+
+        if object_category == "operations":
+
+            return DomainKnowledge(
+
+                found=True,
+
+                domain="operational_excellence",
+
+                reasoning="operations object",
+
+                confidence=0.95,
+
+            )
+
+        # -------------------------
+        # Supply Chain
+        # -------------------------
+
+        if object_category == "supply_chain":
+
+            return DomainKnowledge(
+
+                found=True,
+
+                domain="supply_chain",
+
+                reasoning="supply chain object",
+
+                confidence=0.95,
+
+            )
+
+        # -------------------------
+        # Finance
+        # -------------------------
+
+        if object_category == "finance":
+
+            return DomainKnowledge(
+
+                found=True,
+
+                domain="finance",
+
+                reasoning="finance object",
+
+                confidence=0.95,
+
+            )
+
+        # -------------------------
+        # Compliance
+        # -------------------------
+
+        if object_category == "compliance":
+
+            return DomainKnowledge(
+
+                found=True,
+
+                domain="compliance",
+
+                reasoning="compliance object",
+
+                confidence=0.95,
+
+            )
+
+        # ======================================================
+        # ACTION-BASED FALLBACK
+        # ======================================================
+
+        if action_base in {
+
+            "lead",
+            "manage",
+            "coach",
+            "train",
+            "mentor",
+            "supervise",
+            "direct",
+
+        }:
+
+            return DomainKnowledge(
+
+                found=True,
+
+                domain="leadership",
+
+                reasoning="leadership action",
+
+                confidence=0.95,
+
+            )
+
+        # -------------------------
+        # Continuous Improvement
+        # -------------------------
+
+        if action_base in {
+
+            "improve",
+            "optimize",
+            "enhance",
+            "streamline",
+
+        }:
+
+            return DomainKnowledge(
+
+                found=True,
+
+                domain="continuous_improvement",
+
+                reasoning="continuous improvement action",
+
+                confidence=0.95,
+
+            )
+
+        # -------------------------
+        # Implementation
+        # -------------------------
+
+        if action_base in {
+
+            "implement",
+            "develop",
+            "create",
+            "design",
+
+        }:
+
+            return DomainKnowledge(
+
+                found=True,
+
+                domain="project_implementation",
+
+                reasoning="implementation action",
+
+                confidence=0.90,
+
+            )
+
+        # ======================================================
+        # Unknown
+        # ======================================================
+
+        return DomainKnowledge()

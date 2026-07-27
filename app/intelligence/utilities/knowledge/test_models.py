@@ -3,41 +3,93 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
+"""
+Test Domain Reasoner
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline.knowledge_pipeline import KnowledgePipeline
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_builder import GraphBuilder
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_query import GraphQuery
+Tests
 
-pipeline = KnowledgePipeline()
+Action Extraction
+Object Extraction
+Domain Reasoning
 
-doc = pipeline.process(
+Run
 
-    "Implemented ISO 9001, trained staff and improved productivity by 25%."
+python test_domain_reasoner.py
+"""
 
+from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor import (
+    ActionExtractor,
 )
 
-graph = GraphBuilder().build(doc)
+from app.intelligence.utilities.knowledge.knowledge_extractors.object_extractor import (
+    ObjectExtractor,
+)
 
-query = GraphQuery(graph)
+from app.intelligence.utilities.knowledge.knowledge_reasoners.domain_reasoner import (
+    DomainReasoner,
+)
 
-query.print_graph()
 
-print()
+action_extractor = ActionExtractor()
 
-print(query.metrics())
+object_extractor = ObjectExtractor()
 
-print()
+reasoner = DomainReasoner()
 
-print(query.measurements())
 
-print()
+sentences = [
 
-print(query.domains())
+    "Trained staff",
 
-print()
+    "Managed supplier quality",
 
-print(query.actions_in_domain("quality"))
+    "Implemented ISO 9001",
 
-print()
+    "Successfully implemented FSSC 22000",
 
-print(query.metric_value("Productivity"))
+    "Reduced customer complaints",
+
+    "Improved production yield",
+
+    "Optimized productivity",
+
+    "Reduced downtime by 40 hours",
+
+]
+
+
+print("=" * 90)
+print("DOMAIN REASONER TEST")
+print("=" * 90)
+
+for sentence in sentences:
+
+    action = action_extractor.extract(sentence)
+
+    obj = object_extractor.extract(sentence)
+
+    domain = reasoner.reason(
+        action,
+        obj,
+    )
+
+    print()
+
+    print(sentence)
+
+    print("-" * 60)
+
+    print("Action")
+    print(action)
+
+    print()
+
+    print("Object")
+    print(obj)
+
+    print()
+
+    print("Domain")
+    print(domain)
+
+    print("-" * 60)

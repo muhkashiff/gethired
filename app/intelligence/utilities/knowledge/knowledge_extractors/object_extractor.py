@@ -1,10 +1,3 @@
-"""
-Object Extractor
-
-Finds business objects
-mentioned in a sentence.
-"""
-
 import json
 from pathlib import Path
 
@@ -18,57 +11,46 @@ class ObjectExtractor:
     def __init__(self):
 
         path = (
-
             Path(__file__).resolve().parent.parent
-
             / "knowledge_knowledge"
-
             / "data"
-
             / "objects.json"
-
         )
 
         with open(path, encoding="utf8") as f:
-
             self.objects = json.load(f)
 
-    # ---------------------------------------------------------
+        # longest phrases first
+        self.sorted_objects = sorted(
+            self.objects.keys(),
+            key=len,
+            reverse=True,
+        )
+
+    # -----------------------------------------------------
 
     def extract(self, sentence):
 
         sentence_lower = sentence.lower()
 
-        best_match = ""
+        for phrase in self.sorted_objects:
 
-        category = ""
+            if phrase in sentence_lower:
 
-        # longest match wins
+                data = self.objects[phrase]
 
-        for obj, cat in self.objects.items():
+                return ObjectKnowledge(
 
-            if obj.lower() in sentence_lower:
+                    found=True,
 
-                if len(obj) > len(best_match):
+                    original=phrase,
 
-                    best_match = obj
+                    canonical=data["canonical"],
 
-                    category = cat
+                    category=data["category"],
 
-        if best_match == "":
+                    confidence=0.95
 
-            return ObjectKnowledge()
+                )
 
-        return ObjectKnowledge(
-
-            found=True,
-
-            original=best_match,
-
-            canonical=best_match.lower(),
-
-            category=category,
-
-            confidence=0.95
-
-        )
+        return ObjectKnowledge()

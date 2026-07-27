@@ -1,39 +1,83 @@
 {
-    "cross-functional teams":"people",
+  "staff": {
+    "canonical": "staff",
+    "category": "people"
+  },
+  "employees": {
+    "canonical": "staff",
+    "category": "people"
+  },
+  "team": {
+    "canonical": "team",
+    "category": "people"
+  },
+  "teams": {
+    "canonical": "team",
+    "category": "people"
+  },
+  "supplier": {
+    "canonical": "supplier",
+    "category": "supply_chain"
+  },
+  "suppliers": {
+    "canonical": "supplier",
+    "category": "supply_chain"
+  },
+  "customer complaints": {
+    "canonical": "customer complaints",
+    "category": "quality"
+  },
+  "complaints": {
+    "canonical": "customer complaints",
+    "category": "quality"
+  },
+  "production": {
+    "canonical": "production",
+    "category": "manufacturing"
+  },
+  "yield": {
+    "canonical": "yield",
+    "category": "manufacturing"
+  },
+  "productivity": {
+    "canonical": "productivity",
+    "category": "operations"
+  },
+  "downtime": {
+    "canonical": "downtime",
+    "category": "operations"
+  },
+  "iso 9001": {
+    "canonical": "ISO 9001",
+    "category": "quality"
+  },
+  "fssc 22000": {
+    "canonical": "FSSC 22000",
+    "category": "food_safety"
+  },
+  "haccp": {
+    "canonical": "HACCP",
+    "category": "food_safety"
+  },
+  "production yield": {
+    "canonical": "production yield",
+    "category": "manufacturing"
+},
+"optimized": {
+  "base": "optimize",
+  "gerund": "optimizing",
+  "category": "optimization"
+},
 
-    "teams":"people",
+"optimize": {
+  "base": "optimize",
+  "gerund": "optimizing",
+  "category": "optimization"
+},
 
-    "supplier quality":"quality",
-
-    "production yield":"operations",
-
-    "yield":"operations",
-
-    "customer complaints":"quality",
-
-    "complaints":"quality",
-
-    "facility":"facility",
-
-    "plant":"facility",
-
-    "food safety":"food_safety",
-
-    "haccp plan":"food_safety",
-
-    "fssc 22000":"food_safety",
-
-    "iso 9001":"quality",
-
-    "audit":"quality",
-
-    "training":"people",
-
-    "inventory":"operations",
-
-    "stock":"operations",
-
-    "warehouse":"operations",
-
-    "production":"operations"
+"optimizing": {
+  "base": "optimize",
+  "gerund": "optimizing",
+  "category": "optimization"
+}
 }
