@@ -78,6 +78,8 @@ class Repository:
             self.paths.confidence_rules
         )
 
+        self.cache.clause_patterns = self._read(self.paths.clause_patterns)
+
     # =========================================================
     # Entity Builders
     # =========================================================
@@ -267,3 +269,8 @@ class Repository:
 
     def get_domain_reasoning(self):
         return self.cache.domain_reasoning
+
+    def get_clause_patterns(self):
+        return self.cache.clause_patterns
+
+    

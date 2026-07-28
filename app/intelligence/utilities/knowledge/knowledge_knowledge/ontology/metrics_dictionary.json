@@ -1,103 +1,154 @@
 {
-    "yield": {
-        "canonical": "Production Yield",
-        "category": "operations",
-        "unit": "%"
-    },
+  "yield": {
+    "entity_id": "KPI_PRODUCTION_YIELD",
+    "canonical": "Production Yield",
+    "category": "operations",
+    "business_area": "operations",
+    "unit": "%",
+    "higher_is_better": true
+  },
 
-    "productivity": {
-        "canonical": "Productivity",
-        "category": "operations",
-        "unit": "%"
-    },
+  "productivity": {
+    "entity_id": "KPI_PRODUCTIVITY",
+    "canonical": "Productivity",
+    "category": "operations",
+    "business_area": "operations",
+    "unit": "%",
+    "higher_is_better": true
+  },
 
-    "efficiency": {
-        "canonical": "Efficiency",
-        "category": "operations",
-        "unit": "%"
-    },
+  "efficiency": {
+    "entity_id": "KPI_EFFICIENCY",
+    "canonical": "Efficiency",
+    "category": "operations",
+    "business_area": "operations",
+    "unit": "%",
+    "higher_is_better": true
+  },
 
-    "complaints": {
-        "canonical": "Customer Complaints",
-        "category": "quality",
-        "unit": "%"
-    },
+  "complaints": {
+    "entity_id": "KPI_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
+    "category": "quality",
+    "business_area": "quality",
+    "unit": "%",
+    "higher_is_better": false
+  },
 
-    "audit": {
-        "canonical": "Audit",
-        "category": "quality",
-        "unit": "count"
-    },
+  "audit": {
+    "entity_id": "KPI_AUDIT",
+    "canonical": "Audit",
+    "category": "quality",
+    "business_area": "quality",
+    "unit": "count",
+    "higher_is_better": true
+  },
 
-    "audits": {
-        "canonical": "Audit",
-        "category": "quality",
-        "unit": "count"
-    },
+  "audits": {
+    "entity_id": "KPI_AUDIT",
+    "canonical": "Audit",
+    "category": "quality",
+    "business_area": "quality",
+    "unit": "count",
+    "higher_is_better": true
+  },
 
-    "defects": {
-        "canonical": "Defect Rate",
-        "category": "quality",
-        "unit": "%"
-    },
+  "defects": {
+    "entity_id": "KPI_DEFECT_RATE",
+    "canonical": "Defect Rate",
+    "category": "quality",
+    "business_area": "quality",
+    "unit": "%",
+    "higher_is_better": false
+  },
 
-    "waste": {
-        "canonical": "Production Waste",
-        "category": "operations",
-        "unit": "%"
-    },
+  "waste": {
+    "entity_id": "KPI_PRODUCTION_WASTE",
+    "canonical": "Production Waste",
+    "category": "operations",
+    "business_area": "operations",
+    "unit": "%",
+    "higher_is_better": false
+  },
 
-    "downtime": {
-        "canonical": "Downtime",
-        "category": "operations",
-        "unit": "hours"
-    },
+  "downtime": {
+    "entity_id": "KPI_DOWNTIME",
+    "canonical": "Downtime",
+    "category": "operations",
+    "business_area": "operations",
+    "unit": "hours",
+    "higher_is_better": false
+  },
 
-    "cost": {
-        "canonical": "Cost",
-        "category": "finance",
-        "unit": "$"
-    },
+  "cost": {
+    "entity_id": "KPI_COST",
+    "canonical": "Cost",
+    "category": "finance",
+    "business_area": "finance",
+    "unit": "$",
+    "higher_is_better": false
+  },
 
-    "savings": {
-        "canonical": "Cost Savings",
-        "category": "finance",
-        "unit": "$"
-    },
+  "savings": {
+    "entity_id": "KPI_COST_SAVINGS",
+    "canonical": "Cost Savings",
+    "category": "finance",
+    "business_area": "finance",
+    "unit": "$",
+    "higher_is_better": true
+  },
 
-    "revenue": {
-        "canonical": "Revenue",
-        "category": "finance",
-        "unit": "$"
-    },
+  "revenue": {
+    "entity_id": "KPI_REVENUE",
+    "canonical": "Revenue",
+    "category": "finance",
+    "business_area": "finance",
+    "unit": "$",
+    "higher_is_better": true
+  },
 
-    "inventory": {
-        "canonical": "Inventory",
-        "category": "operations",
-        "unit": "units"
-    },
+  "inventory": {
+    "entity_id": "KPI_INVENTORY",
+    "canonical": "Inventory",
+    "category": "operations",
+    "business_area": "operations",
+    "unit": "units",
+    "higher_is_better": true
+  },
 
-    "stock": {
-        "canonical": "Inventory",
-        "category": "operations",
-        "unit": "units"
-    },
+  "stock": {
+    "entity_id": "KPI_INVENTORY",
+    "canonical": "Inventory",
+    "category": "operations",
+    "business_area": "operations",
+    "unit": "units",
+    "higher_is_better": true
+  },
 
-    "training": {
-        "canonical": "Training",
-        "category": "people",
-        "unit": "hours"
-    },
+  "training": {
+    "entity_id": "KPI_TRAINING",
+    "canonical": "Training",
+    "category": "people",
+    "business_area": "people",
+    "unit": "hours",
+    "higher_is_better": true
+  },
 
-    "certification": {
-        "canonical": "Certification",
-        "category": "quality",
-        "unit": "count"
-    },
+  "certification": {
+    "entity_id": "KPI_CERTIFICATION",
+    "canonical": "Certification",
+    "category": "quality",
+    "business_area": "quality",
+    "unit": "count",
+    "higher_is_better": true
+  },
 
-    "customer satisfaction": {
-        "canonical": "Customer Satisfaction",
-        "category": "quality",
-        "unit": "%"
-    }
+  "customer satisfaction": {
+    "entity_id": "KPI_CUSTOMER_SATISFACTION",
+    "canonical": "Customer Satisfaction",
+    "category": "quality",
+    "business_area": "quality",
+    "unit": "%",
+    "higher_is_better": true
+  }
 }

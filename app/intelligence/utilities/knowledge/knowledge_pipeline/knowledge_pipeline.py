@@ -86,9 +86,7 @@ class KnowledgePipeline:
         for clause in clauses:
 
             segmented.extend(
-
                 self.action_segmenter.segment(clause)
-
             )
 
         segmented = self.clause_normalizer.normalize(segmented)
@@ -119,27 +117,31 @@ class KnowledgePipeline:
 
             )
 
-            parsed_sentence = self.sentence_parser.parse(
+            # ------------------------------------------
+            # Parse ONE semantic clause
+            # ------------------------------------------
+
+            parsed_clause = self.sentence_parser.parse(
 
                 clause.text
 
             )
 
-            clause_obj.facts = parsed_sentence.facts
+            clause_obj.facts = parsed_clause.facts
 
-            clause_obj.confidence = parsed_sentence.confidence
+            clause_obj.confidence = parsed_clause.confidence
 
             sentence_obj.clauses.append(clause_obj)
 
             all_sentence_facts.extend(
 
-                parsed_sentence.facts
+                parsed_clause.facts
 
             )
 
             clause_confidences.append(
 
-                parsed_sentence.confidence
+                parsed_clause.confidence
 
             )
 
@@ -189,6 +191,56 @@ class KnowledgePipeline:
 
             "facts": len(document.facts),
 
+            "actions": sum(
+
+                1
+
+                for fact in document.facts
+
+                if fact.interpretation.action.found
+
+            ),
+
+            "objects": sum(
+
+                1
+
+                for fact in document.facts
+
+                if fact.interpretation.object.found
+
+            ),
+
+            "metrics": sum(
+
+                1
+
+                for fact in document.facts
+
+                if fact.interpretation.metric.found
+
+            ),
+
+            "measurements": sum(
+
+                1
+
+                for fact in document.facts
+
+                if fact.interpretation.measurement.found
+
+            ),
+
+            "domains": len({
+
+                fact.interpretation.domain.entity_id
+
+                for fact in document.facts
+
+                if fact.interpretation.domain.found
+
+            }),
+
         }
 
         # --------------------------------------------------
@@ -201,9 +253,9 @@ class KnowledgePipeline:
 
                 sum(
 
-                    s.confidence
+                    sentence.confidence
 
-                    for s in document.sentences
+                    for sentence in document.sentences
 
                 )
 

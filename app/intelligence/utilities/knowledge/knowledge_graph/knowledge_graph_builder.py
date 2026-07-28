@@ -1,0 +1,373 @@
+"""
+Knowledge Graph Builder
+
+Builds a semantic knowledge graph from a parsed
+KnowledgeDocument.
+"""
+
+from app.intelligence.utilities.knowledge.knowledge_graph.graph_document import (
+    KnowledgeGraphDocument,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
+    KnowledgeGraph,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_graph.node_models import (
+    GraphNode,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_graph.edge_models import (
+    GraphEdge,
+)
+
+
+class KnowledgeGraphBuilder:
+
+    def __init__(self):
+
+        self.node_counter = 1
+        self.edge_counter = 1
+
+    # -------------------------------------------------
+
+    def build(self, knowledge_document):
+
+        graph = KnowledgeGraph()
+
+        for sentence in knowledge_document.sentences:
+
+            for fact in sentence.facts:
+
+                self._build_fact(graph, fact)
+
+        graph.confidence = knowledge_document.confidence
+
+        return KnowledgeGraphDocument(
+
+            knowledge_document=knowledge_document,
+
+            graph=graph,
+
+            confidence=graph.confidence,
+
+            statistics=knowledge_document.statistics,
+
+        )
+
+    # -------------------------------------------------
+
+    def _build_fact(self, graph, fact):
+
+        interpretation = fact.interpretation
+
+        action = interpretation.action
+        obj = interpretation.object
+        domain = interpretation.domain
+        metric = interpretation.metric
+        measurement = interpretation.measurement
+
+        # ---------------------------------------------
+        # Action
+        # ---------------------------------------------
+
+        action_node = None
+
+        if action.found:
+
+            action_node = self._add_node(
+
+                graph=graph,
+
+                entity_id=action.entity_id,
+
+                node_type="Action",
+
+                label=action.base,
+
+                category=action.category,
+
+                business_area=action.business_area,
+
+                confidence=action.confidence,
+
+                impact_weight=action.impact_weight,
+
+                metadata=action.metadata,
+
+            )
+
+        # ---------------------------------------------
+        # Object
+        # ---------------------------------------------
+
+        object_node = None
+
+        if obj.found:
+
+            object_node = self._add_node(
+
+                graph=graph,
+
+                entity_id=obj.entity_id,
+
+                node_type="Object",
+
+                label=obj.canonical,
+
+                category=obj.category,
+
+                business_area=obj.business_area,
+
+                confidence=obj.confidence,
+
+                impact_weight=obj.impact_weight,
+
+                metadata=obj.metadata,
+
+            )
+
+        # ---------------------------------------------
+        # Domain
+        # ---------------------------------------------
+
+        domain_node = None
+
+        if domain.found:
+
+            domain_node = self._add_node(
+
+                graph=graph,
+
+                entity_id=domain.entity_id,
+
+                node_type="Domain",
+
+                label=domain.domain,
+
+                category="domain",
+
+                business_area=domain.business_area,
+
+                confidence=domain.confidence,
+
+                impact_weight=domain.impact_weight,
+
+                metadata=domain.metadata,
+
+            )
+
+        # ---------------------------------------------
+        # Metric
+        # ---------------------------------------------
+
+        metric_node = None
+
+        if metric.found:
+
+            metric_node = self._add_node(
+
+                graph=graph,
+
+                entity_id=metric.entity_id,
+
+                node_type="Metric",
+
+                label=metric.canonical,
+
+                category=metric.category,
+
+                business_area=metric.business_area,
+
+                confidence=metric.confidence,
+
+                impact_weight=metric.impact_weight,
+
+                metadata=metric.metadata,
+
+            )
+
+        # ---------------------------------------------
+        # Measurement
+        # ---------------------------------------------
+
+        measurement_node = None
+
+        if measurement.found:
+
+            measurement_node = self._add_node(
+
+                graph=graph,
+
+                entity_id=(
+                    f"MEASUREMENT_"
+                    f"{measurement.metric.upper().replace(' ', '_')}_"
+                    f"{measurement.value}"
+                ),
+
+                node_type="Measurement",
+
+                label=f"{measurement.value}{measurement.unit}",
+
+                category="measurement",
+
+                business_area=measurement.business_area,
+
+                confidence=measurement.confidence,
+
+                impact_weight=measurement.impact_weight,
+
+                metadata={
+                    "value": measurement.value,
+                    "unit": measurement.unit,
+                    "direction": measurement.direction,
+                    "effect": measurement.effect,
+                },
+
+            )
+
+        # ---------------------------------------------
+        # Relationships
+        # ---------------------------------------------
+
+        if action_node and object_node:
+
+            self._add_edge(
+                graph,
+                action_node,
+                object_node,
+                "targets",
+            )
+
+        if action_node and metric_node:
+
+            self._add_edge(
+                graph,
+                action_node,
+                metric_node,
+                "affects",
+            )
+
+        if metric_node and measurement_node:
+
+            self._add_edge(
+                graph,
+                metric_node,
+                measurement_node,
+                "measured_by",
+            )
+
+        if object_node and domain_node:
+
+            self._add_edge(
+                graph,
+                object_node,
+                domain_node,
+                "belongs_to",
+            )
+
+    # -------------------------------------------------
+
+    def _add_node(
+
+        self,
+
+        graph,
+
+        entity_id,
+
+        node_type,
+
+        label,
+
+        category,
+
+        business_area,
+
+        confidence,
+
+        metadata,
+
+        impact_weight=1.0,
+
+    ):
+
+        existing = graph.get_node_by_entity(entity_id)
+
+        if existing:
+
+            existing.frequency += 1
+            return existing
+
+        node = GraphNode(
+
+            node_id=f"N{self.node_counter:05}",
+
+            entity_id=entity_id,
+
+            node_type=node_type,
+
+            label=label,
+
+            canonical=label,
+
+            category=category,
+
+            business_area=business_area,
+
+            confidence=confidence,
+
+            impact_weight=impact_weight,
+
+            metadata=metadata,
+
+        )
+
+        graph.add_node(node)
+
+        self.node_counter += 1
+
+        return node
+
+    # -------------------------------------------------
+
+    def _add_edge(
+
+        self,
+
+        graph,
+
+        source,
+
+        target,
+
+        relationship,
+
+    ):
+
+        edge = GraphEdge(
+
+            edge_id=f"E{self.edge_counter:05}",
+
+            source_node=source.entity_id,
+
+            target_node=target.entity_id,
+
+            relationship=relationship,
+
+            relationship_label=relationship,
+
+            confidence=1.0,
+
+            weight=1.0,
+
+            source="knowledge_pipeline",
+
+        )
+
+        graph.add_edge(edge)
+
+        source.add_edge(edge)
+        target.add_edge(edge)
+
+        self.edge_counter += 1

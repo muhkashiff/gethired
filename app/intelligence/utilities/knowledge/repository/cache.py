@@ -49,3 +49,5 @@ class RepositoryCache:
     measurement_patterns: dict = field(default_factory=dict)
 
     aliases: dict = field(default_factory=dict)
+
+    clause_patterns: dict = field(default_factory=dict)

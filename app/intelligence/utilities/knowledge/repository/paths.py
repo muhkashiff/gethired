@@ -45,6 +45,7 @@ class RepositoryPaths:
 
         self.technologies = ONTOLOGY / "technologies.json"
 
+
         # -------------------
         # Config
         # -------------------
@@ -62,3 +63,7 @@ class RepositoryPaths:
         self.measurement_semantics = (
             SEMANTICS / "measurement_semantics.json"
         )
+
+        self.clause_patterns = (
+            SEMANTICS / "clause_patterns.json"
+                )

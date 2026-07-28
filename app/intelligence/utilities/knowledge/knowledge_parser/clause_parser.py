@@ -10,22 +10,16 @@ import re
 from pathlib import Path
 
 from app.intelligence.utilities.knowledge.knowledge_models.clause_models import Clause
+from app.intelligence.utilities.knowledge.repository.repository import Repository
 
 
 class ClauseParser:
 
     def __init__(self):
 
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "knowledge_knowledge"
-            / "semantics"
-            / "clause_patterns.json"
-        )
+        self.repository = Repository()
 
-        with open(path, encoding="utf8") as f:
-            self.rules = json.load(f)
-
+        self.rules = self.repository.get_clause_patterns()
     # -------------------------------------------------------
 
     def parse(self, sentence):
@@ -42,15 +36,19 @@ class ClauseParser:
 
                 Clause(
 
-                    text=clause.strip(),
+                    text=clause,
 
                     index=i + 1,
 
                     parent_sentence=sentence,
 
-                    confidence=0.95,
+                    confidence=1.0,
 
-                    is_independent=True
+                    is_independent=True,
+
+                    clause_type="semantic",
+
+                    source="rule"
 
                 )
 
