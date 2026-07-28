@@ -1,18 +1,19 @@
 """
 Action Extractor
 
-Identifies one or more actions from a sentence.
+Repository-driven Action Extractor.
 
-extract()
-    Returns the first detected action (backward compatible).
+Identifies one or more actions from a sentence using the
+central ontology repository.
 
-extract_all()
-    Returns every detected action with positional metadata.
+No JSON files are opened here.
+
+Repository is the single source of truth.
 """
 
-import json
 import re
-from pathlib import Path
+
+from app.intelligence.utilities.knowledge.repository.repository import Repository
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.action_models import (
     ActionKnowledge,
@@ -23,15 +24,7 @@ class ActionExtractor:
 
     def __init__(self):
 
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "knowledge_knowledge"
-            / "ontology"
-            / "actions.json"
-        )
-
-        with open(path, encoding="utf8") as f:
-            self.actions = json.load(f)
+        self.repository = Repository()
 
     # ----------------------------------------------------------
     # Backward compatible API
@@ -39,10 +32,10 @@ class ActionExtractor:
 
     def extract(self, sentence: str) -> ActionKnowledge:
         """
-        Returns the first action found.
+        Returns the first detected action.
 
-        Existing parser code can continue calling this
-        without any modification.
+        Existing parser code can continue calling extract()
+        without modification.
         """
 
         actions = self.extract_all(sentence)
@@ -53,16 +46,10 @@ class ActionExtractor:
         return ActionKnowledge()
 
     # ----------------------------------------------------------
-    # New API
+    # Extract every action
     # ----------------------------------------------------------
 
     def extract_all(self, sentence: str):
-        """
-        Returns every detected action in the sentence.
-
-        Each ActionKnowledge contains positional information
-        used later by the Clause Parser.
-        """
 
         results = []
 
@@ -76,23 +63,29 @@ class ActionExtractor:
 
             word = match.group()
 
-            if word not in self.actions:
+            # --------------------------------------------
+            # Repository lookup
+            # --------------------------------------------
+
+            entity = self.repository.get_action(word)
+
+            if entity is None:
+
                 token_index += 1
                 continue
 
-            data = self.actions[word]
+            metadata = entity.metadata
 
-            # -----------------------------
-            # Safe defaults
-            # -----------------------------
+            base = metadata.get("base", word)
 
-            base = data.get("base", word)
+            gerund = metadata.get(
+                "gerund",
+                base + "ing"
+            )
 
-            gerund = data.get("gerund", base + "ing")
-
-            category = data.get("category", "")
-
-            entity_id = data.get("entity_id", "")
+            # --------------------------------------------
+            # Build Knowledge Model
+            # --------------------------------------------
 
             results.append(
 
@@ -100,17 +93,37 @@ class ActionExtractor:
 
                     found=True,
 
+                    confidence=0.95,
+
+                    # -----------------------
+                    # Linguistics
+                    # -----------------------
+
                     original=word,
 
                     base=base,
 
                     gerund=gerund,
 
-                    category=category,
+                    category=entity.category,
 
-                    entity_id=entity_id,
+                    # -----------------------
+                    # Ontology
+                    # -----------------------
 
-                    confidence=0.95,
+                    entity_id=entity.entity_id,
+
+                    business_area=entity.business_area,
+
+                    impact_weight=entity.impact_weight,
+
+                    source="ontology",
+
+                    metadata=metadata,
+
+                    # -----------------------
+                    # Position
+                    # -----------------------
 
                     start_char=match.start(),
 

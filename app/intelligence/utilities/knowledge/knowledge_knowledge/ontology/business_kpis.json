@@ -1,120 +1,171 @@
 {
-    "yield": {
+    "production_yield": {
         "entity_id": "KPI_PRODUCTION_YIELD",
         "canonical": "Production Yield",
-        "category": "operations",
-        "unit": "%"
+        "category": "manufacturing",
+        "business_area": "manufacturing",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 1.00
     },
 
     "productivity": {
         "entity_id": "KPI_PRODUCTIVITY",
         "canonical": "Productivity",
         "category": "operations",
-        "unit": "%"
+        "business_area": "operations",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 0.95
     },
 
     "efficiency": {
         "entity_id": "KPI_EFFICIENCY",
         "canonical": "Efficiency",
         "category": "operations",
-        "unit": "%"
-    },
-
-    "complaints": {
-        "entity_id": "KPI_CUSTOMER_COMPLAINTS",
-        "canonical": "Customer Complaints",
-        "category": "quality",
-        "unit": "%"
-    },
-
-    "audit": {
-        "entity_id": "KPI_AUDIT",
-        "canonical": "Audit",
-        "category": "quality",
-        "unit": "count"
-    },
-
-    "audits": {
-        "entity_id": "KPI_AUDIT",
-        "canonical": "Audit",
-        "category": "quality",
-        "unit": "count"
-    },
-
-    "defects": {
-        "entity_id": "KPI_DEFECT_RATE",
-        "canonical": "Defect Rate",
-        "category": "quality",
-        "unit": "%"
-    },
-
-    "waste": {
-        "entity_id": "KPI_PRODUCTION_WASTE",
-        "canonical": "Production Waste",
-        "category": "operations",
-        "unit": "%"
+        "business_area": "operations",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 0.95
     },
 
     "downtime": {
         "entity_id": "KPI_DOWNTIME",
         "canonical": "Downtime",
         "category": "operations",
-        "unit": "hours"
+        "business_area": "operations",
+        "preferred_unit": "hours",
+        "higher_is_better": false,
+        "impact_weight": 1.00
     },
 
-    "cost": {
-        "entity_id": "KPI_COST",
-        "canonical": "Cost",
-        "category": "finance",
-        "unit": "$"
-    },
-
-    "savings": {
-        "entity_id": "KPI_COST_SAVINGS",
-        "canonical": "Cost Savings",
-        "category": "finance",
-        "unit": "$"
-    },
-
-    "revenue": {
-        "entity_id": "KPI_REVENUE",
-        "canonical": "Revenue",
-        "category": "finance",
-        "unit": "$"
-    },
-
-    "inventory": {
-        "entity_id": "KPI_INVENTORY",
-        "canonical": "Inventory",
-        "category": "operations",
-        "unit": "units"
-    },
-
-    "stock": {
-        "entity_id": "KPI_INVENTORY",
-        "canonical": "Inventory",
-        "category": "operations",
-        "unit": "units"
-    },
-
-    "training": {
-        "entity_id": "KPI_TRAINING",
-        "canonical": "Training",
-        "category": "people",
-        "unit": "hours"
-    },
-
-    "certification": {
-        "entity_id": "KPI_CERTIFICATION",
-        "canonical": "Certification",
+    "customer_complaints": {
+        "entity_id": "KPI_CUSTOMER_COMPLAINTS",
+        "canonical": "Customer Complaints",
         "category": "quality",
-        "unit": "count"
+        "business_area": "quality",
+        "preferred_unit": "%",
+        "higher_is_better": false,
+        "impact_weight": 1.00
     },
 
-    "customer satisfaction": {
+    "defect_rate": {
+        "entity_id": "KPI_DEFECT_RATE",
+        "canonical": "Defect Rate",
+        "category": "quality",
+        "business_area": "quality",
+        "preferred_unit": "%",
+        "higher_is_better": false,
+        "impact_weight": 1.00
+    },
+
+    "non_conformance": {
+        "entity_id": "KPI_NON_CONFORMANCE",
+        "canonical": "Non Conformance",
+        "category": "quality",
+        "business_area": "quality",
+        "preferred_unit": "count",
+        "higher_is_better": false,
+        "impact_weight": 0.95
+    },
+
+    "customer_satisfaction": {
         "entity_id": "KPI_CUSTOMER_SATISFACTION",
         "canonical": "Customer Satisfaction",
         "category": "quality",
-        "unit": "%"
+        "business_area": "quality",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 1.00
+    },
+
+    "food_safety_incidents": {
+        "entity_id": "KPI_FOOD_SAFETY_INCIDENTS",
+        "canonical": "Food Safety Incidents",
+        "category": "food_safety",
+        "business_area": "food_safety",
+        "preferred_unit": "count",
+        "higher_is_better": false,
+        "impact_weight": 1.00
+    },
+
+    "audit_score": {
+        "entity_id": "KPI_AUDIT_SCORE",
+        "canonical": "Audit Score",
+        "category": "food_safety",
+        "business_area": "food_safety",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 1.00
+    },
+
+    "inventory_accuracy": {
+        "entity_id": "KPI_INVENTORY_ACCURACY",
+        "canonical": "Inventory Accuracy",
+        "category": "supply_chain",
+        "business_area": "supply_chain",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 0.90
+    },
+
+    "on_time_delivery": {
+        "entity_id": "KPI_ON_TIME_DELIVERY",
+        "canonical": "On Time Delivery",
+        "category": "supply_chain",
+        "business_area": "supply_chain",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 0.95
+    },
+
+    "cost_savings": {
+        "entity_id": "KPI_COST_SAVINGS",
+        "canonical": "Cost Savings",
+        "category": "finance",
+        "business_area": "finance",
+        "preferred_unit": "$",
+        "higher_is_better": true,
+        "impact_weight": 1.00
+    },
+
+    "revenue_growth": {
+        "entity_id": "KPI_REVENUE_GROWTH",
+        "canonical": "Revenue Growth",
+        "category": "finance",
+        "business_area": "finance",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 1.00
+    },
+
+    "waste_reduction": {
+        "entity_id": "KPI_WASTE_REDUCTION",
+        "canonical": "Waste Reduction",
+        "category": "manufacturing",
+        "business_area": "manufacturing",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 0.95
+    },
+
+    "training_hours": {
+        "entity_id": "KPI_TRAINING_HOURS",
+        "canonical": "Training Hours",
+        "category": "people",
+        "business_area": "people",
+        "preferred_unit": "hours",
+        "higher_is_better": true,
+        "impact_weight": 0.80
+    },
+
+    "employee_retention": {
+        "entity_id": "KPI_EMPLOYEE_RETENTION",
+        "canonical": "Employee Retention",
+        "category": "people",
+        "business_area": "people",
+        "preferred_unit": "%",
+        "higher_is_better": true,
+        "impact_weight": 0.90
     }
 }

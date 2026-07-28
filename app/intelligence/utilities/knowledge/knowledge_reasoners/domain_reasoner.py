@@ -25,7 +25,11 @@ class DomainReasoner:
 
         self.repository = Repository()
 
-        self.rules = self.repository.get_dictionary("domains")
+        # Rule mapping
+        self.rules = self.repository.get_domain_reasoning()
+
+        # Canonical domain metadata
+        self.domains = self.repository.get_domains()
 
     # ---------------------------------------------------------
 
@@ -44,37 +48,57 @@ class DomainReasoner:
             object_category = obj.category.lower()
 
         # -------------------------------------------------
-        # Ontology lookup
+        # Rule lookup
         # -------------------------------------------------
 
-        if action_category in self.rules:
+        if action_category not in self.rules:
 
-            mapping = self.rules[action_category]
+            return DomainKnowledge()
 
-            if object_category in mapping:
+        mapping = self.rules[action_category]
 
-                info = mapping[object_category]
+        if object_category not in mapping:
 
-                return DomainKnowledge(
+            return DomainKnowledge()
 
-                    found=True,
+        rule = mapping[object_category]
 
-                    entity_id=info.get("domain_id", ""),
+        domain_id = rule.get("domain_id", "")
 
-                    domain=info.get("canonical", ""),
+        canonical = rule.get("canonical", "")
 
-                    business_area=info.get("business_area", ""),
+        # -------------------------------------------------
+        # Metadata lookup
+        # -------------------------------------------------
 
-                    reasoning=f"{action_category} + {object_category}",
+        domain_metadata = self.domains.get(canonical, {})
 
-                    confidence=0.95,
+        return DomainKnowledge(
 
-                    metadata=info,
+            found=True,
 
+            entity_id=domain_id,
+
+            domain=canonical,
+
+            business_area=domain_metadata.get(
+                "business_area",
+                ""
+            ),
+
+            impact_weight=float(
+                domain_metadata.get(
+                    "impact_weight",
+                    1.0,
                 )
+            ),
 
-        # -------------------------------------------------
-        # fallback
-        # -------------------------------------------------
+            source="ontology",
 
-        return DomainKnowledge()
+            metadata=domain_metadata,
+
+            reasoning=f"{action_category} + {object_category}",
+
+            confidence=0.95,
+
+        )

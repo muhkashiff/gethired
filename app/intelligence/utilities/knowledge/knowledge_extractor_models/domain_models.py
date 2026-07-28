@@ -1,5 +1,17 @@
 """
 Domain Knowledge Model
+
+Represents the business domain assigned
+to a clause or achievement.
+
+Examples
+
+Food Safety
+Quality
+Manufacturing
+Operations
+Supply Chain
+Leadership
 """
 
 from dataclasses import dataclass, field
@@ -10,20 +22,18 @@ class DomainKnowledge:
 
     found: bool = False
 
-    # Canonical ontology ID
+    confidence: float = 0.0
+
     entity_id: str = ""
 
-    # Human readable domain
     domain: str = ""
 
-    # Business area
     business_area: str = ""
 
-    # Why the reasoner selected this domain
-    reasoning: str = ""
-
-    confidence: float = 0.0
+    impact_weight: float = 1.0
 
     source: str = "ontology"
 
     metadata: dict = field(default_factory=dict)
+
+    reasoning: str = ""

@@ -1,5 +1,12 @@
-import json
-from pathlib import Path
+"""
+Object Extractor
+
+Extracts ontology-backed business objects.
+
+Repository Driven Version
+"""
+
+from app.intelligence.utilities.knowledge.repository.repository import Repository
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.object_models import (
     ObjectKnowledge,
@@ -10,24 +17,18 @@ class ObjectExtractor:
 
     def __init__(self):
 
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "knowledge_knowledge"
-            / "ontology"
-            / "objects.json"
-        )
+        self.repository = Repository()
 
-        with open(path, encoding="utf8") as f:
-            self.objects = json.load(f)
+        self.objects = self.repository.get_dictionary("objects")
 
-        # longest phrases first
+        # longest phrase first
         self.sorted_objects = sorted(
             self.objects.keys(),
             key=len,
             reverse=True,
         )
 
-    # -----------------------------------------------------
+    # ------------------------------------------------------------
 
     def extract(self, sentence):
 
@@ -37,7 +38,10 @@ class ObjectExtractor:
 
             if phrase in sentence_lower:
 
-                data = self.objects[phrase]
+                entity = self.repository.get_object(phrase)
+
+                if entity is None:
+                    continue
 
                 return ObjectKnowledge(
 
@@ -45,11 +49,25 @@ class ObjectExtractor:
 
                     original=phrase,
 
-                    canonical=data["canonical"],
+                    canonical=entity.canonical,
 
-                    category=data["category"],
+                    category=entity.category,
 
-                    confidence=0.95
+                    confidence=0.95,
+
+                    # ---------------------------------
+                    # Ontology
+                    # ---------------------------------
+
+                    entity_id=entity.entity_id,
+
+                    business_area=entity.business_area,
+
+                    impact_weight=entity.impact_weight,
+                    
+                    source="ontology",
+
+                    metadata=entity.metadata,
 
                 )
 

@@ -1,0 +1,141 @@
+{
+    "leadership": {
+        "entity_id": "DOMAIN_LEADERSHIP",
+        "canonical": "leadership",
+        "business_area": "people",
+        "description": "Leadership and people management."
+    },
+
+    "operational_leadership": {
+        "entity_id": "DOMAIN_OPERATIONAL_LEADERSHIP",
+        "canonical": "operational_leadership",
+        "business_area": "operations",
+        "description": "Leading manufacturing or operational functions."
+    },
+
+    "quality_leadership": {
+        "entity_id": "DOMAIN_QUALITY_LEADERSHIP",
+        "canonical": "quality_leadership",
+        "business_area": "quality",
+        "description": "Leadership of quality systems."
+    },
+
+    "food_safety_leadership": {
+        "entity_id": "DOMAIN_FOOD_SAFETY_LEADERSHIP",
+        "canonical": "food_safety_leadership",
+        "business_area": "food_safety",
+        "description": "Leadership of food safety systems."
+    },
+
+    "people_management": {
+        "entity_id": "DOMAIN_PEOPLE_MANAGEMENT",
+        "canonical": "people_management",
+        "business_area": "people",
+        "description": "Managing teams and personnel."
+    },
+
+    "quality_management": {
+        "entity_id": "DOMAIN_QUALITY_MANAGEMENT",
+        "canonical": "quality_management",
+        "business_area": "quality",
+        "description": "Managing quality systems."
+    },
+
+    "operations_management": {
+        "entity_id": "DOMAIN_OPERATIONS_MANAGEMENT",
+        "canonical": "operations_management",
+        "business_area": "operations",
+        "description": "Managing operational processes."
+    },
+
+    "facility_management": {
+        "entity_id": "DOMAIN_FACILITY_MANAGEMENT",
+        "canonical": "facility_management",
+        "business_area": "operations",
+        "description": "Managing manufacturing facilities."
+    },
+
+    "food_safety": {
+        "entity_id": "DOMAIN_FOOD_SAFETY",
+        "canonical": "food_safety",
+        "business_area": "food_safety",
+        "description": "Food safety systems and compliance."
+    },
+
+    "quality": {
+        "entity_id": "DOMAIN_QUALITY",
+        "canonical": "quality",
+        "business_area": "quality",
+        "description": "Quality assurance and quality control."
+    },
+
+    "operations": {
+        "entity_id": "DOMAIN_OPERATIONS",
+        "canonical": "operations",
+        "business_area": "operations",
+        "description": "Operational excellence."
+    },
+
+    "continuous_improvement": {
+        "entity_id": "DOMAIN_CONTINUOUS_IMPROVEMENT",
+        "canonical": "continuous_improvement",
+        "business_area": "operations",
+        "description": "Continuous improvement initiatives."
+    },
+
+    "operational_excellence": {
+        "entity_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
+        "canonical": "operational_excellence",
+        "business_area": "operations",
+        "description": "Operational excellence and optimization."
+    },
+
+    "quality_improvement": {
+        "entity_id": "DOMAIN_QUALITY_IMPROVEMENT",
+        "canonical": "quality_improvement",
+        "business_area": "quality",
+        "description": "Quality improvement initiatives."
+    },
+
+    "people_development": {
+        "entity_id": "DOMAIN_PEOPLE_DEVELOPMENT",
+        "canonical": "people_development",
+        "business_area": "people",
+        "description": "Training and capability development."
+    },
+
+    "quality_excellence": {
+        "entity_id": "DOMAIN_QUALITY_EXCELLENCE",
+        "canonical": "quality_excellence",
+        "business_area": "quality",
+        "description": "Quality excellence achievements."
+    },
+
+    "food_safety_excellence": {
+        "entity_id": "DOMAIN_FOOD_SAFETY_EXCELLENCE",
+        "canonical": "food_safety_excellence",
+        "business_area": "food_safety",
+        "description": "Food safety excellence achievements."
+    },
+
+    "quality_systems": {
+        "entity_id": "DOMAIN_QUALITY_SYSTEMS",
+        "canonical": "quality_systems",
+        "business_area": "quality",
+        "description": "Quality management systems."
+    },
+
+    "food_safety_systems": {
+        "entity_id": "DOMAIN_FOOD_SAFETY_SYSTEMS",
+        "canonical": "food_safety_systems",
+        "business_area": "food_safety",
+        "description": "Food safety management systems."
+    },
+
+    "process_development": {
+        "entity_id": "DOMAIN_PROCESS_DEVELOPMENT",
+        "canonical": "process_development",
+        "business_area": "operations",
+        "description": "Process development and implementation."
+    }
+}

@@ -3,11 +3,13 @@ Measurement Extractor
 
 Extracts KPI measurements
 from resume achievements.
+
+Repository Driven Version
 """
 
-import json
 import re
-from pathlib import Path
+
+from app.intelligence.utilities.knowledge.repository.repository import Repository
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.measurement_models import (
     MeasurementKnowledge,
@@ -18,15 +20,9 @@ class MeasurementExtractor:
 
     def __init__(self):
 
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "knowledge_knowledge"
-            / "config"
-            / "measurement_patterns.json"
-        )
+        self.repository = Repository()
 
-        with open(path, encoding="utf8") as f:
-            self.patterns = json.load(f)
+        self.patterns = self.repository.get_measurement_patterns()
 
     # ----------------------------------------------------------
 
@@ -63,7 +59,7 @@ class MeasurementExtractor:
 
                 normalized_value=value,
 
-                unit="%",
+                unit=metric.preferred_unit or "%",
 
                 operator=self._operator(text),
 
@@ -73,7 +69,21 @@ class MeasurementExtractor:
 
                 business_meaning="",
 
-                confidence=0.98
+                confidence=0.98,
+
+                # -------------------------
+                # Ontology
+                # -------------------------
+
+                entity_id=metric.entity_id,
+
+                business_area=metric.business_area,
+
+                impact_weight=metric.impact_weight,
+
+                source=metric.source,
+
+                metadata=metric.metadata,
 
             )
 
@@ -92,7 +102,14 @@ class MeasurementExtractor:
             multiplier = 1
 
             if suffix:
-                multiplier = self.patterns["multipliers"][suffix.lower()]
+
+                multiplier = self.patterns.get(
+                    "multipliers",
+                    {}
+                ).get(
+                    suffix.lower(),
+                    1,
+                )
 
             normalized = value * multiplier
 
@@ -112,7 +129,7 @@ class MeasurementExtractor:
 
                 normalized_value=normalized,
 
-                unit="$",
+                unit=metric.preferred_unit or "$",
 
                 operator=self._operator(text),
 
@@ -122,7 +139,21 @@ class MeasurementExtractor:
 
                 business_meaning="",
 
-                confidence=0.98
+                confidence=0.98,
+
+                # -------------------------
+                # Ontology
+                # -------------------------
+
+                entity_id=metric.entity_id,
+
+                business_area=metric.business_area,
+
+                impact_weight=metric.impact_weight,
+
+                source=metric.source,
+
+                metadata=metric.metadata,
 
             )
 
@@ -152,7 +183,7 @@ class MeasurementExtractor:
 
                 normalized_value=value,
 
-                unit=metric.unit,
+                unit=metric.preferred_unit,
 
                 operator=self._operator(text),
 
@@ -162,7 +193,21 @@ class MeasurementExtractor:
 
                 business_meaning="",
 
-                confidence=0.95
+                confidence=0.95,
+
+                # -------------------------
+                # Ontology
+                # -------------------------
+
+                entity_id=metric.entity_id,
+
+                business_area=metric.business_area,
+
+                impact_weight=metric.impact_weight,
+
+                source=metric.source,
+
+                metadata=metric.metadata,
 
             )
 
@@ -174,7 +219,7 @@ class MeasurementExtractor:
 
     def _operator(self, text):
 
-        for op in self.patterns["operators"]:
+        for op in self.patterns.get("operators", []):
 
             if f" {op} " in text:
                 return op

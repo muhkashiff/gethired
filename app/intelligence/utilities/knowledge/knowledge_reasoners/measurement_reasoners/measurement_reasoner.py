@@ -1,37 +1,29 @@
 """
 Measurement Reasoner
 
-Enriches MeasurementKnowledge with business semantics.
+Ontology Driven Version
 
-This module determines:
+Enriches MeasurementKnowledge using ontology semantics.
 
-- direction (increase / decrease / neutral)
-- effect (positive / negative / neutral)
+Determines
+
+- direction
+- effect
 - business meaning
 
-Unlike earlier versions, this module updates the existing
-MeasurementKnowledge object instead of creating a separate
-MeasurementReasoning object.
+Repository Driven
 """
 
-import json
-from pathlib import Path
+from app.intelligence.utilities.knowledge.repository.repository import Repository
 
 
 class MeasurementReasoner:
 
     def __init__(self):
 
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "knowledge_knowledge"
-            / "semantics"
-            / "measurement_semantics.json"
-        )
+        self.repository = Repository()
 
-        from app.intelligence.utilities.knowledge.repository import repository
-
-        self.rules = repository.get_semantics()
+        self.rules = self.repository.measurement_semantics()
 
     # ----------------------------------------------------------
 
@@ -40,10 +32,6 @@ class MeasurementReasoner:
         action,
         measurement,
     ):
-        """
-        Enrich MeasurementKnowledge with
-        direction and business effect.
-        """
 
         if not measurement.found:
             return measurement
@@ -58,7 +46,9 @@ class MeasurementReasoner:
         )
 
         measurement.direction = direction
+
         measurement.effect = effect
+
         measurement.business_meaning = (
             f"{verb} {measurement.canonical}"
         )
@@ -75,6 +65,7 @@ class MeasurementReasoner:
     def _direction(self, verb):
 
         increase = {
+
             "increase",
             "improve",
             "grow",
@@ -84,9 +75,11 @@ class MeasurementReasoner:
             "optimize",
             "boost",
             "enhance",
+
         }
 
         decrease = {
+
             "reduce",
             "decrease",
             "drop",
@@ -95,6 +88,7 @@ class MeasurementReasoner:
             "minimize",
             "lower",
             "cut",
+
         }
 
         if verb in increase:
@@ -112,12 +106,6 @@ class MeasurementReasoner:
         canonical_metric,
         verb,
     ):
-        """
-        Determines whether the action has a
-        positive or negative business impact.
-
-        Rules are metric-specific.
-        """
 
         rule = self.rules.get(canonical_metric)
 
@@ -125,13 +113,19 @@ class MeasurementReasoner:
             return "neutral"
 
         positive = [
+
             v.lower()
+
             for v in rule.get("positive", [])
+
         ]
 
         negative = [
+
             v.lower()
+
             for v in rule.get("negative", [])
+
         ]
 
         if verb in positive:

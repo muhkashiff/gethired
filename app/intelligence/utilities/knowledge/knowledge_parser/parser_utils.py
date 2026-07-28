@@ -19,14 +19,12 @@ class ParserUtils:
 
     @staticmethod
     def calculate_confidence(
-
         action,
         obj,
         domain,
         metric,
         measurement,
-        modifiers
-
+        modifiers,
     ):
 
         scores = []
@@ -49,11 +47,9 @@ class ParserUtils:
         for modifier in modifiers:
 
             if getattr(modifier, "found", False):
-
                 scores.append(modifier.confidence)
 
         if not scores:
-
             return 0.0
 
         return round(mean(scores), 2)
@@ -64,11 +60,15 @@ class ParserUtils:
 
     @staticmethod
     def is_achievement(
-
         action,
-        measurement
-
+        measurement,
     ):
+        """
+        Temporary implementation.
+
+        Later this should become ontology-driven by reading
+        action.metadata["is_achievement"] or similar.
+        """
 
         achievement_verbs = {
 
@@ -87,16 +87,14 @@ class ParserUtils:
             "launch",
             "establish",
             "design",
-            "transform"
+            "transform",
 
         }
 
         if getattr(action, "base", "").lower() in achievement_verbs:
-
             return True
 
         if getattr(measurement, "found", False):
-
             return True
 
         return False
@@ -107,39 +105,19 @@ class ParserUtils:
 
     @staticmethod
     def semantic_type(domain):
+        """
+        Ontology driven.
 
-        mapping = {
+        No hardcoded mapping required.
+        """
 
-            "leadership": "leadership",
+        if not getattr(domain, "found", False):
+            return "general"
 
-            "food_safety": "food_safety",
-
-            "quality_management": "quality",
-
-            "quality_improvement": "quality",
-
-            "quality_excellence": "quality",
-
-            "operational_excellence": "operations",
-
-            "finance": "finance",
-
-            "supply_chain": "supply_chain",
-
-            "manufacturing": "manufacturing",
-
-            "compliance": "compliance",
-
-            "continuous_improvement": "continuous_improvement"
-
-        }
-
-        return mapping.get(
-
-            getattr(domain, "domain", ""),
-
-            "general"
-
+        return getattr(
+            domain,
+            "business_area",
+            "general",
         )
 
     # ----------------------------------------------------------
@@ -148,39 +126,19 @@ class ParserUtils:
 
     @staticmethod
     def business_area(domain):
+        """
+        Ontology driven.
 
-        mapping = {
+        Returns the business area directly from DomainKnowledge.
+        """
 
-            "leadership": "Leadership",
+        if not getattr(domain, "found", False):
+            return "General"
 
-            "food_safety": "Food Safety",
-
-            "quality_management": "Quality",
-
-            "quality_improvement": "Quality",
-
-            "quality_excellence": "Quality",
-
-            "operational_excellence": "Operations",
-
-            "finance": "Finance",
-
-            "manufacturing": "Manufacturing",
-
-            "supply_chain": "Supply Chain",
-
-            "compliance": "Compliance",
-
-            "continuous_improvement": "Continuous Improvement"
-
-        }
-
-        return mapping.get(
-
-            getattr(domain, "domain", ""),
-
-            "General"
-
+        return getattr(
+            domain,
+            "business_area",
+            "General",
         )
 
     # ----------------------------------------------------------
@@ -191,19 +149,15 @@ class ParserUtils:
     def resume_strength(confidence):
 
         if confidence >= 0.95:
-
             return "Exceptional"
 
         if confidence >= 0.90:
-
             return "Very Strong"
 
         if confidence >= 0.80:
-
             return "Strong"
 
         if confidence >= 0.70:
-
             return "Moderate"
 
         return "Weak"
@@ -214,13 +168,10 @@ class ParserUtils:
 
     @staticmethod
     def executive_signal(
-
-        interpretation
-
+        interpretation,
     ):
 
         if not interpretation.domain.found:
-
             return False
 
         executive_domains = {
@@ -228,16 +179,14 @@ class ParserUtils:
             "leadership",
             "strategy",
             "operational_excellence",
-            "quality_excellence"
+            "quality_excellence",
 
         }
 
         if interpretation.domain.domain in executive_domains:
-
             return True
 
         if interpretation.measurement.effect == "positive":
-
             return True
 
         return False

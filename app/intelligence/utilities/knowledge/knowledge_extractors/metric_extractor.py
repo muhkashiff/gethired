@@ -3,10 +3,11 @@ Metric Extractor
 
 Extracts business KPIs
 from resume statements.
+
+Repository Driven Version
 """
 
-import json
-from pathlib import Path
+from app.intelligence.utilities.knowledge.repository.repository import Repository
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.metric_models import (
     MetricKnowledge,
@@ -17,21 +18,17 @@ class MetricExtractor:
 
     def __init__(self):
 
-        path = (
+        self.repository = Repository()
 
-            Path(__file__).resolve().parent.parent
+        # Load KPI dictionary
+        self.metrics = self.repository.get_dictionary("metrics")
 
-            / "knowledge_knowledge"
-
-            / "ontology"
-
-            / "metrics_dictionary.json"
-
+        # Longest metric phrases first
+        self.sorted_metrics = sorted(
+            self.metrics.keys(),
+            key=len,
+            reverse=True,
         )
-
-        with open(path, encoding="utf8") as f:
-
-            self.metrics = json.load(f)
 
     # ------------------------------------------------------
 
@@ -41,32 +38,53 @@ class MetricExtractor:
 
         best_match = ""
 
-        for metric in self.metrics:
+        # Search longest phrases first
+        for metric in self.sorted_metrics:
 
             if metric in sentence:
 
-                if len(metric) > len(best_match):
-
-                    best_match = metric
+                best_match = metric
+                break
 
         if best_match == "":
 
             return MetricKnowledge()
 
-        data = self.metrics[best_match]
+        entity = self.repository.get_metric(best_match)
+
+        if entity is None:
+
+            return MetricKnowledge()
 
         return MetricKnowledge(
 
             found=True,
 
+            confidence=0.95,
+
             metric=best_match,
 
-            canonical=data["canonical"],
+            canonical=entity.canonical,
 
-            category=data["category"],
+            category=entity.category,
 
-            unit=data["unit"],
+            unit=entity.preferred_unit,
 
-            confidence=0.95
+            entity_id=entity.entity_id,
+
+            business_area=entity.business_area,
+
+            impact_weight=entity.impact_weight,
+
+            source=entity.source,
+
+            metadata=entity.metadata,
+
+            higher_is_better=entity.metadata.get(
+                "higher_is_better",
+                True,
+            ),
+
+            preferred_unit=entity.preferred_unit,
 
         )

@@ -1,296 +1,269 @@
 """
-Knowledge Repository
+Ontology Repository
 
-Single source of truth
-for the entire AI engine.
+Central ontology repository.
+
+Loads every ontology/config file once and returns
+EntityRecord objects instead of raw JSON whenever possible.
+
+Backward compatibility is preserved.
 """
 
 import json
-from pathlib import Path
 
-from .cache import RepositoryCache
-from .entity_record import EntityRecord
-
-
-ROOT = Path(__file__).resolve().parents[1]
-
-ONTOLOGY = ROOT / "knowledge_knowledge" / "ontology"
-SEMANTICS = ROOT / "knowledge_knowledge" / "semantics"
-CONFIG = ROOT / "knowledge_knowledge" / "config"
+from app.intelligence.utilities.knowledge.repository.paths import RepositoryPaths
+from app.intelligence.utilities.knowledge.repository.cache import RepositoryCache
+from app.intelligence.utilities.knowledge.repository.entity_record import EntityRecord
 
 
 class Repository:
 
     def __init__(self):
 
+        self.paths = RepositoryPaths()
         self.cache = RepositoryCache()
 
-        self.load_all()
+        self._load()
 
-    # -------------------------------------------------------
-    # Utilities
-    # -------------------------------------------------------
+    # ---------------------------------------------------------
 
-    def normalize_key(self, text: str) -> str:
-        """
-        Normalize keys for reliable lookups.
-        """
-
-        return (
-            text.lower()
-            .strip()
-            .replace("_", " ")
-        )
-
-    # -------------------------------------------------------
-
-    def _load_json(self, folder: Path, filename: str):
-
-        path = folder / filename
-
-        if not path.exists():
-            return {}
+    def _read(self, path):
 
         with open(path, encoding="utf8") as f:
             return json.load(f)
 
-    # -------------------------------------------------------
-    # Load Everything
-    # -------------------------------------------------------
+    # ---------------------------------------------------------
 
-    def load_all(self):
+    def _load(self):
 
-        self.cache.actions = self._load_json(
-            ONTOLOGY,
-            "actions.json"
+        self.cache.actions = self._read(self.paths.actions)
+
+        self.cache.objects = self._read(self.paths.objects)
+
+        self.cache.metrics = self._read(self.paths.metrics)
+
+        self.cache.business_kpis = self._read(
+            self.paths.business_kpis
         )
 
-        self.cache.objects = self._load_json(
-            ONTOLOGY,
-            "objects.json"
+        self.cache.domains = self._read(
+            self.paths.domains
         )
 
-        self.cache.metrics = self._load_json(
-            ONTOLOGY,
-            "business_kpis.json"
+        self.cache.domain_reasoning = self._read(
+            self.paths.domain_reasoning
         )
 
-        self.cache.certifications = self._load_json(
-            ONTOLOGY,
-            "certifications.json"
+        self.cache.certifications = self._read(
+            self.paths.certifications
         )
 
-        self.cache.technologies = self._load_json(
-            ONTOLOGY,
-            "technologies.json"
+        self.cache.technologies = self._read(
+            self.paths.technologies
         )
 
-        self.cache.aliases = self._load_json(
-            ONTOLOGY,
-            "aliases.json"
+        self.cache.measurement_patterns = self._read(
+            self.paths.measurement_patterns
         )
 
-        self.cache.domains = self._load_json(
-            ONTOLOGY,
-            "domains.json"
+        self.cache.measurement_semantics = self._read(
+            self.paths.measurement_semantics
         )
 
-        self.cache.semantics = self._load_json(
-            SEMANTICS,
-            "measurement_semantics.json"
+        self.cache.modifier_dictionary = self._read(
+            self.paths.modifier_dictionary
         )
 
-        self.cache.config = {}
+        self.cache.confidence_rules = self._read(
+            self.paths.confidence_rules
+        )
 
-    # -------------------------------------------------------
+    # =========================================================
+    # Entity Builders
+    # =========================================================
 
-    def reload(self):
+    def _entity(self, data, source="ontology"):
 
-        self.load_all()
+        if not data:
+            return None
 
-    # -------------------------------------------------------
-    # Generic Access
-    # -------------------------------------------------------
+        return EntityRecord(
+
+            entity_id=data.get("entity_id", ""),
+
+            canonical=data.get(
+                "canonical",
+                data.get("base", "")
+            ),
+
+            aliases=data.get("aliases", []),
+
+            category=data.get("category", ""),
+
+            business_area=data.get(
+                "business_area",
+                ""
+            ),
+
+            preferred_direction=data.get(
+                "preferred_direction",
+                ""
+            ),
+
+            impact_weight=float(
+                data.get("impact_weight", 1.0)
+            ),
+
+            business_meaning=data.get(
+                "business_meaning",
+                ""
+            ),
+
+            source=source,
+
+            metadata=data
+
+        )
+
+    # =========================================================
+    # Repository Lookups
+    # =========================================================
+
+    def get_action(self, word):
+
+        data = self.cache.actions.get(word)
+
+        return self._entity(data)
+
+    # ---------------------------------------------------------
+
+    def get_object(self, phrase):
+
+        data = self.cache.objects.get(phrase)
+
+        return self._entity(data)
+
+    # ---------------------------------------------------------
+
+    def get_metric(self, phrase):
+
+        data = self.cache.metrics.get(phrase)
+
+        return self._entity(data)
+
+    # ---------------------------------------------------------
+
+    def get_business_kpi(self, phrase):
+
+        data = self.cache.business_kpis.get(phrase)
+
+        return self._entity(data)
+
+    # ---------------------------------------------------------
+
+    def get_certification(self, phrase):
+
+        data = self.cache.certifications.get(phrase)
+
+        return self._entity(data)
+
+    # ---------------------------------------------------------
+
+    def get_technology(self, phrase):
+
+        data = self.cache.technologies.get(phrase)
+
+        return self._entity(data)
+
+    # ---------------------------------------------------------
+
+    def get_domain(self, domain):
+
+        data = self.cache.domains.get(domain)
+
+        return self._entity(data)
+
+    # =========================================================
+    # Backward Compatible API
+    # =========================================================
+
+    def actions(self):
+        return self.cache.actions
+
+    def objects(self):
+        return self.cache.objects
+
+    def metrics(self):
+        return self.cache.metrics
+
+    def business_kpis(self):
+        return self.cache.business_kpis
+
+    def domains(self):
+        return self.cache.domains
+
+    def domain_reasoning(self):
+        return self.cache.domain_reasoning
+
+    def certifications(self):
+        return self.cache.certifications
+
+    def technologies(self):
+        return self.cache.technologies
+
+    def measurement_patterns(self):
+        return self.cache.measurement_patterns
+
+    def modifier_dictionary(self):
+        return self.cache.modifier_dictionary
+
+    def measurement_semantics(self):
+        return self.cache.measurement_semantics
+
+    def confidence_rules(self):
+        return self.cache.confidence_rules
 
     def get_dictionary(self, name):
 
-        return getattr(self.cache, name)
+        dictionaries = {
 
-    # -------------------------------------------------------
+            "actions": self.cache.actions,
 
-    def get_object(self, key):
+            "objects": self.cache.objects,
 
-        return self.cache.objects.get(
-            self.normalize_key(key)
-        )
+            "metrics": self.cache.metrics,
 
-    # -------------------------------------------------------
+            "business_kpis": self.cache.business_kpis,
 
-    def get_metric(self, key):
+            "domains": self.cache.domains,
 
-        return self.cache.metrics.get(
-            self.normalize_key(key)
-        )
+            "domain_reasoning": self.cache.domain_reasoning,
 
-    # -------------------------------------------------------
+            "certifications": self.cache.certifications,
 
-    def get_action(self, key):
+            "technologies": self.cache.technologies,
 
-        return self.cache.actions.get(
-            self.normalize_key(key)
-        )
+            "measurement_patterns": self.cache.measurement_patterns,
 
-    # -------------------------------------------------------
+            "measurement_semantics": self.cache.measurement_semantics,
 
-    def get_certification(self, key):
+            "modifier_dictionary": self.cache.modifier_dictionary,
 
-        return self.cache.certifications.get(
-            self.normalize_key(key)
-        )
+            "confidence_rules": self.cache.confidence_rules,
 
-    # -------------------------------------------------------
+        }
 
-    def get_technology(self, key):
+        return dictionaries.get(name, {})
 
-        return self.cache.technologies.get(
-            self.normalize_key(key)
-        )
+    def get_measurement_patterns(self):
+        return self.cache.measurement_patterns
 
-    # -------------------------------------------------------
+    def get_modifier_dictionary(self):
+        return self.cache.modifier_dictionary
 
-    def get_semantics(self):
+    def get_domains(self):
+        return self.cache.domains
 
-        return self.cache.semantics
 
-    # -------------------------------------------------------
-    # Alias Search
-    # -------------------------------------------------------
-
-    def search_alias(self, text):
-
-        text = self.normalize_key(text)
-
-        alias = self.cache.aliases.get(text)
-
-        if alias is None:
-            return None
-
-        if isinstance(alias, dict):
-            return alias.get("canonical", text)
-
-        return alias
-
-    # -------------------------------------------------------
-    # Universal Entity Lookup
-    # -------------------------------------------------------
-
-    def get_entity(self, canonical):
-
-        canonical = self.normalize_key(canonical)
-
-        entity = {}
-
-        # ------------------------
-        # Merge Objects
-        # ------------------------
-
-        if canonical in self.cache.objects:
-
-            entity.update(
-                self.cache.objects[canonical]
-            )
-
-        # ------------------------
-        # Merge KPIs
-        # ------------------------
-
-        if canonical in self.cache.metrics:
-
-            entity.update(
-                self.cache.metrics[canonical]
-            )
-
-        # ------------------------
-        # Merge Certifications
-        # ------------------------
-
-        if canonical in self.cache.certifications:
-
-            entity.update(
-                self.cache.certifications[canonical]
-            )
-
-        # ------------------------
-        # Merge Technologies
-        # ------------------------
-
-        if canonical in self.cache.technologies:
-
-            entity.update(
-                self.cache.technologies[canonical]
-            )
-
-        # ------------------------
-
-        if not entity:
-
-            return None
-
-        return self.merge_entity(
-            canonical,
-            entity
-        )
-
-    # -------------------------------------------------------
-    # Merge Into Universal Entity
-    # -------------------------------------------------------
-
-    def merge_entity(self, key, entity):
-
-        record = EntityRecord()
-
-        record.entity_id = entity.get(
-            "entity_id",
-            key.upper().replace(" ", "_")
-        )
-
-        record.canonical = entity.get(
-            "canonical",
-            key.title()
-        )
-
-        record.category = entity.get(
-            "category",
-            ""
-        )
-
-        record.business_area = entity.get(
-            "business_area",
-            ""
-        )
-
-        record.preferred_direction = entity.get(
-            "preferred_direction",
-            ""
-        )
-
-        record.impact_weight = entity.get(
-            "impact_weight",
-            0
-        )
-
-        record.business_meaning = entity.get(
-            "business_meaning",
-            ""
-        )
-
-        record.aliases = entity.get(
-            "aliases",
-            []
-        )
-
-        record.source = "ontology"
-
-        record.metadata = entity
-
-        return record
+    def get_domain_reasoning(self):
+        return self.cache.domain_reasoning

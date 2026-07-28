@@ -2,6 +2,9 @@
 Knowledge Interpretation Model
 
 Semantic interpretation of one resume statement.
+
+This object aggregates all extracted knowledge into a single
+business interpretation used throughout the intelligence engine.
 """
 
 from dataclasses import dataclass, field
@@ -17,6 +20,10 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.modifier_mo
 @dataclass
 class KnowledgeInterpretation:
 
+    # ---------------------------------------------------------
+    # Core Knowledge
+    # ---------------------------------------------------------
+
     action: ActionKnowledge = field(default_factory=ActionKnowledge)
 
     object: ObjectKnowledge = field(default_factory=ObjectKnowledge)
@@ -29,6 +36,10 @@ class KnowledgeInterpretation:
 
     modifiers: list[ModifierKnowledge] = field(default_factory=list)
 
+    # ---------------------------------------------------------
+    # Business Interpretation
+    # ---------------------------------------------------------
+
     achievement: bool = False
 
     quantified: bool = False
@@ -37,4 +48,12 @@ class KnowledgeInterpretation:
 
     business_area: str = ""
 
+    # ---------------------------------------------------------
+    # Intelligence
+    # ---------------------------------------------------------
+
     confidence: float = 0.0
+
+    overall_impact_weight: float = 1.0
+
+    explanation: str = ""
