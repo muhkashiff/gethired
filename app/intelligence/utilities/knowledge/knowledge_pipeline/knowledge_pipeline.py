@@ -18,7 +18,19 @@ ActionSegmenter
 SentenceParser
     ↓
 KnowledgeDocument
+    ↓
+KnowledgeGraph
+    ↓
+KnowledgeProfile
 """
+
+from app.intelligence.utilities.knowledge.knowledge_graph.knowledge_graph_builder import (
+    KnowledgeGraphBuilder,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.profile_builder import (
+    ProfileBuilder,
+)
 
 from app.intelligence.utilities.knowledge.knowledge_models import (
     KnowledgeDocument,
@@ -61,9 +73,13 @@ class KnowledgePipeline:
 
         self.sentence_parser = SentenceParser()
 
+        self.graph_builder = KnowledgeGraphBuilder()
+
+        self.profile_builder = ProfileBuilder()
+
     # ----------------------------------------------------------
 
-    def process(self, sentence: str) -> KnowledgeDocument:
+    def process(self, sentence: str):
 
         document = KnowledgeDocument()
 
@@ -86,7 +102,9 @@ class KnowledgePipeline:
         for clause in clauses:
 
             segmented.extend(
+
                 self.action_segmenter.segment(clause)
+
             )
 
         segmented = self.clause_normalizer.normalize(segmented)
@@ -116,10 +134,6 @@ class KnowledgePipeline:
                 original_text=clause.text
 
             )
-
-            # ------------------------------------------
-            # Parse ONE semantic clause
-            # ------------------------------------------
 
             parsed_clause = self.sentence_parser.parse(
 
@@ -265,4 +279,36 @@ class KnowledgePipeline:
 
             )
 
-        return document
+        # ==================================================
+        # Build Knowledge Graph
+        # ==================================================
+
+        graph_document = self.graph_builder.build(
+
+            document
+
+        )
+
+        # ==================================================
+        # Build Knowledge Profile
+        # ==================================================
+
+        knowledge_profile = self.profile_builder.build(
+
+            graph_document
+
+        )
+
+        # ==================================================
+        # Unified Pipeline Result
+        # ==================================================
+
+        return {
+
+            "knowledge_document": document,
+
+            "graph_document": graph_document,
+
+            "knowledge_profile": knowledge_profile,
+
+        }

@@ -1,0 +1,64 @@
+{
+    "Production Yield": {
+        "category": "operations",
+        "weight": 9,
+        "higher_is_better": true,
+        "executive_weight": 1.20
+    },
+
+    "Efficiency": {
+        "category": "operations",
+        "weight": 8,
+        "higher_is_better": true,
+        "executive_weight": 1.10
+    },
+
+    "Revenue": {
+        "category": "finance",
+        "weight": 10,
+        "higher_is_better": true,
+        "executive_weight": 1.40
+    },
+
+    "Cost Savings": {
+        "category": "finance",
+        "weight": 10,
+        "higher_is_better": true,
+        "executive_weight": 1.40
+    },
+
+    "Customer Complaints": {
+        "category": "quality",
+        "weight": 9,
+        "higher_is_better": false,
+        "executive_weight": 1.20
+    },
+
+    "Production Waste": {
+        "category": "operations",
+        "weight": 8,
+        "higher_is_better": false,
+        "executive_weight": 1.10
+    },
+
+    "Downtime": {
+        "category": "operations",
+        "weight": 8,
+        "higher_is_better": false,
+        "executive_weight": 1.10
+    },
+
+    "Training": {
+        "category": "people",
+        "weight": 5,
+        "higher_is_better": true,
+        "executive_weight": 1.00
+    },
+
+    "Certification": {
+        "category": "quality",
+        "weight": 7,
+        "higher_is_better": true,
+        "executive_weight": 1.10
+    }
+}

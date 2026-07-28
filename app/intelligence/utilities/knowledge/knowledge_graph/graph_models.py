@@ -3,14 +3,6 @@ Knowledge Graph Model
 
 Represents the complete semantic graph extracted
 from one resume or one document.
-
-Graph Structure
-
-KnowledgeGraph
-    ├── Nodes
-    ├── Edges
-    ├── Indexes
-    └── Statistics
 """
 
 from dataclasses import dataclass, field
@@ -26,9 +18,6 @@ from app.intelligence.utilities.knowledge.knowledge_graph.node_models import (
 
 @dataclass
 class KnowledgeGraph:
-    """
-    Complete Resume Knowledge Graph
-    """
 
     # --------------------------------------------------
     # Graph Contents
@@ -67,7 +56,7 @@ class KnowledgeGraph:
     metadata: dict = field(default_factory=dict)
 
     # ==================================================
-    # Helpers
+    # Node Management
     # ==================================================
 
     def add_node(self, node: GraphNode):
@@ -97,7 +86,9 @@ class KnowledgeGraph:
 
         self.edge_count = len(self.edges)
 
-    # --------------------------------------------------
+    # ==================================================
+    # Lookup
+    # ==================================================
 
     def get_node(self, node_id):
 
@@ -114,23 +105,11 @@ class KnowledgeGraph:
 
         return self.node_index.get(node_id)
 
-    # --------------------------------------------------
+    # ==================================================
+    # Edge Lookup
+    # ==================================================
 
-    def get_edges_from(self, node_id):
-
-        return [
-
-            edge
-
-            for edge in self.edges
-
-            if edge.source_node == node_id
-
-        ]
-
-    # --------------------------------------------------
-
-    def get_edges_to(self, node_id):
+    def get_edges_from(self, entity_id):
 
         return [
 
@@ -138,6 +117,150 @@ class KnowledgeGraph:
 
             for edge in self.edges
 
-            if edge.target_node == node_id
+            if edge.source_node == entity_id
 
         ]
+
+    # --------------------------------------------------
+
+    def get_edges_to(self, entity_id):
+
+        return [
+
+            edge
+
+            for edge in self.edges
+
+            if edge.target_node == entity_id
+
+        ]
+
+    # ==================================================
+    # Typed Collections
+    # ==================================================
+
+    def actions(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Action"
+
+        ]
+
+    # --------------------------------------------------
+
+    def objects(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Object"
+
+        ]
+
+    # --------------------------------------------------
+
+    def metrics(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Metric"
+
+        ]
+
+    # --------------------------------------------------
+
+    def measurements(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Measurement"
+
+        ]
+
+    # --------------------------------------------------
+
+    def domains(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Domain"
+
+        ]
+
+    # --------------------------------------------------
+
+    def certifications(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Certification"
+
+        ]
+
+    # --------------------------------------------------
+
+    def technologies(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Technology"
+
+        ]
+
+    # --------------------------------------------------
+
+    def modifiers(self):
+
+        return [
+
+            node
+
+            for node in self.nodes
+
+            if node.node_type == "Modifier"
+
+        ]
+
+    # ==================================================
+    # Summary
+    # ==================================================
+
+    def summary(self):
+
+        return {
+
+            "nodes": self.node_count,
+
+            "edges": self.edge_count,
+
+            "confidence": self.confidence,
+
+        }

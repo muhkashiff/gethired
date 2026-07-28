@@ -49,6 +49,9 @@ class Repository:
         self.cache.domains = self._read(
             self.paths.domains
         )
+        self.cache.impact_dictionary = self._read(
+                self.paths.impact_dictionary
+            )
 
         self.cache.domain_reasoning = self._read(
             self.paths.domain_reasoning
@@ -253,6 +256,8 @@ class Repository:
 
             "confidence_rules": self.cache.confidence_rules,
 
+            "impact_dictionary": self.cache.impact_dictionary,
+
         }
 
         return dictionaries.get(name, {})
@@ -272,5 +277,8 @@ class Repository:
 
     def get_clause_patterns(self):
         return self.cache.clause_patterns
+
+    def get_impact_dictionary(self):
+        return self.cache.impact_dictionary
 
     

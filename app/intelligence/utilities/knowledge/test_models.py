@@ -5,86 +5,61 @@ from pprint import pprint
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
-from pprint import pprint
-
 from app.intelligence.utilities.knowledge.knowledge_pipeline import (
     KnowledgePipeline,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_graph.knowledge_graph_builder import (
-    KnowledgeGraphBuilder,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_query_engine import (
-    GraphQueryEngine,
-)
-
 pipeline = KnowledgePipeline()
 
-document = pipeline.process(
+result = pipeline.process(
+
     "Implemented FSSC 22000 requirements and increased Production Yield from 70% to 99% by leading cross-functional teams."
+
 )
 
-builder = KnowledgeGraphBuilder()
+print("\n==============================")
+print("PIPELINE RESULT TYPE")
+print("==============================")
+print(type(result))
 
-graph_document = builder.build(document)
+print("\n==============================")
+print("PIPELINE RESULT")
+print("==============================")
+pprint(result)
 
-graph = graph_document.graph
+# ----------------------------------------
+# If pipeline returns a dictionary
+# ----------------------------------------
 
-print("\n====================")
-print("NODES")
-print("====================")
+if isinstance(result, dict):
 
-for node in graph.nodes:
-    pprint(node)
+    print("\n==============================")
+    print("KNOWLEDGE PROFILE")
+    print("==============================")
 
-print("\n====================")
-print("EDGES")
-print("====================")
+    pprint(result.get("knowledge_profile"))
 
-for edge in graph.edges:
-    pprint(edge)
+    print("\n==============================")
+    print("GRAPH SUMMARY")
+    print("==============================")
 
-query = GraphQueryEngine(graph)
+    graph_document = result.get("graph_document")
 
-print("\n====================")
-print("ACTIONS")
-print("====================")
+    if graph_document:
 
-for node in query.actions():
-    print(node.label)
+        pprint(graph_document.graph.summary())
 
-print("\n====================")
-print("OBJECTS")
-print("====================")
+        print("\nNodes :", graph_document.graph.node_count)
+        print("Edges :", graph_document.graph.edge_count)
 
-for node in query.objects():
-    print(node.label)
+# ----------------------------------------
+# If pipeline returns KnowledgeGraphDocument
+# ----------------------------------------
 
-print("\n====================")
-print("METRICS")
-print("====================")
+else:
 
-for node in query.metrics():
-    print(node.label)
+    print("\n==============================")
+    print("GRAPH SUMMARY")
+    print("==============================")
 
-print("\n====================")
-print("DOMAINS")
-print("====================")
-
-for node in query.domains():
-    print(node.label)
-
-print("\n====================")
-print("MEASUREMENTS")
-print("====================")
-
-for node in query.measurements():
-    print(node.label)
-
-print("\n====================")
-print("GRAPH SUMMARY")
-print("====================")
-
-print("Nodes :", len(graph.nodes))
-print("Edges :", len(graph.edges))
+    pprint(result.graph.summary())

@@ -51,3 +51,5 @@ class RepositoryCache:
     aliases: dict = field(default_factory=dict)
 
     clause_patterns: dict = field(default_factory=dict)
+
+    impact_dictionary: dict = field(default_factory=dict)

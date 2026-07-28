@@ -45,7 +45,8 @@ class RepositoryPaths:
 
         self.technologies = ONTOLOGY / "technologies.json"
 
-
+        self.impact_dictionary = ONTOLOGY/ "impact_dictionary.json"
+    
         # -------------------
         # Config
         # -------------------
@@ -67,3 +68,5 @@ class RepositoryPaths:
         self.clause_patterns = (
             SEMANTICS / "clause_patterns.json"
                 )
+
+        
