@@ -1,15 +1,13 @@
 """
 Measurement Extractor
 
-Extracts KPI measurements
-from resume achievements.
-
-Repository Driven Version
+Uses the modular Measurement Parser to extract
+measurements from resume achievements.
 """
 
-import re
-
-from app.intelligence.utilities.knowledge.repository.repository import Repository
+from app.intelligence.utilities.knowledge.knowledge_parser.measurement.measurement_parser import (
+    MeasurementParser,
+)
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.measurement_models import (
     MeasurementKnowledge,
@@ -20,9 +18,7 @@ class MeasurementExtractor:
 
     def __init__(self):
 
-        self.repository = Repository()
-
-        self.patterns = self.repository.get_measurement_patterns()
+        self.parser = MeasurementParser()
 
     # ----------------------------------------------------------
 
@@ -31,197 +27,96 @@ class MeasurementExtractor:
         if not metric.found:
             return MeasurementKnowledge()
 
-        text = sentence.lower()
+        result = self.parser.parse(sentence)
 
-        # ======================================================
-        # Percentage
-        # ======================================================
+        if result is None:
+            return MeasurementKnowledge()
 
-        percent = re.search(r"(\d+(?:\.\d+)?)\s*%", text)
+        return MeasurementKnowledge(
 
-        if percent:
+            # --------------------------------------------------
+            # Detection
+            # --------------------------------------------------
 
-            value = float(percent.group(1))
+            found=True,
 
-            return MeasurementKnowledge(
+            confidence=0.98,
 
-                found=True,
+            # --------------------------------------------------
+            # Metric
+            # --------------------------------------------------
 
-                metric=metric.canonical,
+            metric=metric.canonical,
 
-                canonical=metric.canonical,
+            canonical=metric.canonical,
 
-                category=metric.category,
+            category=metric.category,
 
-                value=percent.group(1),
+            # --------------------------------------------------
+            # Original Measurement
+            # --------------------------------------------------
 
-                numeric_value=value,
+            value=result.get("raw_value", ""),
 
-                normalized_value=value,
+            numeric_value=float(
+                result.get("numeric_value", 0.0)
+            ),
 
-                unit=metric.preferred_unit or "%",
+            normalized_value=float(
+                result.get("numeric_value", 0.0)
+            ),
 
-                operator=self._operator(text),
+            unit=result.get("unit", ""),
 
-                direction="",
+            operator=result.get(
+                "comparison_operator",
+                "",
+            ),
 
-                effect="",
+            # --------------------------------------------------
+            # Advanced Measurement
+            # --------------------------------------------------
 
-                business_meaning="",
+            measurement_type=result.get(
+                "measurement_type",
+                "absolute",
+            ),
 
-                confidence=0.98,
+            from_value=result.get("from_value"),
 
-                # -------------------------
-                # Ontology
-                # -------------------------
+            to_value=result.get("to_value"),
 
-                entity_id=metric.entity_id,
+            change_value=result.get("change_value"),
 
-                business_area=metric.business_area,
+            percent_change=result.get("percent_change"),
 
-                impact_weight=metric.impact_weight,
+            comparison_operator=result.get(
+                "comparison_operator",
+                "",
+            ),
 
-                source=metric.source,
+            # --------------------------------------------------
+            # Business Interpretation
+            # --------------------------------------------------
 
-                metadata=metric.metadata,
+            direction="",
 
-            )
+            effect="",
 
-        # ======================================================
-        # Currency
-        # ======================================================
+            business_meaning="",
 
-        money = re.search(r"\$(\d+(?:\.\d+)?)([kmb])?", text)
+            # --------------------------------------------------
+            # Ontology
+            # --------------------------------------------------
 
-        if money:
+            entity_id=metric.entity_id,
 
-            value = float(money.group(1))
+            business_area=metric.business_area,
 
-            suffix = money.group(2)
+            impact_weight=metric.impact_weight,
 
-            multiplier = 1
+            source=metric.source,
 
-            if suffix:
+            metadata=metric.metadata,
 
-                multiplier = self.patterns.get(
-                    "multipliers",
-                    {}
-                ).get(
-                    suffix.lower(),
-                    1,
-                )
-
-            normalized = value * multiplier
-
-            return MeasurementKnowledge(
-
-                found=True,
-
-                metric=metric.canonical,
-
-                canonical=metric.canonical,
-
-                category=metric.category,
-
-                value=money.group(1),
-
-                numeric_value=value,
-
-                normalized_value=normalized,
-
-                unit=metric.preferred_unit or "$",
-
-                operator=self._operator(text),
-
-                direction="",
-
-                effect="",
-
-                business_meaning="",
-
-                confidence=0.98,
-
-                # -------------------------
-                # Ontology
-                # -------------------------
-
-                entity_id=metric.entity_id,
-
-                business_area=metric.business_area,
-
-                impact_weight=metric.impact_weight,
-
-                source=metric.source,
-
-                metadata=metric.metadata,
-
-            )
-
-        # ======================================================
-        # Plain Number
-        # ======================================================
-
-        integer = re.search(r"\b(\d+)\b", text)
-
-        if integer:
-
-            value = float(integer.group(1))
-
-            return MeasurementKnowledge(
-
-                found=True,
-
-                metric=metric.canonical,
-
-                canonical=metric.canonical,
-
-                category=metric.category,
-
-                value=integer.group(1),
-
-                numeric_value=value,
-
-                normalized_value=value,
-
-                unit=metric.preferred_unit,
-
-                operator=self._operator(text),
-
-                direction="",
-
-                effect="",
-
-                business_meaning="",
-
-                confidence=0.95,
-
-                # -------------------------
-                # Ontology
-                # -------------------------
-
-                entity_id=metric.entity_id,
-
-                business_area=metric.business_area,
-
-                impact_weight=metric.impact_weight,
-
-                source=metric.source,
-
-                metadata=metric.metadata,
-
-            )
-
-        # ======================================================
-
-        return MeasurementKnowledge()
-
-    # ----------------------------------------------------------
-
-    def _operator(self, text):
-
-        for op in self.patterns.get("operators", []):
-
-            if f" {op} " in text:
-                return op
-
-        return ""
+        )

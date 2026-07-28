@@ -202,12 +202,12 @@ class KnowledgeGraphBuilder:
                 entity_id=(
                     f"MEASUREMENT_"
                     f"{measurement.metric.upper().replace(' ', '_')}_"
-                    f"{measurement.value}"
+                    f"{measurement.numeric_value}"
                 ),
 
                 node_type="Measurement",
 
-                label=f"{measurement.value}{measurement.unit}",
+                label=measurement.value,
 
                 category="measurement",
 
@@ -218,13 +218,41 @@ class KnowledgeGraphBuilder:
                 impact_weight=measurement.impact_weight,
 
                 metadata={
+
+                    # original value
+
                     "value": measurement.value,
+                    "numeric_value": measurement.numeric_value,
+                    "normalized_value": measurement.normalized_value,
                     "unit": measurement.unit,
+
+                    # NEW
+
+                    "measurement_type": measurement.measurement_type,
+
+                    "start_value": measurement.from_value,
+
+                    "end_value": measurement.to_value,
+
+                    "change_value": measurement.change_value,
+
+                    "percent_change": measurement.percent_change,
+
+                    "comparison_operator": measurement.comparison_operator,
+
+                    # reasoning
+
                     "direction": measurement.direction,
+
                     "effect": measurement.effect,
+
+                    "business_meaning": measurement.business_meaning,
+
                 },
 
             )
+
+            
 
         # ---------------------------------------------
         # Relationships

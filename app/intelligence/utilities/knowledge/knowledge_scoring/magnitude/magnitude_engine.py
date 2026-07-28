@@ -3,28 +3,13 @@ Magnitude Engine
 
 Calculates HOW BIG an achievement is.
 
-This engine only looks at measurements.
-
-It does NOT care about business importance.
-
-Impact Engine
-    answers
-
-        "Is Yield important?"
-
-Magnitude Engine
-    answers
-
-        "How much was Yield improved?"
+Uses the Measurement node stored inside the Knowledge Graph.
 """
-
-from math import fabs
 
 
 class MagnitudeEngine:
 
     def __init__(self):
-
         pass
 
     # ---------------------------------------------------------
@@ -32,7 +17,6 @@ class MagnitudeEngine:
     def score(self, graph):
 
         results = []
-
         total = 0
 
         for measurement in graph.measurements():
@@ -59,119 +43,144 @@ class MagnitudeEngine:
 
         meta = measurement.metadata
 
-        start = self._number(meta.get("start_value"))
-
-        end = self._number(meta.get("end_value"))
-
-        value = self._number(meta.get("value"))
-
-        direction = meta.get("direction", "neutral")
-
         # -------------------------------------------------
-        # Old parser
+        # Read everything from Graph metadata
         # -------------------------------------------------
 
-        if start is None and end is None:
+        measurement_value = meta.get("value", measurement.label)
+
+        measurement_type = meta.get("measurement_type", "absolute")
+
+        start = meta.get("start_value")
+
+        end = meta.get("end_value")
+
+        absolute_change = meta.get("change_value")
+
+        percent_change = meta.get("percent_change")
+
+        direction = meta.get("direction", "")
+
+        # -------------------------------------------------
+        # Absolute Measurement
+        # -------------------------------------------------
+
+        if measurement_type == "absolute":
 
             return {
 
-                "measurement": measurement.label,
+                "measurement": measurement_value,
 
-                "score": 1,
+                "measurement_type": measurement_type,
 
-                "classification": "Unknown",
+                "classification": "Absolute",
+
+                "start": None,
+
+                "end": None,
 
                 "change": None,
 
                 "percent_change": None,
 
-            }
-
-        # -------------------------------------------------
-
-        if start is None:
-
-            start = value
-
-        if end is None:
-
-            end = value
-
-        if start is None or end is None:
-
-            return {
-
-                "measurement": measurement.label,
+                "direction": direction,
 
                 "score": 1,
 
+            }
+
+        # -------------------------------------------------
+        # Safety
+        # -------------------------------------------------
+
+        if percent_change is None:
+
+            if start is not None and end is not None:
+
+                try:
+
+                    absolute_change = round(end - start, 2)
+
+                    if start != 0:
+
+                        percent_change = abs(
+                            ((end - start) / start) * 100
+                        )
+
+                except Exception:
+
+                    percent_change = None
+
+        # -------------------------------------------------
+        # Still unknown
+        # -------------------------------------------------
+
+        if percent_change is None:
+
+            return {
+
+                "measurement": measurement_value,
+
+                "measurement_type": measurement_type,
+
                 "classification": "Unknown",
 
-                "change": None,
+                "start": start,
+
+                "end": end,
+
+                "change": absolute_change,
 
                 "percent_change": None,
+
+                "direction": direction,
+
+                "score": 1,
 
             }
 
         # -------------------------------------------------
-
-        absolute_change = fabs(end - start)
-
-        if start == 0:
-
-            percent_change = 100
-
-        else:
-
-            percent_change = fabs(
-
-                (end - start) / start
-
-            ) * 100
-
-        # -------------------------------------------------
-        # Classification
+        # Magnitude Classification
         # -------------------------------------------------
 
         if percent_change >= 50:
 
             classification = "Exceptional"
-
             score = 10
 
         elif percent_change >= 30:
 
             classification = "Major"
-
             score = 8
 
         elif percent_change >= 15:
 
             classification = "Strong"
-
             score = 6
 
         elif percent_change >= 5:
 
             classification = "Moderate"
-
             score = 4
 
         else:
 
             classification = "Minor"
-
             score = 2
+
+        # -------------------------------------------------
 
         return {
 
-            "measurement": measurement.label,
+            "measurement": measurement_value,
+
+            "measurement_type": measurement_type,
 
             "start": start,
 
             "end": end,
 
-            "change": round(absolute_change, 2),
+            "change": round(absolute_change, 2) if absolute_change is not None else None,
 
             "percent_change": round(percent_change, 2),
 
@@ -182,19 +191,3 @@ class MagnitudeEngine:
             "score": score,
 
         }
-
-    # ---------------------------------------------------------
-
-    def _number(self, value):
-
-        if value is None:
-
-            return None
-
-        try:
-
-            return float(value)
-
-        except:
-
-            return None
