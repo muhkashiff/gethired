@@ -80,3 +80,77 @@ class GraphNode:
     def degree(self):
 
         return len(self.incoming_edges) + len(self.outgoing_edges)
+
+    @property
+    def value(self):
+        return self.metadata.get("value")
+
+
+    @property
+    def numeric_value(self):
+        return self.metadata.get("numeric_value")
+
+
+    @property
+    def normalized_value(self):
+        return self.metadata.get("normalized_value")
+
+
+    @property
+    def unit(self):
+        return self.metadata.get("unit")
+
+
+    @property
+    def start_value(self):
+        return self.metadata.get("start_value")
+
+
+    @property
+    def from_value(self):
+        return self.metadata.get("start_value")
+
+
+    @property
+    def end_value(self):
+        return self.metadata.get("end_value")
+
+
+    @property
+    def to_value(self):
+        return self.metadata.get("end_value")
+
+
+    @property
+    def change_value(self):
+        return self.metadata.get("change_value")
+
+
+    @property
+    def percent_change(self):
+        return self.metadata.get("percent_change")
+
+
+    @property
+    def measurement_type(self):
+        return self.metadata.get("measurement_type")
+
+
+    @property
+    def comparison_operator(self):
+        return self.metadata.get("comparison_operator")
+
+
+    @property
+    def direction(self):
+        return self.metadata.get("direction")
+
+
+    @property
+    def effect(self):
+        return self.metadata.get("effect")
+
+
+    @property
+    def business_meaning(self):
+        return self.metadata.get("business_meaning")

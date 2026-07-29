@@ -219,40 +219,52 @@ class KnowledgeGraphBuilder:
 
                 metadata={
 
-                    # original value
-
                     "value": measurement.value,
                     "numeric_value": measurement.numeric_value,
                     "normalized_value": measurement.normalized_value,
                     "unit": measurement.unit,
 
-                    # NEW
-
                     "measurement_type": measurement.measurement_type,
 
                     "start_value": measurement.from_value,
-
                     "end_value": measurement.to_value,
-
                     "change_value": measurement.change_value,
-
                     "percent_change": measurement.percent_change,
 
                     "comparison_operator": measurement.comparison_operator,
 
-                    # reasoning
-
                     "direction": measurement.direction,
-
                     "effect": measurement.effect,
-
                     "business_meaning": measurement.business_meaning,
 
                 },
 
             )
 
-            
+            # --------------------------------------------------
+            # Promote important measurement fields
+            # into node.properties for fast access
+            # --------------------------------------------------
+
+            measurement_node.properties["value"] = measurement.value
+            measurement_node.properties["numeric_value"] = measurement.numeric_value
+            measurement_node.properties["normalized_value"] = measurement.normalized_value
+
+            measurement_node.properties["unit"] = measurement.unit
+
+            measurement_node.properties["measurement_type"] = measurement.measurement_type
+
+            measurement_node.properties["from_value"] = measurement.from_value
+            measurement_node.properties["to_value"] = measurement.to_value
+
+            measurement_node.properties["change_value"] = measurement.change_value
+            measurement_node.properties["percent_change"] = measurement.percent_change
+
+            measurement_node.properties["comparison_operator"] = measurement.comparison_operator
+
+            measurement_node.properties["direction"] = measurement.direction
+            measurement_node.properties["effect"] = measurement.effect
+            measurement_node.properties["business_meaning"] = measurement.business_meaning
 
         # ---------------------------------------------
         # Relationships

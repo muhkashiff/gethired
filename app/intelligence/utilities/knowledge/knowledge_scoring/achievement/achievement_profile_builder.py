@@ -4,7 +4,13 @@ Achievement Profile Builder
 Builds the complete achievement profile from
 Achievement Engine output.
 
-This becomes part of the Knowledge Profile.
+Produces a richer profile including:
+
+• Overall score
+• Top achievements
+• KPI distribution
+• Magnitude distribution
+• Detailed measurement cards
 """
 
 from collections import Counter
@@ -26,9 +32,7 @@ class AchievementProfileBuilder:
 
         achievement = self.engine.score(graph)
 
-        impact = achievement["impact"]
-
-        magnitude = achievement["magnitude"]
+        achievement_cards = achievement["achievements"]
 
         profile = {
 
@@ -40,12 +44,21 @@ class AchievementProfileBuilder:
 
             "magnitude_score": achievement["magnitude_score"],
 
-            "top_metrics": self._top_metrics(impact),
+            # Executive summaries
+            "top_metrics": self._top_metrics(achievement_cards),
 
-            "impact_distribution": self._impact_distribution(impact),
+            "top_achievements": achievement_cards,
 
-            "magnitude_distribution": self._magnitude_distribution(magnitude),
+            # Distributions
+            "impact_distribution": self._impact_distribution(
+                achievement["achievements"]
+            ),
 
+            "magnitude_distribution": self._magnitude_distribution(
+                achievement["achievements"]
+            ),
+
+            # Full engine output
             "details": achievement,
 
         }
@@ -54,19 +67,24 @@ class AchievementProfileBuilder:
 
     # -----------------------------------------------------
 
-    def _top_metrics(self, impact):
+    def _top_metrics(self, achievements):
 
         metrics = []
 
-        for item in impact["measurements"]:
+        for item in achievements:
 
             metrics.append(
-
                 {
 
                     "metric": item["metric"],
 
-                    "score": item["score"],
+                    "overall_score": item["overall_score"],
+
+                    "impact_score": item["impact_score"],
+
+                    "magnitude_score": item["magnitude_score"],
+
+                    "business_value": item["business_value"],
 
                 }
 
@@ -74,7 +92,7 @@ class AchievementProfileBuilder:
 
         metrics.sort(
 
-            key=lambda x: x["score"],
+            key=lambda x: x["overall_score"],
 
             reverse=True,
 
@@ -84,24 +102,139 @@ class AchievementProfileBuilder:
 
     # -----------------------------------------------------
 
-    def _impact_distribution(self, impact):
+    def _top_achievements(self, impact, magnitude):
 
-        counter = Counter()
+        # -----------------------------------------------------
+        # Build lookup from Magnitude Engine
+        # -----------------------------------------------------
 
-        for item in impact["measurements"]:
+        mag_lookup = {}
 
-            counter[item["metric"]] += 1
+        for m in magnitude.get("measurements", []):
 
-        return dict(counter)
+            metric = m.get("metric")
+
+            if metric:
+
+                mag_lookup[metric] = m
+
+        # -----------------------------------------------------
+        # Merge Impact + Magnitude
+        # -----------------------------------------------------
+
+        cards = []
+
+        for item in impact.get("measurements", []):
+
+            metric = item.get("metric")
+
+            mag = mag_lookup.get(metric, {})
+
+            cards.append(
+
+                {
+
+                    # -----------------------------------
+                    # KPI
+                    # -----------------------------------
+
+                    "metric": metric,
+
+                    "action": item.get("action"),
+
+                    "measurement": item.get("measurement"),
+
+                    "measurement_type": item.get("measurement_type"),
+
+                    # -----------------------------------
+                    # Values
+                    # -----------------------------------
+
+                    "start_value": item.get("start_value"),
+
+                    "end_value": item.get("end_value"),
+
+                    "change_value": item.get("change_value"),
+
+                    "percent_change": item.get("percent_change"),
+
+                    "unit": item.get("unit"),
+
+                    # -----------------------------------
+                    # Business Interpretation
+                    # -----------------------------------
+
+                    "direction": item.get("direction"),
+
+                    "effect": item.get("effect"),
+
+                    "business_meaning": item.get("business_meaning"),
+
+                    "business_value": item.get("business_value"),
+
+                    "business_area": item.get("business_area"),
+
+                    # -----------------------------------
+                    # Scores
+                    # -----------------------------------
+
+                    "impact_score": item.get("score", 0),
+
+                    "magnitude_score": mag.get("score", 0),
+
+                    "classification": mag.get("classification", "Unknown"),
+
+                }
+
+            )
+
+        # -----------------------------------------------------
+        # Highest impact first
+        # -----------------------------------------------------
+
+        cards.sort(
+
+            key=lambda x: (
+
+                x["impact_score"],
+
+                x["magnitude_score"],
+
+            ),
+
+            reverse=True,
+
+        )
+
+        return cards
 
     # -----------------------------------------------------
 
-    def _magnitude_distribution(self, magnitude):
+    def _impact_distribution(self, achievements):
 
         counter = Counter()
 
-        for item in magnitude["measurements"]:
+        for item in achievements:
 
-            counter[item["classification"]] += 1
+            metric = item.get("metric")
+
+            if metric:
+
+                counter[metric] += 1
+
+        return dict(counter)
+    # -----------------------------------------------------
+
+    def _magnitude_distribution(self, achievements):
+
+        counter = Counter()
+
+        for item in achievements:
+
+            classification = item.get("classification")
+
+            if classification:
+
+                counter[classification] += 1
 
         return dict(counter)

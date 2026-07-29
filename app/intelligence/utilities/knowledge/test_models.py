@@ -5,91 +5,75 @@ from pprint import pprint
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline import (
-    KnowledgePipeline,
-)
-
-# --------------------------------------------------------
-# Test Sentence
-# --------------------------------------------------------
-
-text = (
-    "Implemented FSSC 22000 requirements and increased "
-    "Production Yield from 70% to 99% by leading cross-functional teams."
-)
+from app.intelligence.utilities.knowledge.knowledge_pipeline import KnowledgePipeline
 
 pipeline = KnowledgePipeline()
 
-result = pipeline.process(text)
+texts = [
 
-document = result["knowledge_document"]
+    # Range
+    "Increased Production Yield from 70% to 99% by leading cross-functional teams.",
 
-graph_document = result["graph_document"]
+    # Reduction
+    "Reduced customer complaints from 35 to 10 per month.",
 
-profile = result["knowledge_profile"]
+    # Cost savings
+    "Generated cost savings of $2.5M through process optimization.",
 
-# ======================================================
-print("\n" + "=" * 80)
-print("DOCUMENT STATISTICS")
-print("=" * 80)
+    # Revenue increase
+    "Increased annual revenue by 18%.",
 
-pprint(document.statistics)
+    # Absolute KPI
+    "Maintained 99.9% equipment availability.",
 
-# ======================================================
-print("\n" + "=" * 80)
-print("GRAPH SUMMARY")
-print("=" * 80)
+    # Food Safety
+    "Implemented FSSC 22000 requirements across the manufacturing facility.",
 
-pprint(graph_document.graph.summary())
+    # Leadership
+    "Led a team of 35 engineers to improve operational excellence.",
 
-# ======================================================
-print("\n" + "=" * 80)
-print("MEASUREMENT")
-print("=" * 80)
+]
 
-print("\nALL FACTS\n")
+for idx, text in enumerate(texts, start=1):
 
-for i, fact in enumerate(document.facts, start=1):
+    print("\n")
+    print("="*100)
+    print(f"TEST CASE {idx}")
+    print("="*100)
 
-    print(f"\nFACT {i}")
-    print("-" * 50)
+    result = pipeline.process(text)
 
-    print(fact.text)
+    document = result["knowledge_document"]
+    graph_document = result["graph_document"]
+    profile = result["knowledge_profile"]
 
-    pprint(fact.interpretation.measurement.summary())
+    print("\nINPUT")
+    print(text)
 
-# ======================================================
-print("\n" + "=" * 80)
-print("KNOWLEDGE PROFILE")
-print("=" * 80)
+    print("\nDOCUMENT STATISTICS")
+    pprint(document.statistics)
 
-pprint(profile)
+    print("\nGRAPH")
+    pprint(graph_document.graph.summary())
 
-# ======================================================
-print("\n" + "=" * 80)
-print("ACHIEVEMENT")
-print("=" * 80)
+    print("\nFACTS")
 
-pprint(profile["achievement"])
+    for sentence in document.sentences:
 
-# ======================================================
-print("\n" + "=" * 80)
-print("IMPACT")
-print("=" * 80)
+        for fact in sentence.facts:
 
-pprint(
+            print("-"*70)
+            print(fact.text)
 
-    profile["achievement"]["details"]["impact"]
+            measurement = fact.interpretation.measurement
 
-)
+            pprint(measurement.summary())
 
-# ======================================================
-print("\n" + "=" * 80)
-print("MAGNITUDE")
-print("=" * 80)
+    print("\nPROFILE SUMMARY")
+    pprint(profile["summary"])
 
-pprint(
+    print("\nTOP ACHIEVEMENTS")
+    pprint(profile["achievement"]["top_achievements"])
 
-    profile["achievement"]["details"]["magnitude"]
-
-)
+    print("\nTOP METRICS")
+    pprint(profile["achievement"]["top_metrics"])

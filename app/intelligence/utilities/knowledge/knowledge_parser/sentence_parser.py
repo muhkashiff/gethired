@@ -56,6 +56,10 @@ from app.intelligence.utilities.knowledge.knowledge_reasoners.measurement_reason
     MeasurementReasoner,
 )
 
+from app.intelligence.utilities.knowledge.knowledge_reasoners.metric_reasoner.metric_reasoner import (
+    MetricReasoner,
+)
+
 
 class SentenceParser:
 
@@ -74,6 +78,8 @@ class SentenceParser:
         self.domain_reasoner = DomainReasoner()
 
         self.measurement_reasoner = MeasurementReasoner()
+
+        self.metric_reasoner = MetricReasoner()
 
         self.utils = ParserUtils()
 
@@ -104,6 +110,13 @@ class SentenceParser:
         )
 
         metric = self.metric_extractor.extract(text)
+
+        metric = self.metric_reasoner.reason(
+            text,
+            metric,
+            action,
+            obj
+        )
 
         measurement = self.measurement_extractor.extract(
             text,

@@ -74,6 +74,7 @@ class ImpactEngine:
 
         }
 
+
     # -------------------------------------------------------
     # Score One Measurement
     # -------------------------------------------------------
@@ -92,6 +93,8 @@ class ImpactEngine:
 
         metric_name = metric.canonical
 
+        meta = measurement.metadata
+
         weight = self.rules.get_weight(metric_name)
 
         executive = self.rules.get_executive_weight(metric_name)
@@ -100,13 +103,7 @@ class ImpactEngine:
 
             metric_name,
 
-            measurement.metadata.get(
-
-                "direction",
-
-                "neutral",
-
-            ),
+            meta.get("direction", "neutral"),
 
         )
 
@@ -116,13 +113,7 @@ class ImpactEngine:
         # Achievement Bonus
         # --------------------------
 
-        if measurement.metadata.get(
-
-            "achievement",
-
-            True,
-
-        ):
+        if meta.get("achievement", True):
 
             score += 2
 
@@ -130,18 +121,12 @@ class ImpactEngine:
         # Quantified Bonus
         # --------------------------
 
-        if measurement.metadata.get(
-
-            "quantified",
-
-            True,
-
-        ):
+        if meta.get("numeric_value") is not None:
 
             score += 1
 
         # --------------------------
-        # Positive Direction Bonus
+        # Positive / Negative Bonus
         # --------------------------
 
         if direction == "positive":
@@ -162,19 +147,37 @@ class ImpactEngine:
 
             "metric": metric_name,
 
-            "value": measurement.metadata.get("value"),
+            "action": action.label if action else "",
 
-            "unit": measurement.metadata.get("unit"),
+            "measurement": meta.get("value"),
+
+            "measurement_type": meta.get("measurement_type"),
+
+            "start_value": meta.get("start_value"),
+
+            "end_value": meta.get("end_value"),
+
+            "change_value": meta.get("change_value"),
+
+            "percent_change": meta.get("percent_change"),
+
+            "numeric_value": meta.get("numeric_value"),
+
+            "normalized_value": meta.get("normalized_value"),
+
+            "unit": meta.get("unit"),
 
             "direction": direction,
+
+            "effect": meta.get("effect"),
+
+            "business_meaning": meta.get("business_meaning"),
 
             "base_weight": weight,
 
             "executive_weight": executive,
 
             "score": round(score, 2),
-
-            "action": action.label if action else "",
 
         }
 

@@ -1,154 +1,224 @@
 {
-  "yield": {
-    "entity_id": "KPI_PRODUCTION_YIELD",
-    "canonical": "Production Yield",
-    "category": "operations",
-    "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
-  },
 
-  "productivity": {
-    "entity_id": "KPI_PRODUCTIVITY",
-    "canonical": "Productivity",
-    "category": "operations",
-    "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
-  },
+"production yield": {
+  "entity_id": "KPI_PRODUCTION_YIELD",
+  "canonical": "Production Yield",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "efficiency": {
-    "entity_id": "KPI_EFFICIENCY",
-    "canonical": "Efficiency",
-    "category": "operations",
-    "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
-  },
+"yield improvement": {
+  "entity_id": "KPI_PRODUCTION_YIELD",
+  "canonical": "Production Yield",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "complaints": {
-    "entity_id": "KPI_CUSTOMER_COMPLAINTS",
-    "canonical": "Customer Complaints",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": false
-  },
+"equipment availability": {
+  "entity_id": "KPI_EQUIPMENT_AVAILABILITY",
+  "canonical": "Equipment Availability",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "audit": {
-    "entity_id": "KPI_AUDIT",
-    "canonical": "Audit",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
+"availability": {
+  "entity_id": "KPI_EQUIPMENT_AVAILABILITY",
+  "canonical": "Equipment Availability",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "audits": {
-    "entity_id": "KPI_AUDIT",
-    "canonical": "Audit",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
+"oee": {
+  "entity_id": "KPI_OEE",
+  "canonical": "Overall Equipment Effectiveness",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "defects": {
-    "entity_id": "KPI_DEFECT_RATE",
-    "canonical": "Defect Rate",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": false
-  },
+"overall equipment effectiveness": {
+  "entity_id": "KPI_OEE",
+  "canonical": "Overall Equipment Effectiveness",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "waste": {
-    "entity_id": "KPI_PRODUCTION_WASTE",
-    "canonical": "Production Waste",
-    "category": "operations",
-    "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": false
-  },
+"throughput": {
+  "entity_id": "KPI_THROUGHPUT",
+  "canonical": "Throughput",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "units",
+  "higher_is_better": true
+},
 
-  "downtime": {
-    "entity_id": "KPI_DOWNTIME",
-    "canonical": "Downtime",
-    "category": "operations",
-    "business_area": "operations",
-    "unit": "hours",
-    "higher_is_better": false
-  },
+"production output": {
+  "entity_id": "KPI_OUTPUT",
+  "canonical": "Production Output",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "units",
+  "higher_is_better": true
+},
 
-  "cost": {
-    "entity_id": "KPI_COST",
-    "canonical": "Cost",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": false
-  },
+"capacity": {
+  "entity_id": "KPI_CAPACITY",
+  "canonical": "Capacity Utilization",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "savings": {
-    "entity_id": "KPI_COST_SAVINGS",
-    "canonical": "Cost Savings",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
+"capacity utilization": {
+  "entity_id": "KPI_CAPACITY",
+  "canonical": "Capacity Utilization",
+  "category": "operations",
+  "business_area": "operations",
+  "unit": "%",
+  "higher_is_better": true
+},
+"quality": {
+  "entity_id": "KPI_QUALITY",
+  "canonical": "Quality",
+  "category": "quality",
+  "business_area": "quality",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "revenue": {
-    "entity_id": "KPI_REVENUE",
-    "canonical": "Revenue",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
+"quality score": {
+  "entity_id": "KPI_QUALITY_SCORE",
+  "canonical": "Quality Score",
+  "category": "quality",
+  "business_area": "quality",
+  "unit": "%",
+  "higher_is_better": true
+},
 
-  "inventory": {
-    "entity_id": "KPI_INVENTORY",
-    "canonical": "Inventory",
-    "category": "operations",
-    "business_area": "operations",
-    "unit": "units",
-    "higher_is_better": true
-  },
+"nonconformance": {
+  "entity_id": "KPI_NONCONFORMANCE",
+  "canonical": "Nonconformance",
+  "category": "quality",
+  "business_area": "quality",
+  "unit": "count",
+  "higher_is_better": false
+},
 
-  "stock": {
-    "entity_id": "KPI_INVENTORY",
-    "canonical": "Inventory",
-    "category": "operations",
-    "business_area": "operations",
-    "unit": "units",
-    "higher_is_better": true
-  },
+"rework": {
+  "entity_id": "KPI_REWORK",
+  "canonical": "Rework",
+  "category": "quality",
+  "business_area": "quality",
+  "unit": "%",
+  "higher_is_better": false
+},
 
-  "training": {
-    "entity_id": "KPI_TRAINING",
-    "canonical": "Training",
-    "category": "people",
-    "business_area": "people",
-    "unit": "hours",
-    "higher_is_better": true
-  },
+"scrap": {
+  "entity_id": "KPI_SCRAP",
+  "canonical": "Scrap",
+  "category": "quality",
+  "business_area": "quality",
+  "unit": "%",
+  "higher_is_better": false
+},
 
-  "certification": {
-    "entity_id": "KPI_CERTIFICATION",
-    "canonical": "Certification",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
+"food safety": {
+  "entity_id": "KPI_FOOD_SAFETY",
+  "canonical": "Food Safety",
+  "category": "quality",
+  "business_area": "quality",
+  "unit": "",
+  "higher_is_better": true
+},
+"profit": {
+  "entity_id": "KPI_PROFIT",
+  "canonical": "Profit",
+  "category": "finance",
+  "business_area": "finance",
+  "unit": "$",
+  "higher_is_better": true
+},
 
-  "customer satisfaction": {
-    "entity_id": "KPI_CUSTOMER_SATISFACTION",
-    "canonical": "Customer Satisfaction",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": true
-  }
+"profitability": {
+  "entity_id": "KPI_PROFITABILITY",
+  "canonical": "Profitability",
+  "category": "finance",
+  "business_area": "finance",
+  "unit": "%",
+  "higher_is_better": true
+},
+
+"margin": {
+  "entity_id": "KPI_MARGIN",
+  "canonical": "Margin",
+  "category": "finance",
+  "business_area": "finance",
+  "unit": "%",
+  "higher_is_better": true
+},
+"delivery": {
+  "entity_id": "KPI_DELIVERY",
+  "canonical": "Delivery Performance",
+  "category": "supply_chain",
+  "business_area": "supply_chain",
+  "unit": "%",
+  "higher_is_better": true
+},
+
+"on time delivery": {
+  "entity_id": "KPI_OTD",
+  "canonical": "On-Time Delivery",
+  "category": "supply_chain",
+  "business_area": "supply_chain",
+  "unit": "%",
+  "higher_is_better": true
+},
+
+"supplier performance": {
+  "entity_id": "KPI_SUPPLIER_PERFORMANCE",
+  "canonical": "Supplier Performance",
+  "category": "supply_chain",
+  "business_area": "supply_chain",
+  "unit": "%",
+  "higher_is_better": true
+},
+"team": {
+  "entity_id": "KPI_TEAM",
+  "canonical": "Team Management",
+  "category": "people",
+  "business_area": "people",
+  "unit": "people",
+  "higher_is_better": true
+},
+
+"employee engagement": {
+  "entity_id": "KPI_EMPLOYEE_ENGAGEMENT",
+  "canonical": "Employee Engagement",
+  "category": "people",
+  "business_area": "people",
+  "unit": "%",
+  "higher_is_better": true
+},
+
+"safety": {
+  "entity_id": "KPI_SAFETY",
+  "canonical": "Safety",
+  "category": "people",
+  "business_area": "people",
+  "unit": "",
+  "higher_is_better": true
 }
+}
+

@@ -21,7 +21,10 @@ class MagnitudeEngine:
 
         for measurement in graph.measurements():
 
-            result = self._score_measurement(measurement)
+            result = self._score_measurement(
+                graph,
+                measurement,
+            )
 
             results.append(result)
 
@@ -39,17 +42,49 @@ class MagnitudeEngine:
 
     # ---------------------------------------------------------
 
-    def _score_measurement(self, measurement):
+    def _score_measurement(
+        self,
+        graph,
+        measurement,
+    ):
 
         meta = measurement.metadata
 
         # -------------------------------------------------
-        # Read everything from Graph metadata
+        # Resolve Metric from Graph
         # -------------------------------------------------
 
-        measurement_value = meta.get("value", measurement.label)
+        metric_name = ""
+        metric_entity = ""
 
-        measurement_type = meta.get("measurement_type", "absolute")
+        for edge in measurement.incoming_edges:
+
+            if edge.relationship == "measured_by":
+
+                metric_node = graph.get_node_by_entity(
+                    edge.source_node
+                )
+
+                if metric_node:
+
+                    metric_name = metric_node.canonical
+                    metric_entity = metric_node.entity_id
+
+                break
+
+        # -------------------------------------------------
+        # Read metadata
+        # -------------------------------------------------
+
+        measurement_value = meta.get(
+            "value",
+            measurement.label,
+        )
+
+        measurement_type = meta.get(
+            "measurement_type",
+            "absolute",
+        )
 
         start = meta.get("start_value")
 
@@ -68,6 +103,9 @@ class MagnitudeEngine:
         if measurement_type == "absolute":
 
             return {
+
+                "metric": metric_name,
+                "metric_entity": metric_entity,
 
                 "measurement": measurement_value,
 
@@ -90,7 +128,7 @@ class MagnitudeEngine:
             }
 
         # -------------------------------------------------
-        # Safety
+        # Calculate percent if missing
         # -------------------------------------------------
 
         if percent_change is None:
@@ -99,7 +137,10 @@ class MagnitudeEngine:
 
                 try:
 
-                    absolute_change = round(end - start, 2)
+                    absolute_change = round(
+                        end - start,
+                        2,
+                    )
 
                     if start != 0:
 
@@ -112,12 +153,15 @@ class MagnitudeEngine:
                     percent_change = None
 
         # -------------------------------------------------
-        # Still unknown
+        # Unknown
         # -------------------------------------------------
 
         if percent_change is None:
 
             return {
+
+                "metric": metric_name,
+                "metric_entity": metric_entity,
 
                 "measurement": measurement_value,
 
@@ -172,6 +216,9 @@ class MagnitudeEngine:
 
         return {
 
+            "metric": metric_name,
+            "metric_entity": metric_entity,
+
             "measurement": measurement_value,
 
             "measurement_type": measurement_type,
@@ -180,9 +227,15 @@ class MagnitudeEngine:
 
             "end": end,
 
-            "change": round(absolute_change, 2) if absolute_change is not None else None,
+            "change": round(
+                absolute_change,
+                2,
+            ) if absolute_change is not None else None,
 
-            "percent_change": round(percent_change, 2),
+            "percent_change": round(
+                percent_change,
+                2,
+            ),
 
             "classification": classification,
 
