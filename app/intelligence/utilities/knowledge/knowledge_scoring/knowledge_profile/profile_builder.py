@@ -1,11 +1,9 @@
 """
 Knowledge Profile Builder
 
-Builds the master knowledge profile from the
-Knowledge Graph.
+Builds the master KnowledgeProfile object.
 
-This is the single object consumed by the rest
-of the intelligence platform.
+Everything returned from this builder is object-oriented.
 
 Current Modules
 
@@ -35,6 +33,10 @@ from app.intelligence.utilities.knowledge.knowledge_scoring.achievement.achievem
     AchievementProfileBuilder,
 )
 
+from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.profile_models import (
+    KnowledgeProfile,
+)
+
 
 class ProfileBuilder:
 
@@ -52,74 +54,108 @@ class ProfileBuilder:
 
         graph = graph_document.graph
 
-        seniority = self.seniority.predict(graph)
+        # -------------------------------------------------
+        # Run Engines
+        # -------------------------------------------------
 
-        leadership = self.leadership.score(graph)
+        seniority_result = self.seniority.predict(graph)
 
-        achievement = self.achievement.build(graph)
+        leadership_result = self.leadership.score(graph)
 
-        profile = {
+        achievement_result = self.achievement.build(graph)
 
-            "summary": {},
+        # -------------------------------------------------
+        # Master Profile Object
+        # -------------------------------------------------
 
-            "seniority": seniority,
+        profile = KnowledgeProfile()
 
-            "leadership": leadership,
+        # -------------------------------------------------
+        # Achievement
+        # -------------------------------------------------
 
-            "achievement": achievement,
+        profile.achievement = achievement_result
 
-        }
+        # -------------------------------------------------
+        # Leadership
+        # -------------------------------------------------
 
-        profile["summary"] = self._build_summary(profile)
-
-        return profile
-
-    # -----------------------------------------------------
-
-    def _build_summary(self, profile):
-
-        seniority = profile["seniority"]
-
-        leadership = profile["leadership"]
-
-        achievement = profile["achievement"]
-
-        seniority_level = seniority.get("level", "Unknown")
-        seniority_score = seniority.get("score", 0)
-
-        leadership_score = getattr(
-            leadership,
+        profile.leadership.score = getattr(
+            leadership_result,
             "overall_score",
             0,
         )
 
-        achievement_score = achievement.get(
-            "overall_score",
+        profile.leadership.level = getattr(
+            leadership_result,
+            "level",
+            "",
+        )
+
+        if hasattr(leadership_result, "actions"):
+
+            profile.leadership.actions = leadership_result.actions
+
+        if hasattr(leadership_result, "executive_actions"):
+
+            profile.leadership.executive_actions = (
+                leadership_result.executive_actions
+            )
+
+        # -------------------------------------------------
+        # Seniority
+        # -------------------------------------------------
+
+        profile.seniority.score = seniority_result.get(
+            "score",
             0,
         )
 
-        overall = round(
+        profile.seniority.level = seniority_result.get(
+            "level",
+            "",
+        )
 
-            seniority_score
+        profile.seniority.actions = seniority_result.get(
+            "actions",
+            {},
+        )
 
-            + leadership_score
+        profile.seniority.domains = seniority_result.get(
+            "domains",
+            {},
+        )
 
-            + achievement_score,
+        # -------------------------------------------------
+        # Summary
+        # -------------------------------------------------
+
+        profile.summary.career_level = (
+            profile.seniority.level
+        )
+
+        profile.summary.seniority_score = (
+            profile.seniority.score
+        )
+
+        profile.summary.leadership_score = (
+            profile.leadership.score
+        )
+
+        profile.summary.achievement_score = (
+            profile.achievement.overall_score
+        )
+
+        profile.summary.overall_score = round(
+
+            profile.summary.seniority_score
+
+            + profile.summary.leadership_score
+
+            + profile.summary.achievement_score,
 
             2,
 
         )
 
-        return {
-
-            "career_level": seniority_level,
-
-            "seniority_score": seniority_score,
-
-            "leadership_score": leadership_score,
-
-            "achievement_score": achievement_score,
-
-            "overall_score": overall,
-
-        }
+        return profile

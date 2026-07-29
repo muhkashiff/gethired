@@ -1,22 +1,27 @@
 """
 Achievement Profile Builder
 
-Builds the complete achievement profile from
+Builds the complete AchievementProfile object from
 Achievement Engine output.
 
-Produces a richer profile including:
+Produces
 
 • Overall score
+• Impact score
+• Magnitude score
 • Top achievements
-• KPI distribution
-• Magnitude distribution
-• Detailed measurement cards
+• KPI distributions
+• Detailed achievement cards
 """
 
 from collections import Counter
 
 from app.intelligence.utilities.knowledge.knowledge_scoring.achievement.achievement_engine import (
     AchievementEngine,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.profile_models import (
+    AchievementProfile,
 )
 
 
@@ -30,38 +35,67 @@ class AchievementProfileBuilder:
 
     def build(self, graph):
 
-        achievement = self.engine.score(graph)
+        engine_result = self.engine.score(graph)
 
-        achievement_cards = achievement["achievements"]
+        achievements = engine_result["achievements"]
 
-        profile = {
+        profile = AchievementProfile()
 
-            "overall_score": achievement["achievement_score"],
+        # -------------------------------------------------
+        # Overall Scores
+        # -------------------------------------------------
 
-            "achievement_count": achievement["achievement_count"],
+        profile.overall_score = engine_result.get(
+            "achievement_score",
+            0,
+        )
 
-            "impact_score": achievement["impact_score"],
+        profile.achievement_count = engine_result.get(
+            "achievement_count",
+            0,
+        )
 
-            "magnitude_score": achievement["magnitude_score"],
+        profile.impact_score = engine_result.get(
+            "impact_score",
+            0,
+        )
 
-            # Executive summaries
-            "top_metrics": self._top_metrics(achievement_cards),
+        profile.magnitude_score = engine_result.get(
+            "magnitude_score",
+            0,
+        )
 
-            "top_achievements": achievement_cards,
+        # -------------------------------------------------
+        # Executive Views
+        # -------------------------------------------------
 
-            # Distributions
-            "impact_distribution": self._impact_distribution(
-                achievement["achievements"]
-            ),
+        profile.top_metrics = self._top_metrics(
+            achievements
+        )
 
-            "magnitude_distribution": self._magnitude_distribution(
-                achievement["achievements"]
-            ),
+        profile.top_achievements = achievements
 
-            # Full engine output
-            "details": achievement,
+        # -------------------------------------------------
+        # Distributions
+        # -------------------------------------------------
 
-        }
+        profile.impact_distribution = (
+            self._impact_distribution(
+                achievements
+            )
+        )
+
+        profile.magnitude_distribution = (
+            self._magnitude_distribution(
+                achievements
+            )
+        )
+
+        # -------------------------------------------------
+        # Raw Engine Output
+        # -------------------------------------------------
+
+        profile.details = engine_result
 
         return profile
 
@@ -74,17 +108,30 @@ class AchievementProfileBuilder:
         for item in achievements:
 
             metrics.append(
+
                 {
 
-                    "metric": item["metric"],
+                    "metric": item.get("metric"),
 
-                    "overall_score": item["overall_score"],
+                    "overall_score": item.get(
+                        "overall_score",
+                        0,
+                    ),
 
-                    "impact_score": item["impact_score"],
+                    "impact_score": item.get(
+                        "impact_score",
+                        0,
+                    ),
 
-                    "magnitude_score": item["magnitude_score"],
+                    "magnitude_score": item.get(
+                        "magnitude_score",
+                        0,
+                    ),
 
-                    "business_value": item["business_value"],
+                    "business_value": item.get(
+                        "business_value",
+                        "",
+                    ),
 
                 }
 
@@ -104,93 +151,129 @@ class AchievementProfileBuilder:
 
     def _top_achievements(self, impact, magnitude):
 
-        # -----------------------------------------------------
-        # Build lookup from Magnitude Engine
-        # -----------------------------------------------------
-
         mag_lookup = {}
 
-        for m in magnitude.get("measurements", []):
+        for m in magnitude.measurements:
 
-            metric = m.get("metric")
+            metric = getattr(m, "metric", None)
 
             if metric:
 
                 mag_lookup[metric] = m
 
-        # -----------------------------------------------------
-        # Merge Impact + Magnitude
-        # -----------------------------------------------------
-
         cards = []
 
-        for item in impact.get("measurements", []):
+        for item in impact.measurements:
 
-            metric = item.get("metric")
+            metric = getattr(item, "metric", None)
 
-            mag = mag_lookup.get(metric, {})
+            mag = mag_lookup.get(metric)
 
             cards.append(
 
                 {
 
-                    # -----------------------------------
-                    # KPI
-                    # -----------------------------------
-
                     "metric": metric,
 
-                    "action": item.get("action"),
+                    "action": getattr(item, "action", ""),
 
-                    "measurement": item.get("measurement"),
+                    "measurement": getattr(
+                        item,
+                        "measurement",
+                        "",
+                    ),
 
-                    "measurement_type": item.get("measurement_type"),
+                    "measurement_type": getattr(
+                        item,
+                        "measurement_type",
+                        "",
+                    ),
 
-                    # -----------------------------------
-                    # Values
-                    # -----------------------------------
+                    "start_value": getattr(
+                        item,
+                        "start_value",
+                        None,
+                    ),
 
-                    "start_value": item.get("start_value"),
+                    "end_value": getattr(
+                        item,
+                        "end_value",
+                        None,
+                    ),
 
-                    "end_value": item.get("end_value"),
+                    "change_value": getattr(
+                        item,
+                        "change_value",
+                        None,
+                    ),
 
-                    "change_value": item.get("change_value"),
+                    "percent_change": getattr(
+                        item,
+                        "percent_change",
+                        None,
+                    ),
 
-                    "percent_change": item.get("percent_change"),
+                    "unit": getattr(
+                        item,
+                        "unit",
+                        "",
+                    ),
 
-                    "unit": item.get("unit"),
+                    "direction": getattr(
+                        item,
+                        "direction",
+                        "",
+                    ),
 
-                    # -----------------------------------
-                    # Business Interpretation
-                    # -----------------------------------
+                    "effect": getattr(
+                        item,
+                        "effect",
+                        "",
+                    ),
 
-                    "direction": item.get("direction"),
+                    "business_meaning": getattr(
+                        item,
+                        "business_meaning",
+                        "",
+                    ),
 
-                    "effect": item.get("effect"),
+                    "business_value": getattr(
+                        item,
+                        "business_value",
+                        "",
+                    ),
 
-                    "business_meaning": item.get("business_meaning"),
+                    "business_area": getattr(
+                        item,
+                        "business_area",
+                        "",
+                    ),
 
-                    "business_value": item.get("business_value"),
+                    "impact_score": getattr(
+                        item,
+                        "score",
+                        0,
+                    ),
 
-                    "business_area": item.get("business_area"),
+                    "magnitude_score": getattr(
+                        mag,
+                        "score",
+                        0,
+                    )
+                    if mag
+                    else 0,
 
-                    # -----------------------------------
-                    # Scores
-                    # -----------------------------------
-
-                    "impact_score": item.get("score", 0),
-
-                    "magnitude_score": mag.get("score", 0),
-
-                    "classification": mag.get("classification", "Unknown"),
+                    "classification": getattr(
+                        mag,
+                        "classification",
+                        "Unknown",
+                    )
+                    if mag
+                    else "Unknown",
 
                 }
 
             )
-
-        # -----------------------------------------------------
-        # Highest impact first
-        # -----------------------------------------------------
 
         cards.sort(
 
@@ -223,6 +306,7 @@ class AchievementProfileBuilder:
                 counter[metric] += 1
 
         return dict(counter)
+
     # -----------------------------------------------------
 
     def _magnitude_distribution(self, achievements):
@@ -231,7 +315,9 @@ class AchievementProfileBuilder:
 
         for item in achievements:
 
-            classification = item.get("classification")
+            classification = item.get(
+                "classification"
+            )
 
             if classification:
 

@@ -57,11 +57,20 @@ from app.intelligence.utilities.knowledge.knowledge_parser.action_segmenter impo
 from app.intelligence.utilities.knowledge.knowledge_parser.sentence_parser import (
     SentenceParser,
 )
-
+from app.intelligence.utilities.knowledge.knowledge_parser.purpose_clause_detector import (
+    PurposeClauseDetector,
+)
+from app.intelligence.utilities.knowledge.knowledge_parser.semantic_connector_detector import (
+    SemanticConnectorDetector,
+)
 
 class KnowledgePipeline:
 
     def __init__(self):
+
+        self.connector_detector = SemanticConnectorDetector()
+
+        self.purpose_detector = PurposeClauseDetector()
 
         self.clause_parser = ClauseParser()
 
@@ -101,11 +110,43 @@ class KnowledgePipeline:
 
         for clause in clauses:
 
-            segmented.extend(
+            pieces = self.action_segmenter.segment(clause)
 
-                self.action_segmenter.segment(clause)
+            rebuilt = []
 
-            )
+            for piece in pieces:
+
+                if (
+
+                    rebuilt
+
+                    and (
+
+                        self.purpose_detector.is_purpose_clause(piece.text)
+
+                        or
+
+                        self.connector_detector.is_connector(piece.text)
+
+                    )
+
+                ):
+
+                    rebuilt[-1].text = (
+
+                        rebuilt[-1].text.rstrip()
+
+                        + " "
+
+                        + piece.text.lstrip()
+
+                    )
+
+                else:
+
+                    rebuilt.append(piece)
+
+            segmented.extend(rebuilt)
 
         segmented = self.clause_normalizer.normalize(segmented)
 

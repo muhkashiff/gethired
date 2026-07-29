@@ -8,7 +8,56 @@ Every downstream AI engine works from this profile.
 """
 
 from dataclasses import dataclass, field
+from typing import Any
 
+
+# ------------------------------------------------------
+# Summary Profile
+# ------------------------------------------------------
+
+@dataclass
+class SummaryProfile:
+
+    overall_score: float = 0.0
+
+    achievement_score: float = 0.0
+
+    leadership_score: float = 0.0
+
+    seniority_score: float = 0.0
+
+    career_level: str = ""
+
+
+# ------------------------------------------------------
+# Achievement Profile
+# ------------------------------------------------------
+
+@dataclass
+class AchievementProfile:
+
+    overall_score: float = 0.0
+
+    achievement_count: int = 0
+
+    impact_score: float = 0.0
+
+    magnitude_score: float = 0.0
+
+    top_achievements: list = field(default_factory=list)
+
+    top_metrics: list = field(default_factory=list)
+
+    impact_distribution: dict = field(default_factory=dict)
+
+    magnitude_distribution: dict = field(default_factory=dict)
+
+    details: Any = None
+
+
+# ------------------------------------------------------
+# Leadership Profile
+# ------------------------------------------------------
 
 @dataclass
 class LeadershipProfile:
@@ -23,7 +72,8 @@ class LeadershipProfile:
 
 
 # ------------------------------------------------------
-
+# Seniority Profile
+# ------------------------------------------------------
 
 @dataclass
 class SeniorityProfile:
@@ -38,7 +88,8 @@ class SeniorityProfile:
 
 
 # ------------------------------------------------------
-
+# Metric Profile
+# ------------------------------------------------------
 
 @dataclass
 class MetricProfile:
@@ -55,7 +106,8 @@ class MetricProfile:
 
 
 # ------------------------------------------------------
-
+# Domain Profile
+# ------------------------------------------------------
 
 @dataclass
 class DomainProfile:
@@ -66,7 +118,8 @@ class DomainProfile:
 
 
 # ------------------------------------------------------
-
+# Modifier Profile
+# ------------------------------------------------------
 
 @dataclass
 class ModifierProfile:
@@ -79,10 +132,19 @@ class ModifierProfile:
 
 
 # ------------------------------------------------------
-
+# Master Knowledge Profile
+# ------------------------------------------------------
 
 @dataclass
 class KnowledgeProfile:
+
+    summary: SummaryProfile = field(
+        default_factory=SummaryProfile
+    )
+
+    achievement: AchievementProfile = field(
+        default_factory=AchievementProfile
+    )
 
     leadership: LeadershipProfile = field(
         default_factory=LeadershipProfile
