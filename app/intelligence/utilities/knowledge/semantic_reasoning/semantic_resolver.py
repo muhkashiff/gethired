@@ -36,6 +36,10 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models imp
     SemanticStatistics,
 )
 
+from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
+        SemanticEntity,
+    )
+
 
 class SemanticResolver:
 
@@ -60,6 +64,12 @@ class SemanticResolver:
             interpretation = fact.interpretation
 
             entities.extend(interpretation.entities)
+
+        # ------------------------------------------
+        # Convert KnowledgeEntity -> SemanticEntity
+        # ------------------------------------------
+
+        entities = self._convert_entities(entities)
 
         result.entities = entities
 
@@ -277,3 +287,36 @@ class SemanticResolver:
             2,
 
         )
+
+    def _convert_entities(self, entities):
+
+        from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
+            SemanticEntity,
+        )
+
+        converted = []
+
+        for e in entities:
+
+            converted.append(
+
+                SemanticEntity(
+
+                    entity_id=e.entity_id,
+                    entity_type=e.entity_type,
+                    canonical=e.canonical,
+
+                    # IMPORTANT
+                    original=e.matched_text,
+
+                    category=e.category,
+                    business_area=e.business_area,
+
+                    confidence=e.confidence,
+
+                    metadata=e.metadata,
+                )
+
+            )
+
+        return converted

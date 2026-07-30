@@ -1,28 +1,26 @@
 """
-Advanced Semantic Cluster Builder V2
+Advanced Cluster Builder V3
 
-Builds business clusters using dependency relationships.
+Creates semantic business-event clusters instead of simply
+grouping connected nodes.
 
-Pipeline
-
-Entities
-     +
-Dependencies
-        ↓
-Business Clusters
-
-Example
-
-Implemented ISO9001 using Lean Manufacturing
-
-becomes one cluster
+Priority
 
 Action
+    ↓
 Object
+    ↓
 Standard
+    ↓
 Methodology
-Domain
+    ↓
+KPI / Metric
+    ↓
 Measurement
+    ↓
+Domain
+    ↓
+Skill
 """
 
 from collections import defaultdict
@@ -36,25 +34,34 @@ class ClusterBuilder:
 
     def build(self, entities, dependencies):
 
+        if not entities:
+            return []
+
         entity_lookup = {
-
             entity.entity_id: entity
-
             for entity in entities
-
         }
 
-        # ---------------------------------------------
-        # Build adjacency graph
-        # ---------------------------------------------
+        # --------------------------------------------
+        # Build adjacency map
+        # --------------------------------------------
 
         adjacency = defaultdict(set)
 
-        for dep in dependencies:
+        for edge in dependencies:
 
-            adjacency[dep.source_entity].add(dep.target_entity)
+            adjacency[edge.source_entity].add(edge.target_entity)
+            adjacency[edge.target_entity].add(edge.source_entity)
 
-            adjacency[dep.target_entity].add(dep.source_entity)
+        # --------------------------------------------
+        # Business event anchors
+        # --------------------------------------------
+
+        anchors = [
+            entity
+            for entity in entities
+            if entity.entity_type == "action"
+        ]
 
         visited = set()
 
@@ -62,33 +69,33 @@ class ClusterBuilder:
 
         cluster_number = 1
 
-        # ---------------------------------------------
-        # Connected Components
-        # ---------------------------------------------
+        # --------------------------------------------
+        # Build clusters around every action
+        # --------------------------------------------
 
-        for entity in entities:
+        for action in anchors:
 
-            if entity.entity_id in visited:
-
+            if action.entity_id in visited:
                 continue
 
-            component = []
+            cluster_entities = {}
 
-            queue = [entity.entity_id]
+            queue = [action.entity_id]
 
             while queue:
 
                 current = queue.pop(0)
 
                 if current in visited:
-
                     continue
 
                 visited.add(current)
 
-                if current in entity_lookup:
+                entity = entity_lookup.get(current)
 
-                    component.append(entity_lookup[current])
+                if entity:
+
+                    cluster_entities[current] = entity
 
                 for neighbour in adjacency[current]:
 
@@ -96,89 +103,106 @@ class ClusterBuilder:
 
                         queue.append(neighbour)
 
-            # -----------------------------------------
-            # Collect dependencies
-            # -----------------------------------------
+            cluster = SemanticCluster()
 
-            component_ids = {
+            cluster.cluster_id = f"CLUSTER_{cluster_number}"
 
-                e.entity_id
+            cluster.entities = list(cluster_entities.values())
 
-                for e in component
+            cluster.dependencies = [
 
-            }
+                edge
 
-            component_dependencies = [
+                for edge in dependencies
 
-                dep
+                if edge.source_entity in cluster_entities
+                and edge.target_entity in cluster_entities
 
-                for dep in dependencies
+            ]
+            cluster.confidence = self._cluster_confidence(cluster)
+            
+            clusters.append(cluster)
 
-                if dep.source_entity in component_ids
-                and dep.target_entity in component_ids
+            cluster_number += 1
+
+        # --------------------------------------------
+        # Remaining isolated entities
+        # --------------------------------------------
+
+        remaining = [
+
+            entity
+
+            for entity in entities
+
+            if entity.entity_id not in visited
+
+        ]
+
+        priority = [
+
+            "object",
+            "standard",
+            "methodology",
+            "kpi",
+            "metric",
+            "measurement",
+            "domain",
+            "skill",
+        ]
+
+        for entity_type in priority:
+
+            matching = [
+
+                entity
+
+                for entity in remaining
+
+                if entity.entity_type == entity_type
 
             ]
 
-            cluster = SemanticCluster(
+            if not matching:
+                continue
 
-                cluster_id=f"CLUSTER_{cluster_number}",
+            cluster = SemanticCluster()
 
-                entities=component,
+            cluster.cluster_id = f"CLUSTER_{cluster_number}"
 
-                dependencies=component_dependencies,
+            cluster.entities = matching
 
-                confidence=self._cluster_confidence(component),
-
-            )
+            cluster.dependencies = []
 
             clusters.append(cluster)
 
             cluster_number += 1
 
-        # ---------------------------------------------
-        # Handle isolated entities
-        # ---------------------------------------------
-
-        if not clusters:
-
-            clusters = [
-
-                SemanticCluster(
-
-                    cluster_id="CLUSTER_1",
-
-                    entities=entities,
-
-                    dependencies=[],
-
-                    confidence=self._cluster_confidence(entities),
-
-                )
-
-            ]
+            for entity in matching:
+                visited.add(entity.entity_id)
 
         return clusters
-
     # ==================================================
 
-    def _cluster_confidence(self, entities):
+    def _cluster_confidence(self, cluster):
 
-        if not entities:
-
+        if not cluster.entities:
             return 0.0
 
-        scores = [
-
+        entity_conf = sum(
             e.confidence
+            for e in cluster.entities
+        ) / len(cluster.entities)
 
-            for e in entities
+        if cluster.dependencies:
+            dep_conf = sum(
+                d.confidence
+                for d in cluster.dependencies
+            ) / len(cluster.dependencies)
 
-        ]
+            return round(
+                (entity_conf * 0.6) + (dep_conf * 0.4),
+                2,
+            )
 
-        return round(
-
-            sum(scores) / len(scores),
-
-            2,
-
-        )
+        return round(entity_conf, 2)

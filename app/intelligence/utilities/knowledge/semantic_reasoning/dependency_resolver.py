@@ -1,23 +1,11 @@
 """
-Business Semantic Dependency Resolver
+Advanced Business Dependency Resolver V2
 
-Builds semantic relationships between extracted entities.
-
-This is NOT a grammatical dependency parser.
-
-Instead it creates business relationships such as
-
-Implemented ---> targets ---> ISO9001
-
-Improved ---> affects ---> Production Yield
-
-Managed ---> manages ---> Team
-
-Reduced ---> optimizes ---> Customer Satisfaction
+Creates business-aware semantic relationships between entities.
 """
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
-    DependencyEdge,
+    SemanticDependency,
 )
 
 
@@ -27,202 +15,176 @@ class DependencyResolver:
 
         dependencies = []
 
-        actions = [
-            e for e in entities
-            if e.entity_type == "action"
+        actions = [e for e in entities if e.entity_type == "action"]
+        objects = [e for e in entities if e.entity_type == "object"]
+        standards = [e for e in entities if e.entity_type == "standard"]
+        methodologies = [e for e in entities if e.entity_type == "methodology"]
+        skills = [e for e in entities if e.entity_type == "skill"]
+        domains = [e for e in entities if e.entity_type == "domain"]
+        kpis = [
+            e
+            for e in entities
+            if e.entity_type in ("kpi", "metric")
+        ]
+        measurements = [
+            e
+            for e in entities
+            if e.entity_type == "measurement"
         ]
 
-        objects = [
-            e for e in entities
-            if e.entity_type == "object"
-        ]
-
-        metrics = [
-            e for e in entities
-            if e.entity_type in ("metric", "kpi")
-        ]
-
-        methodologies = [
-            e for e in entities
-            if e.entity_type == "methodology"
-        ]
-
-        domains = [
-            e for e in entities
-            if e.entity_type == "domain"
-        ]
-
-        skills = [
-            e for e in entities
-            if e.entity_type == "skill"
-        ]
-
-        standards = [
-            e for e in entities
-            if e.entity_type == "standard"
-        ]
-
-        # ----------------------------------------
+        # ==================================================
         # Action -> Object
-        # ----------------------------------------
+        # ==================================================
 
         for action in actions:
 
-            for obj in objects:
+            relation = self._object_relation(action)
 
-                relation = self._action_object_relation(action)
+            if relation:
 
-                if relation:
+                for obj in objects:
 
                     dependencies.append(
-
-                        DependencyEdge(
-
+                        SemanticDependency(
                             source_entity=action.entity_id,
-
                             target_entity=obj.entity_id,
-
                             relation=relation,
-
                             confidence=0.98,
-
                         )
-
                     )
 
-        # ----------------------------------------
-        # Action -> KPI / Metric
-        # ----------------------------------------
+        # ==================================================
+        # Action -> Standard
+        # ==================================================
 
         for action in actions:
 
-            for metric in metrics:
+            relation = self._standard_relation(action)
 
-                relation = self._action_metric_relation(action)
+            if relation:
 
-                if relation:
+                for standard in standards:
 
                     dependencies.append(
-
-                        DependencyEdge(
-
+                        SemanticDependency(
                             source_entity=action.entity_id,
-
-                            target_entity=metric.entity_id,
-
+                            target_entity=standard.entity_id,
                             relation=relation,
-
-                            confidence=0.98,
-
+                            confidence=0.99,
                         )
-
                     )
 
-        # ----------------------------------------
+        # ==================================================
         # Action -> Methodology
-        # ----------------------------------------
+        # ==================================================
 
         for action in actions:
 
             for methodology in methodologies:
 
                 dependencies.append(
-
-                    DependencyEdge(
-
+                    SemanticDependency(
                         source_entity=action.entity_id,
-
                         target_entity=methodology.entity_id,
-
-                        relation="achieved_using",
-
+                        relation="performed_using",
                         confidence=0.98,
-
                     )
-
                 )
 
-        # ----------------------------------------
+        # ==================================================
+        # Action -> KPI
+        # ==================================================
+
+        for action in actions:
+
+            relation = self._kpi_relation(action)
+
+            if relation:
+
+                for kpi in kpis:
+
+                    dependencies.append(
+                        SemanticDependency(
+                            source_entity=action.entity_id,
+                            target_entity=kpi.entity_id,
+                            relation=relation,
+                            confidence=0.98,
+                        )
+                    )
+
+        # ==================================================
+        # KPI -> Measurement
+        # ==================================================
+
+        for kpi in kpis:
+
+            for measurement in measurements:
+
+                dependencies.append(
+                    SemanticDependency(
+                        source_entity=kpi.entity_id,
+                        target_entity=measurement.entity_id,
+                        relation="measured_by",
+                        confidence=0.95,
+                    )
+                )
+
+        # ==================================================
         # Object -> Domain
-        # ----------------------------------------
+        # ==================================================
 
         for obj in objects:
 
             for domain in domains:
 
                 dependencies.append(
-
-                    DependencyEdge(
-
+                    SemanticDependency(
                         source_entity=obj.entity_id,
-
                         target_entity=domain.entity_id,
-
                         relation="belongs_to",
-
                         confidence=0.95,
-
                     )
-
                 )
 
-        # ----------------------------------------
+        # ==================================================
         # Action -> Skill
-        # ----------------------------------------
+        # ==================================================
 
         for action in actions:
 
             for skill in skills:
 
                 dependencies.append(
-
-                    DependencyEdge(
-
+                    SemanticDependency(
                         source_entity=action.entity_id,
-
                         target_entity=skill.entity_id,
-
                         relation="requires",
-
                         confidence=0.95,
-
                     )
-
                 )
 
-        # ----------------------------------------
-        # Action -> Standard
-        # ----------------------------------------
+        # ==================================================
+        # Remove duplicate edges
+        # ==================================================
 
-        for action in actions:
+        unique = {}
 
-            for standard in standards:
+        for edge in dependencies:
 
-                dependencies.append(
+            key = (
+                edge.source_entity,
+                edge.target_entity,
+                edge.relation,
+            )
 
-                    DependencyEdge(
+            if key not in unique:
+                unique[key] = edge
 
-                        source_entity=action.entity_id,
+        return list(unique.values())
 
-                        target_entity=standard.entity_id,
+    # ======================================================
 
-                        relation="targets",
-
-                        confidence=0.98,
-
-                    )
-
-                )
-
-        return dependencies
-
-    # ===================================================
-    # Relationship Rules
-    # ===================================================
-
-    def _action_object_relation(self, action):
-
-        verb = action.canonical.lower()
+    def _object_relation(self, action):
 
         mapping = {
 
@@ -230,9 +192,13 @@ class DependencyResolver:
 
             "develop": "creates",
 
+            "manage": "manages",
+
             "lead": "manages",
 
-            "manage": "manages",
+            "monitor": "monitors",
+
+            "maintain": "maintains",
 
             "improve": "optimizes",
 
@@ -242,40 +208,54 @@ class DependencyResolver:
 
             "increase": "improves",
 
-            "certify": "certifies",
+            "control": "controls",
 
             "perform": "executes",
 
-            "design": "creates",
-
-            "build": "creates",
-
-            "monitor": "monitors",
-
-            "control": "controls",
-
-            "maintain": "maintains",
+            "certify": "certifies",
 
         }
 
-        return mapping.get(verb)
+        return mapping.get(action.canonical.lower())
 
-    def _action_metric_relation(self, action):
+    # ======================================================
 
-        verb = action.canonical.lower()
+    def _standard_relation(self, action):
 
         mapping = {
 
-            "improve": "affects",
+            "implement": "complies_with",
 
-            "reduce": "affects",
+            "develop": "complies_with",
 
-            "increase": "affects",
+            "certify": "certified_against",
 
-            "lead": "measured_by",
-
-            "manage": "measured_by",
+            "audit": "audited_against",
 
         }
 
-        return mapping.get(verb)
+        return mapping.get(action.canonical.lower())
+
+    # ======================================================
+
+    def _kpi_relation(self, action):
+
+        mapping = {
+
+            "improve": "improved",
+
+            "reduce": "reduced",
+
+            "increase": "increased",
+
+            "optimize": "optimized",
+
+            "monitor": "measures",
+
+            "manage": "measured_by",
+
+            "lead": "measured_by",
+
+        }
+
+        return mapping.get(action.canonical.lower())
