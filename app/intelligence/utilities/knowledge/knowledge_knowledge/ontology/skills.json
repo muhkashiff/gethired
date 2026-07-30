@@ -1,0 +1,332 @@
+{
+  "Leadership": {
+    "entity_id": "SKILL_LEADERSHIP",
+    "canonical": "Leadership",
+    "aliases": [
+      "Leadership",
+      "Leadership Skills"
+    ],
+    "category": "people_management",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Team Building": {
+    "entity_id": "SKILL_TEAM_BUILDING",
+    "canonical": "Team Building",
+    "aliases": [
+      "Team Building",
+      "Team Building Skills"
+    ],
+    "category": "people_management",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Problem Solving": {
+    "entity_id": "SKILL_PROBLEM_SOLVING",
+    "canonical": "Problem Solving",
+    "aliases": [
+      "Problem Solving",
+      "Problem Solving Skills"
+    ],
+    "category": "analytical",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Decision Making": {
+    "entity_id": "SKILL_DECISION_MAKING",
+    "canonical": "Decision Making",
+    "aliases": [
+      "Decision Making",
+      "Decision Making Skills"
+    ],
+    "category": "management",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Communication": {
+    "entity_id": "SKILL_COMMUNICATION",
+    "canonical": "Communication",
+    "aliases": [
+      "Communication",
+      "Communication Skills"
+    ],
+    "category": "soft_skill",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Training": {
+    "entity_id": "SKILL_TRAINING",
+    "canonical": "Training",
+    "aliases": [
+      "Training",
+      "Training Skills"
+    ],
+    "category": "people_development",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Root Cause Analysis": {
+    "entity_id": "SKILL_ROOT_CAUSE_ANALYSIS",
+    "canonical": "Root Cause Analysis",
+    "aliases": [
+      "Root Cause Analysis",
+      "Root Cause Analysis Skills"
+    ],
+    "category": "analytical",
+    "business_area": "quality",
+    "impact_weight": 1.0
+  },
+  "Auditing": {
+    "entity_id": "SKILL_AUDITING",
+    "canonical": "Auditing",
+    "aliases": [
+      "Auditing",
+      "Auditing Skills"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "impact_weight": 1.0
+  },
+  "Data Analysis": {
+    "entity_id": "SKILL_DATA_ANALYSIS",
+    "canonical": "Data Analysis",
+    "aliases": [
+      "Data Analysis",
+      "Data Analysis Skills"
+    ],
+    "category": "analytical",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Continuous Improvement": {
+    "entity_id": "SKILL_CONTINUOUS_IMPROVEMENT",
+    "canonical": "Continuous Improvement",
+    "aliases": [
+      "Continuous Improvement",
+      "Continuous Improvement Skills"
+    ],
+    "category": "improvement",
+    "business_area": "operations",
+    "impact_weight": 1.0
+  },
+  "Negotiation": {
+    "entity_id": "SKILL_NEGOTIATION",
+    "canonical": "Negotiation",
+    "aliases": [
+      "Negotiation",
+      "Negotiation Skills"
+    ],
+    "category": "soft_skill",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Conflict Resolution": {
+    "entity_id": "SKILL_CONFLICT_RESOLUTION",
+    "canonical": "Conflict Resolution",
+    "aliases": [
+      "Conflict Resolution",
+      "Conflict Resolution Skills"
+    ],
+    "category": "soft_skill",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Project Management": {
+    "entity_id": "SKILL_PROJECT_MANAGEMENT",
+    "canonical": "Project Management",
+    "aliases": [
+      "Project Management",
+      "Project Management Skills"
+    ],
+    "category": "management",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Risk Management": {
+    "entity_id": "SKILL_RISK_MANAGEMENT",
+    "canonical": "Risk Management",
+    "aliases": [
+      "Risk Management",
+      "Risk Management Skills"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "impact_weight": 1.0
+  },
+  "Strategic Planning": {
+    "entity_id": "SKILL_STRATEGIC_PLANNING",
+    "canonical": "Strategic Planning",
+    "aliases": [
+      "Strategic Planning",
+      "Strategic Planning Skills"
+    ],
+    "category": "management",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Process Improvement": {
+    "entity_id": "SKILL_PROCESS_IMPROVEMENT",
+    "canonical": "Process Improvement",
+    "aliases": [
+      "Process Improvement",
+      "Process Improvement Skills"
+    ],
+    "category": "improvement",
+    "business_area": "operations",
+    "impact_weight": 1.0
+  },
+  "Coaching": {
+    "entity_id": "SKILL_COACHING",
+    "canonical": "Coaching",
+    "aliases": [
+      "Coaching",
+      "Coaching Skills"
+    ],
+    "category": "people_development",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Mentoring": {
+    "entity_id": "SKILL_MENTORING",
+    "canonical": "Mentoring",
+    "aliases": [
+      "Mentoring",
+      "Mentoring Skills"
+    ],
+    "category": "people_development",
+    "business_area": "management",
+    "impact_weight": 1.0
+  },
+  "Time Management": {
+    "entity_id": "SKILL_TIME_MANAGEMENT",
+    "canonical": "Time Management",
+    "aliases": [
+      "Time Management",
+      "Time Management Skills"
+    ],
+    "category": "soft_skill",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Change Management": {
+    "entity_id": "SKILL_CHANGE_MANAGEMENT",
+    "canonical": "Change Management",
+    "aliases": [
+      "Change Management",
+      "Change Management Skills"
+    ],
+    "category": "management",
+    "business_area": "operations",
+    "impact_weight": 1.0
+  },
+  "Customer Service": {
+    "entity_id": "SKILL_CUSTOMER_SERVICE",
+    "canonical": "Customer Service",
+    "aliases": [
+      "Customer Service",
+      "Customer Service Skills"
+    ],
+    "category": "customer",
+    "business_area": "retail",
+    "impact_weight": 1.0
+  },
+  "Inventory Management": {
+    "entity_id": "SKILL_INVENTORY_MANAGEMENT",
+    "canonical": "Inventory Management",
+    "aliases": [
+      "Inventory Management",
+      "Inventory Management Skills"
+    ],
+    "category": "operations",
+    "business_area": "supply_chain",
+    "impact_weight": 1.0
+  },
+  "Production Planning": {
+    "entity_id": "SKILL_PRODUCTION_PLANNING",
+    "canonical": "Production Planning",
+    "aliases": [
+      "Production Planning",
+      "Production Planning Skills"
+    ],
+    "category": "operations",
+    "business_area": "manufacturing",
+    "impact_weight": 1.0
+  },
+  "Quality Assurance": {
+    "entity_id": "SKILL_QUALITY_ASSURANCE",
+    "canonical": "Quality Assurance",
+    "aliases": [
+      "Quality Assurance",
+      "Quality Assurance Skills"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "impact_weight": 1.0
+  },
+  "Food Safety": {
+    "entity_id": "SKILL_FOOD_SAFETY",
+    "canonical": "Food Safety",
+    "aliases": [
+      "Food Safety",
+      "Food Safety Skills"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "impact_weight": 1.0
+  },
+  "Statistical Analysis": {
+    "entity_id": "SKILL_STATISTICAL_ANALYSIS",
+    "canonical": "Statistical Analysis",
+    "aliases": [
+      "Statistical Analysis",
+      "Statistical Analysis Skills"
+    ],
+    "category": "analytical",
+    "business_area": "quality",
+    "impact_weight": 1.0
+  },
+  "Supplier Management": {
+    "entity_id": "SKILL_SUPPLIER_MANAGEMENT",
+    "canonical": "Supplier Management",
+    "aliases": [
+      "Supplier Management",
+      "Supplier Management Skills"
+    ],
+    "category": "procurement",
+    "business_area": "supply_chain",
+    "impact_weight": 1.0
+  },
+  "Documentation": {
+    "entity_id": "SKILL_DOCUMENTATION",
+    "canonical": "Documentation",
+    "aliases": [
+      "Documentation",
+      "Documentation Skills"
+    ],
+    "category": "quality",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Presentation Skills": {
+    "entity_id": "SKILL_PRESENTATION_SKILLS",
+    "canonical": "Presentation Skills",
+    "aliases": [
+      "Presentation Skills",
+      "Presentation Skills Skills"
+    ],
+    "category": "soft_skill",
+    "business_area": "general",
+    "impact_weight": 1.0
+  },
+  "Troubleshooting": {
+    "entity_id": "SKILL_TROUBLESHOOTING",
+    "canonical": "Troubleshooting",
+    "aliases": [
+      "Troubleshooting",
+      "Troubleshooting Skills"
+    ],
+    "category": "technical",
+    "business_area": "operations",
+    "impact_weight": 1.0
+  }
+}

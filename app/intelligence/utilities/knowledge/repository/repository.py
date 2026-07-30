@@ -83,6 +83,14 @@ class Repository:
 
         self.cache.clause_patterns = self._read(self.paths.clause_patterns)
 
+        self.cache.skills = self._read(
+            self.paths.skills
+        )
+
+        self.cache.methodologies = self._read(
+            self.paths.methodologies
+        )
+
     # =========================================================
     # Entity Builders
     # =========================================================
@@ -187,7 +195,19 @@ class Repository:
         data = self.cache.domains.get(domain)
 
         return self._entity(data)
+    
+    def get_skill(self, phrase):
 
+        data = self.cache.skills.get(phrase)
+
+        return self._entity(data)
+
+
+    def get_methodology(self, phrase):
+
+        data = self.cache.methodologies.get(phrase)
+
+        return self._entity(data)
     # =========================================================
     # Backward Compatible API
     # =========================================================
@@ -228,6 +248,32 @@ class Repository:
     def confidence_rules(self):
         return self.cache.confidence_rules
 
+    def get_measurement_patterns(self):
+        return self.cache.measurement_patterns
+    
+    def get_modifier_dictionary(self):
+        return self.cache.modifier_dictionary
+    
+    def get_domains(self):
+        return self.cache.domains
+
+    def get_domain_reasoning(self):
+        return self.cache.domain_reasoning
+    
+    def get_clause_patterns(self):
+        return self.cache.clause_patterns
+    
+    def get_impact_dictionary(self):
+        return self.cache.impact_dictionary
+    
+    
+    def skills(self):
+        return self.cache.skills
+    
+    
+    def methodologies(self):
+        return self.cache.methodologies
+
     def get_dictionary(self, name):
 
         dictionaries = {
@@ -258,27 +304,12 @@ class Repository:
 
             "impact_dictionary": self.cache.impact_dictionary,
 
+            "skills": self.cache.skills,
+
+            "methodologies": self.cache.methodologies,
+
         }
 
         return dictionaries.get(name, {})
-
-    def get_measurement_patterns(self):
-        return self.cache.measurement_patterns
-
-    def get_modifier_dictionary(self):
-        return self.cache.modifier_dictionary
-
-    def get_domains(self):
-        return self.cache.domains
-
-
-    def get_domain_reasoning(self):
-        return self.cache.domain_reasoning
-
-    def get_clause_patterns(self):
-        return self.cache.clause_patterns
-
-    def get_impact_dictionary(self):
-        return self.cache.impact_dictionary
 
     

@@ -1,0 +1,92 @@
+{
+  "lean manufacturing": {
+    "entity_id": "METH_LEAN",
+    "canonical": "Lean Manufacturing",
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+  "six sigma": {
+    "entity_id": "METH_SIX_SIGMA",
+    "canonical": "Six Sigma",
+    "category": "continuous_improvement",
+    "business_area": "quality"
+  },
+  "kaizen": {
+    "entity_id": "METH_KAIZEN",
+    "canonical": "Kaizen",
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+  "5s": {
+    "entity_id": "METH_5S",
+    "canonical": "5S",
+    "category": "workplace_organization",
+    "business_area": "operations"
+  },
+  "tpm": {
+    "entity_id": "METH_TPM",
+    "canonical": "Total Productive Maintenance",
+    "category": "maintenance",
+    "business_area": "maintenance"
+  },
+  "rca": {
+    "entity_id": "METH_RCA",
+    "canonical": "Root Cause Analysis",
+    "category": "problem_solving",
+    "business_area": "quality"
+  },
+  "capa": {
+    "entity_id": "METH_CAPA",
+    "canonical": "Corrective and Preventive Action",
+    "category": "quality_system",
+    "business_area": "quality"
+  },
+  "spc": {
+    "entity_id": "METH_SPC",
+    "canonical": "Statistical Process Control",
+    "category": "quality_tools",
+    "business_area": "quality"
+  },
+  "pdca": {
+    "entity_id": "METH_PDCA",
+    "canonical": "Plan Do Check Act",
+    "category": "continuous_improvement",
+    "business_area": "management"
+  },
+  "dmaic": {
+    "entity_id": "METH_DMAIC",
+    "canonical": "DMAIC",
+    "category": "six_sigma",
+    "business_area": "quality"
+  },
+  "fmea": {
+    "entity_id": "METH_FMEA",
+    "canonical": "Failure Mode and Effects Analysis",
+    "category": "risk",
+    "business_area": "quality"
+  },
+  "8d": {
+    "entity_id": "METH_8D",
+    "canonical": "8D Problem Solving",
+    "category": "problem_solving",
+    "business_area": "quality"
+  },
+  "fishbone": {
+    "entity_id": "METH_FISHBONE",
+    "canonical": "Fishbone Analysis",
+    "category": "problem_solving",
+    "business_area": "quality"
+  },
+  "pareto": {
+    "entity_id": "METH_PARETO",
+    "canonical": "Pareto Analysis",
+    "category": "quality_tools",
+    "business_area": "quality"
+  },
+  "gemba": {
+    "entity_id": "METH_GEMBA",
+    "canonical": "Gemba Walk",
+    "category": "leadership",
+    "business_area": "operations"
+  }
+}

@@ -137,5 +137,166 @@
         "canonical": "process_development",
         "business_area": "operations",
         "description": "Process development and implementation."
+    },
+
+    "manufacturing": {
+    "entity_id": "DOMAIN_MANUFACTURING",
+    "canonical": "Manufacturing",
+    "category": "operations"
+    },
+    "production": {
+        "entity_id": "DOMAIN_PRODUCTION",
+        "canonical": "Production",
+        "category": "operations"
+    },
+    "operational excellence": {
+        "entity_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
+        "canonical": "Operational Excellence",
+        "category": "operations"
+    },
+    "continuous improvement": {
+        "entity_id": "DOMAIN_CONTINUOUS_IMPROVEMENT",
+        "canonical": "Continuous Improvement",
+        "category": "operations"
+    },
+        "maintenance": {
+        "entity_id": "DOMAIN_MAINTENANCE",
+        "canonical": "Maintenance",
+        "category": "operations"
+    },
+    "total productive maintenance": {
+        "entity_id": "DOMAIN_MAINTENANCE",
+        "canonical": "Maintenance",
+        "category": "operations"
+    },
+    
+    "quality assurance": {
+        "entity_id": "DOMAIN_QUALITY_ASSURANCE",
+        "canonical": "Quality Assurance",
+        "category": "quality"
+    },
+    "quality control": {
+        "entity_id": "DOMAIN_QUALITY_CONTROL",
+        "canonical": "Quality Control",
+        "category": "quality"
+    },
+    "food safety": {
+        "entity_id": "DOMAIN_FOOD_SAFETY",
+        "canonical": "Food Safety",
+        "category": "food_safety"
+    },
+    "food safety management": {
+        "entity_id": "DOMAIN_FOOD_SAFETY",
+        "canonical": "Food Safety",
+        "category": "food_safety"
+    },
+    "haccp": {
+        "entity_id": "DOMAIN_FOOD_SAFETY",
+        "canonical": "Food Safety",
+        "category": "food_safety"
+    },
+    "gmp": {
+        "entity_id": "DOMAIN_FOOD_SAFETY",
+        "canonical": "Food Safety",
+        "category": "food_safety"
+    },
+    "fssc 22000": {
+        "entity_id": "DOMAIN_FOOD_SAFETY",
+        "canonical": "Food Safety",
+        "category": "food_safety"
+    },
+    "supply chain": {
+        "entity_id": "DOMAIN_SUPPLY_CHAIN",
+        "canonical": "Supply Chain",
+        "category": "supply_chain"
+    },
+    "inventory management": {
+        "entity_id": "DOMAIN_INVENTORY",
+        "canonical": "Inventory Management",
+        "category": "supply_chain"
+    },
+    "procurement": {
+        "entity_id": "DOMAIN_PROCUREMENT",
+        "canonical": "Procurement",
+        "category": "supply_chain"
+    },
+    "warehouse": {
+        "entity_id": "DOMAIN_WAREHOUSING",
+        "canonical": "Warehousing",
+        "category": "supply_chain"
+    },
+    "logistics": {
+        "entity_id": "DOMAIN_LOGISTICS",
+        "canonical": "Logistics",
+        "category": "supply_chain"
+    },
+    "people": {
+        "entity_id": "DOMAIN_PEOPLE",
+        "canonical": "People",
+        "category": "people"
+    },
+    "training": {
+        "entity_id": "DOMAIN_TRAINING",
+        "canonical": "Training & Development",
+        "category": "people"
+    },
+    "people development": {
+        "entity_id": "DOMAIN_PEOPLE_DEVELOPMENT",
+        "canonical": "People Development",
+        "category": "people"
+    },
+    
+    "team management": {
+        "entity_id": "DOMAIN_LEADERSHIP",
+        "canonical": "Leadership",
+        "category": "leadership"
+    },
+        
+    "finance": {
+        "entity_id": "DOMAIN_FINANCE",
+        "canonical": "Finance",
+        "category": "finance"
+    },
+    "revenue": {
+        "entity_id": "DOMAIN_FINANCE",
+        "canonical": "Finance",
+        "category": "finance"
+    },
+    "cost reduction": {
+        "entity_id": "DOMAIN_COST_MANAGEMENT",
+        "canonical": "Cost Management",
+        "category": "finance"
+    },
+    "customer service": {
+        "entity_id": "DOMAIN_CUSTOMER_SERVICE",
+        "canonical": "Customer Service",
+        "category": "customer"
+    },
+    "customer experience": {
+        "entity_id": "DOMAIN_CUSTOMER_EXPERIENCE",
+        "canonical": "Customer Experience",
+        "category": "customer"
+    },
+    "project management": {
+        "entity_id": "DOMAIN_PROJECT_MANAGEMENT",
+        "canonical": "Project Management",
+        "category": "management"
+    },
+    "risk management": {
+        "entity_id": "DOMAIN_RISK_MANAGEMENT",
+        "canonical": "Risk Management",
+        "category": "management"
+    },
+    "compliance": {
+        "entity_id": "DOMAIN_COMPLIANCE",
+        "canonical": "Compliance",
+        "category": "governance"
+    },
+    "audit": {
+        "entity_id": "DOMAIN_AUDIT",
+        "canonical": "Audit",
+        "category": "governance"
     }
-}
+    }
+
+    

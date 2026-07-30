@@ -1,0 +1,38 @@
+{
+  "iso 9001": {
+    "entity_id": "STD_ISO_9001",
+    "canonical": "ISO 9001",
+    "category": "quality",
+    "business_area": "quality"
+  },
+  "fssc 22000": {
+    "entity_id": "STD_FSSC_22000",
+    "canonical": "FSSC 22000",
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+  "haccp": {
+    "entity_id": "STD_HACCP",
+    "canonical": "HACCP",
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+  "gmp": {
+    "entity_id": "STD_GMP",
+    "canonical": "GMP",
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+  "tpm": {
+    "entity_id": "METHOD_TPM",
+    "canonical": "Total Productive Maintenance",
+    "category": "maintenance",
+    "business_area": "operations"
+  },
+  "lean manufacturing": {
+    "entity_id": "METHOD_LEAN_MANUFACTURING",
+    "canonical": "Lean Manufacturing",
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  }
+}

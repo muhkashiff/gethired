@@ -12,6 +12,15 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretat
     KnowledgeInterpretation,
 )
 
+from app.intelligence.utilities.knowledge.knowledge_dependency.dependency_models import (
+    DependencyEdge,
+)
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.practice_models import (
+    PracticeKnowledge,
+)
+
+
+
 # ---------------------------------------------------------
 # Atomic Knowledge
 # ---------------------------------------------------------
@@ -28,6 +37,16 @@ class KnowledgeFact:
         default_factory=KnowledgeInterpretation
     )
 
+    # -----------------------------
+    # NEW
+    # -----------------------------
+
+    dependency_edges: List[DependencyEdge] = field(default_factory=list)
+
+    # -----------------------------
+    # Existing
+    # -----------------------------
+
     achievement: bool = False
 
     quantified: bool = False
@@ -35,6 +54,8 @@ class KnowledgeFact:
     source: str = "resume"
 
     confidence: float = 0.0
+
+    practice: PracticeKnowledge = field(default_factory=PracticeKnowledge)
 
 
 # ---------------------------------------------------------
@@ -45,14 +66,6 @@ class KnowledgeFact:
 class KnowledgeClause:
     """
     Represents one semantic clause.
-
-    Example
-
-    Implemented ISO9001,
-    trained staff,
-    improved productivity.
-
-    One sentence may contain multiple clauses.
     """
 
     original_text: str = ""
@@ -70,8 +83,6 @@ class KnowledgeClause:
 class KnowledgeSentence:
     """
     One parsed sentence.
-
-    Contains one or more semantic clauses.
     """
 
     original_text: str = ""
@@ -91,18 +102,10 @@ class KnowledgeSentence:
 class KnowledgeDocument:
     """
     Complete parsed document.
-
-    Resume
-    Job Description
-    Interview
-    Recruiter Notes
-
-    Everything becomes a KnowledgeDocument.
     """
 
     sentences: List[KnowledgeSentence] = field(default_factory=list)
 
-    # Flattened index of every fact
     facts: List[KnowledgeFact] = field(default_factory=list)
 
     statistics: Dict = field(default_factory=dict)

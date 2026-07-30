@@ -6,9 +6,17 @@
   },
 
   "FSSC 22000": {
-    "entity_id": "FSSC_22000",
-    "canonical": "FSSC 22000",
-    "category": "food_safety"
+        "entity_id":"STD_FSSC22000",
+        "canonical":"FSSC 22000",
+
+        "aliases":[
+            "FSSC22000",
+            "FSSC-22000",
+            "FSSC 22000",
+            "Food Safety System Certification 22000"
+        ],
+
+        "category":"food_safety"
   },
 
   "BRCGS": {

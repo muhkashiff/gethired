@@ -1,0 +1,21 @@
+{
+  "lean": "METH_LEAN",
+  "lean manufacturing": "METH_LEAN",
+  "toyota production system": "METH_LEAN",
+  "tpm": "METH_TPM",
+  "total productive maintenance": "METH_TPM",
+  "5s": "METH_5S",
+  "six sigma": "METH_SIX_SIGMA",
+  "green belt": "METH_SIX_SIGMA",
+  "black belt": "METH_SIX_SIGMA",
+  "rca": "METH_RCA",
+  "root cause analysis": "METH_RCA",
+  "pdca": "METH_PDCA",
+  "dmaic": "METH_DMAIC",
+  "fmea": "METH_FMEA",
+  "8d": "METH_8D",
+  "pareto": "METH_PARETO",
+  "fishbone": "METH_FISHBONE",
+  "ishikawa": "METH_FISHBONE",
+  "gemba": "METH_GEMBA"
+}

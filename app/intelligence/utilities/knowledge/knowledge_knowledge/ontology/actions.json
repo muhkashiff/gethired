@@ -282,5 +282,42 @@
     "base": "mentor",
     "gerund": "mentoring",
     "category": "people_development"
+  },
+  "maintain": {
+    "entity_id": "ACT_MAINTAIN",
+    "base": "maintain",
+    "gerund": "maintaining",
+    "category": "sustainment"
+  },
+  "maintained": {
+    "entity_id": "ACT_MAINTAIN",
+    "base": "maintain",
+    "gerund": "maintaining",
+    "category": "sustainment"
+  },
+  "maintaining": {
+    "entity_id": "ACT_MAINTAIN",
+    "base": "maintain",
+    "gerund": "maintaining",
+    "category": "sustainment"
+  },
+
+  "establish": {
+    "entity_id": "ACT_ESTABLISH",
+    "base": "establish",
+    "gerund": "establishing",
+    "category": "establishment"
+  },
+  "established": {
+    "entity_id": "ACT_ESTABLISH",
+    "base": "establish",
+    "gerund": "establishing",
+    "category": "establishment"
+  },
+  "establishing": {
+    "entity_id": "ACT_ESTABLISH",
+    "base": "establish",
+    "gerund": "establishing",
+    "category": "establishment"
   }
 }

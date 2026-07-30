@@ -41,6 +41,16 @@ class KnowledgeGraphBuilder:
 
                 self._build_fact(graph, fact)
 
+            if hasattr(sentence, "dependency_result"):
+
+                self._build_dependency_edges(
+
+                    graph,
+
+                    sentence.dependency_result
+
+                )
+
         graph.confidence = knowledge_document.confidence
 
         return KnowledgeGraphDocument(
@@ -266,46 +276,7 @@ class KnowledgeGraphBuilder:
             measurement_node.properties["effect"] = measurement.effect
             measurement_node.properties["business_meaning"] = measurement.business_meaning
 
-        # ---------------------------------------------
-        # Relationships
-        # ---------------------------------------------
-
-        if action_node and object_node:
-
-            self._add_edge(
-                graph,
-                action_node,
-                object_node,
-                "targets",
-            )
-
-        if action_node and metric_node:
-
-            self._add_edge(
-                graph,
-                action_node,
-                metric_node,
-                "affects",
-            )
-
-        if metric_node and measurement_node:
-
-            self._add_edge(
-                graph,
-                metric_node,
-                measurement_node,
-                "measured_by",
-            )
-
-        if object_node and domain_node:
-
-            self._add_edge(
-                graph,
-                object_node,
-                domain_node,
-                "belongs_to",
-            )
-
+        
     # -------------------------------------------------
 
     def _add_node(
@@ -411,3 +382,44 @@ class KnowledgeGraphBuilder:
         target.add_edge(edge)
 
         self.edge_counter += 1
+
+    #--------------------------------------------
+    # Dependency parser
+    #--------------------------------------------
+
+    def _build_dependency_edges(self, graph, dependency_result):
+
+        for dep in dependency_result.edges:
+
+            source = graph.get_node_by_entity(dep.source_entity)
+            target = graph.get_node_by_entity(dep.target_entity)
+
+            if source is None or target is None:
+                continue
+
+            edge = GraphEdge(
+
+                edge_id=f"E{self.edge_counter:05}",
+
+                source_node=source.entity_id,
+
+                target_node=target.entity_id,
+
+                relationship=dep.relation,
+
+                relationship_label=dep.relation,
+
+                confidence=dep.confidence,
+
+                weight=1.0,
+
+                source="dependency_parser",
+
+            )
+
+            graph.add_edge(edge)
+
+            source.add_edge(edge)
+            target.add_edge(edge)
+
+            self.edge_counter += 1

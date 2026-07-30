@@ -1,115 +1,196 @@
 {
-  "staff": {
-    "entity_id": "OBJ_STAFF",
-    "canonical": "Staff",
+  
+  "engineers": {
+    "entity_id": "OBJ_ENGINEERS",
+    "canonical": "Engineers",
     "category": "people"
   },
-
-  "employees": {
-    "entity_id": "OBJ_STAFF",
-    "canonical": "Staff",
+  "engineer": {
+    "entity_id": "OBJ_ENGINEERS",
+    "canonical": "Engineers",
     "category": "people"
   },
-
-  "team": {
-    "entity_id": "OBJ_TEAM",
-    "canonical": "Team",
-    "category": "people"
+  
+  "customers": {
+    "entity_id": "OBJ_CUSTOMERS",
+    "canonical": "Customers",
+    "category": "customer"
   },
-
-  "teams": {
-    "entity_id": "OBJ_TEAM",
-    "canonical": "Team",
-    "category": "people"
+  "customer": {
+    "entity_id": "OBJ_CUSTOMERS",
+    "canonical": "Customers",
+    "category": "customer"
   },
-
+ 
+  "production line": {
+    "entity_id": "OBJ_PRODUCTION_LINE",
+    "canonical": "Production Line",
+    "category": "operations"
+  },
+  
+  "facility": {
+    "entity_id": "OBJ_MANUFACTURING_FACILITY",
+    "canonical": "Manufacturing Facility",
+    "category": "operations"
+  },
+  "equipment": {
+    "entity_id": "OBJ_EQUIPMENT",
+    "canonical": "Equipment",
+    "category": "operations"
+  },
+  "machine": {
+    "entity_id": "OBJ_EQUIPMENT",
+    "canonical": "Equipment",
+    "category": "operations"
+  },
+  "machines": {
+    "entity_id": "OBJ_EQUIPMENT",
+    "canonical": "Equipment",
+    "category": "operations"
+  },
+  
+  "warehouse": {
+    "entity_id": "OBJ_WAREHOUSE",
+    "canonical": "Warehouse",
+    "category": "supply_chain"
+  },
   "supplier": {
     "entity_id": "OBJ_SUPPLIER",
     "canonical": "Supplier",
     "category": "supply_chain"
   },
-
   "suppliers": {
     "entity_id": "OBJ_SUPPLIER",
     "canonical": "Supplier",
     "category": "supply_chain"
   },
-
-  "customer complaints": {
-    "entity_id": "OBJ_CUSTOMER_COMPLAINTS",
-    "canonical": "Customer Complaints",
+  "materials": {
+    "entity_id": "OBJ_MATERIALS",
+    "canonical": "Materials",
+    "category": "supply_chain"
+  },
+  "raw materials": {
+    "entity_id": "OBJ_RAW_MATERIALS",
+    "canonical": "Raw Materials",
+    "category": "supply_chain"
+  },
+  "process": {
+    "entity_id": "OBJ_PROCESS",
+    "canonical": "Process",
+    "category": "operations"
+  },
+  "processes": {
+    "entity_id": "OBJ_PROCESS",
+    "canonical": "Process",
+    "category": "operations"
+  },
+  
+  "qms": {
+    "entity_id": "OBJ_QMS",
+    "canonical": "Quality Management System",
     "category": "quality"
   },
-
-  "complaints": {
-    "entity_id": "OBJ_CUSTOMER_COMPLAINTS",
-    "canonical": "Customer Complaints",
-    "category": "quality"
+  "food safety management system": {
+    "entity_id": "OBJ_FSMS",
+    "canonical": "Food Safety Management System",
+    "category": "food_safety"
+  },
+  "fsms": {
+    "entity_id": "OBJ_FSMS",
+    "canonical": "Food Safety Management System",
+    "category": "food_safety"
+  },
+  "haccp": {
+    "entity_id": "OBJ_HACCP",
+    "canonical": "HACCP",
+    "category": "food_safety"
+  },
+  "gmp": {
+    "entity_id": "OBJ_GMP",
+    "canonical": "GMP",
+    "category": "food_safety"
   },
 
+  "total productive maintenance": {
+    "entity_id": "OBJ_TPM",
+    "canonical": "TPM",
+    "category": "maintenance"
+  },
+  "project": {
+    "entity_id": "OBJ_PROJECT",
+    "canonical": "Project",
+    "category": "management"
+  },
+  "audit": {
+    "entity_id": "OBJ_AUDIT",
+    "canonical": "Audit",
+    "category": "governance"
+  },
+  "training": {
+    "entity_id": "OBJ_TRAINING",
+    "canonical": "Training",
+    "category": "people"
+  },
+  
+  "employees": {
+    "entity_id": "OBJ_STAFF",
+    "canonical": "Staff",
+    "category": "people"
+  },
+  "employee": {
+    "entity_id": "OBJ_STAFF",
+    "canonical": "Staff",
+    "category": "people"
+  },
+  "staff": {
+    "entity_id": "OBJ_STAFF",
+    "canonical": "Staff",
+    "category": "people"
+  },
+  "operators": {
+    "entity_id": "OBJ_OPERATORS",
+    "canonical": "Operators",
+    "category": "people"
+  },
+  "operator": {
+    "entity_id": "OBJ_OPERATORS",
+    "canonical": "Operators",
+    "category": "people"
+  },
+  "team": {
+    "entity_id": "OBJ_TEAM",
+    "canonical": "Team",
+    "category": "people"
+  },
+  "manufacturing facility": {
+    "entity_id": "OBJ_MANUFACTURING_FACILITY",
+    "canonical": "Manufacturing Facility",
+    "category": "operations"
+  },
   "production": {
     "entity_id": "OBJ_PRODUCTION",
     "canonical": "Production",
-    "category": "manufacturing"
-  },
-
-  "yield": {
-    "entity_id": "OBJ_PRODUCTION_YIELD",
-    "canonical": "Production Yield",
-    "category": "manufacturing"
-  },
-
-  "production yield": {
-    "entity_id": "OBJ_PRODUCTION_YIELD",
-    "canonical": "Production Yield",
-    "category": "manufacturing"
-  },
-
-  "productivity": {
-    "entity_id": "OBJ_PRODUCTIVITY",
-    "canonical": "Productivity",
     "category": "operations"
   },
-
   "downtime": {
     "entity_id": "OBJ_DOWNTIME",
     "canonical": "Downtime",
     "category": "operations"
   },
-
-  "ISO 9001": {
-    "entity_id": "OBJ_ISO_9001",
-    "canonical": "ISO 9001",
+  "customer complaints": {
+    "entity_id": "OBJ_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
     "category": "quality"
   },
-
-  "iso 9001": {
-    "entity_id": "OBJ_ISO_9001",
-    "canonical": "ISO 9001",
+  "quality management system": {
+    "entity_id": "OBJ_QUALITY_MANAGEMENT_SYSTEM",
+    "canonical": "Quality Management System",
     "category": "quality"
   },
-
-  "FSSC 22000": {
-    "entity_id": "OBJ_FSSC_22000",
-    "canonical": "FSSC 22000",
-    "category": "food_safety"
-  },
-
-  "fssc 22000": {
-    "entity_id": "OBJ_FSSC_22000",
-    "canonical": "FSSC 22000",
-    "category": "food_safety"
-  },
-
-  "HACCP": {
-    "entity_id": "OBJ_HACCP",
-    "canonical": "HACCP",
-    "category": "food_safety"
-  },
-
-  "haccp": {
-    "entity_id": "OBJ_HACCP",
-    "canonical": "HACCP",
-    "category": "food_safety"
+  "inventory": {
+    "entity_id": "OBJ_INVENTORY",
+    "canonical": "Inventory",
+    "category": "supply_chain"
   }
+
 }

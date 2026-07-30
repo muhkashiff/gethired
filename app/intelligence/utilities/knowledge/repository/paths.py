@@ -46,6 +46,10 @@ class RepositoryPaths:
         self.technologies = ONTOLOGY / "technologies.json"
 
         self.impact_dictionary = ONTOLOGY/ "impact_dictionary.json"
+
+        self.skills = ONTOLOGY / "skills.json"
+
+        self.methodologies = ONTOLOGY / "methodologies.json"
     
         # -------------------
         # Config

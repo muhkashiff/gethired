@@ -60,7 +60,7 @@ from app.intelligence.utilities.knowledge.knowledge_parser.sentence_parser impor
 from app.intelligence.utilities.knowledge.knowledge_parser.purpose_clause_detector import (
     PurposeClauseDetector,
 )
-from app.intelligence.utilities.knowledge.knowledge_parser.semantic_connector_detector import (
+from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_connector_detector import (
     SemanticConnectorDetector,
 )
 

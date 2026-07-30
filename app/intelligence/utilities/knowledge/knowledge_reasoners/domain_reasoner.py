@@ -29,7 +29,7 @@ class DomainReasoner:
         self.rules = self.repository.get_domain_reasoning()
 
         # Canonical domain metadata
-        self.domains = self.repository.get_domains()
+        #self.domains = self.repository.get_domains()
 
     # ---------------------------------------------------------
 
@@ -68,34 +68,35 @@ class DomainReasoner:
         canonical = rule.get("canonical", "")
 
         # -------------------------------------------------
-        # Metadata lookup
+        # Entity lookup
         # -------------------------------------------------
 
-        domain_metadata = self.domains.get(canonical, {})
+        domain_entity = self.repository.get_domain(canonical)
+
+        if domain_entity is None:
+            return DomainKnowledge(
+                found=True,
+                entity_id=domain_id,
+                domain=canonical,
+                reasoning=f"{action_category} + {object_category}",
+                confidence=0.95,
+            )
 
         return DomainKnowledge(
 
             found=True,
 
-            entity_id=domain_id,
+            entity_id=domain_entity.entity_id,
 
-            domain=canonical,
+            domain=domain_entity.canonical,
 
-            business_area=domain_metadata.get(
-                "business_area",
-                ""
-            ),
+            business_area=domain_entity.business_area,
 
-            impact_weight=float(
-                domain_metadata.get(
-                    "impact_weight",
-                    1.0,
-                )
-            ),
+            impact_weight=domain_entity.impact_weight,
 
-            source="ontology",
+            source=domain_entity.source,
 
-            metadata=domain_metadata,
+            metadata=domain_entity.metadata,
 
             reasoning=f"{action_category} + {object_category}",
 

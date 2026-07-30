@@ -15,7 +15,12 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_mode
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.metric_models import MetricKnowledge
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.measurement_models import MeasurementKnowledge
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.modifier_models import ModifierKnowledge
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.entity_models import KnowledgeEntity
 
+from app.intelligence.utilities.knowledge.knowledge_dependency.dependency_models import DependencyEdge
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.practice_models import (
+    PracticeKnowledge,
+)
 
 @dataclass
 class KnowledgeInterpretation:
@@ -35,6 +40,12 @@ class KnowledgeInterpretation:
     measurement: MeasurementKnowledge = field(default_factory=MeasurementKnowledge)
 
     modifiers: list[ModifierKnowledge] = field(default_factory=list)
+
+    practice: PracticeKnowledge = field(default_factory=PracticeKnowledge)
+
+    entities: list[KnowledgeEntity] = field(default_factory=list)
+
+    dependencies: list[DependencyEdge] = field(default_factory=list)
 
     # ---------------------------------------------------------
     # Business Interpretation
