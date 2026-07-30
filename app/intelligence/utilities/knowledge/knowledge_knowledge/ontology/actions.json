@@ -38,11 +38,16 @@
   },
 
   "implement": {
-    "entity_id": "ACT_IMPLEMENT",
-    "base": "implement",
-    "gerund": "implementing",
-    "category": "implementation"
-  },
+        "entity_id": "ACT_IMPLEMENT",
+        "base": "implement",
+        "gerund": "implementing",
+        "category": "implementation",
+        "aliases": [
+            "implemented",
+            "implements",
+            "implement"
+        ]
+    },
   "implementing": {
     "entity_id": "ACT_IMPLEMENT",
     "base": "implement",
@@ -319,5 +324,12 @@
     "base": "establish",
     "gerund": "establishing",
     "category": "establishment"
+  },
+  "performed": {
+    "entity_id": "ACT_PERFORM",
+    "base": "perform",
+    "gerund": "performing",
+    "category": "performance"
   }
+  
 }

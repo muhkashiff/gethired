@@ -4,92 +4,177 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
-from app.intelligence.utilities.knowledge.knowledge_parser.sentence_parser import SentenceParser
+"""
+Knowledge Pipeline Integration Test
 
-parser = SentenceParser()
+Tests the complete pipeline:
 
-sentence = parser.parse(
+Sentence
+    ↓
+Sentence Parser
+    ↓
+Knowledge Document
+    ↓
+Knowledge Graph
+    ↓
+Knowledge Profile
+    ↓
+Semantic Resolver
 
-    "Implemented FSSC22000 Quality Management System using Lean Manufacturing."
+"""
 
+from app.intelligence.utilities.knowledge.knowledge_pipeline.knowledge_pipeline import (
+    KnowledgePipeline,
 )
 
-print("=" * 80)
 
-print(sentence.original_text)
+TEST_SENTENCES = [
 
-print("=" * 80)
+    "Implemented FSSC22000 Quality Management System using Lean Manufacturing.",
 
-fact = sentence.facts[0]
+    "Led cross functional team of 25 employees.",
 
-interp = fact.interpretation
+    "Improved production yield from 70% to 99% using Six Sigma.",
 
-print()
+    "Reduced customer complaints by 80%.",
 
-print("ACTION")
+    "Managed Water Treatment Plant operations.",
 
-print(interp.action)
+    "Certified facility against ISO 9001 and FSSC22000.",
 
-print()
+    "Optimized production process through Kaizen methodology.",
 
-print("OBJECT")
+    "Developed HACCP plans for beverage manufacturing.",
 
-print(interp.object)
+    "Performed Root Cause Analysis using Fishbone Diagram.",
 
-print()
+    "Implemented GMP and Food Safety standards.",
 
-print("DOMAIN")
+]
 
-print(interp.domain)
 
-print()
+def print_header(title):
 
-print("METRIC")
+    print("\n" + "=" * 100)
+    print(title)
+    print("=" * 100)
 
-print(interp.metric)
 
-print()
+def print_document(document):
 
-print("MEASUREMENT")
+    print("\nDOCUMENT")
 
-print(interp.measurement)
+    print("-" * 50)
 
-print()
+    print(f"Sentences : {len(document.sentences)}")
+    print(f"Facts     : {len(document.facts)}")
+    print(f"Confidence: {document.confidence}")
 
-print("PRACTICE")
 
-print(interp.practice)
+def print_graph(graph_document):
 
-print()
+    graph = graph_document.graph
 
-print("ENTITIES")
+    print("\nGRAPH")
 
-for entity in interp.entities:
+    print("-" * 50)
 
-    print(
+    print(f"Nodes : {graph.node_count}")
+    print(f"Edges : {graph.edge_count}")
 
-        entity.entity_type,
+    print("\nNode Types")
 
-        entity.entity_id,
+    counts = {}
 
-        entity.canonical,
+    for node in graph.nodes:
 
-    )
+        counts[node.node_type] = counts.get(node.node_type, 0) + 1
 
-print()
+    for k, v in sorted(counts.items()):
 
-print("DEPENDENCIES")
+        print(f"{k:15} : {v}")
 
-for dep in interp.dependencies:
 
-    print(dep)
+def print_profile(profile):
 
-print()
+    print("\nPROFILE")
 
-print("ACHIEVEMENT :", interp.achievement)
+    print("-" * 50)
 
-print("CONFIDENCE  :", interp.confidence)
+    print(f"Overall Score      : {profile.summary.overall_score}")
+    print(f"Seniority Score    : {profile.summary.seniority_score}")
+    print(f"Leadership Score   : {profile.summary.leadership_score}")
+    print(f"Achievement Score  : {profile.summary.achievement_score}")
 
-print("IMPACT      :", interp.overall_impact_weight)
 
-print("EXPLANATION :", interp.explanation)
+def print_semantic(result):
+
+    print("\nSEMANTIC")
+
+    print("-" * 50)
+
+    print(f"Entities      : {len(result.entities)}")
+    print(f"Dependencies  : {len(result.dependencies)}")
+    print(f"Clusters      : {len(result.clusters)}")
+    print(f"Confidence    : {result.confidence}")
+
+    print("\nMetadata")
+
+    print(result.metadata)
+
+    print("\nClusters")
+
+    for cluster in result.clusters:
+
+        print(
+            f"{cluster.cluster_id}"
+            f" | {cluster.semantic_type}"
+            f" | {cluster.label}"
+            f" | {cluster.confidence}"
+        )
+
+        for entity in cluster.entities:
+
+            print(
+                f"    └── "
+                f"{entity.entity_type}"
+                f" : {entity.canonical}"
+            )
+
+    print("\nDependencies")
+
+    for dep in result.dependencies:
+
+        print(
+
+            f"{dep.source_entity}"
+
+            f" -- {dep.relation} --> "
+
+            f"{dep.target_entity}"
+
+        )
+
+
+def main():
+
+    pipeline = KnowledgePipeline()
+
+    for sentence in TEST_SENTENCES:
+
+        print_header(sentence)
+
+        result = pipeline.process(sentence)
+
+        print_document(result.knowledge_document)
+
+        print_graph(result.graph_document)
+
+        print_profile(result.knowledge_profile)
+
+        print_semantic(result.semantic_result)
+
+
+if __name__ == "__main__":
+
+    main()

@@ -6,7 +6,7 @@ used across every AI engine.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Any
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretation_models import (
     KnowledgeInterpretation,
@@ -102,12 +102,33 @@ class KnowledgeSentence:
 class KnowledgeDocument:
     """
     Complete parsed document.
+    Master object passed through every AI layer.
     """
+
+    # Original document
+
+    raw_text: str = ""
+
+    # NLP
 
     sentences: List[KnowledgeSentence] = field(default_factory=list)
 
     facts: List[KnowledgeFact] = field(default_factory=list)
 
+    # Statistics
+
     statistics: Dict = field(default_factory=dict)
 
     confidence: float = 0.0
+
+    # -----------------------------
+    # Pipeline Objects
+    # -----------------------------
+
+    interpretation: Any = None
+
+    graph: Any = None
+
+    semantic_result: Any = None
+
+    knowledge_profile: Any = None

@@ -1,55 +1,78 @@
 """
 Semantic Connector Detector
 
-Some connectors indicate continuation of
-the same achievement.
+Detects semantic connectors between entities.
 
-Examples
+Example
 
-by
-through
+Implemented ISO 9001 using Lean Manufacturing.
+
+Connector:
 using
-via
-with
-while
-after
-before
 
-These should remain attached to
-the previous clause.
+Relation:
+achieved_using
 """
+
+import re
 
 
 class SemanticConnectorDetector:
 
     def __init__(self):
 
-        self.connectors = {
+        self.rules = {
 
-            "by",
-            "through",
-            "using",
-            "via",
-            "with",
-            "while",
-            "after",
-            "before",
-            "without",
-            "including",
-            "leveraging"
+            "using": "achieved_using",
+
+            "through": "achieved_through",
+
+            "via": "achieved_using",
+
+            "by": "performed_by",
+
+            "with": "performed_with",
+
+            "to": "resulting_in",
+
+            "for": "supports",
+
+            "into": "transformed_into",
+
+            "from": "derived_from",
+
+            "across": "applies_to",
+
+            "within": "belongs_to",
+
+            "under": "governed_by",
 
         }
 
-    # --------------------------------------------------
+    # ----------------------------------------------------------
 
-    def is_connector(self, text):
+    def detect(self, sentence):
 
-        text = text.lower().strip()
+        sentence = sentence.lower()
 
-        for connector in self.connectors:
+        found = []
 
-            if text.startswith(connector + " "):
+        for connector, relation in self.rules.items():
 
-                return True
+            pattern = r"\b" + re.escape(connector) + r"\b"
 
-        return False
+            if re.search(pattern, sentence):
+
+                found.append(
+
+                    {
+
+                        "connector": connector,
+
+                        "relation": relation,
+
+                    }
+
+                )
+
+        return found

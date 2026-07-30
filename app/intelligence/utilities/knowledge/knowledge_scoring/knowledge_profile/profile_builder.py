@@ -130,32 +130,32 @@ class ProfileBuilder:
         # Summary
         # -------------------------------------------------
 
-        profile.summary.career_level = (
-            profile.seniority.level
-        )
+        profile.summary.career_level = profile.seniority.level
 
-        profile.summary.seniority_score = (
-            profile.seniority.score
-        )
+        profile.summary.seniority_score = profile.seniority.score
 
-        profile.summary.leadership_score = (
-            profile.leadership.score
-        )
+        profile.summary.leadership_score = profile.leadership.score
 
         profile.summary.achievement_score = (
             profile.achievement.overall_score
         )
 
-        profile.summary.overall_score = round(
+        profile.summary.overall_score = self._calculate_overall_score(profile)
+
+        return profile
+
+    # -----------------------------------------------------
+    # Helper
+    # -----------------------------------------------------
+
+    def _calculate_overall_score(self, profile):
+
+        return round(
 
             profile.summary.seniority_score
-
             + profile.summary.leadership_score
-
             + profile.summary.achievement_score,
 
             2,
 
         )
-
-        return profile

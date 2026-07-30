@@ -63,12 +63,21 @@ from app.intelligence.utilities.knowledge.knowledge_parser.purpose_clause_detect
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_connector_detector import (
     SemanticConnectorDetector,
 )
+from app.intelligence.utilities.knowledge.knowledge_pipeline.pipeline_result import (
+    PipelineResult,
+)
+from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_resolver import (
+    SemanticResolver,
+)
+
 
 class KnowledgePipeline:
 
     def __init__(self):
 
         self.connector_detector = SemanticConnectorDetector()
+
+        self.semantic_resolver = SemanticResolver()
 
         self.purpose_detector = PurposeClauseDetector()
 
@@ -326,7 +335,7 @@ class KnowledgePipeline:
 
         graph_document = self.graph_builder.build(
 
-            document
+            knowledge_document = document
 
         )
 
@@ -340,16 +349,25 @@ class KnowledgePipeline:
 
         )
 
+        semantic_result = self.semantic_resolver.resolve(
+            document.facts
+        )
+
         # ==================================================
         # Unified Pipeline Result
         # ==================================================
 
-        return {
+        
+        return PipelineResult(
 
-            "knowledge_document": document,
+            knowledge_document=document,
 
-            "graph_document": graph_document,
+            graph_document=graph_document,
 
-            "knowledge_profile": knowledge_profile,
+            knowledge_profile=knowledge_profile,
 
-        }
+            semantic_result=semantic_result,
+
+            )
+
+        

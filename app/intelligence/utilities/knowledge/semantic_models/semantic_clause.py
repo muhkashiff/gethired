@@ -1,80 +1,57 @@
 """
 Semantic Clause
 
-Represents one fully interpreted clause.
+Represents one semantic clause extracted from a sentence.
 
-Every AI engine should consume SemanticClause
-instead of rerunning extractors.
+Example
+
+Implemented ISO 9001 using Lean Manufacturing.
+
+A sentence may contain multiple clauses.
 """
 
 from dataclasses import dataclass, field
 
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.action_models import (
-    ActionKnowledge,
+from app.intelligence.utilities.knowledge.knowledge_models import (
+    KnowledgeFact,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.object_models import (
-    ObjectKnowledge,
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.entity_models import (
+    KnowledgeEntity,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_models import (
-    DomainKnowledge,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.metric_models import (
-    MetricKnowledge,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.measurement_models import (
-    MeasurementKnowledge,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.modifier_models import (
-    ModifierKnowledge,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretation_models import (
-    KnowledgeInterpretation,
+from app.intelligence.utilities.knowledge.knowledge_dependency.dependency_models import (
+    DependencyEdge,
 )
 
 
 @dataclass
 class SemanticClause:
 
+    # ---------------------------------------------------------
+    # Original text
+    # ---------------------------------------------------------
+
     text: str = ""
 
-    normalized_text: str = ""
+    # ---------------------------------------------------------
+    # Parsed knowledge
+    # ---------------------------------------------------------
 
-    index: int = 0
+    facts: list[KnowledgeFact] = field(default_factory=list)
 
-    parent_sentence: str = ""
+    entities: list[KnowledgeEntity] = field(default_factory=list)
+
+    dependencies: list[DependencyEdge] = field(default_factory=list)
+
+    # ---------------------------------------------------------
+    # Metadata
+    # ---------------------------------------------------------
 
     confidence: float = 0.0
 
-    action: ActionKnowledge = field(default_factory=ActionKnowledge)
-
-    object: ObjectKnowledge = field(default_factory=ObjectKnowledge)
-
-    domain: DomainKnowledge = field(default_factory=DomainKnowledge)
-
-    metric: MetricKnowledge = field(default_factory=MetricKnowledge)
-
-    measurement: MeasurementKnowledge = field(default_factory=MeasurementKnowledge)
-
-    modifiers: list[ModifierKnowledge] = field(default_factory=list)
-
-    interpretation: KnowledgeInterpretation = field(
-        default_factory=KnowledgeInterpretation
-    )
-
-    achievement: bool = False
-
-    quantified: bool = False
-
-    executive_signal: bool = False
-
-    semantic_type: str = ""
-
-    business_area: str = ""
+    clause_index: int = 0
 
     source: str = "resume"
+
+    metadata: dict = field(default_factory=dict)
