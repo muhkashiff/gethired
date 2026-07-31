@@ -36,6 +36,8 @@ class SemanticEntity:
 
             original: str = ""
 
+            matched_text: str = ""
+
             category: str = ""
 
             business_area: str = ""
@@ -294,3 +296,30 @@ def __repr__(self):
 KnowledgeEntity = SemanticEntity
 DependencyEdge = SemanticDependency
 SemanticResult = SemanticResolution
+
+# ============================================================
+# Business Statement
+# ============================================================
+
+@dataclass
+class BusinessStatement:
+
+    statement_id: str = ""
+
+    action: SemanticEntity | None = None
+
+    targets: list[SemanticEntity] = field(default_factory=list)
+
+    methods: list[SemanticEntity] = field(default_factory=list)
+
+    standards: list[SemanticEntity] = field(default_factory=list)
+
+    skills: list[SemanticEntity] = field(default_factory=list)
+
+    metrics: list[SemanticEntity] = field(default_factory=list)
+
+    domains: list[SemanticEntity] = field(default_factory=list)
+
+    dependencies: list[SemanticDependency] = field(default_factory=list)
+
+    confidence: float = 1.0

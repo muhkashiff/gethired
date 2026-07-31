@@ -1,208 +1,81 @@
 """
-Advanced Cluster Builder V3
+Advanced Cluster Builder V4
 
-Creates semantic business-event clusters instead of simply
-grouping connected nodes.
+Builds semantic clusters directly from Business Statements.
 
-Priority
-
-Action
-    ↓
-Object
-    ↓
-Standard
-    ↓
-Methodology
-    ↓
-KPI / Metric
-    ↓
-Measurement
-    ↓
-Domain
-    ↓
-Skill
+Business Statement
+        ↓
+Semantic Cluster
 """
 
-from collections import defaultdict
+import uuid
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
     SemanticCluster,
+    SemanticMetadata,
 )
 
 
 class ClusterBuilder:
 
-    def build(self, entities, dependencies):
-
-        if not entities:
-            return []
-
-        entity_lookup = {
-            entity.entity_id: entity
-            for entity in entities
-        }
-
-        # --------------------------------------------
-        # Build adjacency map
-        # --------------------------------------------
-
-        adjacency = defaultdict(set)
-
-        for edge in dependencies:
-
-            adjacency[edge.source_entity].add(edge.target_entity)
-            adjacency[edge.target_entity].add(edge.source_entity)
-
-        # --------------------------------------------
-        # Business event anchors
-        # --------------------------------------------
-
-        anchors = [
-            entity
-            for entity in entities
-            if entity.entity_type == "action"
-        ]
-
-        visited = set()
+    def build(self, business_statements):
 
         clusters = []
 
-        cluster_number = 1
-
-        # --------------------------------------------
-        # Build clusters around every action
-        # --------------------------------------------
-
-        for action in anchors:
-
-            if action.entity_id in visited:
-                continue
-
-            cluster_entities = {}
-
-            queue = [action.entity_id]
-
-            while queue:
-
-                current = queue.pop(0)
-
-                if current in visited:
-                    continue
-
-                visited.add(current)
-
-                entity = entity_lookup.get(current)
-
-                if entity:
-
-                    cluster_entities[current] = entity
-
-                for neighbour in adjacency[current]:
-
-                    if neighbour not in visited:
-
-                        queue.append(neighbour)
+        for statement in business_statements:
 
             cluster = SemanticCluster()
 
-            cluster.cluster_id = f"CLUSTER_{cluster_number}"
+            # -----------------------------------
+            # Identity
+            # -----------------------------------
 
-            cluster.entities = list(cluster_entities.values())
+            cluster.cluster_id = (
 
-            cluster.dependencies = [
+                "CLUSTER_"
 
-                edge
+                + uuid.uuid4().hex[:8].upper()
 
-                for edge in dependencies
-
-                if edge.source_entity in cluster_entities
-                and edge.target_entity in cluster_entities
-
-            ]
-            cluster.confidence = self._cluster_confidence(cluster)
-            
-            clusters.append(cluster)
-
-            cluster_number += 1
-
-        # --------------------------------------------
-        # Remaining isolated entities
-        # --------------------------------------------
-
-        remaining = [
-
-            entity
-
-            for entity in entities
-
-            if entity.entity_id not in visited
-
-        ]
-
-        priority = [
-
-            "object",
-            "standard",
-            "methodology",
-            "kpi",
-            "metric",
-            "measurement",
-            "domain",
-            "skill",
-        ]
-
-        for entity_type in priority:
-
-            matching = [
-
-                entity
-
-                for entity in remaining
-
-                if entity.entity_type == entity_type
-
-            ]
-
-            if not matching:
-                continue
-
-            cluster = SemanticCluster()
-
-            cluster.cluster_id = f"CLUSTER_{cluster_number}"
-
-            cluster.entities = matching
-
-            cluster.dependencies = []
-
-            clusters.append(cluster)
-
-            cluster_number += 1
-
-            for entity in matching:
-                visited.add(entity.entity_id)
-
-        return clusters
-    # ==================================================
-
-    def _cluster_confidence(self, cluster):
-
-        if not cluster.entities:
-            return 0.0
-
-        entity_conf = sum(
-            e.confidence
-            for e in cluster.entities
-        ) / len(cluster.entities)
-
-        if cluster.dependencies:
-            dep_conf = sum(
-                d.confidence
-                for d in cluster.dependencies
-            ) / len(cluster.dependencies)
-
-            return round(
-                (entity_conf * 0.6) + (dep_conf * 0.4),
-                2,
             )
 
-        return round(entity_conf, 2)
+            cluster.label = statement.label
+
+            cluster.semantic_type = statement.semantic_type
+
+            cluster.confidence = statement.confidence
+
+            # -----------------------------------
+            # Entities
+            # -----------------------------------
+
+            cluster.entities = list(statement.entities)
+
+            # -----------------------------------
+            # Dependencies
+            # -----------------------------------
+
+            cluster.dependencies = list(
+
+                statement.dependencies
+
+            )
+
+            # -----------------------------------
+            # Metadata
+            # -----------------------------------
+
+            cluster.metadata = SemanticMetadata(
+
+                primary_domain=statement.primary_domain,
+
+                primary_business_area=statement.primary_business_area,
+
+                semantic_type=statement.semantic_type,
+
+                achievement=statement.achievement,
+
+            )
+
+            clusters.append(cluster)
+
+        return clusters

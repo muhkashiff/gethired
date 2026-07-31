@@ -39,11 +39,15 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models imp
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
         SemanticEntity,
     )
-
+from app.intelligence.utilities.knowledge.semantic_reasoning.business_statement_builder import (
+    BusinessStatementBuilder,
+)
 
 class SemanticResolver:
 
     def __init__(self):
+
+        self.statement_builder = BusinessStatementBuilder()
 
         self.dependency_resolver = DependencyResolver()
 
@@ -81,13 +85,21 @@ class SemanticResolver:
 
         result.dependencies = dependencies
 
+
+        business_statements = (
+                self.statement_builder.build(
+                    entities,
+                    dependencies,
+                )
+            )
+
+
         # -----------------------------------------------------
         # Clusters
         # -----------------------------------------------------
 
         clusters = self.cluster_builder.build(
-            entities,
-            dependencies,
+            business_statements
         )
 
         classified = []
