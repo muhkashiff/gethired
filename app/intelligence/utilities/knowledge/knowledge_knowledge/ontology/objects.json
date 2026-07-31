@@ -1,196 +1,1445 @@
 {
-  
   "engineers": {
     "entity_id": "OBJ_ENGINEERS",
     "canonical": "Engineers",
-    "category": "people"
-  },
-  "engineer": {
-    "entity_id": "OBJ_ENGINEERS",
-    "canonical": "Engineers",
-    "category": "people"
-  },
-  
-  "customers": {
-    "entity_id": "OBJ_CUSTOMERS",
-    "canonical": "Customers",
-    "category": "customer"
-  },
-  "customer": {
-    "entity_id": "OBJ_CUSTOMERS",
-    "canonical": "Customers",
-    "category": "customer"
-  },
- 
-  "production line": {
-    "entity_id": "OBJ_PRODUCTION_LINE",
-    "canonical": "Production Line",
-    "category": "operations"
-  },
-  
-  "facility": {
-    "entity_id": "OBJ_MANUFACTURING_FACILITY",
-    "canonical": "Manufacturing Facility",
-    "category": "operations"
-  },
-  "equipment": {
-    "entity_id": "OBJ_EQUIPMENT",
-    "canonical": "Equipment",
-    "category": "operations"
-  },
-  "machine": {
-    "entity_id": "OBJ_EQUIPMENT",
-    "canonical": "Equipment",
-    "category": "operations"
-  },
-  "machines": {
-    "entity_id": "OBJ_EQUIPMENT",
-    "canonical": "Equipment",
-    "category": "operations"
-  },
-  
-  "warehouse": {
-    "entity_id": "OBJ_WAREHOUSE",
-    "canonical": "Warehouse",
-    "category": "supply_chain"
-  },
-  "supplier": {
-    "entity_id": "OBJ_SUPPLIER",
-    "canonical": "Supplier",
-    "category": "supply_chain"
-  },
-  "suppliers": {
-    "entity_id": "OBJ_SUPPLIER",
-    "canonical": "Supplier",
-    "category": "supply_chain"
-  },
-  "materials": {
-    "entity_id": "OBJ_MATERIALS",
-    "canonical": "Materials",
-    "category": "supply_chain"
-  },
-  "raw materials": {
-    "entity_id": "OBJ_RAW_MATERIALS",
-    "canonical": "Raw Materials",
-    "category": "supply_chain"
-  },
-  "process": {
-    "entity_id": "OBJ_PROCESS",
-    "canonical": "Process",
-    "category": "operations"
-  },
-  "processes": {
-    "entity_id": "OBJ_PROCESS",
-    "canonical": "Process",
-    "category": "operations"
-  },
-  
-  "qms": {
-    "entity_id": "OBJ_QMS",
-    "canonical": "Quality Management System",
-    "category": "quality"
-  },
-  "food safety management system": {
-    "entity_id": "OBJ_FSMS",
-    "canonical": "Food Safety Management System",
-    "category": "food_safety"
-  },
-  "fsms": {
-    "entity_id": "OBJ_FSMS",
-    "canonical": "Food Safety Management System",
-    "category": "food_safety"
-  },
-  "haccp": {
-    "entity_id": "OBJ_HACCP",
-    "canonical": "HACCP",
-    "category": "food_safety"
-  },
-  "gmp": {
-    "entity_id": "OBJ_GMP",
-    "canonical": "GMP",
-    "category": "food_safety"
-  },
-
-  "total productive maintenance": {
-    "entity_id": "OBJ_TPM",
-    "canonical": "TPM",
-    "category": "maintenance"
-  },
-  "project": {
-    "entity_id": "OBJ_PROJECT",
-    "canonical": "Project",
-    "category": "management"
-  },
-  "audit": {
-    "entity_id": "OBJ_AUDIT",
-    "canonical": "Audit",
-    "category": "governance"
-  },
-  "training": {
-    "entity_id": "OBJ_TRAINING",
-    "canonical": "Training",
-    "category": "people"
-  },
-  
-  "employees": {
-    "entity_id": "OBJ_STAFF",
-    "canonical": "Staff",
-    "category": "people"
-  },
-  "employee": {
-    "entity_id": "OBJ_STAFF",
-    "canonical": "Staff",
-    "category": "people"
-  },
-  "staff": {
-    "entity_id": "OBJ_STAFF",
-    "canonical": "Staff",
-    "category": "people"
+    "aliases": [
+      "Engineers",
+      "engineers"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
   },
   "operators": {
     "entity_id": "OBJ_OPERATORS",
     "canonical": "Operators",
-    "category": "people"
+    "aliases": [
+      "Operators",
+      "operators"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
   },
-  "operator": {
-    "entity_id": "OBJ_OPERATORS",
-    "canonical": "Operators",
-    "category": "people"
+  "staff": {
+    "entity_id": "OBJ_STAFF",
+    "canonical": "Staff",
+    "aliases": [
+      "Staff",
+      "staff"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "managers": {
+    "entity_id": "OBJ_MANAGERS",
+    "canonical": "Managers",
+    "aliases": [
+      "Managers",
+      "managers"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "supervisors": {
+    "entity_id": "OBJ_SUPERVISORS",
+    "canonical": "Supervisors",
+    "aliases": [
+      "Supervisors",
+      "supervisors"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
   },
   "team": {
     "entity_id": "OBJ_TEAM",
     "canonical": "Team",
-    "category": "people"
+    "aliases": [
+      "Team",
+      "team"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "employees": {
+    "entity_id": "OBJ_EMPLOYEES",
+    "canonical": "Employees",
+    "aliases": [
+      "Employees",
+      "employees"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "auditors": {
+    "entity_id": "OBJ_AUDITORS",
+    "canonical": "Auditors",
+    "aliases": [
+      "Auditors",
+      "auditors"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "inspectors": {
+    "entity_id": "OBJ_INSPECTORS",
+    "canonical": "Inspectors",
+    "aliases": [
+      "Inspectors",
+      "inspectors"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "technicians": {
+    "entity_id": "OBJ_TECHNICIANS",
+    "canonical": "Technicians",
+    "aliases": [
+      "Technicians",
+      "technicians"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "analysts": {
+    "entity_id": "OBJ_ANALYSTS",
+    "canonical": "Analysts",
+    "aliases": [
+      "Analysts",
+      "analysts"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "consultants": {
+    "entity_id": "OBJ_CONSULTANTS",
+    "canonical": "Consultants",
+    "aliases": [
+      "Consultants",
+      "consultants"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "customers": {
+    "entity_id": "OBJ_CUSTOMERS",
+    "canonical": "Customers",
+    "aliases": [
+      "Customers",
+      "customers"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "suppliers": {
+    "entity_id": "OBJ_SUPPLIERS",
+    "canonical": "Suppliers",
+    "aliases": [
+      "Suppliers",
+      "suppliers"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "vendors": {
+    "entity_id": "OBJ_VENDORS",
+    "canonical": "Vendors",
+    "aliases": [
+      "Vendors",
+      "vendors"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "contractors": {
+    "entity_id": "OBJ_CONTRACTORS",
+    "canonical": "Contractors",
+    "aliases": [
+      "Contractors",
+      "contractors"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "leadership team": {
+    "entity_id": "OBJ_LEADERSHIP_TEAM",
+    "canonical": "Leadership Team",
+    "aliases": [
+      "Leadership Team",
+      "leadership team"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "cross functional team": {
+    "entity_id": "OBJ_CROSS_FUNCTIONAL_TEAM",
+    "canonical": "Cross Functional Team",
+    "aliases": [
+      "Cross Functional Team",
+      "cross functional team"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "production team": {
+    "entity_id": "OBJ_PRODUCTION_TEAM",
+    "canonical": "Production Team",
+    "aliases": [
+      "Production Team",
+      "production team"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "quality team": {
+    "entity_id": "OBJ_QUALITY_TEAM",
+    "canonical": "Quality Team",
+    "aliases": [
+      "Quality Team",
+      "quality team"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "maintenance team": {
+    "entity_id": "OBJ_MAINTENANCE_TEAM",
+    "canonical": "Maintenance Team",
+    "aliases": [
+      "Maintenance Team",
+      "maintenance team"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "warehouse staff": {
+    "entity_id": "OBJ_WAREHOUSE_STAFF",
+    "canonical": "Warehouse Staff",
+    "aliases": [
+      "Warehouse Staff",
+      "warehouse staff"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "drivers": {
+    "entity_id": "OBJ_DRIVERS",
+    "canonical": "Drivers",
+    "aliases": [
+      "Drivers",
+      "drivers"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "trainers": {
+    "entity_id": "OBJ_TRAINERS",
+    "canonical": "Trainers",
+    "aliases": [
+      "Trainers",
+      "trainers"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "mentors": {
+    "entity_id": "OBJ_MENTORS",
+    "canonical": "Mentors",
+    "aliases": [
+      "Mentors",
+      "mentors"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "stakeholders": {
+    "entity_id": "OBJ_STAKEHOLDERS",
+    "canonical": "Stakeholders",
+    "aliases": [
+      "Stakeholders",
+      "stakeholders"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "clients": {
+    "entity_id": "OBJ_CLIENTS",
+    "canonical": "Clients",
+    "aliases": [
+      "Clients",
+      "clients"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "users": {
+    "entity_id": "OBJ_USERS",
+    "canonical": "Users",
+    "aliases": [
+      "Users",
+      "users"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "executives": {
+    "entity_id": "OBJ_EXECUTIVES",
+    "canonical": "Executives",
+    "aliases": [
+      "Executives",
+      "executives"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "workers": {
+    "entity_id": "OBJ_WORKERS",
+    "canonical": "Workers",
+    "aliases": [
+      "Workers",
+      "workers"
+    ],
+    "category": "People",
+    "business_area": "People",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  
+  "production line": {
+    "entity_id": "OBJ_PRODUCTION_LINE",
+    "canonical": "Production Line",
+    "aliases": [
+      "Production Line",
+      "production line"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
   },
   "manufacturing facility": {
     "entity_id": "OBJ_MANUFACTURING_FACILITY",
     "canonical": "Manufacturing Facility",
-    "category": "operations"
+    "aliases": [
+      "Manufacturing Facility",
+      "manufacturing facility"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
   },
-  "production": {
-    "entity_id": "OBJ_PRODUCTION",
-    "canonical": "Production",
-    "category": "operations"
+  "equipment": {
+    "entity_id": "OBJ_EQUIPMENT",
+    "canonical": "Equipment",
+    "aliases": [
+      "Equipment",
+      "equipment"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
   },
-  "downtime": {
-    "entity_id": "OBJ_DOWNTIME",
-    "canonical": "Downtime",
-    "category": "operations"
+  "machine": {
+    "entity_id": "OBJ_MACHINE",
+    "canonical": "Machine",
+    "aliases": [
+      "Machine",
+      "machine"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
   },
-  "customer complaints": {
-    "entity_id": "OBJ_CUSTOMER_COMPLAINTS",
-    "canonical": "Customer Complaints",
-    "category": "quality"
-  },
-  "quality management system": {
-    "entity_id": "OBJ_QUALITY_MANAGEMENT_SYSTEM",
-    "canonical": "Quality Management System",
-    "category": "quality"
+  "warehouse": {
+    "entity_id": "OBJ_WAREHOUSE",
+    "canonical": "Warehouse",
+    "aliases": [
+      "Warehouse",
+      "warehouse"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
   },
   "inventory": {
     "entity_id": "OBJ_INVENTORY",
     "canonical": "Inventory",
-    "category": "supply_chain"
+    "aliases": [
+      "Inventory",
+      "inventory"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "raw materials": {
+    "entity_id": "OBJ_RAW_MATERIALS",
+    "canonical": "Raw Materials",
+    "aliases": [
+      "Raw Materials",
+      "raw materials"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "finished goods": {
+    "entity_id": "OBJ_FINISHED_GOODS",
+    "canonical": "Finished Goods",
+    "aliases": [
+      "Finished Goods",
+      "finished goods"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "batch": {
+    "entity_id": "OBJ_BATCH",
+    "canonical": "Batch",
+    "aliases": [
+      "Batch",
+      "batch"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "process": {
+    "entity_id": "OBJ_PROCESS",
+    "canonical": "Process",
+    "aliases": [
+      "Process",
+      "process"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "production": {
+    "entity_id": "OBJ_PRODUCTION",
+    "canonical": "Production",
+    "aliases": [
+      "Production",
+      "production"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "utilities": {
+    "entity_id": "OBJ_UTILITIES",
+    "canonical": "Utilities",
+    "aliases": [
+      "Utilities",
+      "utilities"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "water treatment plant": {
+    "entity_id": "OBJ_WATER_TREATMENT_PLANT",
+    "canonical": "Water Treatment Plant",
+    "aliases": [
+      "Water Treatment Plant",
+      "water treatment plant"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "packaging line": {
+    "entity_id": "OBJ_PACKAGING_LINE",
+    "canonical": "Packaging Line",
+    "aliases": [
+      "Packaging Line",
+      "packaging line"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "filling line": {
+    "entity_id": "OBJ_FILLING_LINE",
+    "canonical": "Filling Line",
+    "aliases": [
+      "Filling Line",
+      "filling line"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "blowing line": {
+    "entity_id": "OBJ_BLOWING_LINE",
+    "canonical": "Blowing Line",
+    "aliases": [
+      "Blowing Line",
+      "blowing line"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "laboratory": {
+    "entity_id": "OBJ_LABORATORY",
+    "canonical": "Laboratory",
+    "aliases": [
+      "Laboratory",
+      "laboratory"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "syrup room": {
+    "entity_id": "OBJ_SYRUP_ROOM",
+    "canonical": "Syrup Room",
+    "aliases": [
+      "Syrup Room",
+      "syrup room"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "work order": {
+    "entity_id": "OBJ_WORK_ORDER",
+    "canonical": "Work Order",
+    "aliases": [
+      "Work Order",
+      "work order"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "shift": {
+    "entity_id": "OBJ_SHIFT",
+    "canonical": "Shift",
+    "aliases": [
+      "Shift",
+      "shift"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "recipe": {
+    "entity_id": "OBJ_RECIPE",
+    "canonical": "Recipe",
+    "aliases": [
+      "Recipe",
+      "recipe"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "formula": {
+    "entity_id": "OBJ_FORMULA",
+    "canonical": "Formula",
+    "aliases": [
+      "Formula",
+      "formula"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "pallet": {
+    "entity_id": "OBJ_PALLET",
+    "canonical": "Pallet",
+    "aliases": [
+      "Pallet",
+      "pallet"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "carton": {
+    "entity_id": "OBJ_CARTON",
+    "canonical": "Carton",
+    "aliases": [
+      "Carton",
+      "carton"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "bottle": {
+    "entity_id": "OBJ_BOTTLE",
+    "canonical": "Bottle",
+    "aliases": [
+      "Bottle",
+      "bottle"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "closure": {
+    "entity_id": "OBJ_CLOSURE",
+    "canonical": "Closure",
+    "aliases": [
+      "Closure",
+      "closure"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "label": {
+    "entity_id": "OBJ_LABEL",
+    "canonical": "Label",
+    "aliases": [
+      "Label",
+      "label"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "sku": {
+    "entity_id": "OBJ_SKU",
+    "canonical": "SKU",
+    "aliases": [
+      "SKU",
+      "sku"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "distribution center": {
+    "entity_id": "OBJ_DISTRIBUTION_CENTER",
+    "canonical": "Distribution Center",
+    "aliases": [
+      "Distribution Center",
+      "distribution center"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "fleet": {
+    "entity_id": "OBJ_FLEET",
+    "canonical": "Fleet",
+    "aliases": [
+      "Fleet",
+      "fleet"
+    ],
+    "category": "Operations",
+    "business_area": "Operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  
+  "quality management system": {
+    "entity_id": "OBJ_QUALITY_MANAGEMENT_SYSTEM",
+    "canonical": "Quality Management System",
+    "aliases": [
+      "Quality Management System",
+      "quality management system"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "food safety management system": {
+    "entity_id": "OBJ_FOOD_SAFETY_MANAGEMENT_SYSTEM",
+    "canonical": "Food Safety Management System",
+    "aliases": [
+      "Food Safety Management System",
+      "food safety management system"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "haccp plan": {
+    "entity_id": "OBJ_HACCP_PLAN",
+    "canonical": "HACCP Plan",
+    "aliases": [
+      "HACCP Plan",
+      "haccp plan"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "capa": {
+    "entity_id": "OBJ_CAPA",
+    "canonical": "CAPA",
+    "aliases": [
+      "CAPA",
+      "capa"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "risk assessment": {
+    "entity_id": "OBJ_RISK_ASSESSMENT",
+    "canonical": "Risk Assessment",
+    "aliases": [
+      "Risk Assessment",
+      "risk assessment"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "change control": {
+    "entity_id": "OBJ_CHANGE_CONTROL",
+    "canonical": "Change Control",
+    "aliases": [
+      "Change Control",
+      "change control"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "validation": {
+    "entity_id": "OBJ_VALIDATION",
+    "canonical": "Validation",
+    "aliases": [
+      "Validation",
+      "validation"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "verification": {
+    "entity_id": "OBJ_VERIFICATION",
+    "canonical": "Verification",
+    "aliases": [
+      "Verification",
+      "verification"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "calibration": {
+    "entity_id": "OBJ_CALIBRATION",
+    "canonical": "Calibration",
+    "aliases": [
+      "Calibration",
+      "calibration"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "audit": {
+    "entity_id": "OBJ_AUDIT",
+    "canonical": "Audit",
+    "aliases": [
+      "Audit",
+      "audit"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "training program": {
+    "entity_id": "OBJ_TRAINING_PROGRAM",
+    "canonical": "Training Program",
+    "aliases": [
+      "Training Program",
+      "training program"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "sop": {
+    "entity_id": "OBJ_SOP",
+    "canonical": "SOP",
+    "aliases": [
+      "SOP",
+      "sop"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "work instruction": {
+    "entity_id": "OBJ_WORK_INSTRUCTION",
+    "canonical": "Work Instruction",
+    "aliases": [
+      "Work Instruction",
+      "work instruction"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "inspection record": {
+    "entity_id": "OBJ_INSPECTION_RECORD",
+    "canonical": "Inspection Record",
+    "aliases": [
+      "Inspection Record",
+      "inspection record"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "batch record": {
+    "entity_id": "OBJ_BATCH_RECORD",
+    "canonical": "Batch Record",
+    "aliases": [
+      "Batch Record",
+      "batch record"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "complaint record": {
+    "entity_id": "OBJ_COMPLAINT_RECORD",
+    "canonical": "Complaint Record",
+    "aliases": [
+      "Complaint Record",
+      "complaint record"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "supplier approval": {
+    "entity_id": "OBJ_SUPPLIER_APPROVAL",
+    "canonical": "Supplier Approval",
+    "aliases": [
+      "Supplier Approval",
+      "supplier approval"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "traceability system": {
+    "entity_id": "OBJ_TRACEABILITY_SYSTEM",
+    "canonical": "Traceability System",
+    "aliases": [
+      "Traceability System",
+      "traceability system"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "document control": {
+    "entity_id": "OBJ_DOCUMENT_CONTROL",
+    "canonical": "Document Control",
+    "aliases": [
+      "Document Control",
+      "document control"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "erp": {
+    "entity_id": "OBJ_ERP",
+    "canonical": "ERP",
+    "aliases": [
+      "ERP",
+      "erp"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "mes": {
+    "entity_id": "OBJ_MES",
+    "canonical": "MES",
+    "aliases": [
+      "MES",
+      "mes"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "scada": {
+    "entity_id": "OBJ_SCADA",
+    "canonical": "SCADA",
+    "aliases": [
+      "SCADA",
+      "scada"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "dashboard": {
+    "entity_id": "OBJ_DASHBOARD",
+    "canonical": "Dashboard",
+    "aliases": [
+      "Dashboard",
+      "dashboard"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "database": {
+    "entity_id": "OBJ_DATABASE",
+    "canonical": "Database",
+    "aliases": [
+      "Database",
+      "database"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "report": {
+    "entity_id": "OBJ_REPORT",
+    "canonical": "Report",
+    "aliases": [
+      "Report",
+      "report"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "kpi dashboard": {
+    "entity_id": "OBJ_KPI_DASHBOARD",
+    "canonical": "KPI Dashboard",
+    "aliases": [
+      "KPI Dashboard",
+      "kpi dashboard"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "project": {
+    "entity_id": "OBJ_PROJECT",
+    "canonical": "Project",
+    "aliases": [
+      "Project",
+      "project"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "program": {
+    "entity_id": "OBJ_PROGRAM",
+    "canonical": "Program",
+    "aliases": [
+      "Program",
+      "program"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "schedule": {
+    "entity_id": "OBJ_SCHEDULE",
+    "canonical": "Schedule",
+    "aliases": [
+      "Schedule",
+      "schedule"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "checklist": {
+    "entity_id": "OBJ_CHECKLIST",
+    "canonical": "Checklist",
+    "aliases": [
+      "Checklist",
+      "checklist"
+    ],
+    "category": "Systems",
+    "business_area": "Systems",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  
+  "customer complaints": {
+    "entity_id": "OBJ_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
+    "aliases": [
+      "Customer Complaints",
+      "customer complaints"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "supplier": {
+    "entity_id": "OBJ_SUPPLIER",
+    "canonical": "Supplier",
+    "aliases": [
+      "Supplier",
+      "supplier"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "purchase order": {
+    "entity_id": "OBJ_PURCHASE_ORDER",
+    "canonical": "Purchase Order",
+    "aliases": [
+      "Purchase Order",
+      "purchase order"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "sales order": {
+    "entity_id": "OBJ_SALES_ORDER",
+    "canonical": "Sales Order",
+    "aliases": [
+      "Sales Order",
+      "sales order"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "invoice": {
+    "entity_id": "OBJ_INVOICE",
+    "canonical": "Invoice",
+    "aliases": [
+      "Invoice",
+      "invoice"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "budget": {
+    "entity_id": "OBJ_BUDGET",
+    "canonical": "Budget",
+    "aliases": [
+      "Budget",
+      "budget"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "forecast": {
+    "entity_id": "OBJ_FORECAST",
+    "canonical": "Forecast",
+    "aliases": [
+      "Forecast",
+      "forecast"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "contract": {
+    "entity_id": "OBJ_CONTRACT",
+    "canonical": "Contract",
+    "aliases": [
+      "Contract",
+      "contract"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "policy": {
+    "entity_id": "OBJ_POLICY",
+    "canonical": "Policy",
+    "aliases": [
+      "Policy",
+      "policy"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "procedure": {
+    "entity_id": "OBJ_PROCEDURE",
+    "canonical": "Procedure",
+    "aliases": [
+      "Procedure",
+      "procedure"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "specification": {
+    "entity_id": "OBJ_SPECIFICATION",
+    "canonical": "Specification",
+    "aliases": [
+      "Specification",
+      "specification"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "certificate": {
+    "entity_id": "OBJ_CERTIFICATE",
+    "canonical": "Certificate",
+    "aliases": [
+      "Certificate",
+      "certificate"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "license": {
+    "entity_id": "OBJ_LICENSE",
+    "canonical": "License",
+    "aliases": [
+      "License",
+      "license"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "permit": {
+    "entity_id": "OBJ_PERMIT",
+    "canonical": "Permit",
+    "aliases": [
+      "Permit",
+      "permit"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "objective": {
+    "entity_id": "OBJ_OBJECTIVE",
+    "canonical": "Objective",
+    "aliases": [
+      "Objective",
+      "objective"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "target": {
+    "entity_id": "OBJ_TARGET",
+    "canonical": "Target",
+    "aliases": [
+      "Target",
+      "target"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "action plan": {
+    "entity_id": "OBJ_ACTION_PLAN",
+    "canonical": "Action Plan",
+    "aliases": [
+      "Action Plan",
+      "action plan"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "improvement plan": {
+    "entity_id": "OBJ_IMPROVEMENT_PLAN",
+    "canonical": "Improvement Plan",
+    "aliases": [
+      "Improvement Plan",
+      "improvement plan"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "business unit": {
+    "entity_id": "OBJ_BUSINESS_UNIT",
+    "canonical": "Business Unit",
+    "aliases": [
+      "Business Unit",
+      "business unit"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "department": {
+    "entity_id": "OBJ_DEPARTMENT",
+    "canonical": "Department",
+    "aliases": [
+      "Department",
+      "department"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "retail store": {
+    "entity_id": "OBJ_RETAIL_STORE",
+    "canonical": "Retail Store",
+    "aliases": [
+      "Retail Store",
+      "retail store"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "outlet": {
+    "entity_id": "OBJ_OUTLET",
+    "canonical": "Outlet",
+    "aliases": [
+      "Outlet",
+      "outlet"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "market": {
+    "entity_id": "OBJ_MARKET",
+    "canonical": "Market",
+    "aliases": [
+      "Market",
+      "market"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "region": {
+    "entity_id": "OBJ_REGION",
+    "canonical": "Region",
+    "aliases": [
+      "Region",
+      "region"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "supply chain": {
+    "entity_id": "OBJ_SUPPLY_CHAIN",
+    "canonical": "Supply Chain",
+    "aliases": [
+      "Supply Chain",
+      "supply chain"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "logistics": {
+    "entity_id": "OBJ_LOGISTICS",
+    "canonical": "Logistics",
+    "aliases": [
+      "Logistics",
+      "logistics"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "procurement": {
+    "entity_id": "OBJ_PROCUREMENT",
+    "canonical": "Procurement",
+    "aliases": [
+      "Procurement",
+      "procurement"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "finance": {
+    "entity_id": "OBJ_FINANCE",
+    "canonical": "Finance",
+    "aliases": [
+      "Finance",
+      "finance"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "hr": {
+    "entity_id": "OBJ_HR",
+    "canonical": "HR",
+    "aliases": [
+      "HR",
+      "hr"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "operations": {
+    "entity_id": "OBJ_OPERATIONS",
+    "canonical": "Operations",
+    "aliases": [
+      "Operations",
+      "operations"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "description": "",
+    "impact_weight": 1.0
   }
-
 }

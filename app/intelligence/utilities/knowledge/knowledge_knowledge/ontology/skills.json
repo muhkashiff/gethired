@@ -1,332 +1,1275 @@
 {
-  "Leadership": {
+  "leadership": {
     "entity_id": "SKILL_LEADERSHIP",
     "canonical": "Leadership",
-    "aliases": [
-      "Leadership",
-      "Leadership Skills"
-    ],
-    "category": "people_management",
+    "aliases": ["leadership","team leadership","leading teams"],
+    "category": "leadership",
     "business_area": "management",
-    "impact_weight": 1.0
+    "domain": "leadership",
+    "skill_type": "soft",
+    "related_actions":["ACT_LEAD","ACT_MANAGE"],
+    "related_objects":["OBJ_TEAM","OBJ_EMPLOYEES"],
+    "related_metrics":["KPI_EMPLOYEE_ENGAGEMENT"],
+    "related_standards":[],
+    "impact_weight":1.0
   },
-  "Team Building": {
-    "entity_id": "SKILL_TEAM_BUILDING",
-    "canonical": "Team Building",
-    "aliases": [
-      "Team Building",
-      "Team Building Skills"
-    ],
-    "category": "people_management",
-    "business_area": "management",
-    "impact_weight": 1.0
+
+  "people_management":{
+    "entity_id":"SKILL_PEOPLE_MANAGEMENT",
+    "canonical":"People Management",
+    "aliases":["managing people","team management"],
+    "category":"management",
+    "business_area":"management",
+    "domain":"leadership",
+    "skill_type":"leadership",
+    "related_actions":["ACT_MANAGE"],
+    "related_objects":["OBJ_TEAM"],
+    "related_metrics":["KPI_TEAM_PERFORMANCE"],
+    "related_standards":[],
+    "impact_weight":1.0
   },
-  "Problem Solving": {
-    "entity_id": "SKILL_PROBLEM_SOLVING",
-    "canonical": "Problem Solving",
-    "aliases": [
-      "Problem Solving",
-      "Problem Solving Skills"
-    ],
-    "category": "analytical",
-    "business_area": "general",
-    "impact_weight": 1.0
+
+  "team_building":{
+    "entity_id":"SKILL_TEAM_BUILDING",
+    "canonical":"Team Building",
+    "aliases":["building teams","team development"],
+    "category":"people",
+    "business_area":"management",
+    "domain":"leadership",
+    "skill_type":"soft",
+    "related_actions":["ACT_DEVELOP"],
+    "related_objects":["OBJ_TEAM"],
+    "related_metrics":["KPI_EMPLOYEE_ENGAGEMENT"],
+    "related_standards":[],
+    "impact_weight":0.95
   },
-  "Decision Making": {
-    "entity_id": "SKILL_DECISION_MAKING",
-    "canonical": "Decision Making",
-    "aliases": [
-      "Decision Making",
-      "Decision Making Skills"
-    ],
-    "category": "management",
-    "business_area": "management",
-    "impact_weight": 1.0
+
+  "coaching":{
+    "entity_id":"SKILL_COACHING",
+    "canonical":"Coaching",
+    "aliases":["coach","employee coaching"],
+    "category":"people",
+    "business_area":"management",
+    "domain":"people_development",
+    "skill_type":"soft",
+    "related_actions":["ACT_COACH"],
+    "related_objects":["OBJ_EMPLOYEES"],
+    "related_metrics":["KPI_TRAINING_EFFECTIVENESS"],
+    "related_standards":[],
+    "impact_weight":0.95
   },
-  "Communication": {
-    "entity_id": "SKILL_COMMUNICATION",
-    "canonical": "Communication",
-    "aliases": [
-      "Communication",
-      "Communication Skills"
-    ],
-    "category": "soft_skill",
-    "business_area": "general",
-    "impact_weight": 1.0
+
+  "mentoring":{
+    "entity_id":"SKILL_MENTORING",
+    "canonical":"Mentoring",
+    "aliases":["mentor","career mentoring"],
+    "category":"people",
+    "business_area":"management",
+    "domain":"people_development",
+    "skill_type":"soft",
+    "related_actions":["ACT_MENTOR"],
+    "related_objects":["OBJ_EMPLOYEES"],
+    "related_metrics":["KPI_TRAINING_EFFECTIVENESS"],
+    "related_standards":[],
+    "impact_weight":0.95
   },
-  "Training": {
-    "entity_id": "SKILL_TRAINING",
-    "canonical": "Training",
-    "aliases": [
-      "Training",
-      "Training Skills"
-    ],
-    "category": "people_development",
-    "business_area": "management",
-    "impact_weight": 1.0
+
+  "communication":{
+    "entity_id":"SKILL_COMMUNICATION",
+    "canonical":"Communication",
+    "aliases":["effective communication","verbal communication"],
+    "category":"soft_skill",
+    "business_area":"general",
+    "domain":"leadership",
+    "skill_type":"soft",
+    "related_actions":["ACT_COMMUNICATE"],
+    "related_objects":["OBJ_TEAM","OBJ_CUSTOMERS"],
+    "related_metrics":["KPI_CUSTOMER_SATISFACTION"],
+    "related_standards":[],
+    "impact_weight":1.0
   },
-  "Root Cause Analysis": {
-    "entity_id": "SKILL_ROOT_CAUSE_ANALYSIS",
-    "canonical": "Root Cause Analysis",
-    "aliases": [
-      "Root Cause Analysis",
-      "Root Cause Analysis Skills"
-    ],
-    "category": "analytical",
-    "business_area": "quality",
-    "impact_weight": 1.0
+
+  "presentation_skills":{
+    "entity_id":"SKILL_PRESENTATION",
+    "canonical":"Presentation Skills",
+    "aliases":["presenting","public speaking"],
+    "category":"soft_skill",
+    "business_area":"general",
+    "domain":"leadership",
+    "skill_type":"soft",
+    "related_actions":["ACT_PRESENT"],
+    "related_objects":["OBJ_TEAM"],
+    "related_metrics":[],
+    "related_standards":[],
+    "impact_weight":0.8
   },
-  "Auditing": {
-    "entity_id": "SKILL_AUDITING",
-    "canonical": "Auditing",
-    "aliases": [
-      "Auditing",
-      "Auditing Skills"
-    ],
-    "category": "quality",
-    "business_area": "quality",
-    "impact_weight": 1.0
+
+  "decision_making":{
+    "entity_id":"SKILL_DECISION_MAKING",
+    "canonical":"Decision Making",
+    "aliases":["decision making","making decisions"],
+    "category":"leadership",
+    "business_area":"management",
+    "domain":"leadership",
+    "skill_type":"soft",
+    "related_actions":["ACT_DECIDE"],
+    "related_objects":["OBJ_PROCESS"],
+    "related_metrics":["KPI_PRODUCTIVITY"],
+    "related_standards":[],
+    "impact_weight":1.0
   },
-  "Data Analysis": {
-    "entity_id": "SKILL_DATA_ANALYSIS",
-    "canonical": "Data Analysis",
-    "aliases": [
-      "Data Analysis",
-      "Data Analysis Skills"
-    ],
-    "category": "analytical",
-    "business_area": "general",
-    "impact_weight": 1.0
+
+  "problem_solving":{
+    "entity_id":"SKILL_PROBLEM_SOLVING",
+    "canonical":"Problem Solving",
+    "aliases":["problem solving","issue resolution"],
+    "category":"analytical",
+    "business_area":"general",
+    "domain":"problem_solving",
+    "skill_type":"soft",
+    "related_actions":["ACT_SOLVE"],
+    "related_objects":["OBJ_PROCESS"],
+    "related_metrics":["KPI_DOWNTIME"],
+    "related_standards":[],
+    "impact_weight":1.0
   },
-  "Continuous Improvement": {
-    "entity_id": "SKILL_CONTINUOUS_IMPROVEMENT",
-    "canonical": "Continuous Improvement",
-    "aliases": [
-      "Continuous Improvement",
-      "Continuous Improvement Skills"
-    ],
-    "category": "improvement",
-    "business_area": "operations",
-    "impact_weight": 1.0
+
+  "critical_thinking":{
+    "entity_id":"SKILL_CRITICAL_THINKING",
+    "canonical":"Critical Thinking",
+    "aliases":["analytical thinking"],
+    "category":"analytical",
+    "business_area":"general",
+    "domain":"analysis",
+    "skill_type":"soft",
+    "related_actions":["ACT_ANALYZE"],
+    "related_objects":["OBJ_PROCESS"],
+    "related_metrics":[],
+    "related_standards":[],
+    "impact_weight":0.9
   },
-  "Negotiation": {
-    "entity_id": "SKILL_NEGOTIATION",
-    "canonical": "Negotiation",
-    "aliases": [
-      "Negotiation",
-      "Negotiation Skills"
-    ],
-    "category": "soft_skill",
-    "business_area": "general",
-    "impact_weight": 1.0
-  },
-  "Conflict Resolution": {
-    "entity_id": "SKILL_CONFLICT_RESOLUTION",
-    "canonical": "Conflict Resolution",
-    "aliases": [
-      "Conflict Resolution",
-      "Conflict Resolution Skills"
-    ],
-    "category": "soft_skill",
-    "business_area": "management",
-    "impact_weight": 1.0
-  },
-  "Project Management": {
-    "entity_id": "SKILL_PROJECT_MANAGEMENT",
-    "canonical": "Project Management",
-    "aliases": [
-      "Project Management",
-      "Project Management Skills"
-    ],
-    "category": "management",
-    "business_area": "general",
-    "impact_weight": 1.0
-  },
-  "Risk Management": {
-    "entity_id": "SKILL_RISK_MANAGEMENT",
-    "canonical": "Risk Management",
-    "aliases": [
-      "Risk Management",
-      "Risk Management Skills"
-    ],
-    "category": "quality",
-    "business_area": "quality",
-    "impact_weight": 1.0
-  },
-  "Strategic Planning": {
-    "entity_id": "SKILL_STRATEGIC_PLANNING",
-    "canonical": "Strategic Planning",
-    "aliases": [
-      "Strategic Planning",
-      "Strategic Planning Skills"
-    ],
-    "category": "management",
-    "business_area": "management",
-    "impact_weight": 1.0
-  },
-  "Process Improvement": {
-    "entity_id": "SKILL_PROCESS_IMPROVEMENT",
-    "canonical": "Process Improvement",
-    "aliases": [
-      "Process Improvement",
-      "Process Improvement Skills"
-    ],
-    "category": "improvement",
-    "business_area": "operations",
-    "impact_weight": 1.0
-  },
-  "Coaching": {
-    "entity_id": "SKILL_COACHING",
-    "canonical": "Coaching",
-    "aliases": [
-      "Coaching",
-      "Coaching Skills"
-    ],
-    "category": "people_development",
-    "business_area": "management",
-    "impact_weight": 1.0
-  },
-  "Mentoring": {
-    "entity_id": "SKILL_MENTORING",
-    "canonical": "Mentoring",
-    "aliases": [
-      "Mentoring",
-      "Mentoring Skills"
-    ],
-    "category": "people_development",
-    "business_area": "management",
-    "impact_weight": 1.0
-  },
-  "Time Management": {
-    "entity_id": "SKILL_TIME_MANAGEMENT",
-    "canonical": "Time Management",
-    "aliases": [
-      "Time Management",
-      "Time Management Skills"
-    ],
-    "category": "soft_skill",
-    "business_area": "general",
-    "impact_weight": 1.0
-  },
-  "Change Management": {
-    "entity_id": "SKILL_CHANGE_MANAGEMENT",
-    "canonical": "Change Management",
-    "aliases": [
-      "Change Management",
-      "Change Management Skills"
-    ],
-    "category": "management",
-    "business_area": "operations",
-    "impact_weight": 1.0
-  },
-  "Customer Service": {
-    "entity_id": "SKILL_CUSTOMER_SERVICE",
-    "canonical": "Customer Service",
-    "aliases": [
-      "Customer Service",
-      "Customer Service Skills"
-    ],
-    "category": "customer",
-    "business_area": "retail",
-    "impact_weight": 1.0
-  },
-  "Inventory Management": {
-    "entity_id": "SKILL_INVENTORY_MANAGEMENT",
-    "canonical": "Inventory Management",
-    "aliases": [
-      "Inventory Management",
-      "Inventory Management Skills"
-    ],
-    "category": "operations",
-    "business_area": "supply_chain",
-    "impact_weight": 1.0
-  },
-  "Production Planning": {
-    "entity_id": "SKILL_PRODUCTION_PLANNING",
-    "canonical": "Production Planning",
-    "aliases": [
-      "Production Planning",
-      "Production Planning Skills"
-    ],
+  
+  "production_management": {
+    "entity_id": "SKILL_PRODUCTION_MANAGEMENT",
+    "canonical": "Production Management",
+    "aliases": ["production management","manufacturing management"],
     "category": "operations",
     "business_area": "manufacturing",
-    "impact_weight": 1.0
+    "domain": "operations_management",
+    "skill_type": "technical",
+    "related_actions":["ACT_MANAGE","ACT_IMPROVE"],
+    "related_objects":["OBJ_PRODUCTION"],
+    "related_metrics":["KPI_THROUGHPUT","KPI_YIELD"],
+    "related_standards":["STD_ISO_9001"],
+    "impact_weight":1.0
   },
-  "Quality Assurance": {
+
+  "manufacturing_operations":{
+    "entity_id":"SKILL_MANUFACTURING_OPERATIONS",
+    "canonical":"Manufacturing Operations",
+    "aliases":["manufacturing","factory operations"],
+    "category":"operations",
+    "business_area":"manufacturing",
+    "domain":"manufacturing",
+    "skill_type":"technical",
+    "related_actions":["ACT_MANAGE"],
+    "related_objects":["OBJ_MANUFACTURING_FACILITY"],
+    "related_metrics":["KPI_OEE"],
+    "related_standards":["STD_ISO_9001"],
+    "impact_weight":1.0
+  },
+
+  "production_planning":{
+    "entity_id":"SKILL_PRODUCTION_PLANNING",
+    "canonical":"Production Planning",
+    "aliases":["production scheduling","production planning"],
+    "category":"planning",
+    "business_area":"manufacturing",
+    "domain":"operations",
+    "skill_type":"technical",
+    "related_actions":["ACT_PLAN"],
+    "related_objects":["OBJ_PRODUCTION"],
+    "related_metrics":["KPI_CAPACITY_UTILIZATION"],
+    "related_standards":[],
+    "impact_weight":0.95
+  },
+
+  "capacity_planning":{
+    "entity_id":"SKILL_CAPACITY_PLANNING",
+    "canonical":"Capacity Planning",
+    "aliases":["capacity planning"],
+    "category":"planning",
+    "business_area":"operations",
+    "domain":"operations",
+    "skill_type":"technical",
+    "related_actions":["ACT_OPTIMIZE"],
+    "related_objects":["OBJ_PROCESS"],
+    "related_metrics":["KPI_CAPACITY_UTILIZATION"],
+    "related_standards":[],
+    "impact_weight":0.95
+  },
+
+  "process_optimization":{
+    "entity_id":"SKILL_PROCESS_OPTIMIZATION",
+    "canonical":"Process Optimization",
+    "aliases":["process optimization","process improvement"],
+    "category":"continuous_improvement",
+    "business_area":"operations",
+    "domain":"continuous_improvement",
+    "skill_type":"technical",
+    "related_actions":["ACT_OPTIMIZE","ACT_IMPROVE"],
+    "related_objects":["OBJ_PROCESS"],
+    "related_metrics":["KPI_YIELD","KPI_PRODUCTIVITY"],
+    "related_standards":["STD_ISO_9001"],
+    "impact_weight":1.0
+  },
+
+  "process_control":{
+    "entity_id":"SKILL_PROCESS_CONTROL",
+    "canonical":"Process Control",
+    "aliases":["process control"],
+    "category":"operations",
+    "business_area":"manufacturing",
+    "domain":"operations",
+    "skill_type":"technical",
+    "related_actions":["ACT_CONTROL"],
+    "related_objects":["OBJ_PROCESS"],
+    "related_metrics":["KPI_CP","KPI_CPK"],
+    "related_standards":["STD_ISO_9001"],
+    "impact_weight":0.95
+  },
+
+  "line_balancing":{
+    "entity_id":"SKILL_LINE_BALANCING",
+    "canonical":"Line Balancing",
+    "aliases":["line balancing"],
+    "category":"operations",
+    "business_area":"manufacturing",
+    "domain":"continuous_improvement",
+    "skill_type":"technical",
+    "related_actions":["ACT_BALANCE"],
+    "related_objects":["OBJ_PRODUCTION_LINE"],
+    "related_metrics":["KPI_THROUGHPUT"],
+    "related_standards":[],
+    "impact_weight":0.90
+  },
+
+  "equipment_management":{
+    "entity_id":"SKILL_EQUIPMENT_MANAGEMENT",
+    "canonical":"Equipment Management",
+    "aliases":["equipment management"],
+    "category":"maintenance",
+    "business_area":"operations",
+    "domain":"maintenance",
+    "skill_type":"technical",
+    "related_actions":["ACT_MAINTAIN"],
+    "related_objects":["OBJ_EQUIPMENT"],
+    "related_metrics":["KPI_OEE"],
+    "related_standards":[],
+    "impact_weight":0.95
+  },
+
+  "preventive_maintenance":{
+    "entity_id":"SKILL_PREVENTIVE_MAINTENANCE",
+    "canonical":"Preventive Maintenance",
+    "aliases":["preventive maintenance","pm"],
+    "category":"maintenance",
+    "business_area":"maintenance",
+    "domain":"maintenance",
+    "skill_type":"technical",
+    "related_actions":["ACT_MAINTAIN"],
+    "related_objects":["OBJ_EQUIPMENT"],
+    "related_metrics":["KPI_DOWNTIME"],
+    "related_standards":[],
+    "impact_weight":0.95
+  },
+
+  "predictive_maintenance":{
+    "entity_id":"SKILL_PREDICTIVE_MAINTENANCE",
+    "canonical":"Predictive Maintenance",
+    "aliases":["predictive maintenance"],
+    "category":"maintenance",
+    "business_area":"maintenance",
+    "domain":"maintenance",
+    "skill_type":"technical",
+    "related_actions":["ACT_MONITOR"],
+    "related_objects":["OBJ_EQUIPMENT"],
+    "related_metrics":["KPI_DOWNTIME"],
+    "related_standards":[],
+    "impact_weight":0.90
+  },
+
+  "utilities_management":{
+    "entity_id":"SKILL_UTILITIES_MANAGEMENT",
+    "canonical":"Utilities Management",
+    "aliases":["utilities","utility management"],
+    "category":"operations",
+    "business_area":"manufacturing",
+    "domain":"utilities",
+    "skill_type":"technical",
+    "related_actions":["ACT_MANAGE"],
+    "related_objects":["OBJ_UTILITIES"],
+    "related_metrics":["KPI_ENERGY_CONSUMPTION"],
+    "related_standards":[],
+    "impact_weight":0.90
+  },
+
+  "water_treatment":{
+    "entity_id":"SKILL_WATER_TREATMENT",
+    "canonical":"Water Treatment",
+    "aliases":["water treatment"],
+    "category":"utilities",
+    "business_area":"manufacturing",
+    "domain":"utilities",
+    "skill_type":"technical",
+    "related_actions":["ACT_MONITOR"],
+    "related_objects":["OBJ_WATER_TREATMENT_PLANT"],
+    "related_metrics":["KPI_WATER_USAGE"],
+    "related_standards":["STD_GMP"],
+    "impact_weight":0.90
+  },
+
+  "cip_operations":{
+    "entity_id":"SKILL_CIP",
+    "canonical":"CIP Operations",
+    "aliases":["cip","clean in place"],
+    "category":"sanitation",
+    "business_area":"manufacturing",
+    "domain":"food_safety",
+    "skill_type":"technical",
+    "related_actions":["ACT_IMPLEMENT"],
+    "related_objects":["OBJ_CIP_SYSTEM"],
+    "related_metrics":["KPI_HYGIENE"],
+    "related_standards":["STD_FSSC22000"],
+    "impact_weight":0.95
+  },
+  
+  "quality_assurance": {
     "entity_id": "SKILL_QUALITY_ASSURANCE",
     "canonical": "Quality Assurance",
     "aliases": [
-      "Quality Assurance",
-      "Quality Assurance Skills"
+      "qa",
+      "quality assurance",
+      "quality management"
     ],
     "category": "quality",
     "business_area": "quality",
+    "domain": "quality_management",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_IMPLEMENT",
+      "ACT_MAINTAIN",
+      "ACT_IMPROVE"
+    ],
+    "related_objects": [
+      "OBJ_QMS"
+    ],
+    "related_metrics": [
+      "KPI_FIRST_PASS_YIELD",
+      "KPI_CUSTOMER_COMPLAINTS"
+    ],
+    "related_standards": [
+      "STD_ISO9001",
+      "STD_FSSC22000"
+    ],
     "impact_weight": 1.0
   },
-  "Food Safety": {
-    "entity_id": "SKILL_FOOD_SAFETY",
-    "canonical": "Food Safety",
+
+  "quality_control": {
+    "entity_id": "SKILL_QUALITY_CONTROL",
+    "canonical": "Quality Control",
     "aliases": [
-      "Food Safety",
-      "Food Safety Skills"
+      "qc",
+      "quality inspection"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "domain": "quality_management",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_MONITOR",
+      "ACT_VERIFY"
+    ],
+    "related_objects": [
+      "OBJ_PRODUCT"
+    ],
+    "related_metrics": [
+      "KPI_DEFECT_RATE"
+    ],
+    "related_standards": [
+      "STD_ISO9001"
+    ],
+    "impact_weight": 1.0
+  },
+
+  "food_safety_management": {
+    "entity_id": "SKILL_FOOD_SAFETY",
+    "canonical": "Food Safety Management",
+    "aliases": [
+      "food safety",
+      "fsms"
     ],
     "category": "food_safety",
     "business_area": "food_safety",
+    "domain": "food_safety_management",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_IMPLEMENT",
+      "ACT_MAINTAIN"
+    ],
+    "related_objects": [
+      "OBJ_FSMS"
+    ],
+    "related_metrics": [
+      "KPI_FOOD_SAFETY"
+    ],
+    "related_standards": [
+      "STD_FSSC22000",
+      "STD_HACCP"
+    ],
     "impact_weight": 1.0
   },
-  "Statistical Analysis": {
-    "entity_id": "SKILL_STATISTICAL_ANALYSIS",
-    "canonical": "Statistical Analysis",
+
+  "haccp_development": {
+    "entity_id": "SKILL_HACCP",
+    "canonical": "HACCP Development",
     "aliases": [
-      "Statistical Analysis",
-      "Statistical Analysis Skills"
+      "haccp",
+      "hazard analysis"
     ],
-    "category": "analytical",
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "domain": "food_safety_management",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_DEVELOP",
+      "ACT_IMPLEMENT"
+    ],
+    "related_objects": [
+      "OBJ_HACCP"
+    ],
+    "related_metrics": [
+      "KPI_CCP_COMPLIANCE"
+    ],
+    "related_standards": [
+      "STD_HACCP",
+      "STD_FSSC22000"
+    ],
+    "impact_weight": 1.0
+  },
+
+  "internal_auditing": {
+    "entity_id": "SKILL_INTERNAL_AUDIT",
+    "canonical": "Internal Auditing",
+    "aliases": [
+      "internal audit",
+      "audit"
+    ],
+    "category": "audit",
     "business_area": "quality",
+    "domain": "compliance",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_AUDIT"
+    ],
+    "related_objects": [
+      "OBJ_AUDIT"
+    ],
+    "related_metrics": [
+      "KPI_AUDIT_SCORE"
+    ],
+    "related_standards": [
+      "STD_ISO9001",
+      "STD_BRCGS"
+    ],
+    "impact_weight": 0.95
+  },
+
+  "supplier_auditing": {
+    "entity_id": "SKILL_SUPPLIER_AUDIT",
+    "canonical": "Supplier Auditing",
+    "aliases": [
+      "supplier audit"
+    ],
+    "category": "audit",
+    "business_area": "supply_chain",
+    "domain": "supplier_management",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_AUDIT"
+    ],
+    "related_objects": [
+      "OBJ_SUPPLIER"
+    ],
+    "related_metrics": [
+      "KPI_SUPPLIER_PERFORMANCE"
+    ],
+    "related_standards": [
+      "STD_BRCGS"
+    ],
+    "impact_weight": 0.9
+  },
+
+  "gmp_compliance": {
+    "entity_id": "SKILL_GMP",
+    "canonical": "Good Manufacturing Practices",
+    "aliases": [
+      "gmp",
+      "good manufacturing practice"
+    ],
+    "category": "food_safety",
+    "business_area": "manufacturing",
+    "domain": "food_safety_management",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_IMPLEMENT"
+    ],
+    "related_objects": [
+      "OBJ_MANUFACTURING_FACILITY"
+    ],
+    "related_metrics": [
+      "KPI_GMP_COMPLIANCE"
+    ],
+    "related_standards": [
+      "STD_GMP"
+    ],
+    "impact_weight": 0.95
+  },
+
+  "sanitation_management": {
+    "entity_id": "SKILL_SANITATION",
+    "canonical": "Sanitation Management",
+    "aliases": [
+      "sanitation",
+      "cleaning validation"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "domain": "sanitation",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_VERIFY"
+    ],
+    "related_objects": [
+      "OBJ_CIP_SYSTEM"
+    ],
+    "related_metrics": [
+      "KPI_HYGIENE"
+    ],
+    "related_standards": [
+      "STD_FSSC22000"
+    ],
+    "impact_weight": 0.9
+  },
+
+  "laboratory_testing": {
+    "entity_id": "SKILL_LAB_TESTING",
+    "canonical": "Laboratory Testing",
+    "aliases": [
+      "lab testing",
+      "quality laboratory"
+    ],
+    "category": "laboratory",
+    "business_area": "quality",
+    "domain": "quality_control",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_TEST"
+    ],
+    "related_objects": [
+      "OBJ_LAB"
+    ],
+    "related_metrics": [
+      "KPI_MICROBIOLOGY"
+    ],
+    "related_standards": [
+      "STD_ISO17025"
+    ],
+    "impact_weight": 0.9
+  },
+
+  "microbiological_testing": {
+    "entity_id": "SKILL_MICROBIOLOGY",
+    "canonical": "Microbiological Testing",
+    "aliases": [
+      "microbiology",
+      "micro testing"
+    ],
+    "category": "laboratory",
+    "business_area": "food_safety",
+    "domain": "laboratory",
+    "skill_type": "technical",
+    "related_actions": [
+      "ACT_TEST"
+    ],
+    "related_objects": [
+      "OBJ_MICROBIOLOGY_LAB"
+    ],
+    "related_metrics": [
+      "KPI_MICROBIOLOGY"
+    ],
+    "related_standards": [
+      "STD_ISO17025"
+    ],
+    "impact_weight": 0.9
+  },
+  
+  "root_cause_analysis": {
+    "entity_id": "SKILL_ROOT_CAUSE_ANALYSIS",
+    "canonical": "Root Cause Analysis",
+    "aliases": ["RCA", "root cause analysis"],
+    "category": "problem_solving",
+    "business_area": "quality",
+    "domain": "quality_management",
+    "skill_type": "technical",
+    "related_actions": ["ACT_ANALYZE", "ACT_IDENTIFY"],
+    "related_methodologies": ["METH_RCA", "METH_5WHY"],
     "impact_weight": 1.0
   },
-  "Supplier Management": {
-    "entity_id": "SKILL_SUPPLIER_MANAGEMENT",
-    "canonical": "Supplier Management",
-    "aliases": [
-      "Supplier Management",
-      "Supplier Management Skills"
-    ],
+
+  "corrective_preventive_action": {
+    "entity_id": "SKILL_CAPA",
+    "canonical": "Corrective and Preventive Action",
+    "aliases": ["CAPA", "corrective action", "preventive action"],
+    "category": "quality_system",
+    "business_area": "quality",
+    "domain": "quality_management",
+    "skill_type": "technical",
+    "related_actions": ["ACT_IMPLEMENT", "ACT_PREVENT"],
+    "related_methodologies": ["METH_CAPA"],
+    "impact_weight": 1.0
+  },
+
+  "statistical_process_control": {
+    "entity_id": "SKILL_SPC",
+    "canonical": "Statistical Process Control",
+    "aliases": ["SPC", "control charts"],
+    "category": "statistics",
+    "business_area": "quality",
+    "domain": "quality_control",
+    "skill_type": "technical",
+    "related_actions": ["ACT_MONITOR"],
+    "related_metrics": ["KPI_CP", "KPI_CPK"],
+    "impact_weight": 1.0
+  },
+
+  "measurement_system_analysis": {
+    "entity_id": "SKILL_MSA",
+    "canonical": "Measurement System Analysis",
+    "aliases": ["MSA", "gage r&r"],
+    "category": "statistics",
+    "business_area": "quality",
+    "domain": "quality_control",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "failure_mode_effect_analysis": {
+    "entity_id": "SKILL_FMEA",
+    "canonical": "Failure Mode and Effects Analysis",
+    "aliases": ["FMEA"],
+    "category": "risk_management",
+    "business_area": "quality",
+    "domain": "risk_management",
+    "skill_type": "technical",
+    "related_methodologies": ["METH_FMEA"],
+    "impact_weight": 0.95
+  },
+
+  "risk_assessment": {
+    "entity_id": "SKILL_RISK_ASSESSMENT",
+    "canonical": "Risk Assessment",
+    "aliases": ["risk analysis"],
+    "category": "risk_management",
+    "business_area": "quality",
+    "domain": "risk_management",
+    "skill_type": "technical",
+    "impact_weight": 1.0
+  },
+
+  "process_validation": {
+    "entity_id": "SKILL_PROCESS_VALIDATION",
+    "canonical": "Process Validation",
+    "aliases": ["validation"],
+    "category": "validation",
+    "business_area": "quality",
+    "domain": "validation",
+    "skill_type": "technical",
+    "related_actions": ["ACT_VALIDATE"],
+    "impact_weight": 1.0
+  },
+
+  "process_verification": {
+    "entity_id": "SKILL_PROCESS_VERIFICATION",
+    "canonical": "Process Verification",
+    "aliases": ["verification"],
+    "category": "verification",
+    "business_area": "quality",
+    "domain": "verification",
+    "skill_type": "technical",
+    "related_actions": ["ACT_VERIFY"],
+    "impact_weight": 1.0
+  },
+
+  "cleaning_validation": {
+    "entity_id": "SKILL_CLEANING_VALIDATION",
+    "canonical": "Cleaning Validation",
+    "aliases": ["cleaning verification"],
+    "category": "validation",
+    "business_area": "food_safety",
+    "domain": "sanitation",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "document_control": {
+    "entity_id": "SKILL_DOCUMENT_CONTROL",
+    "canonical": "Document Control",
+    "aliases": ["controlled documents"],
+    "category": "quality_system",
+    "business_area": "quality",
+    "domain": "quality_systems",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "change_control": {
+    "entity_id": "SKILL_CHANGE_CONTROL",
+    "canonical": "Change Control",
+    "aliases": ["change management"],
+    "category": "quality_system",
+    "business_area": "quality",
+    "domain": "quality_systems",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "calibration_management": {
+    "entity_id": "SKILL_CALIBRATION",
+    "canonical": "Calibration Management",
+    "aliases": ["equipment calibration"],
+    "category": "quality_system",
+    "business_area": "quality",
+    "domain": "metrology",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "complaint_handling": {
+    "entity_id": "SKILL_COMPLAINT_HANDLING",
+    "canonical": "Complaint Handling",
+    "aliases": ["customer complaint investigation"],
+    "category": "customer_quality",
+    "business_area": "quality",
+    "domain": "customer_quality",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "supplier_quality_management": {
+    "entity_id": "SKILL_SUPPLIER_QUALITY",
+    "canonical": "Supplier Quality Management",
+    "aliases": ["supplier quality"],
+    "category": "supplier_quality",
+    "business_area": "supply_chain",
+    "domain": "supplier_management",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "supplier_approval": {
+    "entity_id": "SKILL_SUPPLIER_APPROVAL",
+    "canonical": "Supplier Approval",
+    "aliases": ["supplier qualification"],
+    "category": "supplier_quality",
+    "business_area": "supply_chain",
+    "domain": "supplier_management",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "traceability_management": {
+    "entity_id": "SKILL_TRACEABILITY",
+    "canonical": "Traceability Management",
+    "aliases": ["product traceability"],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "domain": "traceability",
+    "skill_type": "technical",
+    "impact_weight": 1.0
+  },
+
+  "mass_balance": {
+    "entity_id": "SKILL_MASS_BALANCE",
+    "canonical": "Mass Balance",
+    "aliases": ["mass balance verification"],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "domain": "traceability",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "food_fraud_assessment": {
+    "entity_id": "SKILL_FOOD_FRAUD",
+    "canonical": "Food Fraud Assessment",
+    "aliases": ["food fraud"],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "domain": "risk_management",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "food_defense": {
+    "entity_id": "SKILL_FOOD_DEFENSE",
+    "canonical": "Food Defense",
+    "aliases": ["food defense program"],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "domain": "risk_management",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "regulatory_compliance": {
+    "entity_id": "SKILL_REGULATORY_COMPLIANCE",
+    "canonical": "Regulatory Compliance",
+    "aliases": ["legal compliance"],
+    "category": "compliance",
+    "business_area": "quality",
+    "domain": "governance",
+    "skill_type": "technical",
+    "impact_weight": 1.0
+  },
+  
+  "inventory_management": {
+    "entity_id": "SKILL_INVENTORY_MANAGEMENT",
+    "canonical": "Inventory Management",
+    "aliases": ["inventory control","stock management"],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "domain": "inventory_management",
+    "skill_type": "technical",
+    "related_metrics": ["KPI_INVENTORY_ACCURACY","KPI_INVENTORY_TURNOVER"],
+    "impact_weight": 1.0
+  },
+
+  "inventory_optimization": {
+    "entity_id": "SKILL_INVENTORY_OPTIMIZATION",
+    "canonical": "Inventory Optimization",
+    "aliases": ["inventory optimisation"],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "domain": "inventory_management",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "warehouse_management": {
+    "entity_id": "SKILL_WAREHOUSE_MANAGEMENT",
+    "canonical": "Warehouse Management",
+    "aliases": ["warehouse operations","warehousing"],
+    "category": "warehouse",
+    "business_area": "supply_chain",
+    "domain": "warehousing",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "logistics_management": {
+    "entity_id": "SKILL_LOGISTICS",
+    "canonical": "Logistics Management",
+    "aliases": ["logistics","distribution logistics"],
+    "category": "logistics",
+    "business_area": "supply_chain",
+    "domain": "logistics",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "distribution_management": {
+    "entity_id": "SKILL_DISTRIBUTION",
+    "canonical": "Distribution Management",
+    "aliases": ["distribution"],
+    "category": "logistics",
+    "business_area": "supply_chain",
+    "domain": "distribution",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "procurement_management": {
+    "entity_id": "SKILL_PROCUREMENT",
+    "canonical": "Procurement Management",
+    "aliases": ["procurement","purchasing"],
     "category": "procurement",
     "business_area": "supply_chain",
-    "impact_weight": 1.0
+    "domain": "procurement",
+    "skill_type": "technical",
+    "impact_weight": 0.95
   },
-  "Documentation": {
-    "entity_id": "SKILL_DOCUMENTATION",
-    "canonical": "Documentation",
-    "aliases": [
-      "Documentation",
-      "Documentation Skills"
-    ],
-    "category": "quality",
-    "business_area": "general",
-    "impact_weight": 1.0
+
+  "strategic_sourcing": {
+    "entity_id": "SKILL_STRATEGIC_SOURCING",
+    "canonical": "Strategic Sourcing",
+    "aliases": ["strategic procurement"],
+    "category": "procurement",
+    "business_area": "supply_chain",
+    "domain": "procurement",
+    "skill_type": "technical",
+    "impact_weight": 0.90
   },
-  "Presentation Skills": {
-    "entity_id": "SKILL_PRESENTATION_SKILLS",
-    "canonical": "Presentation Skills",
-    "aliases": [
-      "Presentation Skills",
-      "Presentation Skills Skills"
-    ],
-    "category": "soft_skill",
-    "business_area": "general",
-    "impact_weight": 1.0
+
+  "vendor_management": {
+    "entity_id": "SKILL_VENDOR_MANAGEMENT",
+    "canonical": "Vendor Management",
+    "aliases": ["supplier management","vendor development"],
+    "category": "supplier",
+    "business_area": "supply_chain",
+    "domain": "supplier_management",
+    "skill_type": "technical",
+    "impact_weight": 0.95
   },
-  "Troubleshooting": {
-    "entity_id": "SKILL_TROUBLESHOOTING",
-    "canonical": "Troubleshooting",
-    "aliases": [
-      "Troubleshooting",
-      "Troubleshooting Skills"
-    ],
-    "category": "technical",
+
+  "supplier_development": {
+    "entity_id": "SKILL_SUPPLIER_DEVELOPMENT",
+    "canonical": "Supplier Development",
+    "aliases": ["vendor development"],
+    "category": "supplier",
+    "business_area": "supply_chain",
+    "domain": "supplier_management",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "supplier_relationship_management": {
+    "entity_id": "SKILL_SRM",
+    "canonical": "Supplier Relationship Management",
+    "aliases": ["SRM"],
+    "category": "supplier",
+    "business_area": "supply_chain",
+    "domain": "supplier_management",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "demand_planning": {
+    "entity_id": "SKILL_DEMAND_PLANNING",
+    "canonical": "Demand Planning",
+    "aliases": ["forecast planning"],
+    "category": "planning",
+    "business_area": "supply_chain",
+    "domain": "planning",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+    "material_requirements_planning": {
+    "entity_id": "SKILL_MRP",
+    "canonical": "Material Requirements Planning",
+    "aliases": ["MRP"],
+    "category": "planning",
     "business_area": "operations",
+    "domain": "planning",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "forecasting": {
+    "entity_id": "SKILL_FORECASTING",
+    "canonical": "Forecasting",
+    "aliases": ["sales forecasting"],
+    "category": "planning",
+    "business_area": "operations",
+    "domain": "analytics",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "material_management": {
+    "entity_id": "SKILL_MATERIAL_MANAGEMENT",
+    "canonical": "Material Management",
+    "aliases": ["raw material management"],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "domain": "inventory_management",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "supply_chain_analytics": {
+    "entity_id": "SKILL_SUPPLY_CHAIN_ANALYTICS",
+    "canonical": "Supply Chain Analytics",
+    "aliases": ["logistics analytics"],
+    "category": "analytics",
+    "business_area": "supply_chain",
+    "domain": "analytics",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "customer_service_management": {
+    "entity_id": "SKILL_CUSTOMER_SERVICE",
+    "canonical": "Customer Service Management",
+    "aliases": ["customer service"],
+    "category": "customer",
+    "business_area": "customer",
+    "domain": "customer_service",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "customer_relationship_management": {
+    "entity_id": "SKILL_CRM",
+    "canonical": "Customer Relationship Management",
+    "aliases": ["CRM"],
+    "category": "customer",
+    "business_area": "customer",
+    "domain": "customer_management",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "business_operations": {
+    "entity_id": "SKILL_BUSINESS_OPERATIONS",
+    "canonical": "Business Operations",
+    "aliases": ["operations management"],
+    "category": "operations",
+    "business_area": "operations",
+    "domain": "operations_management",
+    "skill_type": "technical",
     "impact_weight": 1.0
+  },
+
+  "resource_planning": {
+    "entity_id": "SKILL_RESOURCE_PLANNING",
+    "canonical": "Resource Planning",
+    "aliases": ["capacity planning"],
+    "category": "planning",
+    "business_area": "operations",
+    "domain": "planning",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+  
+  "business_analytics": {
+    "entity_id": "SKILL_BUSINESS_ANALYTICS",
+    "canonical": "Business Analytics",
+    "aliases": ["analytics","business intelligence"],
+    "category": "analytics",
+    "business_area": "business",
+    "domain": "business_analytics",
+    "skill_type": "technical",
+    "impact_weight": 1.00
+  },
+
+  "data_analysis": {
+    "entity_id": "SKILL_DATA_ANALYSIS",
+    "canonical": "Data Analysis",
+    "aliases": ["data analytics","analytical skills"],
+    "category": "analytics",
+    "business_area": "business",
+    "domain": "analytics",
+    "skill_type": "technical",
+    "impact_weight": 1.00
+  },
+
+  "data_visualization": {
+    "entity_id": "SKILL_DATA_VISUALIZATION",
+    "canonical": "Data Visualization",
+    "aliases": ["dashboard development","visual analytics"],
+    "category": "analytics",
+    "business_area": "business",
+    "domain": "analytics",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "business_intelligence": {
+    "entity_id": "SKILL_BUSINESS_INTELLIGENCE",
+    "canonical": "Business Intelligence",
+    "aliases": ["BI"],
+    "category": "analytics",
+    "business_area": "business",
+    "domain": "business_analytics",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "data_driven_decision_making": {
+    "entity_id": "SKILL_DATA_DRIVEN_DECISION",
+    "canonical": "Data Driven Decision Making",
+    "aliases": ["evidence based decision making"],
+    "category": "management",
+    "business_area": "management",
+    "domain": "leadership",
+    "skill_type": "leadership",
+    "impact_weight": 1.00
+  },
+
+  "digital_transformation": {
+    "entity_id": "SKILL_DIGITAL_TRANSFORMATION",
+    "canonical": "Digital Transformation",
+    "aliases": ["digitalisation"],
+    "category": "technology",
+    "business_area": "business",
+    "domain": "digital_transformation",
+    "skill_type": "strategic",
+    "impact_weight": 0.95
+  },
+
+  "artificial_intelligence": {
+    "entity_id": "SKILL_AI",
+    "canonical": "Artificial Intelligence",
+    "aliases": ["AI","machine intelligence"],
+    "category": "technology",
+    "business_area": "business",
+    "domain": "artificial_intelligence",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "machine_learning": {
+    "entity_id": "SKILL_MACHINE_LEARNING",
+    "canonical": "Machine Learning",
+    "aliases": ["ML"],
+    "category": "technology",
+    "business_area": "analytics",
+    "domain": "artificial_intelligence",
+    "skill_type": "technical",
+    "impact_weight": 0.90
+  },
+
+  "financial_analysis": {
+    "entity_id": "SKILL_FINANCIAL_ANALYSIS",
+    "canonical": "Financial Analysis",
+    "aliases": ["financial planning"],
+    "category": "finance",
+    "business_area": "finance",
+    "domain": "finance",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "budget_management": {
+    "entity_id": "SKILL_BUDGET_MANAGEMENT",
+    "canonical": "Budget Management",
+    "aliases": ["budgeting"],
+    "category": "finance",
+    "business_area": "finance",
+    "domain": "finance",
+    "skill_type": "management",
+    "impact_weight": 0.95
+  },
+
+  "cost_control": {
+    "entity_id": "SKILL_COST_CONTROL",
+    "canonical": "Cost Control",
+    "aliases": ["cost management","cost optimization"],
+    "category": "finance",
+    "business_area": "finance",
+    "domain": "finance",
+    "skill_type": "management",
+    "impact_weight": 1.00
+  },
+
+  "stakeholder_management": {
+    "entity_id": "SKILL_STAKEHOLDER_MANAGEMENT",
+    "canonical": "Stakeholder Management",
+    "aliases": ["stakeholder engagement"],
+    "category": "leadership",
+    "business_area": "management",
+    "domain": "leadership",
+    "skill_type": "leadership",
+    "impact_weight": 0.95
+  },
+
+  "cross_functional_collaboration": {
+    "entity_id": "SKILL_CROSS_FUNCTIONAL",
+    "canonical": "Cross Functional Collaboration",
+    "aliases": ["cross functional teamwork"],
+    "category": "leadership",
+    "business_area": "management",
+    "domain": "leadership",
+    "skill_type": "leadership",
+    "impact_weight": 0.95
+  },
+
+  "executive_reporting": {
+    "entity_id": "SKILL_EXECUTIVE_REPORTING",
+    "canonical": "Executive Reporting",
+    "aliases": ["management reporting"],
+    "category": "management",
+    "business_area": "management",
+    "domain": "leadership",
+    "skill_type": "management",
+    "impact_weight": 0.90
+  },
+
+  "performance_management": {
+    "entity_id": "SKILL_PERFORMANCE_MANAGEMENT",
+    "canonical": "Performance Management",
+    "aliases": ["performance monitoring"],
+    "category": "management",
+    "business_area": "management",
+    "domain": "leadership",
+    "skill_type": "management",
+    "impact_weight": 1.00
+  },
+
+  "kpi_development": {
+    "entity_id": "SKILL_KPI_DEVELOPMENT",
+    "canonical": "KPI Development",
+    "aliases": ["kpi design"],
+    "category": "analytics",
+    "business_area": "management",
+    "domain": "performance_management",
+    "skill_type": "technical",
+    "impact_weight": 0.95
+  },
+
+  "agile_project_management": {
+    "entity_id": "SKILL_AGILE",
+    "canonical": "Agile Project Management",
+    "aliases": ["agile"],
+    "category": "project_management",
+    "business_area": "management",
+    "domain": "project_management",
+    "skill_type": "management",
+    "impact_weight": 0.90
+  },
+
+  "scrum": {
+    "entity_id": "SKILL_SCRUM",
+    "canonical": "Scrum",
+    "aliases": ["scrum framework"],
+    "category": "project_management",
+    "business_area": "management",
+    "domain": "project_management",
+    "skill_type": "management",
+    "impact_weight": 0.85
+  },
+
+  "innovation_management": {
+    "entity_id": "SKILL_INNOVATION",
+    "canonical": "Innovation Management",
+    "aliases": ["innovation"],
+    "category": "leadership",
+    "business_area": "management",
+    "domain": "innovation",
+    "skill_type": "leadership",
+    "impact_weight": 0.90
+  },
+
+  "strategic_leadership": {
+    "entity_id": "SKILL_STRATEGIC_LEADERSHIP",
+    "canonical": "Strategic Leadership",
+    "aliases": ["business leadership"],
+    "category": "leadership",
+    "business_area": "management",
+    "domain": "leadership",
+    "skill_type": "leadership",
+    "impact_weight": 1.00
   }
 }

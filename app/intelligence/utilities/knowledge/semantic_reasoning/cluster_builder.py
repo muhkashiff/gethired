@@ -30,14 +30,10 @@ class ClusterBuilder:
             # Identity
             # -----------------------------------
 
-            cluster.cluster_id = (
-
-                "CLUSTER_"
-
-                + uuid.uuid4().hex[:8].upper()
-
+            cluster.cluster_id = statement.statement_id.replace(
+                "STATEMENT",
+                "CLUSTER",
             )
-
             cluster.label = statement.label
 
             cluster.semantic_type = statement.semantic_type

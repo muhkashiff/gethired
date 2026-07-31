@@ -1,33 +1,458 @@
 {
   "ISO 9001": {
-    "entity_id": "ISO_9001",
-    "canonical": "ISO 9001",
-    "category": "quality"
+    "entity_id": "CERT_ISO9001",
+    "canonical": "ISO 9001 Certification",
+    "aliases": [
+      "ISO9001",
+      "ISO 9001:2015",
+      "ISO 9001:2021"
+    ],
+    "category": "quality",
+    "business_area": "quality"
   },
 
   "FSSC 22000": {
-        "entity_id":"STD_FSSC22000",
-        "canonical":"FSSC 22000",
-
-        "aliases":[
-            "FSSC22000",
-            "FSSC-22000",
-            "FSSC 22000",
-            "Food Safety System Certification 22000"
-        ],
-
-        "category":"food_safety"
+    "entity_id": "CERT_FSSC22000",
+    "canonical": "FSSC 22000 Certification",
+    "aliases": [
+      "FSSC22000",
+      "Food Safety System Certification 22000"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
   },
 
   "BRCGS": {
-    "entity_id": "BRCGS",
-    "canonical": "BRCGS",
-    "category": "food_safety"
+    "entity_id": "CERT_BRCGS",
+    "canonical": "BRCGS Certification",
+    "aliases": [
+      "BRC",
+      "BRCGS Food Safety"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
   },
 
-  "HACCP": {
-    "entity_id": "HACCP",
-    "canonical": "HACCP",
-    "category": "food_safety"
+  "SQF": {
+    "entity_id": "CERT_SQF",
+    "canonical": "Safe Quality Food",
+    "aliases": [
+      "SQF Certification"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "IFS Food": {
+    "entity_id": "CERT_IFS",
+    "canonical": "IFS Food Certification",
+    "aliases": [
+      "IFS"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "GlobalG.A.P.": {
+    "entity_id": "CERT_GLOBALGAP",
+    "canonical": "GlobalG.A.P.",
+    "aliases": [
+      "Global GAP",
+      "GLOBALGAP"
+    ],
+    "category": "agriculture",
+    "business_area": "supply_chain"
+  },
+
+  "ISO 14001": {
+    "entity_id": "CERT_ISO14001",
+    "canonical": "ISO 14001 Certification",
+    "aliases": [
+      "ISO14001"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+
+  "ISO 45001": {
+    "entity_id": "CERT_ISO45001",
+    "canonical": "ISO 45001 Certification",
+    "aliases": [
+      "ISO45001"
+    ],
+    "category": "health_safety",
+    "business_area": "health_safety"
+  },
+
+  "ISO 22000": {
+    "entity_id": "CERT_ISO22000",
+    "canonical": "ISO 22000 Certification",
+    "aliases": [
+      "ISO22000"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+ 
+  "ISO 50001": {
+    "entity_id": "CERT_ISO50001",
+    "canonical": "ISO 50001",
+    "aliases": [
+      "ISO50001"
+    ],
+    "category": "energy",
+    "business_area": "utilities",
+    "description": "Energy Management System"
+  },
+
+    "Organic": {
+    "entity_id": "CERT_ORGANIC",
+    "canonical": "Organic Certification",
+    "aliases": [
+      "USDA Organic",
+      "EU Organic"
+    ],
+    "category": "agriculture",
+    "business_area": "regulatory"
+  },
+  
+  "GLOBALG.A.P": {
+    "entity_id": "CERT_GLOBALGAP",
+    "canonical": "GLOBALG.A.P",
+    "aliases": [
+      "GLOBAL GAP",
+      "GLOBALGAP"
+    ],
+    "category": "agriculture",
+    "business_area": "supply_chain",
+    "description": "Good Agricultural Practices certification.",
+    "issuing_body": "GLOBALG.A.P",
+    "industry": [
+      "Agriculture",
+      "Fresh Produce"
+    ]
+  },
+
+  
+
+  "Organic Certification": {
+    "entity_id": "CERT_ORGANIC",
+    "canonical": "Organic Certification",
+    "aliases": [
+      "USDA Organic",
+      "Organic"
+    ],
+    "category": "regulatory",
+    "business_area": "quality",
+    "description": "Certification for organic food production.",
+    "industry": [
+      "Food",
+      "Agriculture"
+    ]
+  },
+
+  "Halal": {
+    "entity_id": "CERT_HALAL",
+    "canonical": "Halal Certification",
+    "aliases": [
+      "Halal"
+    ],
+    "category": "regulatory",
+    "business_area": "food_safety",
+    "description": "Certification confirming compliance with Halal requirements.",
+    "industry": [
+      "Food",
+      "Beverage",
+      "Pharmaceutical"
+    ]
+  },
+
+  "Kosher": {
+    "entity_id": "CERT_KOSHER",
+    "canonical": "Kosher Certification",
+    "aliases": [
+      "Kosher"
+    ],
+    "category": "regulatory",
+    "business_area": "food_safety",
+    "description": "Certification confirming compliance with Kosher dietary requirements.",
+    "industry": [
+      "Food",
+      "Beverage"
+    ]
+  },
+
+  "Rainforest Alliance": {
+    "entity_id": "CERT_RAINFOREST",
+    "canonical": "Rainforest Alliance",
+    "aliases": [
+      "Rainforest Alliance"
+    ],
+    "category": "sustainability",
+    "business_area": "sustainability",
+    "description": "Environmental sustainability certification.",
+    "industry": [
+      "Agriculture",
+      "Food"
+    ]
+  },
+
+  "Fairtrade": {
+    "entity_id": "CERT_FAIRTRADE",
+    "canonical": "Fairtrade",
+    "aliases": [
+      "Fair Trade",
+      "Fairtrade"
+    ],
+    "category": "sustainability",
+    "business_area": "sustainability",
+    "description": "Certification for ethical sourcing.",
+    "industry": [
+      "Food",
+      "Agriculture"
+    ]
+  },
+
+  "RSPO": {
+    "entity_id": "CERT_RSPO",
+    "canonical": "Roundtable on Sustainable Palm Oil",
+    "aliases": [
+      "RSPO"
+    ],
+    "category": "sustainability",
+    "business_area": "sustainability",
+    "description": "Certification for sustainable palm oil.",
+    "industry": [
+      "Food",
+      "FMCG"
+    ]
+  },
+
+  "Sedex": {
+    "entity_id": "CERT_SEDEX",
+    "canonical": "Sedex",
+    "aliases": [
+      "SMETA",
+      "Sedex"
+    ],
+    "category": "ethical",
+    "business_area": "compliance",
+    "description": "Ethical trade audit and supplier compliance.",
+    "industry": [
+      "Retail",
+      "Manufacturing"
+    ]
+  },
+
+  "FDA FSMA": {
+    "entity_id": "CERT_FDA_FSMA",
+    "canonical": "FDA Food Safety Modernization Act",
+    "aliases": [
+      "FSMA",
+      "FDA FSMA",
+      "Food Safety Modernization Act"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "issuing_body": "US FDA"
+  },
+
+  "FSVP": {
+    "entity_id": "CERT_FSVP",
+    "canonical": "Foreign Supplier Verification Program",
+    "aliases": [
+      "FSVP"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "issuing_body": "US FDA"
+  },
+
+  "PCQI": {
+    "entity_id": "CERT_PCQI",
+    "canonical": "Preventive Controls Qualified Individual",
+    "aliases": [
+      "PCQI",
+      "Preventive Controls Qualified Individual"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "issuing_body": "FSPCA"
+  },
+
+  "FSPCA": {
+    "entity_id": "CERT_FSPCA",
+    "canonical": "Food Safety Preventive Controls Alliance",
+    "aliases": [
+      "FSPCA"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "issuing_body": "FSPCA"
+  },
+
+    
+  "SMETA": {
+    "entity_id": "CERT_SMETA",
+    "canonical": "SMETA Audit",
+    "aliases": [
+      "SMETA"
+    ],
+    "category": "ethical",
+    "business_area": "compliance"
+  },
+
+    "ISO 26000": {
+    "entity_id": "CERT_ISO26000",
+    "canonical": "ISO 26000",
+    "aliases": [
+      "ISO26000"
+    ],
+    "category": "social_responsibility",
+    "business_area": "governance"
+  },
+
+  "ISO 37001": {
+    "entity_id": "CERT_ISO37001",
+    "canonical": "ISO 37001",
+    "aliases": [
+      "ISO37001"
+    ],
+    "category": "governance",
+    "business_area": "governance"
+  },
+
+  "ISO 45003": {
+    "entity_id": "CERT_ISO45003",
+    "canonical": "ISO 45003",
+    "aliases": [
+      "ISO45003"
+    ],
+    "category": "health_safety",
+    "business_area": "health_safety"
+  },
+  
+    "ISO 17025": {
+    "entity_id": "CERT_ISO_17025",
+    "canonical": "ISO/IEC 17025",
+    "aliases": [
+      "Testing Laboratory",
+      "Calibration Laboratory"
+    ],
+    "category": "laboratory",
+    "business_area": "quality"
+  },
+
+    "ISO 22005": {
+    "entity_id": "CERT_ISO_22005",
+    "canonical": "ISO 22005",
+    "aliases": [
+      "Food Traceability"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  
+    "CQI IRCA": {
+    "entity_id": "CERT_CQI_IRCA",
+    "canonical": "CQI IRCA Certified",
+    "aliases": [
+      "IRCA",
+      "CQI/IRCA"
+    ],
+    "category": "auditing",
+    "business_area": "quality"
+  },
+
+  "Lead Auditor": {
+    "entity_id": "CERT_LEAD_AUDITOR",
+    "canonical": "Lead Auditor",
+    "aliases": [
+      "Certified Lead Auditor"
+    ],
+    "category": "auditing",
+    "business_area": "quality"
+  },
+
+  "Internal Auditor": {
+    "entity_id": "CERT_INTERNAL_AUDITOR",
+    "canonical": "Internal Auditor",
+    "aliases": [
+      "Internal Audit"
+    ],
+    "category": "auditing",
+    "business_area": "quality"
+  },
+
+  "Six Sigma Green Belt": {
+    "entity_id": "CERT_SSGB",
+    "canonical": "Six Sigma Green Belt",
+    "aliases": [
+      "Green Belt"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "Six Sigma Black Belt": {
+    "entity_id": "CERT_SSBB",
+    "canonical": "Six Sigma Black Belt",
+    "aliases": [
+      "Black Belt"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "Lean Six Sigma": {
+    "entity_id": "CERT_LEAN_SS",
+    "canonical": "Lean Six Sigma",
+    "aliases": [
+      "LSS"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "Agile Scrum Master": {
+    "entity_id": "CERT_SCRUM_MASTER",
+    "canonical": "Agile Scrum Master",
+    "aliases": [
+      "Scrum Master"
+    ],
+    "category": "project_management",
+    "business_area": "management"
+  },
+
+  "PMP": {
+    "entity_id": "CERT_PMP",
+    "canonical": "Project Management Professional",
+    "aliases": [
+      "Project Management Professional"
+    ],
+    "category": "project_management",
+    "business_area": "management"
+  },
+
+  "NEBOSH": {
+    "entity_id": "CERT_NEBOSH",
+    "canonical": "NEBOSH",
+    "aliases": [
+      "National Examination Board in Occupational Safety and Health"
+    ],
+    "category": "safety",
+    "business_area": "safety"
+  },
+
+  "OSHA": {
+    "entity_id": "CERT_OSHA",
+    "canonical": "OSHA",
+    "aliases": [
+      "Occupational Safety and Health Administration"
+    ],
+    "category": "safety",
+    "business_area": "safety"
   }
 }

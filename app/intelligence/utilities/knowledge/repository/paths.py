@@ -50,6 +50,9 @@ class RepositoryPaths:
         self.skills = ONTOLOGY / "skills.json"
 
         self.methodologies = ONTOLOGY / "methodologies.json"
+
+        self.standards = ONTOLOGY / "standards.json"
+            
     
         # -------------------
         # Config

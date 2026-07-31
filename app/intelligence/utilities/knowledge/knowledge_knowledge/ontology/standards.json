@@ -1,37 +1,1289 @@
 {
-  "iso 9001": {
-    "entity_id": "STD_ISO_9001",
-    "canonical": "ISO 9001",
+  "gmp": {
+    "entity_id": "STD_GMP",
+    "canonical": "Good Manufacturing Practices",
+    "aliases": [
+      "Good Manufacturing Practice",
+      "Good Manufacturing Practices",
+      "GMP"
+    ],
+    "category": "manufacturing",
+    "business_area": "operations"
+  },
+
+  "ghp": {
+    "entity_id": "STD_GHP",
+    "canonical": "Good Hygiene Practices",
+    "aliases": [
+      "Good Hygiene Practice",
+      "Good Hygiene Practices",
+      "GHP"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "glp": {
+    "entity_id": "STD_GLP",
+    "canonical": "Good Laboratory Practices",
+    "aliases": [
+      "Good Laboratory Practice",
+      "GLP"
+    ],
+    "category": "laboratory",
+    "business_area": "laboratory"
+  },
+
+  "gdp": {
+    "entity_id": "STD_GDP",
+    "canonical": "Good Documentation Practices",
+    "aliases": [
+      "Good Documentation Practice",
+      "GDP"
+    ],
     "category": "quality",
     "business_area": "quality"
   },
+
+  "haccp": {
+    "entity_id": "STD_HACCP",
+    "canonical": "Hazard Analysis and Critical Control Points",
+    "aliases": [
+      "HACCP"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "iso 22000": {
+    "entity_id": "STD_ISO_22000",
+    "canonical": "ISO 22000",
+    "aliases": [
+      "ISO22000"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
   "fssc 22000": {
     "entity_id": "STD_FSSC_22000",
     "canonical": "FSSC 22000",
+    "aliases": [
+      "FSSC22000",
+      "Food Safety System Certification 22000"
+    ],
     "category": "food_safety",
     "business_area": "food_safety"
   },
-  "haccp": {
-    "entity_id": "STD_HACCP",
-    "canonical": "HACCP",
+
+  "codex alimentarius": {
+    "entity_id": "STD_CODEX",
+    "canonical": "Codex Alimentarius",
+    "aliases": [
+      "Codex"
+    ],
     "category": "food_safety",
     "business_area": "food_safety"
   },
-  "gmp": {
-    "entity_id": "STD_GMP",
-    "canonical": "GMP",
+
+  "fsma": {
+    "entity_id": "STD_FSMA",
+    "canonical": "Food Safety Modernization Act",
+    "aliases": [
+      "FSMA"
+    ],
+    "category": "regulatory",
+    "business_area": "food_safety"
+  },
+
+  "harpc": {
+    "entity_id": "STD_HARPC",
+    "canonical": "Hazard Analysis and Risk-Based Preventive Controls",
+    "aliases": [
+      "HARPC"
+    ],
     "category": "food_safety",
     "business_area": "food_safety"
   },
-  "tpm": {
-    "entity_id": "METHOD_TPM",
+
+  "pcqi": {
+    "entity_id": "STD_PCQI",
+    "canonical": "Preventive Controls Qualified Individual",
+    "aliases": [
+      "PCQI"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "fspca human food": {
+    "entity_id": "STD_FSPCA_HF",
+    "canonical": "FSPCA Human Food",
+    "aliases": [
+      "FSPCA Human Food Preventive Controls"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "fspca animal food": {
+    "entity_id": "STD_FSPCA_AF",
+    "canonical": "FSPCA Animal Food",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "brcgs": {
+    "entity_id": "STD_BRCGS",
+    "canonical": "BRCGS Food Safety",
+    "aliases": [
+      "BRC",
+      "BRC Global Standard",
+      "BRCGS Food Safety"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "sqf": {
+    "entity_id": "STD_SQF",
+    "canonical": "Safe Quality Food",
+    "aliases": [
+      "SQF"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "ifs food": {
+    "entity_id": "STD_IFS",
+    "canonical": "IFS Food",
+    "aliases": [
+      "IFS"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "globalgap": {
+    "entity_id": "STD_GLOBALGAP",
+    "canonical": "GLOBALG.A.P.",
+    "aliases": [
+      "GLOBALGAP",
+      "Global GAP"
+    ],
+    "category": "agriculture",
+    "business_area": "agriculture"
+  },
+
+  "halal": {
+    "entity_id": "STD_HALAL",
+    "canonical": "Halal Certification",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "kosher": {
+    "entity_id": "STD_KOSHER",
+    "canonical": "Kosher Certification",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+  "organic": {
+    "entity_id": "STD_ORGANIC",
+    "canonical": "Organic Certification",
+    "aliases": [],
+    "category": "agriculture",
+    "business_area": "agriculture"
+  },
+
+  "iso 9001": {
+    "entity_id": "STD_ISO_9001",
+    "canonical": "ISO 9001",
+    "aliases": [
+      "ISO9001"
+    ],
+    "category": "quality",
+    "business_area": "quality"
+  },
+
+  "iso 10002": {
+    "entity_id": "STD_ISO_10002",
+    "canonical": "ISO 10002",
+    "aliases": [],
+    "category": "quality",
+    "business_area": "quality"
+  },
+
+  "iso 10012": {
+    "entity_id": "STD_ISO_10012",
+    "canonical": "ISO 10012",
+    "aliases": [],
+    "category": "quality",
+    "business_area": "quality"
+  },
+
+  "iso 19011": {
+    "entity_id": "STD_ISO_19011",
+    "canonical": "ISO 19011",
+    "aliases": [],
+    "category": "quality",
+    "business_area": "quality"
+  },
+
+  "iso 17025": {
+    "entity_id": "STD_ISO_17025",
+    "canonical": "ISO/IEC 17025",
+    "aliases": [
+      "ISO 17025"
+    ],
+    "category": "laboratory",
+    "business_area": "laboratory"
+  },
+
+  "iso 17020": {
+    "entity_id": "STD_ISO_17020",
+    "canonical": "ISO/IEC 17020",
+    "aliases": [
+      "ISO 17020"
+    ],
+    "category": "inspection",
+    "business_area": "quality"
+  },
+
+  "iso 17043": {
+    "entity_id": "STD_ISO_17043",
+    "canonical": "ISO/IEC 17043",
+    "aliases": [
+      "ISO 17043"
+    ],
+    "category": "laboratory",
+    "business_area": "laboratory"
+  },
+
+  "iso 15189": {
+    "entity_id": "STD_ISO_15189",
+    "canonical": "ISO 15189",
+    "aliases": [],
+    "category": "medical",
+    "business_area": "medical"
+  },
+
+  "lean manufacturing": {
+    "entity_id": "STD_LEAN",
+    "canonical": "Lean Manufacturing",
+    "aliases": [
+      "Lean"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "total productive maintenance": {
+    "entity_id": "STD_TPM",
     "canonical": "Total Productive Maintenance",
+    "aliases": [
+      "TPM"
+    ],
     "category": "maintenance",
     "business_area": "operations"
   },
-  "lean manufacturing": {
-    "entity_id": "METHOD_LEAN_MANUFACTURING",
-    "canonical": "Lean Manufacturing",
+
+  "six sigma": {
+    "entity_id": "STD_SIX_SIGMA",
+    "canonical": "Six Sigma",
+    "aliases": [],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "kaizen": {
+    "entity_id": "STD_KAIZEN",
+    "canonical": "Kaizen",
+    "aliases": [],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "5s": {
+    "entity_id": "STD_5S",
+    "canonical": "5S",
+    "aliases": [],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "pdca": {
+    "entity_id": "STD_PDCA",
+    "canonical": "Plan Do Check Act",
+    "aliases": [
+      "PDCA"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "poka yoke": {
+    "entity_id": "STD_POKA_YOKE",
+    "canonical": "Poka-Yoke",
+    "aliases": [
+      "Mistake Proofing"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "smed": {
+    "entity_id": "STD_SMED",
+    "canonical": "Single Minute Exchange of Dies",
+    "aliases": [
+      "SMED"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "visual management": {
+    "entity_id": "STD_VISUAL_MANAGEMENT",
+    "canonical": "Visual Management",
+    "aliases": [],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "just in time": {
+    "entity_id": "STD_JIT",
+    "canonical": "Just In Time",
+    "aliases": [
+      "JIT"
+    ],
+    "category": "manufacturing",
+    "business_area": "operations"
+  },
+
+  "value stream mapping": {
+    "entity_id": "STD_VSM",
+    "canonical": "Value Stream Mapping",
+    "aliases": [
+      "VSM"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations"
+  },
+
+  "standard work": {
+    "entity_id": "STD_STANDARD_WORK",
+    "canonical": "Standard Work",
+    "aliases": [],
+    "category": "manufacturing",
+    "business_area": "operations"
+  },
+  
+  "iso 14001": {
+    "entity_id": "STD_ISO_14001",
+    "canonical": "ISO 14001",
+    "aliases": [
+      "ISO14001",
+      "Environmental Management System"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+
+  "iso 45001": {
+    "entity_id": "STD_ISO_45001",
+    "canonical": "ISO 45001",
+    "aliases": [
+      "ISO45001",
+      "Occupational Health and Safety Management System"
+    ],
+    "category": "health_safety",
+    "business_area": "health_safety"
+  },
+
+  "iso 50001": {
+    "entity_id": "STD_ISO_50001",
+    "canonical": "ISO 50001",
+    "aliases": [
+      "ISO50001",
+      "Energy Management System"
+    ],
+    "category": "energy",
+    "business_area": "energy"
+  },
+
+  "iso 31000": {
+    "entity_id": "STD_ISO_31000",
+    "canonical": "ISO 31000",
+    "aliases": [
+      "ISO31000",
+      "Risk Management"
+    ],
+    "category": "risk",
+    "business_area": "risk"
+  },
+
+  "iso 22301": {
+    "entity_id": "STD_ISO_22301",
+    "canonical": "ISO 22301",
+    "aliases": [
+      "Business Continuity Management System"
+    ],
+    "category": "business_continuity",
+    "business_area": "governance"
+  },
+
+  "iso 26000": {
+    "entity_id": "STD_ISO_26000",
+    "canonical": "ISO 26000",
+    "aliases": [
+      "Social Responsibility"
+    ],
+    "category": "sustainability",
+    "business_area": "sustainability"
+  },
+
+  "iso 37001": {
+    "entity_id": "STD_ISO_37001",
+    "canonical": "ISO 37001",
+    "aliases": [
+      "Anti Bribery Management System"
+    ],
+    "category": "governance",
+    "business_area": "governance"
+  },
+
+  "iso 37301": {
+    "entity_id": "STD_ISO_37301",
+    "canonical": "ISO 37301",
+    "aliases": [
+      "Compliance Management System"
+    ],
+    "category": "compliance",
+    "business_area": "governance"
+  },
+
+  "ohsas 18001": {
+    "entity_id": "STD_OHSAS_18001",
+    "canonical": "OHSAS 18001",
+    "aliases": [
+      "Occupational Health and Safety Assessment Series"
+    ],
+    "category": "health_safety",
+    "business_area": "health_safety"
+  },
+
+  "osha": {
+    "entity_id": "STD_OSHA",
+    "canonical": "Occupational Safety and Health Administration",
+    "aliases": [
+      "OSHA Standard"
+    ],
+    "category": "health_safety",
+    "business_area": "health_safety"
+  },
+
+  "nfpa": {
+    "entity_id": "STD_NFPA",
+    "canonical": "National Fire Protection Association",
+    "aliases": [
+      "NFPA"
+    ],
+    "category": "fire_safety",
+    "business_area": "health_safety"
+  },
+
+  "environmental protection act": {
+    "entity_id": "STD_ENV_PROTECTION_ACT",
+    "canonical": "Environmental Protection Act",
+    "aliases": [
+      "EPA"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+
+  "reach": {
+    "entity_id": "STD_REACH",
+    "canonical": "REACH Regulation",
+    "aliases": [
+      "Registration Evaluation Authorisation Restriction of Chemicals"
+    ],
+    "category": "regulatory",
+    "business_area": "environment"
+  },
+
+  "rohs": {
+    "entity_id": "STD_ROHS",
+    "canonical": "Restriction of Hazardous Substances",
+    "aliases": [
+      "RoHS Directive"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+
+  "waste electrical and electronic equipment": {
+    "entity_id": "STD_WEEE",
+    "canonical": "WEEE Directive",
+    "aliases": [
+      "WEEE"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+
+  "iso 39001": {
+    "entity_id": "STD_ISO_39001",
+    "canonical": "ISO 39001",
+    "aliases": [
+      "Road Traffic Safety Management"
+    ],
+    "category": "health_safety",
+    "business_area": "health_safety"
+  },
+
+  "iso 55001": {
+    "entity_id": "STD_ISO_55001",
+    "canonical": "ISO 55001",
+    "aliases": [
+      "Asset Management System"
+    ],
+    "category": "asset_management",
+    "business_area": "operations"
+  },
+
+  "sedex": {
+    "entity_id": "STD_SEDEX",
+    "canonical": "SEDEX",
+    "aliases": [
+      "Supplier Ethical Data Exchange"
+    ],
+    "category": "ethical_trade",
+    "business_area": "supply_chain"
+  },
+
+  "smeta": {
+    "entity_id": "STD_SMETA",
+    "canonical": "SMETA",
+    "aliases": [
+      "Sedex Members Ethical Trade Audit"
+    ],
+    "category": "ethical_trade",
+    "business_area": "supply_chain"
+  },
+
+  "sa8000": {
+    "entity_id": "STD_SA8000",
+    "canonical": "SA8000",
+    "aliases": [
+      "Social Accountability 8000"
+    ],
+    "category": "social_responsibility",
+    "business_area": "sustainability"
+  },
+
+  "iso 20400": {
+    "entity_id": "STD_ISO_20400",
+    "canonical": "ISO 20400",
+    "aliases": [
+      "Sustainable Procurement"
+    ],
+    "category": "procurement",
+    "business_area": "supply_chain"
+  },
+
+  "energy star": {
+    "entity_id": "STD_ENERGY_STAR",
+    "canonical": "Energy Star",
+    "aliases": [],
+    "category": "energy",
+    "business_area": "energy"
+  },
+
+  "iso 14064": {
+    "entity_id": "STD_ISO_14064",
+    "canonical": "ISO 14064",
+    "aliases": [
+      "Greenhouse Gas Management"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+
+  "iso 14067": {
+    "entity_id": "STD_ISO_14067",
+    "canonical": "ISO 14067",
+    "aliases": [
+      "Carbon Footprint"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+
+  "iso 46001": {
+    "entity_id": "STD_ISO_46001",
+    "canonical": "ISO 46001",
+    "aliases": [
+      "Water Efficiency Management"
+    ],
+    "category": "environment",
+    "business_area": "environment"
+  },
+  
+  "iso 13485": {
+    "entity_id": "STD_ISO_13485",
+    "canonical": "ISO 13485",
+    "aliases": [
+      "Medical Device Quality Management System"
+    ],
+    "category": "medical",
+    "business_area": "medical"
+  },
+
+  "gamp 5": {
+    "entity_id": "STD_GAMP_5",
+    "canonical": "GAMP 5",
+    "aliases": [
+      "Good Automated Manufacturing Practice",
+      "GAMP5"
+    ],
+    "category": "validation",
+    "business_area": "pharmaceutical"
+  },
+
+  "good clinical practice": {
+    "entity_id": "STD_GCP",
+    "canonical": "Good Clinical Practice",
+    "aliases": [
+      "GCP"
+    ],
+    "category": "clinical",
+    "business_area": "medical"
+  },
+
+  "good distribution practice": {
+    "entity_id": "STD_GDP_DIST",
+    "canonical": "Good Distribution Practice",
+    "aliases": [
+      "GDP Distribution"
+    ],
+    "category": "distribution",
+    "business_area": "supply_chain"
+  },
+
+  "good pharmacovigilance practice": {
+    "entity_id": "STD_GVP",
+    "canonical": "Good Pharmacovigilance Practice",
+    "aliases": [
+      "GVP"
+    ],
+    "category": "pharmacovigilance",
+    "business_area": "pharmaceutical"
+  },
+
+  "21 cfr part 11": {
+    "entity_id": "STD_21_CFR_11",
+    "canonical": "21 CFR Part 11",
+    "aliases": [
+      "FDA 21 CFR Part 11"
+    ],
+    "category": "regulatory",
+    "business_area": "pharmaceutical"
+  },
+
+  "21 cfr part 210": {
+    "entity_id": "STD_21_CFR_210",
+    "canonical": "21 CFR Part 210",
+    "aliases": [],
+    "category": "regulatory",
+    "business_area": "pharmaceutical"
+  },
+
+  "21 cfr part 211": {
+    "entity_id": "STD_21_CFR_211",
+    "canonical": "21 CFR Part 211",
+    "aliases": [],
+    "category": "regulatory",
+    "business_area": "pharmaceutical"
+  },
+
+  "annex 11": {
+    "entity_id": "STD_ANNEX_11",
+    "canonical": "EU GMP Annex 11",
+    "aliases": [],
+    "category": "validation",
+    "business_area": "pharmaceutical"
+  },
+
+  "annex 15": {
+    "entity_id": "STD_ANNEX_15",
+    "canonical": "EU GMP Annex 15",
+    "aliases": [],
+    "category": "validation",
+    "business_area": "pharmaceutical"
+  },
+
+  "astm": {
+    "entity_id": "STD_ASTM",
+    "canonical": "ASTM International",
+    "aliases": [
+      "ASTM Standards"
+    ],
+    "category": "testing",
+    "business_area": "laboratory"
+  },
+
+  "astm e2500": {
+    "entity_id": "STD_ASTM_E2500",
+    "canonical": "ASTM E2500",
+    "aliases": [],
+    "category": "validation",
+    "business_area": "pharmaceutical"
+  },
+
+  "iso 11135": {
+    "entity_id": "STD_ISO_11135",
+    "canonical": "ISO 11135",
+    "aliases": [],
+    "category": "medical",
+    "business_area": "medical"
+  },
+
+  "iso 11137": {
+    "entity_id": "STD_ISO_11137",
+    "canonical": "ISO 11137",
+    "aliases": [],
+    "category": "medical",
+    "business_area": "medical"
+  },
+
+  "iso 10993": {
+    "entity_id": "STD_ISO_10993",
+    "canonical": "ISO 10993",
+    "aliases": [
+      "Biological Evaluation of Medical Devices"
+    ],
+    "category": "medical",
+    "business_area": "medical"
+  },
+
+  "iso 17665": {
+    "entity_id": "STD_ISO_17665",
+    "canonical": "ISO 17665",
+    "aliases": [],
+    "category": "sterilization",
+    "business_area": "medical"
+  },
+
+  "iso 14971": {
+    "entity_id": "STD_ISO_14971",
+    "canonical": "ISO 14971",
+    "aliases": [
+      "Medical Device Risk Management"
+    ],
+    "category": "risk",
+    "business_area": "medical"
+  },
+
+  "usp": {
+    "entity_id": "STD_USP",
+    "canonical": "United States Pharmacopeia",
+    "aliases": [
+      "USP"
+    ],
+    "category": "pharmaceutical",
+    "business_area": "pharmaceutical"
+  },
+
+  "bp": {
+    "entity_id": "STD_BP",
+    "canonical": "British Pharmacopoeia",
+    "aliases": [
+      "BP"
+    ],
+    "category": "pharmaceutical",
+    "business_area": "pharmaceutical"
+  },
+
+  "ep": {
+    "entity_id": "STD_EP",
+    "canonical": "European Pharmacopoeia",
+    "aliases": [
+      "Ph. Eur."
+    ],
+    "category": "pharmaceutical",
+    "business_area": "pharmaceutical"
+  },
+
+  "jp": {
+    "entity_id": "STD_JP",
+    "canonical": "Japanese Pharmacopoeia",
+    "aliases": [],
+    "category": "pharmaceutical",
+    "business_area": "pharmaceutical"
+  },
+
+  "who good manufacturing practices": {
+    "entity_id": "STD_WHO_GMP",
+    "canonical": "WHO GMP",
+    "aliases": [
+      "WHO GMP"
+    ],
+    "category": "pharmaceutical",
+    "business_area": "pharmaceutical"
+  },
+
+  "pic/s": {
+    "entity_id": "STD_PICS",
+    "canonical": "PIC/S GMP",
+    "aliases": [
+      "PICS"
+    ],
+    "category": "pharmaceutical",
+    "business_area": "pharmaceutical"
+  },
+
+  "calibration laboratory": {
+    "entity_id": "STD_CAL_LAB",
+    "canonical": "Calibration Laboratory",
+    "aliases": [],
+    "category": "laboratory",
+    "business_area": "laboratory"
+  },
+
+  "measurement uncertainty": {
+    "entity_id": "STD_MEASUREMENT_UNCERTAINTY",
+    "canonical": "Measurement Uncertainty",
+    "aliases": [],
+    "category": "metrology",
+    "business_area": "laboratory"
+  },
+
+  "iatf 16949": {
+    "entity_id": "STD_IATF_16949",
+    "canonical": "IATF 16949",
+    "aliases": [
+      "Automotive Quality Management System"
+    ],
+    "category": "automotive",
+    "business_area": "automotive"
+  },
+
+  "as9100": {
+    "entity_id": "STD_AS9100",
+    "canonical": "AS9100",
+    "aliases": [
+      "Aerospace Quality Management"
+    ],
+    "category": "aerospace",
+    "business_area": "aerospace"
+  },
+
+  "nadcap": {
+    "entity_id": "STD_NADCAP",
+    "canonical": "NADCAP",
+    "aliases": [
+      "National Aerospace and Defense Contractors Accreditation Program"
+    ],
+    "category": "aerospace",
+    "business_area": "aerospace"
+  },
+
+  "api q1": {
+    "entity_id": "STD_API_Q1",
+    "canonical": "API Q1",
+    "aliases": [],
+    "category": "oil_gas",
+    "business_area": "oil_gas"
+  },
+
+  "api q2": {
+    "entity_id": "STD_API_Q2",
+    "canonical": "API Q2",
+    "aliases": [],
+    "category": "oil_gas",
+    "business_area": "oil_gas"
+  },
+
+  "iec 61508": {
+    "entity_id": "STD_IEC_61508",
+    "canonical": "IEC 61508",
+    "aliases": [
+      "Functional Safety"
+    ],
+    "category": "engineering",
+    "business_area": "engineering"
+  },
+
+  "iec 62304": {
+    "entity_id": "STD_IEC_62304",
+    "canonical": "IEC 62304",
+    "aliases": [
+      "Medical Device Software"
+    ],
+    "category": "medical",
+    "business_area": "medical"
+  },
+
+  "iec 60601": {
+    "entity_id": "STD_IEC_60601",
+    "canonical": "IEC 60601",
+    "aliases": [
+      "Medical Electrical Equipment"
+    ],
+    "category": "medical",
+    "business_area": "medical"
+  },
+
+  "iec 17025": {
+    "entity_id": "STD_IEC_17025",
+    "canonical": "IEC 17025",
+    "aliases": [],
+    "category": "laboratory",
+    "business_area": "laboratory"
+  },
+
+  "iso 15378": {
+    "entity_id": "STD_ISO_15378",
+    "canonical": "ISO 15378",
+    "aliases": [
+      "Primary Packaging Materials"
+    ],
+    "category": "packaging",
+    "business_area": "packaging"
+  },
+
+  "iso 22005": {
+    "entity_id": "STD_ISO_22005",
+    "canonical": "ISO 22005",
+    "aliases": [
+      "Traceability in Feed and Food Chain"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety"
+  },
+
+    "rainforest alliance": {
+    "entity_id": "STD_RA",
+    "canonical": "Rainforest Alliance",
+    "aliases": [],
+    "category": "sustainability",
+    "business_area": "agriculture"
+  },
+
+  "organic certification": {
+    "entity_id": "STD_ORGANIC",
+    "canonical": "Organic Certification",
+    "aliases": [],
+    "category": "agriculture",
+    "business_area": "agriculture"
+  },
+
+  "fairtrade": {
+    "entity_id": "STD_FAIRTRADE",
+    "canonical": "Fairtrade",
+    "aliases": [],
+    "category": "sustainability",
+    "business_area": "sustainability"
+  },
+
+  "forest stewardship council": {
+    "entity_id": "STD_FSC",
+    "canonical": "Forest Stewardship Council",
+    "aliases": [
+      "FSC"
+    ],
+    "category": "environment",
+    "business_area": "sustainability"
+  },
+
+  "pefc": {
+    "entity_id": "STD_PEFC",
+    "canonical": "Programme for the Endorsement of Forest Certification",
+    "aliases": [],
+    "category": "environment",
+    "business_area": "sustainability"
+  },
+
+  "oeko tex": {
+    "entity_id": "STD_OEKOTEX",
+    "canonical": "OEKO-TEX",
+    "aliases": [
+      "Oeko Tex"
+    ],
+    "category": "textile",
+    "business_area": "textile"
+  },
+
+  "sae": {
+    "entity_id": "STD_SAE",
+    "canonical": "SAE Standards",
+    "aliases": [],
+    "category": "engineering",
+    "business_area": "engineering"
+  },
+
+  "ansi": {
+    "entity_id": "STD_ANSI",
+    "canonical": "ANSI Standards",
+    "aliases": [],
+    "category": "engineering",
+    "business_area": "engineering"
+  },
+
+  "din": {
+    "entity_id": "STD_DIN",
+    "canonical": "DIN Standards",
+    "aliases": [],
+    "category": "engineering",
+    "business_area": "engineering"
+  },
+
+  "bsi": {
+    "entity_id": "STD_BSI",
+    "canonical": "British Standards Institution",
+    "aliases": [],
+    "category": "engineering",
+    "business_area": "engineering"
+  },
+
+  "jis": {
+    "entity_id": "STD_JIS",
+    "canonical": "Japanese Industrial Standards",
+    "aliases": [],
+    "category": "engineering",
+    "business_area": "engineering"
+  },
+  
+  "iso 27001": {
+    "entity_id": "STD_ISO_27001",
+    "canonical": "ISO 27001",
+    "aliases": [
+      "Information Security Management System",
+      "ISMS"
+    ],
+    "category": "information_security",
+    "business_area": "information_security"
+  },
+
+  "iso 27017": {
+    "entity_id": "STD_ISO_27017",
+    "canonical": "ISO 27017",
+    "aliases": [
+      "Cloud Security"
+    ],
+    "category": "cloud",
+    "business_area": "information_security"
+  },
+
+  "iso 27018": {
+    "entity_id": "STD_ISO_27018",
+    "canonical": "ISO 27018",
+    "aliases": [
+      "Cloud Privacy"
+    ],
+    "category": "privacy",
+    "business_area": "information_security"
+  },
+
+  "iso 27701": {
+    "entity_id": "STD_ISO_27701",
+    "canonical": "ISO 27701",
+    "aliases": [
+      "Privacy Information Management System",
+      "PIMS"
+    ],
+    "category": "privacy",
+    "business_area": "information_security"
+  },
+
+  "iso 20000": {
+    "entity_id": "STD_ISO_20000",
+    "canonical": "ISO 20000",
+    "aliases": [
+      "IT Service Management"
+    ],
+    "category": "service_management",
+    "business_area": "it"
+  },
+
+  "itil": {
+    "entity_id": "STD_ITIL",
+    "canonical": "ITIL",
+    "aliases": [
+      "Information Technology Infrastructure Library"
+    ],
+    "category": "service_management",
+    "business_area": "it"
+  },
+
+  "cobit": {
+    "entity_id": "STD_COBIT",
+    "canonical": "COBIT",
+    "aliases": [],
+    "category": "governance",
+    "business_area": "it"
+  },
+
+  "nist": {
+    "entity_id": "STD_NIST",
+    "canonical": "NIST Cybersecurity Framework",
+    "aliases": [
+      "NIST CSF"
+    ],
+    "category": "cybersecurity",
+    "business_area": "information_security"
+  },
+
+  "cis controls": {
+    "entity_id": "STD_CIS_CONTROLS",
+    "canonical": "CIS Controls",
+    "aliases": [],
+    "category": "cybersecurity",
+    "business_area": "information_security"
+  },
+
+  "soc 2": {
+    "entity_id": "STD_SOC2",
+    "canonical": "SOC 2",
+    "aliases": [
+      "SOC2"
+    ],
+    "category": "audit",
+    "business_area": "information_security"
+  },
+
+  "pci dss": {
+    "entity_id": "STD_PCI_DSS",
+    "canonical": "PCI DSS",
+    "aliases": [
+      "Payment Card Industry Data Security Standard"
+    ],
+    "category": "payment_security",
+    "business_area": "information_security"
+  },
+
+  "gdpr": {
+    "entity_id": "STD_GDPR",
+    "canonical": "General Data Protection Regulation",
+    "aliases": [],
+    "category": "privacy",
+    "business_area": "information_security"
+  },
+
+  "hipaa": {
+    "entity_id": "STD_HIPAA",
+    "canonical": "HIPAA",
+    "aliases": [],
+    "category": "privacy",
+    "business_area": "healthcare"
+  },
+
+  "cmmi": {
+    "entity_id": "STD_CMMI",
+    "canonical": "Capability Maturity Model Integration",
+    "aliases": [],
+    "category": "software",
+    "business_area": "software_engineering"
+  },
+
+  "pmbok": {
+    "entity_id": "STD_PMBOK",
+    "canonical": "PMBOK",
+    "aliases": [
+      "Project Management Body of Knowledge"
+    ],
+    "category": "project_management",
+    "business_area": "project_management"
+  },
+
+  "prince2": {
+    "entity_id": "STD_PRINCE2",
+    "canonical": "PRINCE2",
+    "aliases": [],
+    "category": "project_management",
+    "business_area": "project_management"
+  },
+
+  "scrum": {
+    "entity_id": "STD_SCRUM",
+    "canonical": "Scrum",
+    "aliases": [
+      "Agile Scrum"
+    ],
+    "category": "agile",
+    "business_area": "project_management"
+  },
+
+  "kanban": {
+    "entity_id": "STD_KANBAN",
+    "canonical": "Kanban",
+    "aliases": [],
+    "category": "agile",
+    "business_area": "project_management"
+  },
+
+  "safe": {
+    "entity_id": "STD_SAFE",
+    "canonical": "Scaled Agile Framework",
+    "aliases": [
+      "SAFe"
+    ],
+    "category": "agile",
+    "business_area": "project_management"
+  },
+
+  "devops": {
+    "entity_id": "STD_DEVOPS",
+    "canonical": "DevOps",
+    "aliases": [],
+    "category": "software",
+    "business_area": "software_engineering"
+  },
+
+  "mlops": {
+    "entity_id": "STD_MLOPS",
+    "canonical": "MLOps",
+    "aliases": [],
+    "category": "artificial_intelligence",
+    "business_area": "data_science"
+  },
+
+  "iso 56002": {
+    "entity_id": "STD_ISO_56002",
+    "canonical": "ISO 56002",
+    "aliases": [
+      "Innovation Management System"
+    ],
+    "category": "innovation",
+    "business_area": "strategy"
+  },
+
+  "efqm": {
+    "entity_id": "STD_EFQM",
+    "canonical": "EFQM Excellence Model",
+    "aliases": [],
+    "category": "business_excellence",
+    "business_area": "strategy"
+  },
+
+  "baldrige": {
+    "entity_id": "STD_BALDRIGE",
+    "canonical": "Baldrige Excellence Framework",
+    "aliases": [],
+    "category": "business_excellence",
+    "business_area": "strategy"
+  },
+
+  "lean six sigma": {
+    "entity_id": "STD_LEAN_SIX_SIGMA",
+    "canonical": "Lean Six Sigma",
+    "aliases": [],
     "category": "continuous_improvement",
     "business_area": "operations"
   }

@@ -1,302 +1,437 @@
 {
-    "leadership": {
-        "entity_id": "DOMAIN_LEADERSHIP",
-        "canonical": "leadership",
-        "business_area": "people",
-        "description": "Leadership and people management."
-    },
-
-    "operational_leadership": {
-        "entity_id": "DOMAIN_OPERATIONAL_LEADERSHIP",
-        "canonical": "operational_leadership",
-        "business_area": "operations",
-        "description": "Leading manufacturing or operational functions."
-    },
-
-    "quality_leadership": {
-        "entity_id": "DOMAIN_QUALITY_LEADERSHIP",
-        "canonical": "quality_leadership",
-        "business_area": "quality",
-        "description": "Leadership of quality systems."
-    },
-
-    "food_safety_leadership": {
-        "entity_id": "DOMAIN_FOOD_SAFETY_LEADERSHIP",
-        "canonical": "food_safety_leadership",
-        "business_area": "food_safety",
-        "description": "Leadership of food safety systems."
-    },
-
-    "people_management": {
-        "entity_id": "DOMAIN_PEOPLE_MANAGEMENT",
-        "canonical": "people_management",
-        "business_area": "people",
-        "description": "Managing teams and personnel."
-    },
-
-    "quality_management": {
-        "entity_id": "DOMAIN_QUALITY_MANAGEMENT",
-        "canonical": "quality_management",
-        "business_area": "quality",
-        "description": "Managing quality systems."
-    },
-
-    "operations_management": {
-        "entity_id": "DOMAIN_OPERATIONS_MANAGEMENT",
-        "canonical": "operations_management",
-        "business_area": "operations",
-        "description": "Managing operational processes."
-    },
-
-    "facility_management": {
-        "entity_id": "DOMAIN_FACILITY_MANAGEMENT",
-        "canonical": "facility_management",
-        "business_area": "operations",
-        "description": "Managing manufacturing facilities."
-    },
-
-    "food_safety": {
-        "entity_id": "DOMAIN_FOOD_SAFETY",
-        "canonical": "food_safety",
-        "business_area": "food_safety",
-        "description": "Food safety systems and compliance."
-    },
-
-    "quality": {
-        "entity_id": "DOMAIN_QUALITY",
-        "canonical": "quality",
-        "business_area": "quality",
-        "description": "Quality assurance and quality control."
-    },
-
-    "operations": {
-        "entity_id": "DOMAIN_OPERATIONS",
-        "canonical": "operations",
-        "business_area": "operations",
-        "description": "Operational excellence."
-    },
-
-    "continuous_improvement": {
-        "entity_id": "DOMAIN_CONTINUOUS_IMPROVEMENT",
-        "canonical": "continuous_improvement",
-        "business_area": "operations",
-        "description": "Continuous improvement initiatives."
-    },
-
-    "operational_excellence": {
-        "entity_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
-        "canonical": "operational_excellence",
-        "business_area": "operations",
-        "description": "Operational excellence and optimization."
-    },
-
-    "quality_improvement": {
-        "entity_id": "DOMAIN_QUALITY_IMPROVEMENT",
-        "canonical": "quality_improvement",
-        "business_area": "quality",
-        "description": "Quality improvement initiatives."
-    },
-
-    "people_development": {
-        "entity_id": "DOMAIN_PEOPLE_DEVELOPMENT",
-        "canonical": "people_development",
-        "business_area": "people",
-        "description": "Training and capability development."
-    },
-
-    "quality_excellence": {
-        "entity_id": "DOMAIN_QUALITY_EXCELLENCE",
-        "canonical": "quality_excellence",
-        "business_area": "quality",
-        "description": "Quality excellence achievements."
-    },
-
-    "food_safety_excellence": {
-        "entity_id": "DOMAIN_FOOD_SAFETY_EXCELLENCE",
-        "canonical": "food_safety_excellence",
-        "business_area": "food_safety",
-        "description": "Food safety excellence achievements."
-    },
-
-    "quality_systems": {
-        "entity_id": "DOMAIN_QUALITY_SYSTEMS",
-        "canonical": "quality_systems",
-        "business_area": "quality",
-        "description": "Quality management systems."
-    },
-
-    "food_safety_systems": {
-        "entity_id": "DOMAIN_FOOD_SAFETY_SYSTEMS",
-        "canonical": "food_safety_systems",
-        "business_area": "food_safety",
-        "description": "Food safety management systems."
-    },
-
-    "process_development": {
-        "entity_id": "DOMAIN_PROCESS_DEVELOPMENT",
-        "canonical": "process_development",
-        "business_area": "operations",
-        "description": "Process development and implementation."
-    },
-
-    "manufacturing": {
+  "operations": {
+    "entity_id": "DOMAIN_OPERATIONS",
+    "canonical": "Operations",
+    "aliases": [
+      "operations",
+      "operations"
+    ],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "manufacturing": {
     "entity_id": "DOMAIN_MANUFACTURING",
     "canonical": "Manufacturing",
-    "category": "operations"
-    },
-    "production": {
-        "entity_id": "DOMAIN_PRODUCTION",
-        "canonical": "Production",
-        "category": "operations"
-    },
-    "operational excellence": {
-        "entity_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
-        "canonical": "Operational Excellence",
-        "category": "operations"
-    },
-    "continuous improvement": {
-        "entity_id": "DOMAIN_CONTINUOUS_IMPROVEMENT",
-        "canonical": "Continuous Improvement",
-        "category": "operations"
-    },
-        "maintenance": {
-        "entity_id": "DOMAIN_MAINTENANCE",
-        "canonical": "Maintenance",
-        "category": "operations"
-    },
-    "total productive maintenance": {
-        "entity_id": "DOMAIN_MAINTENANCE",
-        "canonical": "Maintenance",
-        "category": "operations"
-    },
-    
-    "quality assurance": {
-        "entity_id": "DOMAIN_QUALITY_ASSURANCE",
-        "canonical": "Quality Assurance",
-        "category": "quality"
-    },
-    "quality control": {
-        "entity_id": "DOMAIN_QUALITY_CONTROL",
-        "canonical": "Quality Control",
-        "category": "quality"
-    },
-    "food safety": {
-        "entity_id": "DOMAIN_FOOD_SAFETY",
-        "canonical": "Food Safety",
-        "category": "food_safety"
-    },
-    "food safety management": {
-        "entity_id": "DOMAIN_FOOD_SAFETY",
-        "canonical": "Food Safety",
-        "category": "food_safety"
-    },
-    "haccp": {
-        "entity_id": "DOMAIN_FOOD_SAFETY",
-        "canonical": "Food Safety",
-        "category": "food_safety"
-    },
-    "gmp": {
-        "entity_id": "DOMAIN_FOOD_SAFETY",
-        "canonical": "Food Safety",
-        "category": "food_safety"
-    },
-    "fssc 22000": {
-        "entity_id": "DOMAIN_FOOD_SAFETY",
-        "canonical": "Food Safety",
-        "category": "food_safety"
-    },
-    "supply chain": {
-        "entity_id": "DOMAIN_SUPPLY_CHAIN",
-        "canonical": "Supply Chain",
-        "category": "supply_chain"
-    },
-    "inventory management": {
-        "entity_id": "DOMAIN_INVENTORY",
-        "canonical": "Inventory Management",
-        "category": "supply_chain"
-    },
-    "procurement": {
-        "entity_id": "DOMAIN_PROCUREMENT",
-        "canonical": "Procurement",
-        "category": "supply_chain"
-    },
-    "warehouse": {
-        "entity_id": "DOMAIN_WAREHOUSING",
-        "canonical": "Warehousing",
-        "category": "supply_chain"
-    },
-    "logistics": {
-        "entity_id": "DOMAIN_LOGISTICS",
-        "canonical": "Logistics",
-        "category": "supply_chain"
-    },
-    "people": {
-        "entity_id": "DOMAIN_PEOPLE",
-        "canonical": "People",
-        "category": "people"
-    },
-    "training": {
-        "entity_id": "DOMAIN_TRAINING",
-        "canonical": "Training & Development",
-        "category": "people"
-    },
-    "people development": {
-        "entity_id": "DOMAIN_PEOPLE_DEVELOPMENT",
-        "canonical": "People Development",
-        "category": "people"
-    },
-    
-    "team management": {
-        "entity_id": "DOMAIN_LEADERSHIP",
-        "canonical": "Leadership",
-        "category": "leadership"
-    },
-        
-    "finance": {
-        "entity_id": "DOMAIN_FINANCE",
-        "canonical": "Finance",
-        "category": "finance"
-    },
-    "revenue": {
-        "entity_id": "DOMAIN_FINANCE",
-        "canonical": "Finance",
-        "category": "finance"
-    },
-    "cost reduction": {
-        "entity_id": "DOMAIN_COST_MANAGEMENT",
-        "canonical": "Cost Management",
-        "category": "finance"
-    },
-    "customer service": {
-        "entity_id": "DOMAIN_CUSTOMER_SERVICE",
-        "canonical": "Customer Service",
-        "category": "customer"
-    },
-    "customer experience": {
-        "entity_id": "DOMAIN_CUSTOMER_EXPERIENCE",
-        "canonical": "Customer Experience",
-        "category": "customer"
-    },
-    "project management": {
-        "entity_id": "DOMAIN_PROJECT_MANAGEMENT",
-        "canonical": "Project Management",
-        "category": "management"
-    },
-    "risk management": {
-        "entity_id": "DOMAIN_RISK_MANAGEMENT",
-        "canonical": "Risk Management",
-        "category": "management"
-    },
-    "compliance": {
-        "entity_id": "DOMAIN_COMPLIANCE",
-        "canonical": "Compliance",
-        "category": "governance"
-    },
-    "audit": {
-        "entity_id": "DOMAIN_AUDIT",
-        "canonical": "Audit",
-        "category": "governance"
-    }
-    }
-
-    
+    "aliases": [
+      "manufacturing",
+      "manufacturing"
+    ],
+    "category": "manufacturing",
+    "business_area": "manufacturing",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "production": {
+    "entity_id": "DOMAIN_PRODUCTION",
+    "canonical": "Production",
+    "aliases": [
+      "production",
+      "production"
+    ],
+    "category": "production",
+    "business_area": "production",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "engineering": {
+    "entity_id": "DOMAIN_ENGINEERING",
+    "canonical": "Engineering",
+    "aliases": [
+      "engineering",
+      "engineering"
+    ],
+    "category": "engineering",
+    "business_area": "engineering",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "maintenance": {
+    "entity_id": "DOMAIN_MAINTENANCE",
+    "canonical": "Maintenance",
+    "aliases": [
+      "maintenance",
+      "maintenance"
+    ],
+    "category": "maintenance",
+    "business_area": "maintenance",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "utilities": {
+    "entity_id": "DOMAIN_UTILITIES",
+    "canonical": "Utilities",
+    "aliases": [
+      "utilities",
+      "utilities"
+    ],
+    "category": "utilities",
+    "business_area": "utilities",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "water_treatment": {
+    "entity_id": "DOMAIN_WATER_TREATMENT",
+    "canonical": "Water Treatment",
+    "aliases": [
+      "water treatment",
+      "water-treatment"
+    ],
+    "category": "water_treatment",
+    "business_area": "water_treatment",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "laboratory": {
+    "entity_id": "DOMAIN_LABORATORY",
+    "canonical": "Laboratory",
+    "aliases": [
+      "laboratory",
+      "laboratory"
+    ],
+    "category": "laboratory",
+    "business_area": "laboratory",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  
+  "quality": {
+    "entity_id": "DOMAIN_QUALITY",
+    "canonical": "Quality",
+    "aliases": [
+      "quality",
+      "quality"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "food_safety": {
+    "entity_id": "DOMAIN_FOOD_SAFETY",
+    "canonical": "Food Safety",
+    "aliases": [
+      "food safety",
+      "food-safety"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "compliance": {
+    "entity_id": "DOMAIN_COMPLIANCE",
+    "canonical": "Compliance",
+    "aliases": [
+      "compliance",
+      "compliance"
+    ],
+    "category": "compliance",
+    "business_area": "compliance",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "audit": {
+    "entity_id": "DOMAIN_AUDIT",
+    "canonical": "Audit",
+    "aliases": [
+      "audit",
+      "audit"
+    ],
+    "category": "audit",
+    "business_area": "audit",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "continuous_improvement": {
+    "entity_id": "DOMAIN_CONTINUOUS_IMPROVEMENT",
+    "canonical": "Continuous Improvement",
+    "aliases": [
+      "continuous improvement",
+      "continuous-improvement"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "continuous_improvement",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "lean_manufacturing": {
+    "entity_id": "DOMAIN_LEAN_MANUFACTURING",
+    "canonical": "Lean Manufacturing",
+    "aliases": [
+      "lean manufacturing",
+      "lean-manufacturing"
+    ],
+    "category": "lean_manufacturing",
+    "business_area": "lean_manufacturing",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "six_sigma": {
+    "entity_id": "DOMAIN_SIX_SIGMA",
+    "canonical": "Six Sigma",
+    "aliases": [
+      "six sigma",
+      "six-sigma"
+    ],
+    "category": "six_sigma",
+    "business_area": "six_sigma",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "packaging": {
+    "entity_id": "DOMAIN_PACKAGING",
+    "canonical": "Packaging",
+    "aliases": [
+      "packaging",
+      "packaging"
+    ],
+    "category": "packaging",
+    "business_area": "packaging",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  
+  "supply_chain": {
+    "entity_id": "DOMAIN_SUPPLY_CHAIN",
+    "canonical": "Supply Chain",
+    "aliases": [
+      "supply chain",
+      "supply-chain"
+    ],
+    "category": "supply_chain",
+    "business_area": "supply_chain",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "procurement": {
+    "entity_id": "DOMAIN_PROCUREMENT",
+    "canonical": "Procurement",
+    "aliases": [
+      "procurement",
+      "procurement"
+    ],
+    "category": "procurement",
+    "business_area": "procurement",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "inventory": {
+    "entity_id": "DOMAIN_INVENTORY",
+    "canonical": "Inventory",
+    "aliases": [
+      "inventory",
+      "inventory"
+    ],
+    "category": "inventory",
+    "business_area": "inventory",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "warehousing": {
+    "entity_id": "DOMAIN_WAREHOUSING",
+    "canonical": "Warehousing",
+    "aliases": [
+      "warehousing",
+      "warehousing"
+    ],
+    "category": "warehousing",
+    "business_area": "warehousing",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "logistics": {
+    "entity_id": "DOMAIN_LOGISTICS",
+    "canonical": "Logistics",
+    "aliases": [
+      "logistics",
+      "logistics"
+    ],
+    "category": "logistics",
+    "business_area": "logistics",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "distribution": {
+    "entity_id": "DOMAIN_DISTRIBUTION",
+    "canonical": "Distribution",
+    "aliases": [
+      "distribution",
+      "distribution"
+    ],
+    "category": "distribution",
+    "business_area": "distribution",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "retail": {
+    "entity_id": "DOMAIN_RETAIL",
+    "canonical": "Retail",
+    "aliases": [
+      "retail",
+      "retail"
+    ],
+    "category": "retail",
+    "business_area": "retail",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "sales": {
+    "entity_id": "DOMAIN_SALES",
+    "canonical": "Sales",
+    "aliases": [
+      "sales",
+      "sales"
+    ],
+    "category": "sales",
+    "business_area": "sales",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  
+  "leadership": {
+    "entity_id": "DOMAIN_LEADERSHIP",
+    "canonical": "Leadership",
+    "aliases": [
+      "leadership",
+      "leadership"
+    ],
+    "category": "leadership",
+    "business_area": "leadership",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "people_management": {
+    "entity_id": "DOMAIN_PEOPLE_MANAGEMENT",
+    "canonical": "People Management",
+    "aliases": [
+      "people management",
+      "people-management"
+    ],
+    "category": "people_management",
+    "business_area": "people_management",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "training": {
+    "entity_id": "DOMAIN_TRAINING",
+    "canonical": "Training",
+    "aliases": [
+      "training",
+      "training"
+    ],
+    "category": "training",
+    "business_area": "training",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "customer_service": {
+    "entity_id": "DOMAIN_CUSTOMER_SERVICE",
+    "canonical": "Customer Service",
+    "aliases": [
+      "customer service",
+      "customer-service"
+    ],
+    "category": "customer_service",
+    "business_area": "customer_service",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "analytics": {
+    "entity_id": "DOMAIN_ANALYTICS",
+    "canonical": "Analytics",
+    "aliases": [
+      "analytics",
+      "analytics"
+    ],
+    "category": "analytics",
+    "business_area": "analytics",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "digital_transformation": {
+    "entity_id": "DOMAIN_DIGITAL_TRANSFORMATION",
+    "canonical": "Digital Transformation",
+    "aliases": [
+      "digital transformation",
+      "digital-transformation"
+    ],
+    "category": "digital_transformation",
+    "business_area": "digital_transformation",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "automation": {
+    "entity_id": "DOMAIN_AUTOMATION",
+    "canonical": "Automation",
+    "aliases": [
+      "automation",
+      "automation"
+    ],
+    "category": "automation",
+    "business_area": "automation",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "project_management": {
+    "entity_id": "DOMAIN_PROJECT_MANAGEMENT",
+    "canonical": "Project Management",
+    "aliases": [
+      "project management",
+      "project-management"
+    ],
+    "category": "project_management",
+    "business_area": "project_management",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "risk_management": {
+    "entity_id": "DOMAIN_RISK_MANAGEMENT",
+    "canonical": "Risk Management",
+    "aliases": [
+      "risk management",
+      "risk-management"
+    ],
+    "category": "risk_management",
+    "business_area": "risk_management",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "finance": {
+    "entity_id": "DOMAIN_FINANCE",
+    "canonical": "Finance",
+    "aliases": [
+      "finance",
+      "finance"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "research_and_development": {
+    "entity_id": "DOMAIN_RESEARCH_AND_DEVELOPMENT",
+    "canonical": "Research And Development",
+    "aliases": [
+      "research and development",
+      "research-and-development"
+    ],
+    "category": "research_and_development",
+    "business_area": "research_and_development",
+    "description": "",
+    "impact_weight": 1.0
+  },
+  "sustainability": {
+    "entity_id": "DOMAIN_SUSTAINABILITY",
+    "canonical": "Sustainability",
+    "aliases": [
+      "sustainability",
+      "sustainability"
+    ],
+    "category": "sustainability",
+    "business_area": "sustainability",
+    "description": "",
+    "impact_weight": 1.0
+  }
+}

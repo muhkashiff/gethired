@@ -1,64 +1,1158 @@
 {
-    "Production Yield": {
-        "category": "operations",
-        "weight": 9,
-        "higher_is_better": true,
-        "executive_weight": 1.20
-    },
+  "production_yield": {
+    "entity_id": "IMPACT_PRODUCTION_YIELD",
+    "canonical": "Production Yield",
+    "aliases": [
+      "Yield",
+      "Production Yield",
+      "Product Yield",
+      "Manufacturing Yield"
+    ],
+    "category": "operations",
+    "business_area": "manufacturing",
+    "linked_kpi": "KPI_PRODUCTION_YIELD",
+    "linked_domain": "DOMAIN_MANUFACTURING",
+    "impact_type": "performance",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.25,
+    "resume_weight": 1.20,
+    "ai_importance": 0.98,
+    "executive_visibility": "high",
+    "description": "Measures usable product output relative to total input.",
+    "typical_unit": "%",
+    "typical_target": ">98%",
+    "reasoning_tags": [
+      "manufacturing",
+      "lean",
+      "efficiency",
+      "yield"
+    ]
+  },
 
-    "Efficiency": {
-        "category": "operations",
-        "weight": 8,
-        "higher_is_better": true,
-        "executive_weight": 1.10
-    },
+  "overall_equipment_effectiveness": {
+    "entity_id": "IMPACT_OEE",
+    "canonical": "Overall Equipment Effectiveness",
+    "aliases": [
+      "OEE",
+      "Equipment Effectiveness"
+    ],
+    "category": "operations",
+    "business_area": "manufacturing",
+    "linked_kpi": "KPI_OEE",
+    "linked_domain": "DOMAIN_OPERATIONAL_EXCELLENCE",
+    "impact_type": "performance",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.35,
+    "resume_weight": 1.25,
+    "ai_importance": 0.99,
+    "executive_visibility": "high",
+    "typical_unit": "%",
+    "typical_target": ">85%",
+    "reasoning_tags": [
+      "availability",
+      "performance",
+      "quality"
+    ]
+  },
 
-    "Revenue": {
-        "category": "finance",
-        "weight": 10,
-        "higher_is_better": true,
-        "executive_weight": 1.40
-    },
+  "efficiency": {
+    "entity_id": "IMPACT_EFFICIENCY",
+    "canonical": "Operational Efficiency",
+    "aliases": [
+      "Efficiency",
+      "Operational Efficiency",
+      "Process Efficiency"
+    ],
+    "category": "operations",
+    "business_area": "operations",
+    "linked_kpi": "KPI_EFFICIENCY",
+    "linked_domain": "DOMAIN_OPERATIONAL_EXCELLENCE",
+    "impact_type": "performance",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.15,
+    "resume_weight": 1.10,
+    "ai_importance": 0.95,
+    "executive_visibility": "high",
+    "typical_unit": "%",
+    "reasoning_tags": [
+      "productivity",
+      "throughput",
+      "optimization"
+    ]
+  },
 
-    "Cost Savings": {
-        "category": "finance",
-        "weight": 10,
-        "higher_is_better": true,
-        "executive_weight": 1.40
-    },
+  "throughput": {
+    "entity_id": "IMPACT_THROUGHPUT",
+    "canonical": "Production Throughput",
+    "aliases": [
+      "Throughput",
+      "Production Output"
+    ],
+    "category": "operations",
+    "business_area": "manufacturing",
+    "linked_kpi": "KPI_THROUGHPUT",
+    "linked_domain": "DOMAIN_MANUFACTURING",
+    "impact_type": "capacity",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.15,
+    "resume_weight": 1.05,
+    "ai_importance": 0.94,
+    "typical_unit": "Units/hour",
+    "reasoning_tags": [
+      "capacity",
+      "output",
+      "production"
+    ]
+  },
 
-    "Customer Complaints": {
-        "category": "quality",
-        "weight": 9,
-        "higher_is_better": false,
-        "executive_weight": 1.20
-    },
+  "capacity_utilization": {
+    "entity_id": "IMPACT_CAPACITY_UTILIZATION",
+    "canonical": "Capacity Utilization",
+    "aliases": [
+      "Capacity",
+      "Capacity Utilization"
+    ],
+    "category": "operations",
+    "business_area": "manufacturing",
+    "linked_kpi": "KPI_CAPACITY_UTILIZATION",
+    "linked_domain": "DOMAIN_OPERATIONAL_EXCELLENCE",
+    "impact_type": "capacity",
+    "higher_is_better": true,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.10,
+    "resume_weight": 1.00,
+    "ai_importance": 0.90,
+    "typical_unit": "%",
+    "reasoning_tags": [
+      "utilization",
+      "capacity",
+      "planning"
+    ]
+  },
 
-    "Production Waste": {
-        "category": "operations",
-        "weight": 8,
-        "higher_is_better": false,
-        "executive_weight": 1.10
-    },
+  "downtime": {
+    "entity_id": "IMPACT_DOWNTIME",
+    "canonical": "Production Downtime",
+    "aliases": [
+      "Downtime",
+      "Machine Downtime",
+      "Equipment Downtime"
+    ],
+    "category": "maintenance",
+    "business_area": "manufacturing",
+    "linked_kpi": "KPI_DOWNTIME",
+    "linked_domain": "DOMAIN_MAINTENANCE",
+    "impact_type": "loss",
+    "higher_is_better": false,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.20,
+    "resume_weight": 1.15,
+    "ai_importance": 0.97,
+    "typical_unit": "Hours",
+    "reasoning_tags": [
+      "maintenance",
+      "availability",
+      "oee"
+    ]
+  },
+  
+  "quality_score": {
+    "entity_id": "IMPACT_QUALITY_SCORE",
+    "canonical": "Quality Score",
+    "aliases": [
+      "Quality Score",
+      "Quality Rating"
+    ],
+    "category": "quality",
+    "business_area": "quality_management",
+    "linked_kpi": "KPI_QUALITY_SCORE",
+    "linked_domain": "DOMAIN_QUALITY_MANAGEMENT",
+    "impact_type": "performance",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.35,
+    "resume_weight": 1.30,
+    "ai_importance": 0.99,
+    "executive_visibility": "high",
+    "typical_unit": "%",
+    "typical_target": ">99%",
+    "reasoning_tags": [
+      "quality",
+      "customer",
+      "compliance"
+    ]
+  },
 
-    "Downtime": {
-        "category": "operations",
-        "weight": 8,
-        "higher_is_better": false,
-        "executive_weight": 1.10
-    },
+  "customer_complaints": {
+    "entity_id": "IMPACT_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
+    "aliases": [
+      "Complaints",
+      "Customer Complaints",
+      "Consumer Complaints"
+    ],
+    "category": "quality",
+    "business_area": "customer_quality",
+    "linked_kpi": "KPI_CUSTOMER_COMPLAINTS",
+    "linked_domain": "DOMAIN_CUSTOMER_EXPERIENCE",
+    "impact_type": "risk",
+    "higher_is_better": false,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.40,
+    "resume_weight": 1.30,
+    "ai_importance": 1.00,
+    "executive_visibility": "high",
+    "typical_unit": "Count",
+    "reasoning_tags": [
+      "customer",
+      "quality",
+      "brand"
+    ]
+  },
 
-    "Training": {
-        "category": "people",
-        "weight": 5,
-        "higher_is_better": true,
-        "executive_weight": 1.00
-    },
+  "nonconformance": {
+    "entity_id": "IMPACT_NONCONFORMANCE",
+    "canonical": "Nonconformance",
+    "aliases": [
+      "NC",
+      "Nonconformance",
+      "Non Conformance"
+    ],
+    "category": "quality",
+    "business_area": "quality_management",
+    "linked_kpi": "KPI_NONCONFORMANCE",
+    "linked_domain": "DOMAIN_QUALITY_MANAGEMENT",
+    "impact_type": "risk",
+    "higher_is_better": false,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.25,
+    "resume_weight": 1.20,
+    "ai_importance": 0.98,
+    "typical_unit": "Count",
+    "reasoning_tags": [
+      "audit",
+      "compliance",
+      "quality"
+    ]
+  },
 
-    "Certification": {
-        "category": "quality",
-        "weight": 7,
-        "higher_is_better": true,
-        "executive_weight": 1.10
-    }
+  "food_safety": {
+    "entity_id": "IMPACT_FOOD_SAFETY",
+    "canonical": "Food Safety",
+    "aliases": [
+      "Food Safety",
+      "Product Safety"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "linked_kpi": "KPI_FOOD_SAFETY",
+    "linked_domain": "DOMAIN_FOOD_SAFETY",
+    "impact_type": "strategic",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.50,
+    "resume_weight": 1.40,
+    "ai_importance": 1.00,
+    "executive_visibility": "highest",
+    "reasoning_tags": [
+      "consumer",
+      "regulatory",
+      "haccp",
+      "fssc22000"
+    ]
+  },
+
+  "audit_score": {
+    "entity_id": "IMPACT_AUDIT_SCORE",
+    "canonical": "Audit Score",
+    "aliases": [
+      "Audit Score",
+      "Audit Rating"
+    ],
+    "category": "quality",
+    "business_area": "compliance",
+    "linked_kpi": "KPI_AUDIT_SCORE",
+    "linked_domain": "DOMAIN_AUDITING",
+    "impact_type": "compliance",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.30,
+    "resume_weight": 1.20,
+    "ai_importance": 0.97,
+    "typical_unit": "%",
+    "reasoning_tags": [
+      "audit",
+      "brcgs",
+      "iso",
+      "fssc"
+    ]
+  },
+
+  "microbiological_compliance": {
+    "entity_id": "IMPACT_MICROBIOLOGICAL_COMPLIANCE",
+    "canonical": "Microbiological Compliance",
+    "aliases": [
+      "Micro Compliance",
+      "Microbiological Compliance"
+    ],
+    "category": "food_safety",
+    "business_area": "laboratory",
+    "linked_kpi": "KPI_MICROBIOLOGICAL_COMPLIANCE",
+    "linked_domain": "DOMAIN_LABORATORY",
+    "impact_type": "food_safety",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.40,
+    "resume_weight": 1.30,
+    "ai_importance": 0.99,
+    "reasoning_tags": [
+      "microbiology",
+      "lab",
+      "food safety"
+    ]
+  },
+  
+  "revenue": {
+    "entity_id": "IMPACT_REVENUE",
+    "canonical": "Revenue",
+    "aliases": [
+      "Revenue",
+      "Sales Revenue",
+      "Annual Revenue",
+      "Business Revenue"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "linked_kpi": "KPI_REVENUE",
+    "linked_domain": "DOMAIN_FINANCE",
+    "impact_type": "financial",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.50,
+    "resume_weight": 1.35,
+    "ai_importance": 1.00,
+    "executive_visibility": "highest",
+    "typical_unit": "$",
+    "reasoning_tags": [
+      "growth",
+      "sales",
+      "business"
+    ]
+  },
+
+  "profit": {
+    "entity_id": "IMPACT_PROFIT",
+    "canonical": "Profit",
+    "aliases": [
+      "Profit",
+      "Net Profit",
+      "Operating Profit"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "linked_kpi": "KPI_PROFIT",
+    "linked_domain": "DOMAIN_FINANCE",
+    "impact_type": "financial",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.50,
+    "resume_weight": 1.35,
+    "ai_importance": 1.00,
+    "executive_visibility": "highest",
+    "typical_unit": "$"
+  },
+
+  "profitability": {
+    "entity_id": "IMPACT_PROFITABILITY",
+    "canonical": "Profitability",
+    "aliases": [
+      "Profitability",
+      "Business Profitability"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "linked_kpi": "KPI_PROFITABILITY",
+    "linked_domain": "DOMAIN_FINANCE",
+    "impact_type": "financial",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.45,
+    "resume_weight": 1.30,
+    "ai_importance": 0.99,
+    "typical_unit": "%"
+  },
+
+  "gross_margin": {
+    "entity_id": "IMPACT_GROSS_MARGIN",
+    "canonical": "Gross Margin",
+    "aliases": [
+      "Gross Margin",
+      "Margin"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "linked_kpi": "KPI_MARGIN",
+    "linked_domain": "DOMAIN_FINANCE",
+    "impact_type": "financial",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 9,
+    "executive_weight": 1.30,
+    "resume_weight": 1.20,
+    "ai_importance": 0.96,
+    "typical_unit": "%"
+  },
+
+  "cost_savings": {
+    "entity_id": "IMPACT_COST_SAVINGS",
+    "canonical": "Cost Savings",
+    "aliases": [
+      "Cost Saving",
+      "Cost Reduction",
+      "Savings"
+    ],
+    "category": "finance",
+    "business_area": "operations",
+    "linked_kpi": "KPI_COST_SAVINGS",
+    "linked_domain": "DOMAIN_COST_OPTIMIZATION",
+    "impact_type": "financial",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.45,
+    "resume_weight": 1.35,
+    "ai_importance": 0.99,
+    "typical_unit": "$",
+    "reasoning_tags": [
+      "lean",
+      "waste",
+      "efficiency"
+    ]
+  },
+
+  "cost_per_unit": {
+    "entity_id": "IMPACT_COST_PER_UNIT",
+    "canonical": "Cost per Unit",
+    "aliases": [
+      "Unit Cost",
+      "Manufacturing Cost"
+    ],
+    "category": "finance",
+    "business_area": "manufacturing",
+    "linked_kpi": "KPI_COST_PER_UNIT",
+    "linked_domain": "DOMAIN_COST_OPTIMIZATION",
+    "impact_type": "cost",
+    "higher_is_better": false,
+    "priority": "high",
+    "weight": 9,
+    "executive_weight": 1.25,
+    "resume_weight": 1.20,
+    "ai_importance": 0.95,
+    "typical_unit": "$/Unit"
+  },
+
+  "return_on_investment": {
+    "entity_id": "IMPACT_ROI",
+    "canonical": "Return on Investment",
+    "aliases": [
+      "ROI",
+      "Return on Investment"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "linked_kpi": "KPI_ROI",
+    "linked_domain": "DOMAIN_FINANCE",
+    "impact_type": "strategic",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.50,
+    "resume_weight": 1.30,
+    "ai_importance": 0.98,
+    "typical_unit": "%"
+  },
+
+  "budget_variance": {
+    "entity_id": "IMPACT_BUDGET_VARIANCE",
+    "canonical": "Budget Variance",
+    "aliases": [
+      "Budget Variance",
+      "Budget Control"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "linked_kpi": "KPI_BUDGET_VARIANCE",
+    "linked_domain": "DOMAIN_FINANCIAL_CONTROL",
+    "impact_type": "financial",
+    "higher_is_better": false,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.10,
+    "resume_weight": 1.00,
+    "ai_importance": 0.90,
+    "typical_unit": "%"
+  },
+  
+  "inventory_accuracy": {
+    "entity_id": "IMPACT_INVENTORY_ACCURACY",
+    "canonical": "Inventory Accuracy",
+    "aliases": [
+      "Inventory Accuracy",
+      "Stock Accuracy",
+      "Inventory Record Accuracy"
+    ],
+    "category": "supply_chain",
+    "business_area": "inventory",
+    "linked_kpi": "KPI_INVENTORY_ACCURACY",
+    "linked_domain": "DOMAIN_SUPPLY_CHAIN",
+    "impact_type": "operational",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.25,
+    "resume_weight": 1.20,
+    "ai_importance": 0.97,
+    "typical_unit": "%",
+    "typical_target": ">99%"
+  },
+
+  "inventory_turnover": {
+    "entity_id": "IMPACT_INVENTORY_TURNOVER",
+    "canonical": "Inventory Turnover",
+    "aliases": [
+      "Inventory Turns",
+      "Stock Turnover"
+    ],
+    "category": "supply_chain",
+    "business_area": "inventory",
+    "linked_kpi": "KPI_INVENTORY_TURNOVER",
+    "linked_domain": "DOMAIN_SUPPLY_CHAIN",
+    "impact_type": "financial",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.20,
+    "resume_weight": 1.10,
+    "ai_importance": 0.94
+  },
+
+  "supplier_performance": {
+    "entity_id": "IMPACT_SUPPLIER_PERFORMANCE",
+    "canonical": "Supplier Performance",
+    "aliases": [
+      "Supplier Rating",
+      "Supplier Scorecard"
+    ],
+    "category": "procurement",
+    "business_area": "supplier_management",
+    "linked_kpi": "KPI_SUPPLIER_PERFORMANCE",
+    "linked_domain": "DOMAIN_PROCUREMENT",
+    "impact_type": "strategic",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.30,
+    "resume_weight": 1.15,
+    "ai_importance": 0.96
+  },
+
+  "on_time_delivery": {
+    "entity_id": "IMPACT_OTD",
+    "canonical": "On-Time Delivery",
+    "aliases": [
+      "OTD",
+      "On Time Delivery"
+    ],
+    "category": "logistics",
+    "business_area": "distribution",
+    "linked_kpi": "KPI_OTD",
+    "linked_domain": "DOMAIN_LOGISTICS",
+    "impact_type": "customer",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.35,
+    "resume_weight": 1.25,
+    "ai_importance": 0.98,
+    "typical_unit": "%",
+    "typical_target": ">98%"
+  },
+
+  "otif": {
+    "entity_id": "IMPACT_OTIF",
+    "canonical": "On Time In Full",
+    "aliases": [
+      "OTIF",
+      "Perfect Delivery"
+    ],
+    "category": "logistics",
+    "business_area": "distribution",
+    "linked_kpi": "KPI_OTIF",
+    "linked_domain": "DOMAIN_LOGISTICS",
+    "impact_type": "customer",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.40,
+    "resume_weight": 1.30,
+    "ai_importance": 0.99
+  },
+
+  "forecast_accuracy": {
+    "entity_id": "IMPACT_FORECAST_ACCURACY",
+    "canonical": "Forecast Accuracy",
+    "aliases": [
+      "Demand Forecast Accuracy"
+    ],
+    "category": "planning",
+    "business_area": "supply_chain",
+    "linked_kpi": "KPI_FORECAST_ACCURACY",
+    "linked_domain": "DOMAIN_SUPPLY_CHAIN",
+    "impact_type": "planning",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.15,
+    "resume_weight": 1.05,
+    "ai_importance": 0.92
+  },
+
+  "warehouse_utilization": {
+    "entity_id": "IMPACT_WAREHOUSE_UTILIZATION",
+    "canonical": "Warehouse Utilization",
+    "aliases": [
+      "Warehouse Capacity Utilization"
+    ],
+    "category": "warehouse",
+    "business_area": "warehouse",
+    "linked_kpi": "KPI_WAREHOUSE_UTILIZATION",
+    "linked_domain": "DOMAIN_WAREHOUSING",
+    "impact_type": "operational",
+    "higher_is_better": true,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.10,
+    "resume_weight": 1.00,
+    "ai_importance": 0.88
+  },
+
+  "fill_rate": {
+    "entity_id": "IMPACT_FILL_RATE",
+    "canonical": "Fill Rate",
+    "aliases": [
+      "Order Fill Rate"
+    ],
+    "category": "customer_service",
+    "business_area": "distribution",
+    "linked_kpi": "KPI_FILL_RATE",
+    "linked_domain": "DOMAIN_LOGISTICS",
+    "impact_type": "customer",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.15,
+    "resume_weight": 1.05,
+    "ai_importance": 0.91
+  },
+
+  "lead_time": {
+    "entity_id": "IMPACT_LEAD_TIME",
+    "canonical": "Lead Time",
+    "aliases": [
+      "Production Lead Time",
+      "Supply Lead Time"
+    ],
+    "category": "operations",
+    "business_area": "planning",
+    "linked_kpi": "KPI_LEAD_TIME",
+    "linked_domain": "DOMAIN_SUPPLY_CHAIN",
+    "impact_type": "speed",
+    "higher_is_better": false,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.20,
+    "resume_weight": 1.10,
+    "ai_importance": 0.93
+  },
+
+  "logistics_cost": {
+    "entity_id": "IMPACT_LOGISTICS_COST",
+    "canonical": "Logistics Cost",
+    "aliases": [
+      "Distribution Cost",
+      "Transportation Cost"
+    ],
+    "category": "finance",
+    "business_area": "logistics",
+    "linked_kpi": "KPI_LOGISTICS_COST",
+    "linked_domain": "DOMAIN_LOGISTICS",
+    "impact_type": "financial",
+    "higher_is_better": false,
+    "priority": "high",
+    "weight": 9,
+    "executive_weight": 1.30,
+    "resume_weight": 1.15,
+    "ai_importance": 0.95
+  },
+  
+  "employee_engagement": {
+    "entity_id": "IMPACT_EMPLOYEE_ENGAGEMENT",
+    "canonical": "Employee Engagement",
+    "aliases": [
+      "Workforce Engagement",
+      "Employee Satisfaction"
+    ],
+    "category": "people",
+    "business_area": "human_resources",
+    "linked_kpi": "KPI_EMPLOYEE_ENGAGEMENT",
+    "linked_domain": "DOMAIN_HR",
+    "impact_type": "people",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.20,
+    "resume_weight": 1.10,
+    "ai_importance": 0.94,
+    "typical_unit": "%"
+  },
+
+  "employee_retention": {
+    "entity_id": "IMPACT_EMPLOYEE_RETENTION",
+    "canonical": "Employee Retention",
+    "aliases": [
+      "Retention",
+      "Employee Retention Rate"
+    ],
+    "category": "people",
+    "business_area": "human_resources",
+    "linked_kpi": "KPI_EMPLOYEE_RETENTION",
+    "linked_domain": "DOMAIN_HR",
+    "impact_type": "people",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.20,
+    "resume_weight": 1.05,
+    "ai_importance": 0.92,
+    "typical_unit": "%"
+  },
+
+  "training_effectiveness": {
+    "entity_id": "IMPACT_TRAINING_EFFECTIVENESS",
+    "canonical": "Training Effectiveness",
+    "aliases": [
+      "Training",
+      "Training Success"
+    ],
+    "category": "people",
+    "business_area": "learning_and_development",
+    "linked_kpi": "KPI_TRAINING_EFFECTIVENESS",
+    "linked_domain": "DOMAIN_LEARNING_DEVELOPMENT",
+    "impact_type": "capability",
+    "higher_is_better": true,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.10,
+    "resume_weight": 1.00,
+    "ai_importance": 0.88,
+    "typical_unit": "%"
+  },
+
+  "leadership_effectiveness": {
+    "entity_id": "IMPACT_LEADERSHIP_EFFECTIVENESS",
+    "canonical": "Leadership Effectiveness",
+    "aliases": [
+      "Leadership",
+      "Leadership Performance"
+    ],
+    "category": "leadership",
+    "business_area": "management",
+    "linked_kpi": "KPI_LEADERSHIP",
+    "linked_domain": "DOMAIN_LEADERSHIP",
+    "impact_type": "leadership",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.35,
+    "resume_weight": 1.25,
+    "ai_importance": 0.98
+  },
+
+  "team_productivity": {
+    "entity_id": "IMPACT_TEAM_PRODUCTIVITY",
+    "canonical": "Team Productivity",
+    "aliases": [
+      "Productivity",
+      "Workforce Productivity"
+    ],
+    "category": "people",
+    "business_area": "operations",
+    "linked_kpi": "KPI_TEAM_PRODUCTIVITY",
+    "linked_domain": "DOMAIN_OPERATIONAL_EXCELLENCE",
+    "impact_type": "performance",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.20,
+    "resume_weight": 1.10,
+    "ai_importance": 0.94
+  },
+
+  "lost_time_injury_frequency_rate": {
+    "entity_id": "IMPACT_LTIFR",
+    "canonical": "Lost Time Injury Frequency Rate",
+    "aliases": [
+      "LTIFR",
+      "Lost Time Injury Rate"
+    ],
+    "category": "safety",
+    "business_area": "health_and_safety",
+    "linked_kpi": "KPI_LTIFR",
+    "linked_domain": "DOMAIN_HEALTH_SAFETY",
+    "impact_type": "risk",
+    "higher_is_better": false,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.40,
+    "resume_weight": 1.30,
+    "ai_importance": 0.99,
+    "typical_unit": "Rate"
+  },
+
+  "total_recordable_incident_rate": {
+    "entity_id": "IMPACT_TRIR",
+    "canonical": "Total Recordable Incident Rate",
+    "aliases": [
+      "TRIR"
+    ],
+    "category": "safety",
+    "business_area": "health_and_safety",
+    "linked_kpi": "KPI_TRIR",
+    "linked_domain": "DOMAIN_HEALTH_SAFETY",
+    "impact_type": "risk",
+    "higher_is_better": false,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.40,
+    "resume_weight": 1.25,
+    "ai_importance": 0.98
+  },
+
+  "near_miss_reporting": {
+    "entity_id": "IMPACT_NEAR_MISS",
+    "canonical": "Near Miss Reporting",
+    "aliases": [
+      "Near Misses"
+    ],
+    "category": "safety",
+    "business_area": "health_and_safety",
+    "linked_kpi": "KPI_NEAR_MISS",
+    "linked_domain": "DOMAIN_HEALTH_SAFETY",
+    "impact_type": "preventive",
+    "higher_is_better": true,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.10,
+    "resume_weight": 1.00,
+    "ai_importance": 0.87
+  },
+
+  "succession_readiness": {
+    "entity_id": "IMPACT_SUCCESSION",
+    "canonical": "Succession Readiness",
+    "aliases": [
+      "Succession Planning"
+    ],
+    "category": "leadership",
+    "business_area": "human_resources",
+    "linked_kpi": "KPI_SUCCESSION",
+    "linked_domain": "DOMAIN_HR",
+    "impact_type": "strategic",
+    "higher_is_better": true,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.15,
+    "resume_weight": 1.00,
+    "ai_importance": 0.86
+  },
+
+  "organizational_culture": {
+    "entity_id": "IMPACT_CULTURE",
+    "canonical": "Organizational Culture",
+    "aliases": [
+      "Culture",
+      "Company Culture"
+    ],
+    "category": "people",
+    "business_area": "leadership",
+    "linked_kpi": "KPI_CULTURE",
+    "linked_domain": "DOMAIN_LEADERSHIP",
+    "impact_type": "organizational",
+    "higher_is_better": true,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.10,
+    "resume_weight": 1.00,
+    "ai_importance": 0.85
+  },
+  
+  "digital_transformation": {
+    "entity_id": "IMPACT_DIGITAL_TRANSFORMATION",
+    "canonical": "Digital Transformation",
+    "aliases": [
+      "Digitalization",
+      "Digital Transformation"
+    ],
+    "category": "digital",
+    "business_area": "enterprise",
+    "linked_kpi": "KPI_DIGITAL_TRANSFORMATION",
+    "linked_domain": "DOMAIN_DIGITAL_TRANSFORMATION",
+    "impact_type": "strategic",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.50,
+    "resume_weight": 1.30,
+    "ai_importance": 1.00
+  },
+
+  "automation": {
+    "entity_id": "IMPACT_AUTOMATION",
+    "canonical": "Automation",
+    "aliases": [
+      "Process Automation",
+      "Workflow Automation"
+    ],
+    "category": "technology",
+    "business_area": "operations",
+    "linked_kpi": "KPI_AUTOMATION",
+    "linked_domain": "DOMAIN_AUTOMATION",
+    "impact_type": "productivity",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 9,
+    "executive_weight": 1.30,
+    "resume_weight": 1.20,
+    "ai_importance": 0.97
+  },
+
+  "artificial_intelligence": {
+    "entity_id": "IMPACT_AI",
+    "canonical": "Artificial Intelligence Adoption",
+    "aliases": [
+      "AI",
+      "Artificial Intelligence",
+      "Machine Learning"
+    ],
+    "category": "technology",
+    "business_area": "enterprise",
+    "linked_kpi": "KPI_AI",
+    "linked_domain": "DOMAIN_AI",
+    "impact_type": "innovation",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 9,
+    "executive_weight": 1.35,
+    "resume_weight": 1.20,
+    "ai_importance": 0.98
+  },
+
+  "innovation": {
+    "entity_id": "IMPACT_INNOVATION",
+    "canonical": "Innovation",
+    "aliases": [
+      "Innovation",
+      "Business Innovation"
+    ],
+    "category": "strategy",
+    "business_area": "enterprise",
+    "linked_kpi": "KPI_INNOVATION",
+    "linked_domain": "DOMAIN_INNOVATION",
+    "impact_type": "strategic",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 9,
+    "executive_weight": 1.30,
+    "resume_weight": 1.15,
+    "ai_importance": 0.96
+  },
+
+  "business_analytics": {
+    "entity_id": "IMPACT_BUSINESS_ANALYTICS",
+    "canonical": "Business Analytics",
+    "aliases": [
+      "Analytics",
+      "Business Intelligence",
+      "BI"
+    ],
+    "category": "analytics",
+    "business_area": "enterprise",
+    "linked_kpi": "KPI_BUSINESS_ANALYTICS",
+    "linked_domain": "DOMAIN_ANALYTICS",
+    "impact_type": "decision_support",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.25,
+    "resume_weight": 1.15,
+    "ai_importance": 0.95
+  },
+
+  "data_quality": {
+    "entity_id": "IMPACT_DATA_QUALITY",
+    "canonical": "Data Quality",
+    "aliases": [
+      "Data Integrity",
+      "Master Data Quality"
+    ],
+    "category": "data",
+    "business_area": "enterprise",
+    "linked_kpi": "KPI_DATA_QUALITY",
+    "linked_domain": "DOMAIN_DATA_GOVERNANCE",
+    "impact_type": "governance",
+    "higher_is_better": true,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.20,
+    "resume_weight": 1.10,
+    "ai_importance": 0.93
+  },
+
+  "energy_efficiency": {
+    "entity_id": "IMPACT_ENERGY_EFFICIENCY",
+    "canonical": "Energy Efficiency",
+    "aliases": [
+      "Energy Consumption"
+    ],
+    "category": "sustainability",
+    "business_area": "environment",
+    "linked_kpi": "KPI_ENERGY_EFFICIENCY",
+    "linked_domain": "DOMAIN_SUSTAINABILITY",
+    "impact_type": "environmental",
+    "higher_is_better": true,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.15,
+    "resume_weight": 1.00,
+    "ai_importance": 0.90
+  },
+
+  "water_consumption": {
+    "entity_id": "IMPACT_WATER_USAGE",
+    "canonical": "Water Consumption",
+    "aliases": [
+      "Water Usage",
+      "Water Efficiency"
+    ],
+    "category": "sustainability",
+    "business_area": "environment",
+    "linked_kpi": "KPI_WATER_USAGE",
+    "linked_domain": "DOMAIN_SUSTAINABILITY",
+    "impact_type": "environmental",
+    "higher_is_better": false,
+    "priority": "medium",
+    "weight": 7,
+    "executive_weight": 1.10,
+    "resume_weight": 1.00,
+    "ai_importance": 0.88
+  },
+
+  "carbon_footprint": {
+    "entity_id": "IMPACT_CARBON_FOOTPRINT",
+    "canonical": "Carbon Footprint",
+    "aliases": [
+      "CO2 Emissions",
+      "Greenhouse Gas Emissions"
+    ],
+    "category": "sustainability",
+    "business_area": "environment",
+    "linked_kpi": "KPI_CARBON",
+    "linked_domain": "DOMAIN_ESG",
+    "impact_type": "environmental",
+    "higher_is_better": false,
+    "priority": "high",
+    "weight": 8,
+    "executive_weight": 1.20,
+    "resume_weight": 1.05,
+    "ai_importance": 0.92
+  },
+
+  "brand_reputation": {
+    "entity_id": "IMPACT_BRAND_REPUTATION",
+    "canonical": "Brand Reputation",
+    "aliases": [
+      "Corporate Reputation",
+      "Brand Trust"
+    ],
+    "category": "strategy",
+    "business_area": "enterprise",
+    "linked_kpi": "KPI_BRAND_REPUTATION",
+    "linked_domain": "DOMAIN_EXECUTIVE",
+    "impact_type": "strategic",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.50,
+    "resume_weight": 1.20,
+    "ai_importance": 0.99
+  },
+
+  "enterprise_value": {
+    "entity_id": "IMPACT_ENTERPRISE_VALUE",
+    "canonical": "Enterprise Value",
+    "aliases": [
+      "Business Value",
+      "Company Value"
+    ],
+    "category": "executive",
+    "business_area": "strategy",
+    "linked_kpi": "KPI_ENTERPRISE_VALUE",
+    "linked_domain": "DOMAIN_EXECUTIVE",
+    "impact_type": "executive",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 10,
+    "executive_weight": 1.60,
+    "resume_weight": 1.25,
+    "ai_importance": 1.00
+  },
+
+  "governance_compliance": {
+    "entity_id": "IMPACT_GOVERNANCE",
+    "canonical": "Governance & Compliance",
+    "aliases": [
+      "Governance",
+      "Corporate Compliance"
+    ],
+    "category": "governance",
+    "business_area": "enterprise",
+    "linked_kpi": "KPI_GOVERNANCE",
+    "linked_domain": "DOMAIN_GOVERNANCE",
+    "impact_type": "governance",
+    "higher_is_better": true,
+    "priority": "critical",
+    "weight": 9,
+    "executive_weight": 1.35,
+    "resume_weight": 1.15,
+    "ai_importance": 0.98
+  }
 }

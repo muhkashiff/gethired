@@ -80,6 +80,10 @@ class SemanticCluster:
 
             semantic_type: str = ""
 
+            business_area: str = ""
+            
+            primary_domain: str = ""
+
             confidence: float = 1.0
 
             entities: list[SemanticEntity] = field(default_factory=list)
@@ -87,7 +91,6 @@ class SemanticCluster:
             dependencies: list[SemanticDependency] = field(default_factory=list)
 
             metadata: dict = field(default_factory=dict)
-
 
         # ============================================================
         # Statistics
@@ -157,6 +160,8 @@ class SemanticResolution:
             )
 
             warnings: list[str] = field(default_factory=list)
+
+            business_statements: list["BusinessStatement"] = field(default_factory=list)
 
         # =========================================================
 
@@ -298,15 +303,32 @@ DependencyEdge = SemanticDependency
 SemanticResult = SemanticResolution
 
 # ============================================================
-# Business Statement
+# Business Statement V2
 # ============================================================
 
 @dataclass
 class BusinessStatement:
 
+    # -----------------------------
+    # Identity
+    # -----------------------------
+
     statement_id: str = ""
 
+    label: str = ""
+
+    # -----------------------------
+    # Core Action
+    # -----------------------------
+
     action: SemanticEntity | None = None
+
+    # Master list of every entity
+    entities: list[SemanticEntity] = field(default_factory=list)
+
+    # -----------------------------
+    # Structured Entity Groups
+    # -----------------------------
 
     targets: list[SemanticEntity] = field(default_factory=list)
 
@@ -320,6 +342,34 @@ class BusinessStatement:
 
     domains: list[SemanticEntity] = field(default_factory=list)
 
+    # -----------------------------
+    # Dependencies
+    # -----------------------------
+
     dependencies: list[SemanticDependency] = field(default_factory=list)
 
+    # -----------------------------
+    # Semantic Intent
+    # -----------------------------
+
+    intent = None
+
+    semantic_type: str = ""
+
+    primary_domain: str = ""
+
+    business_area: str = ""
+
+    achievement: bool = False
+
+    # -----------------------------
+    # Confidence
+    # -----------------------------
+
     confidence: float = 1.0
+
+    # -----------------------------
+    # Metadata
+    # -----------------------------
+
+    metadata: dict = field(default_factory=dict)

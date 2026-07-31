@@ -1,0 +1,772 @@
+{
+  "REL_000001": {
+    "relation_type": "acts_on",
+    "source": "ACT_IMPLEMENT",
+    "target": "OBJ_QMS",
+    "weight": 1.0,
+    "description": "Implementation action targets the Quality Management System."
+  },
+
+  "REL_000002": {
+    "relation_type": "acts_on",
+    "source": "ACT_IMPLEMENT",
+    "target": "OBJ_FSMS",
+    "weight": 1.0
+  },
+
+  "REL_000003": {
+    "relation_type": "acts_on",
+    "source": "ACT_MONITOR",
+    "target": "OBJ_PROCESS",
+    "weight": 0.95
+  },
+
+  "REL_000004": {
+    "relation_type": "acts_on",
+    "source": "ACT_VALIDATE",
+    "target": "OBJ_PROCESS",
+    "weight": 0.95
+  },
+
+  "REL_000005": {
+    "relation_type": "acts_on",
+    "source": "ACT_VERIFY",
+    "target": "OBJ_PROCESS",
+    "weight": 0.95
+  },
+
+  "REL_000006": {
+    "relation_type": "supports",
+    "source": "SKILL_LEADERSHIP",
+    "target": "METH_COACHING",
+    "weight": 0.90
+  },
+
+  "REL_000007": {
+    "relation_type": "supports",
+    "source": "SKILL_TEAM_BUILDING",
+    "target": "METH_PDCA",
+    "weight": 0.80
+  },
+
+  "REL_000008": {
+    "relation_type": "supports",
+    "source": "SKILL_ROOT_CAUSE_ANALYSIS",
+    "target": "METH_RCA",
+    "weight": 1.00
+  },
+
+  "REL_000009": {
+    "relation_type": "supports",
+    "source": "SKILL_STATISTICAL_ANALYSIS",
+    "target": "METH_SPC",
+    "weight": 0.95
+  },
+
+  "REL_000010": {
+    "relation_type": "supports",
+    "source": "SKILL_PROCESS_IMPROVEMENT",
+    "target": "METH_LEAN",
+    "weight": 0.95
+  },
+
+  "REL_000011": {
+    "relation_type": "supports",
+    "source": "SKILL_CONTINUOUS_IMPROVEMENT",
+    "target": "METH_KAIZEN",
+    "weight": 0.95
+  },
+
+  "REL_000012": {
+    "relation_type": "supports",
+    "source": "SKILL_SIX_SIGMA",
+    "target": "METH_DMAIC",
+    "weight": 1.00
+  },
+
+  "REL_000013": {
+    "relation_type": "governs",
+    "source": "STD_ISO9001",
+    "target": "OBJ_QMS",
+    "weight": 1.00
+  },
+
+  "REL_000014": {
+    "relation_type": "governs",
+    "source": "STD_FSSC22000",
+    "target": "OBJ_FSMS",
+    "weight": 1.00
+  },
+
+  "REL_000015": {
+    "relation_type": "governs",
+    "source": "STD_HACCP",
+    "target": "OBJ_HACCP_PLAN",
+    "weight": 1.00
+  },
+
+  "REL_000016": {
+    "relation_type": "governs",
+    "source": "STD_BRCGS",
+    "target": "OBJ_MANUFACTURING_FACILITY",
+    "weight": 0.95
+  },
+
+  "REL_000017": {
+    "relation_type": "improves",
+    "source": "METH_LEAN",
+    "target": "KPI_PRODUCTIVITY",
+    "weight": 0.95
+  },
+
+  "REL_000018": {
+    "relation_type": "improves",
+    "source": "METH_LEAN",
+    "target": "KPI_WASTE",
+    "weight": 0.95
+  },
+
+  "REL_000019": {
+    "relation_type": "improves",
+    "source": "METH_SIX_SIGMA",
+    "target": "KPI_CPK",
+    "weight": 1.00
+  },
+
+  "REL_000020": {
+    "relation_type": "improves",
+    "source": "METH_TPM",
+    "target": "KPI_OEE",
+    "weight": 1.00
+  },
+  
+  "REL_000021": {
+    "relation_type": "belongs_to_domain",
+    "source": "SKILL_LEADERSHIP",
+    "target": "DOMAIN_LEADERSHIP",
+    "weight": 1.00
+  },
+
+  "REL_000022": {
+    "relation_type": "belongs_to_domain",
+    "source": "SKILL_TEAM_BUILDING",
+    "target": "DOMAIN_PEOPLE_MANAGEMENT",
+    "weight": 1.00
+  },
+
+  "REL_000023": {
+    "relation_type": "belongs_to_domain",
+    "source": "SKILL_PROCESS_IMPROVEMENT",
+    "target": "DOMAIN_CONTINUOUS_IMPROVEMENT",
+    "weight": 1.00
+  },
+
+  "REL_000024": {
+    "relation_type": "belongs_to_domain",
+    "source": "SKILL_QUALITY_ASSURANCE",
+    "target": "DOMAIN_QUALITY_MANAGEMENT",
+    "weight": 1.00
+  },
+
+  "REL_000025": {
+    "relation_type": "belongs_to_domain",
+    "source": "SKILL_HACCP",
+    "target": "DOMAIN_FOOD_SAFETY",
+    "weight": 1.00
+  },
+
+  "REL_000026": {
+    "relation_type": "belongs_to_domain",
+    "source": "SKILL_SUPPLIER_MANAGEMENT",
+    "target": "DOMAIN_SUPPLY_CHAIN",
+    "weight": 0.95
+  },
+
+  "REL_000027": {
+    "relation_type": "belongs_to_domain",
+    "source": "SKILL_BUSINESS_ANALYTICS",
+    "target": "DOMAIN_BUSINESS_ANALYTICS",
+    "weight": 1.00
+  },
+
+  "REL_000028": {
+    "relation_type": "measures",
+    "source": "KPI_OEE",
+    "target": "DOMAIN_OPERATIONAL_EXCELLENCE",
+    "weight": 1.00
+  },
+
+  "REL_000029": {
+    "relation_type": "measures",
+    "source": "KPI_YIELD",
+    "target": "DOMAIN_MANUFACTURING",
+    "weight": 1.00
+  },
+
+  "REL_000030": {
+    "relation_type": "measures",
+    "source": "KPI_CPK",
+    "target": "DOMAIN_QUALITY_CONTROL",
+    "weight": 1.00
+  },
+
+  "REL_000031": {
+    "relation_type": "measures",
+    "source": "KPI_CUSTOMER_COMPLAINTS",
+    "target": "DOMAIN_CUSTOMER_EXPERIENCE",
+    "weight": 1.00
+  },
+
+  "REL_000032": {
+    "relation_type": "measures",
+    "source": "KPI_SUPPLIER_PERFORMANCE",
+    "target": "DOMAIN_SUPPLY_CHAIN",
+    "weight": 0.95
+  },
+
+  "REL_000033": {
+    "relation_type": "validated_by",
+    "source": "DOMAIN_QUALITY_MANAGEMENT",
+    "target": "STD_ISO9001",
+    "weight": 1.00
+  },
+
+  "REL_000034": {
+    "relation_type": "validated_by",
+    "source": "DOMAIN_FOOD_SAFETY",
+    "target": "STD_FSSC22000",
+    "weight": 1.00
+  },
+
+  "REL_000035": {
+    "relation_type": "validated_by",
+    "source": "DOMAIN_FOOD_SAFETY",
+    "target": "STD_HACCP",
+    "weight": 1.00
+  },
+
+  "REL_000036": {
+    "relation_type": "validated_by",
+    "source": "DOMAIN_FOOD_SAFETY",
+    "target": "STD_BRCGS",
+    "weight": 0.95
+  },
+
+  "REL_000037": {
+    "relation_type": "requires_skill",
+    "source": "STD_ISO9001",
+    "target": "SKILL_INTERNAL_AUDITING",
+    "weight": 0.95
+  },
+
+  "REL_000038": {
+    "relation_type": "requires_skill",
+    "source": "STD_FSSC22000",
+    "target": "SKILL_HACCP",
+    "weight": 1.00
+  },
+
+  "REL_000039": {
+    "relation_type": "requires_skill",
+    "source": "STD_BRCGS",
+    "target": "SKILL_GMP",
+    "weight": 0.95
+  },
+
+  "REL_000040": {
+    "relation_type": "requires_skill",
+    "source": "STD_HACCP",
+    "target": "SKILL_RISK_ASSESSMENT",
+    "weight": 1.00
+  },
+  
+  "REL_000041": {
+    "relation_type": "enables",
+    "source": "TECH_PYTHON",
+    "target": "SKILL_DATA_ANALYSIS",
+    "weight": 1.00
+  },
+
+  "REL_000042": {
+    "relation_type": "enables",
+    "source": "TECH_PYTHON",
+    "target": "SKILL_MACHINE_LEARNING",
+    "weight": 1.00
+  },
+
+  "REL_000043": {
+    "relation_type": "enables",
+    "source": "TECH_SQL",
+    "target": "SKILL_DATA_ANALYSIS",
+    "weight": 0.95
+  },
+
+  "REL_000044": {
+    "relation_type": "enables",
+    "source": "TECH_POWER_BI",
+    "target": "SKILL_DATA_VISUALIZATION",
+    "weight": 1.00
+  },
+
+  "REL_000045": {
+    "relation_type": "enables",
+    "source": "TECH_TABLEAU",
+    "target": "SKILL_DATA_VISUALIZATION",
+    "weight": 1.00
+  },
+
+  "REL_000046": {
+    "relation_type": "enables",
+    "source": "TECH_EXCEL",
+    "target": "SKILL_BUSINESS_ANALYTICS",
+    "weight": 0.95
+  },
+
+  "REL_000047": {
+    "relation_type": "supports",
+    "source": "TECH_POWER_BI",
+    "target": "DOMAIN_BUSINESS_ANALYTICS",
+    "weight": 1.00
+  },
+
+  "REL_000048": {
+    "relation_type": "supports",
+    "source": "TECH_TABLEAU",
+    "target": "DOMAIN_BUSINESS_INTELLIGENCE",
+    "weight": 1.00
+  },
+
+  "REL_000049": {
+    "relation_type": "supports",
+    "source": "TECH_SQL",
+    "target": "DOMAIN_DATA_ANALYTICS",
+    "weight": 0.95
+  },
+
+  "REL_000050": {
+    "relation_type": "supports",
+    "source": "TECH_PYTHON",
+    "target": "DOMAIN_DATA_ANALYTICS",
+    "weight": 1.00
+  },
+
+  "REL_000051": {
+    "relation_type": "implements",
+    "source": "TECH_PYTHON",
+    "target": "METH_MACHINE_LEARNING",
+    "weight": 1.00
+  },
+
+  "REL_000052": {
+    "relation_type": "implements",
+    "source": "TECH_SQL",
+    "target": "METH_ETL",
+    "weight": 0.95
+  },
+
+  "REL_000053": {
+    "relation_type": "implements",
+    "source": "TECH_POWER_BI",
+    "target": "METH_BUSINESS_INTELLIGENCE",
+    "weight": 1.00
+  },
+
+  "REL_000054": {
+    "relation_type": "improves",
+    "source": "TECH_POWER_BI",
+    "target": "KPI_DECISION_SPEED",
+    "weight": 0.90
+  },
+
+  "REL_000055": {
+    "relation_type": "improves",
+    "source": "TECH_TABLEAU",
+    "target": "KPI_REPORTING_ACCURACY",
+    "weight": 0.90
+  },
+
+  "REL_000056": {
+    "relation_type": "improves",
+    "source": "TECH_SQL",
+    "target": "KPI_DATA_ACCURACY",
+    "weight": 0.90
+  },
+
+  "REL_000057": {
+    "relation_type": "improves",
+    "source": "TECH_PYTHON",
+    "target": "KPI_FORECAST_ACCURACY",
+    "weight": 0.95
+  },
+
+  "REL_000058": {
+    "relation_type": "used_for",
+    "source": "TECH_POWER_BI",
+    "target": "OBJ_DASHBOARD",
+    "weight": 1.00
+  },
+
+  "REL_000059": {
+    "relation_type": "used_for",
+    "source": "TECH_TABLEAU",
+    "target": "OBJ_DASHBOARD",
+    "weight": 1.00
+  },
+
+  "REL_000060": {
+    "relation_type": "used_for",
+    "source": "TECH_SQL",
+    "target": "OBJ_DATABASE",
+    "weight": 1.00
+  },
+  
+  "REL_000061": {
+    "relation_type": "validates",
+    "source": "CERT_ISO9001_LEAD_AUDITOR",
+    "target": "STD_ISO9001",
+    "weight": 1.00
+  },
+
+  "REL_000062": {
+    "relation_type": "validates",
+    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "target": "STD_FSSC22000",
+    "weight": 1.00
+  },
+
+  "REL_000063": {
+    "relation_type": "validates",
+    "source": "CERT_BRCGS_LEAD_AUDITOR",
+    "target": "STD_BRCGS",
+    "weight": 1.00
+  },
+
+  "REL_000064": {
+    "relation_type": "validates",
+    "source": "CERT_PCQI",
+    "target": "STD_FOOD_SAFETY",
+    "weight": 0.95
+  },
+
+  "REL_000065": {
+    "relation_type": "belongs_to_domain",
+    "source": "CERT_ISO9001_LEAD_AUDITOR",
+    "target": "DOMAIN_QUALITY_MANAGEMENT",
+    "weight": 1.00
+  },
+
+  "REL_000066": {
+    "relation_type": "belongs_to_domain",
+    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "target": "DOMAIN_FOOD_SAFETY",
+    "weight": 1.00
+  },
+
+  "REL_000067": {
+    "relation_type": "belongs_to_domain",
+    "source": "CERT_BRCGS_LEAD_AUDITOR",
+    "target": "DOMAIN_FOOD_SAFETY",
+    "weight": 1.00
+  },
+
+  "REL_000068": {
+    "relation_type": "belongs_to_domain",
+    "source": "CERT_SIX_SIGMA_GREEN_BELT",
+    "target": "DOMAIN_CONTINUOUS_IMPROVEMENT",
+    "weight": 0.95
+  },
+
+  "REL_000069": {
+    "relation_type": "belongs_to_domain",
+    "source": "CERT_SIX_SIGMA_BLACK_BELT",
+    "target": "DOMAIN_OPERATIONAL_EXCELLENCE",
+    "weight": 1.00
+  },
+
+  "REL_000070": {
+    "relation_type": "requires_skill",
+    "source": "CERT_ISO9001_LEAD_AUDITOR",
+    "target": "SKILL_INTERNAL_AUDITING",
+    "weight": 1.00
+  },
+
+  "REL_000071": {
+    "relation_type": "requires_skill",
+    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "target": "SKILL_HACCP",
+    "weight": 1.00
+  },
+
+  "REL_000072": {
+    "relation_type": "requires_skill",
+    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "target": "SKILL_RISK_ASSESSMENT",
+    "weight": 0.95
+  },
+
+  "REL_000073": {
+    "relation_type": "requires_skill",
+    "source": "CERT_BRCGS_LEAD_AUDITOR",
+    "target": "SKILL_GMP",
+    "weight": 0.95
+  },
+
+  "REL_000074": {
+    "relation_type": "requires_skill",
+    "source": "CERT_PCQI",
+    "target": "SKILL_PREVENTIVE_CONTROLS",
+    "weight": 0.95
+  },
+
+  "REL_000075": {
+    "relation_type": "supports_methodology",
+    "source": "CERT_SIX_SIGMA_GREEN_BELT",
+    "target": "METH_DMAIC",
+    "weight": 1.00
+  },
+
+  "REL_000076": {
+    "relation_type": "supports_methodology",
+    "source": "CERT_SIX_SIGMA_BLACK_BELT",
+    "target": "METH_SIX_SIGMA",
+    "weight": 1.00
+  },
+
+  "REL_000077": {
+    "relation_type": "supports_methodology",
+    "source": "CERT_AGILE_SCRUM_MASTER",
+    "target": "METH_AGILE",
+    "weight": 1.00
+  },
+
+  "REL_000078": {
+    "relation_type": "supports_methodology",
+    "source": "CERT_LEAN_MANAGEMENT",
+    "target": "METH_LEAN",
+    "weight": 1.00
+  },
+
+  "REL_000079": {
+    "relation_type": "improves",
+    "source": "CERT_SIX_SIGMA_BLACK_BELT",
+    "target": "KPI_CPK",
+    "weight": 0.90
+  },
+
+  "REL_000080": {
+    "relation_type": "improves",
+    "source": "CERT_LEAN_MANAGEMENT",
+    "target": "KPI_PRODUCTIVITY",
+    "weight": 0.90
+  },
+  
+  "REL_000101": {
+    "relation_type": "experience_implies_skill",
+    "source": "OBJ_PRODUCTION_MANAGER",
+    "target": "SKILL_LEADERSHIP",
+    "weight": 0.98
+  },
+
+  "REL_000102": {
+    "relation_type": "experience_implies_skill",
+    "source": "OBJ_QA_MANAGER",
+    "target": "SKILL_QUALITY_ASSURANCE",
+    "weight": 1.00
+  },
+
+  "REL_000103": {
+    "relation_type": "experience_implies_skill",
+    "source": "OBJ_FOOD_SAFETY_MANAGER",
+    "target": "SKILL_HACCP",
+    "weight": 1.00
+  },
+
+  "REL_000104": {
+    "relation_type": "experience_implies_domain",
+    "source": "OBJ_QA_MANAGER",
+    "target": "DOMAIN_QUALITY_MANAGEMENT",
+    "weight": 1.00
+  },
+
+  "REL_000105": {
+    "relation_type": "experience_implies_domain",
+    "source": "OBJ_PRODUCTION_MANAGER",
+    "target": "DOMAIN_MANUFACTURING",
+    "weight": 0.97
+  },
+
+  "REL_000106": {
+    "relation_type": "experience_implies_domain",
+    "source": "OBJ_SUPPLY_CHAIN_MANAGER",
+    "target": "DOMAIN_SUPPLY_CHAIN",
+    "weight": 1.00
+  },
+
+  "REL_000107": {
+    "relation_type": "career_progression",
+    "source": "OBJ_QA_OFFICER",
+    "target": "OBJ_QA_SUPERVISOR",
+    "weight": 0.90
+  },
+
+  "REL_000108": {
+    "relation_type": "career_progression",
+    "source": "OBJ_QA_SUPERVISOR",
+    "target": "OBJ_QA_MANAGER",
+    "weight": 0.95
+  },
+
+  "REL_000109": {
+    "relation_type": "career_progression",
+    "source": "OBJ_QA_MANAGER",
+    "target": "OBJ_QA_DIRECTOR",
+    "weight": 0.90
+  },
+
+  "REL_000110": {
+    "relation_type": "career_progression",
+    "source": "OBJ_PRODUCTION_ENGINEER",
+    "target": "OBJ_PRODUCTION_MANAGER",
+    "weight": 0.95
+  },
+
+  "REL_000111": {
+    "relation_type": "semantic_similarity",
+    "source": "SKILL_PROCESS_IMPROVEMENT",
+    "target": "SKILL_CONTINUOUS_IMPROVEMENT",
+    "weight": 0.97
+  },
+
+  "REL_000112": {
+    "relation_type": "semantic_similarity",
+    "source": "SKILL_LEAN_MANUFACTURING",
+    "target": "SKILL_OPERATIONAL_EXCELLENCE",
+    "weight": 0.96
+  },
+
+  "REL_000113": {
+    "relation_type": "semantic_similarity",
+    "source": "SKILL_DATA_ANALYSIS",
+    "target": "SKILL_BUSINESS_ANALYTICS",
+    "weight": 0.95
+  },
+
+  "REL_000114": {
+    "relation_type": "semantic_similarity",
+    "source": "TECH_POWER_BI",
+    "target": "TECH_TABLEAU",
+    "weight": 0.90
+  },
+
+  "REL_000115": {
+    "relation_type": "semantic_similarity",
+    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "target": "CERT_BRCGS_LEAD_AUDITOR",
+    "weight": 0.88
+  },
+
+  "REL_000116": {
+    "relation_type": "ai_reasoning",
+    "source": "SKILL_STATISTICAL_ANALYSIS",
+    "target": "KPI_CPK",
+    "weight": 0.98
+  },
+
+  "REL_000117": {
+    "relation_type": "ai_reasoning",
+    "source": "SKILL_ROOT_CAUSE_ANALYSIS",
+    "target": "KPI_CUSTOMER_COMPLAINTS",
+    "weight": 0.95
+  },
+
+  "REL_000118": {
+    "relation_type": "ai_reasoning",
+    "source": "SKILL_LEAN_MANUFACTURING",
+    "target": "KPI_WASTE",
+    "weight": 0.96
+  },
+
+  "REL_000119": {
+    "relation_type": "ai_reasoning",
+    "source": "SKILL_TPM",
+    "target": "KPI_OEE",
+    "weight": 0.98
+  },
+
+  "REL_000120": {
+    "relation_type": "supports_resume_scoring",
+    "source": "DOMAIN_QUALITY_MANAGEMENT",
+    "target": "OBJ_RESUME",
+    "weight": 1.00
+  },
+
+  "REL_000121": {
+    "relation_type": "supports_resume_scoring",
+    "source": "DOMAIN_BUSINESS_ANALYTICS",
+    "target": "OBJ_RESUME",
+    "weight": 1.00
+  },
+
+  "REL_000122": {
+    "relation_type": "supports_resume_scoring",
+    "source": "DOMAIN_FOOD_SAFETY",
+    "target": "OBJ_RESUME",
+    "weight": 1.00
+  },
+
+  "REL_000123": {
+    "relation_type": "supports_job_matching",
+    "source": "SKILL_HACCP",
+    "target": "OBJ_JOB_DESCRIPTION",
+    "weight": 1.00
+  },
+
+  "REL_000124": {
+    "relation_type": "supports_job_matching",
+    "source": "CERT_PCQI",
+    "target": "OBJ_JOB_DESCRIPTION",
+    "weight": 0.98
+  },
+
+  "REL_000125": {
+    "relation_type": "supports_job_matching",
+    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "target": "OBJ_JOB_DESCRIPTION",
+    "weight": 0.97
+  },
+
+  "REL_000126": {
+    "relation_type": "supports_job_matching",
+    "source": "SKILL_POWER_BI",
+    "target": "OBJ_JOB_DESCRIPTION",
+    "weight": 0.95
+  },
+
+  "REL_000127": {
+    "relation_type": "supports_job_matching",
+    "source": "SKILL_MACHINE_LEARNING",
+    "target": "OBJ_JOB_DESCRIPTION",
+    "weight": 0.94
+  },
+
+  "REL_000128": {
+    "relation_type": "cross_domain",
+    "source": "DOMAIN_FOOD_SAFETY",
+    "target": "DOMAIN_QUALITY_MANAGEMENT",
+    "weight": 0.99
+  },
+
+  "REL_000129": {
+    "relation_type": "cross_domain",
+    "source": "DOMAIN_MANUFACTURING",
+    "target": "DOMAIN_CONTINUOUS_IMPROVEMENT",
+    "weight": 0.96
+  },
+
+  "REL_000130": {
+    "relation_type": "cross_domain",
+    "source": "DOMAIN_BUSINESS_ANALYTICS",
+    "target": "DOMAIN_DIGITAL_TRANSFORMATION",
+    "weight": 0.95
+  }
+}

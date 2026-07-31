@@ -1,121 +1,1433 @@
 {
-    "leadership": {
-        "people": {
-            "domain_id": "DOMAIN_LEADERSHIP",
-            "canonical": "leadership"
-        },
-        "operations": {
-            "domain_id": "DOMAIN_OPERATIONAL_LEADERSHIP",
-            "canonical": "operational_leadership"
-        },
-        "quality": {
-            "domain_id": "DOMAIN_QUALITY_LEADERSHIP",
-            "canonical": "quality_leadership"
-        },
-        "food_safety": {
-            "domain_id": "DOMAIN_FOOD_SAFETY_LEADERSHIP",
-            "canonical": "food_safety_leadership"
-        }
-    },
+  "leadership": {
+    "reasoning_id": "REASON_LEADERSHIP",
+    "canonical": "Leadership",
+    "description": "Leading people, teams, departments and organizations toward strategic objectives.",
 
-    "management": {
-        "people": {
-            "domain_id": "DOMAIN_PEOPLE_MANAGEMENT",
-            "canonical": "people_management"
-        },
-        "quality": {
-            "domain_id": "DOMAIN_QUALITY_MANAGEMENT",
-            "canonical": "quality_management"
-        },
-        "operations": {
-            "domain_id": "DOMAIN_OPERATIONS_MANAGEMENT",
-            "canonical": "operations_management"
-        },
-        "facility": {
-            "domain_id": "DOMAIN_FACILITY_MANAGEMENT",
-            "canonical": "facility_management"
-        }
-    },
+    "primary_domain": "leadership",
 
-    "implementation": {
-        "food_safety": {
-            "domain_id": "DOMAIN_FOOD_SAFETY",
-            "canonical": "food_safety"
-        },
-        "quality": {
-            "domain_id": "DOMAIN_QUALITY",
-            "canonical": "quality"
-        },
-        "operations": {
-            "domain_id": "DOMAIN_OPERATIONS",
-            "canonical": "operations"
-        },
-        "continuous_improvement": {
-            "domain_id": "DOMAIN_CONTINUOUS_IMPROVEMENT",
-            "canonical": "continuous_improvement"
-        }
-    },
+    "secondary_domains": [
+      "people_management",
+      "operations_management",
+      "strategic_management"
+    ],
 
-    "improvement": {
-        "operations": {
-            "domain_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
-            "canonical": "operational_excellence"
-        },
-        "quality": {
-            "domain_id": "DOMAIN_QUALITY_IMPROVEMENT",
-            "canonical": "quality_improvement"
-        },
-        "people": {
-            "domain_id": "DOMAIN_PEOPLE_DEVELOPMENT",
-            "canonical": "people_development"
-        }
-    },
+    "trigger_actions": [
+      "ACT_LEAD",
+      "ACT_DIRECT",
+      "ACT_MANAGE",
+      "ACT_SUPERVISE",
+      "ACT_GUIDE",
+      "ACT_MENTOR",
+      "ACT_COACH",
+      "ACT_DELEGATE"
+    ],
 
-    "optimization": {
-        "operations": {
-            "domain_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
-            "canonical": "operational_excellence"
-        },
-        "quality": {
-            "domain_id": "DOMAIN_QUALITY_IMPROVEMENT",
-            "canonical": "quality_improvement"
-        }
-    },
+    "trigger_objects": [
+      "OBJ_TEAM",
+      "OBJ_EMPLOYEES",
+      "OBJ_ENGINEERS",
+      "OBJ_OPERATORS",
+      "OBJ_DEPARTMENT"
+    ],
 
-    "achievement": {
-        "quality": {
-            "domain_id": "DOMAIN_QUALITY_EXCELLENCE",
-            "canonical": "quality_excellence"
-        },
-        "food_safety": {
-            "domain_id": "DOMAIN_FOOD_SAFETY_EXCELLENCE",
-            "canonical": "food_safety_excellence"
-        },
-        "operations": {
-            "domain_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
-            "canonical": "operational_excellence"
-        }
-    },
+    "trigger_skills": [
+      "SKILL_LEADERSHIP",
+      "SKILL_TEAM_BUILDING",
+      "SKILL_COACHING",
+      "SKILL_MENTORING",
+      "SKILL_STAKEHOLDER_MANAGEMENT"
+    ],
 
-    "certification": {
-        "quality": {
-            "domain_id": "DOMAIN_QUALITY_SYSTEMS",
-            "canonical": "quality_systems"
-        },
-        "food_safety": {
-            "domain_id": "DOMAIN_FOOD_SAFETY_SYSTEMS",
-            "canonical": "food_safety_systems"
-        }
-    },
+    "trigger_metrics": [
+      "KPI_EMPLOYEE_ENGAGEMENT",
+      "KPI_PRODUCTIVITY",
+      "KPI_TRAINING",
+      "KPI_RETENTION"
+    ],
 
-    "development": {
-        "people": {
-            "domain_id": "DOMAIN_PEOPLE_DEVELOPMENT",
-            "canonical": "people_development"
-        },
-        "operations": {
-            "domain_id": "DOMAIN_PROCESS_DEVELOPMENT",
-            "canonical": "process_development"
-        }
-    }
+    "trigger_certifications": [],
+
+    "confidence": 0.99
+  },
+
+  "people_management": {
+
+    "reasoning_id": "REASON_PEOPLE_MANAGEMENT",
+
+    "canonical": "People Management",
+
+    "description": "Managing employee performance, development and organizational capability.",
+
+    "primary_domain": "people_management",
+
+    "secondary_domains": [
+      "leadership",
+      "training",
+      "human_resources"
+    ],
+
+    "trigger_actions": [
+      "ACT_TRAIN",
+      "ACT_COACH",
+      "ACT_MENTOR",
+      "ACT_SUPPORT",
+      "ACT_DEVELOP",
+      "ACT_EVALUATE"
+    ],
+
+    "trigger_objects": [
+      "OBJ_EMPLOYEES",
+      "OBJ_OPERATORS",
+      "OBJ_STAFF",
+      "OBJ_TEAM"
+    ],
+
+    "trigger_skills": [
+      "SKILL_COACHING",
+      "SKILL_MENTORING",
+      "SKILL_TRAINING",
+      "SKILL_PERFORMANCE_MANAGEMENT"
+    ],
+
+    "trigger_metrics": [
+      "KPI_TRAINING",
+      "KPI_EMPLOYEE_ENGAGEMENT",
+      "KPI_COMPETENCY"
+    ],
+
+    "confidence": 0.98
+  },
+
+  "implementation": {
+
+    "reasoning_id": "REASON_IMPLEMENTATION",
+
+    "canonical": "Implementation",
+
+    "description": "Implementing systems, standards, projects and operational improvements.",
+
+    "primary_domain": "operations_management",
+
+    "secondary_domains": [
+      "food_safety_management",
+      "quality_management",
+      "continuous_improvement"
+    ],
+
+    "trigger_actions": [
+      "ACT_IMPLEMENT",
+      "ACT_ESTABLISH",
+      "ACT_DEPLOY",
+      "ACT_EXECUTE",
+      "ACT_INSTALL",
+      "ACT_INTRODUCE"
+    ],
+
+    "trigger_objects": [
+      "OBJ_QMS",
+      "OBJ_FSMS",
+      "OBJ_PROCESS",
+      "OBJ_PRODUCTION_LINE",
+      "OBJ_MANUFACTURING_FACILITY"
+    ],
+
+    "trigger_standards": [
+      "STD_ISO9001",
+      "STD_FSSC22000",
+      "STD_HACCP",
+      "STD_BRCGS"
+    ],
+
+    "trigger_methodologies": [
+      "METH_PDCA",
+      "METH_LEAN",
+      "METH_SIX_SIGMA"
+    ],
+
+    "trigger_skills": [
+      "SKILL_PROJECT_MANAGEMENT",
+      "SKILL_PROCESS_IMPROVEMENT"
+    ],
+
+    "trigger_metrics": [
+      "KPI_COMPLIANCE",
+      "KPI_PROCESS_CAPABILITY"
+    ],
+
+    "confidence": 0.97
+  },
+
+  "continuous_improvement": {
+
+    "reasoning_id": "REASON_CONTINUOUS_IMPROVEMENT",
+
+    "canonical": "Continuous Improvement",
+
+    "description": "Improving performance through structured improvement methodologies.",
+
+    "primary_domain": "continuous_improvement",
+
+    "secondary_domains": [
+      "operational_excellence",
+      "quality_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_IMPROVE",
+      "ACT_OPTIMIZE",
+      "ACT_ENHANCE",
+      "ACT_REDUCE",
+      "ACT_SIMPLIFY",
+      "ACT_STREAMLINE"
+    ],
+
+    "trigger_methodologies": [
+      "METH_LEAN",
+      "METH_KAIZEN",
+      "METH_PDCA",
+      "METH_DMAIC",
+      "METH_SIX_SIGMA"
+    ],
+
+    "trigger_metrics": [
+      "KPI_OEE",
+      "KPI_YIELD",
+      "KPI_WASTE",
+      "KPI_PRODUCTIVITY"
+    ],
+
+    "trigger_skills": [
+      "SKILL_PROCESS_IMPROVEMENT",
+      "SKILL_CONTINUOUS_IMPROVEMENT"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "operational_excellence": {
+
+    "reasoning_id": "REASON_OPERATIONAL_EXCELLENCE",
+
+    "canonical": "Operational Excellence",
+
+    "description": "Optimizing business operations through efficiency, reliability and performance.",
+
+    "primary_domain": "operational_excellence",
+
+    "secondary_domains": [
+      "operations_management",
+      "continuous_improvement"
+    ],
+
+    "trigger_actions": [
+      "ACT_OPTIMIZE",
+      "ACT_STANDARDIZE",
+      "ACT_IMPROVE",
+      "ACT_MONITOR"
+    ],
+
+    "trigger_objects": [
+      "OBJ_PROCESS",
+      "OBJ_EQUIPMENT",
+      "OBJ_PRODUCTION"
+    ],
+
+    "trigger_methodologies": [
+      "METH_LEAN",
+      "METH_TPM",
+      "METH_SIX_SIGMA"
+    ],
+
+    "trigger_metrics": [
+      "KPI_OEE",
+      "KPI_DOWNTIME",
+      "KPI_THROUGHPUT",
+      "KPI_CAPACITY_UTILIZATION"
+    ],
+
+    "confidence": 0.98
+  },
+  
+  "quality_management": {
+    "reasoning_id": "REASON_QUALITY_MANAGEMENT",
+    "canonical": "Quality Management",
+    "description": "Managing quality systems, standards, compliance and continual improvement.",
+
+    "primary_domain": "quality_management",
+
+    "secondary_domains": [
+      "quality_assurance",
+      "quality_control",
+      "continuous_improvement"
+    ],
+
+    "trigger_actions": [
+      "ACT_MANAGE",
+      "ACT_IMPLEMENT",
+      "ACT_MONITOR",
+      "ACT_CONTROL",
+      "ACT_STANDARDIZE",
+      "ACT_VERIFY"
+    ],
+
+    "trigger_objects": [
+      "OBJ_QMS",
+      "OBJ_PROCESS",
+      "OBJ_PRODUCT",
+      "OBJ_CUSTOMER_COMPLAINTS"
+    ],
+
+    "trigger_standards": [
+      "STD_ISO9001",
+      "STD_ISO17025",
+      "STD_BRCGS",
+      "STD_FSSC22000"
+    ],
+
+    "trigger_methodologies": [
+      "METH_PDCA",
+      "METH_CAPA",
+      "METH_RCA",
+      "METH_SPC"
+    ],
+
+    "trigger_skills": [
+      "SKILL_QUALITY_ASSURANCE",
+      "SKILL_QUALITY_MANAGEMENT",
+      "SKILL_DOCUMENT_CONTROL"
+    ],
+
+    "trigger_metrics": [
+      "KPI_QUALITY_SCORE",
+      "KPI_NONCONFORMANCE",
+      "KPI_CUSTOMER_COMPLAINTS"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "quality_assurance": {
+
+    "reasoning_id": "REASON_QUALITY_ASSURANCE",
+
+    "canonical": "Quality Assurance",
+
+    "description": "Preventing defects through quality systems and process compliance.",
+
+    "primary_domain": "quality_assurance",
+
+    "secondary_domains": [
+      "quality_management",
+      "food_safety_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_VERIFY",
+      "ACT_VALIDATE",
+      "ACT_INSPECT",
+      "ACT_REVIEW",
+      "ACT_APPROVE"
+    ],
+
+    "trigger_objects": [
+      "OBJ_PROCESS",
+      "OBJ_MATERIALS",
+      "OBJ_PRODUCT",
+      "OBJ_DOCUMENT"
+    ],
+
+    "trigger_skills": [
+      "SKILL_PROCESS_VALIDATION",
+      "SKILL_PROCESS_VERIFICATION",
+      "SKILL_DOCUMENT_CONTROL"
+    ],
+
+    "trigger_metrics": [
+      "KPI_FIRST_PASS_YIELD",
+      "KPI_DEFECT_RATE",
+      "KPI_CUSTOMER_COMPLAINTS"
+    ],
+
+    "confidence": 0.98
+  },
+
+  "quality_control": {
+
+    "reasoning_id": "REASON_QUALITY_CONTROL",
+
+    "canonical": "Quality Control",
+
+    "description": "Inspection, testing and monitoring product quality."
+
+    ,
+
+    "primary_domain": "quality_control",
+
+    "secondary_domains": [
+      "quality_assurance"
+    ],
+
+    "trigger_actions": [
+      "ACT_TEST",
+      "ACT_INSPECT",
+      "ACT_MEASURE",
+      "ACT_SAMPLE",
+      "ACT_MONITOR"
+    ],
+
+    "trigger_objects": [
+      "OBJ_PRODUCT",
+      "OBJ_RAW_MATERIALS",
+      "OBJ_LABORATORY",
+      "OBJ_PROCESS"
+    ],
+
+    "trigger_methodologies": [
+      "METH_SPC",
+      "METH_MSA"
+    ],
+
+    "trigger_skills": [
+      "SKILL_STATISTICAL_ANALYSIS",
+      "SKILL_SPC",
+      "SKILL_CALIBRATION"
+    ],
+
+    "trigger_metrics": [
+      "KPI_CP",
+      "KPI_CPK",
+      "KPI_REWORK",
+      "KPI_SCRAP"
+    ],
+
+    "confidence": 0.98
+  },
+
+  "auditing": {
+
+    "reasoning_id": "REASON_AUDITING",
+
+    "canonical": "Auditing",
+
+    "description": "Internal, external and supplier audits."
+
+    ,
+
+    "primary_domain": "auditing",
+
+    "secondary_domains": [
+      "compliance",
+      "quality_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_AUDIT",
+      "ACT_INSPECT",
+      "ACT_REVIEW",
+      "ACT_VERIFY"
+    ],
+
+    "trigger_objects": [
+      "OBJ_AUDIT",
+      "OBJ_QMS",
+      "OBJ_FSMS",
+      "OBJ_SUPPLIER"
+    ],
+
+    "trigger_standards": [
+      "STD_ISO9001",
+      "STD_FSSC22000",
+      "STD_BRCGS",
+      "STD_HACCP"
+    ],
+
+    "trigger_skills": [
+      "SKILL_AUDITING",
+      "SKILL_COMPLIANCE"
+    ],
+
+    "trigger_metrics": [
+      "KPI_AUDIT_FINDINGS",
+      "KPI_COMPLIANCE"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "compliance": {
+
+    "reasoning_id": "REASON_COMPLIANCE",
+
+    "canonical": "Compliance",
+
+    "description": "Regulatory, customer and certification compliance."
+
+    ,
+
+    "primary_domain": "compliance",
+
+    "secondary_domains": [
+      "quality_management",
+      "food_safety_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_COMPLY",
+      "ACT_IMPLEMENT",
+      "ACT_VERIFY",
+      "ACT_MONITOR"
+    ],
+
+    "trigger_standards": [
+      "STD_ISO9001",
+      "STD_FSSC22000",
+      "STD_BRCGS",
+      "STD_HACCP",
+      "STD_GMP"
+    ],
+
+    "trigger_skills": [
+      "SKILL_REGULATORY_COMPLIANCE",
+      "SKILL_DOCUMENT_CONTROL"
+    ],
+
+    "trigger_metrics": [
+      "KPI_COMPLIANCE"
+    ],
+
+    "confidence": 0.99
+  },
+  
+  "food_safety_management": {
+    "reasoning_id": "REASON_FOOD_SAFETY_MANAGEMENT",
+    "canonical": "Food Safety Management",
+
+    "description": "Implementation, maintenance and continual improvement of food safety systems.",
+
+    "primary_domain": "food_safety_management",
+
+    "secondary_domains": [
+      "quality_management",
+      "regulatory_compliance"
+    ],
+
+    "trigger_actions": [
+      "ACT_IMPLEMENT",
+      "ACT_ESTABLISH",
+      "ACT_MONITOR",
+      "ACT_VERIFY",
+      "ACT_VALIDATE",
+      "ACT_CONTROL"
+    ],
+
+    "trigger_objects": [
+      "OBJ_FSMS",
+      "OBJ_PROCESS",
+      "OBJ_PRODUCT",
+      "OBJ_PRODUCTION_LINE",
+      "OBJ_MANUFACTURING_FACILITY"
+    ],
+
+    "trigger_standards": [
+      "STD_FSSC22000",
+      "STD_BRCGS",
+      "STD_HACCP",
+      "STD_GMP"
+    ],
+
+    "trigger_methodologies": [
+      "METH_HACCP",
+      "METH_CAPA",
+      "METH_PDCA"
+    ],
+
+    "trigger_skills": [
+      "SKILL_FOOD_SAFETY",
+      "SKILL_RISK_ASSESSMENT",
+      "SKILL_HACCP"
+    ],
+
+    "trigger_metrics": [
+      "KPI_FOOD_SAFETY",
+      "KPI_MICROBIOLOGICAL_COMPLIANCE",
+      "KPI_AUDIT_FINDINGS"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "haccp_management": {
+
+    "reasoning_id": "REASON_HACCP",
+
+    "canonical": "HACCP",
+
+    "description": "Hazard Analysis and Critical Control Point implementation and maintenance.",
+
+    "primary_domain": "food_safety",
+
+    "secondary_domains": [
+      "risk_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_ANALYZE",
+      "ACT_IDENTIFY",
+      "ACT_MONITOR",
+      "ACT_CONTROL",
+      "ACT_VALIDATE",
+      "ACT_VERIFY"
+    ],
+
+    "trigger_objects": [
+      "OBJ_HACCP",
+      "OBJ_PROCESS",
+      "OBJ_CCP"
+    ],
+
+    "trigger_standards": [
+      "STD_HACCP",
+      "STD_FSSC22000"
+    ],
+
+    "trigger_metrics": [
+      "KPI_CCP_COMPLIANCE",
+      "KPI_PROCESS_CONTROL"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "gmp": {
+
+    "reasoning_id": "REASON_GMP",
+
+    "canonical": "Good Manufacturing Practices",
+
+    "primary_domain": "food_safety",
+
+    "secondary_domains": [
+      "manufacturing"
+    ],
+
+    "trigger_actions": [
+      "ACT_CLEAN",
+      "ACT_SANITIZE",
+      "ACT_INSPECT",
+      "ACT_MONITOR"
+    ],
+
+    "trigger_objects": [
+      "OBJ_EQUIPMENT",
+      "OBJ_PRODUCTION_LINE",
+      "OBJ_MANUFACTURING_FACILITY"
+    ],
+
+    "trigger_standards": [
+      "STD_GMP"
+    ],
+
+    "trigger_metrics": [
+      "KPI_GMP_COMPLIANCE"
+    ],
+
+    "confidence": 0.98
+  },
+
+  "food_defense": {
+
+    "reasoning_id": "REASON_FOOD_DEFENSE",
+
+    "canonical": "Food Defense",
+
+    "primary_domain": "food_safety",
+
+    "secondary_domains": [
+      "security"
+    ],
+
+    "trigger_actions": [
+      "ACT_PROTECT",
+      "ACT_SECURE",
+      "ACT_PREVENT"
+    ],
+
+    "trigger_objects": [
+      "OBJ_FACILITY",
+      "OBJ_ACCESS_POINT"
+    ],
+
+    "trigger_standards": [
+      "STD_BRCGS",
+      "STD_FSSC22000"
+    ],
+
+    "trigger_metrics": [
+      "KPI_SECURITY_INCIDENTS"
+    ],
+
+    "confidence": 0.95
+  },
+
+  "food_fraud": {
+
+    "reasoning_id": "REASON_FOOD_FRAUD",
+
+    "canonical": "Food Fraud",
+
+    "primary_domain": "food_safety",
+
+    "secondary_domains": [
+      "procurement",
+      "supplier_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_PREVENT",
+      "ACT_VERIFY",
+      "ACT_INSPECT"
+    ],
+
+    "trigger_objects": [
+      "OBJ_SUPPLIER",
+      "OBJ_RAW_MATERIALS"
+    ],
+
+    "trigger_standards": [
+      "STD_BRCGS",
+      "STD_FSSC22000"
+    ],
+
+    "trigger_metrics": [
+      "KPI_SUPPLIER_APPROVAL"
+    ],
+
+    "confidence": 0.95
+  },
+
+  "allergen_management": {
+
+    "reasoning_id": "REASON_ALLERGEN",
+
+    "canonical": "Allergen Management",
+
+    "primary_domain": "food_safety",
+
+    "secondary_domains": [
+      "quality_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_IDENTIFY",
+      "ACT_CONTROL",
+      "ACT_MONITOR"
+    ],
+
+    "trigger_objects": [
+      "OBJ_PROCESS",
+      "OBJ_PRODUCT"
+    ],
+
+    "trigger_standards": [
+      "STD_FSSC22000",
+      "STD_BRCGS"
+    ],
+
+    "trigger_metrics": [
+      "KPI_ALLERGEN_COMPLIANCE"
+    ],
+
+    "confidence": 0.96
+  },
+
+  "traceability": {
+
+    "reasoning_id": "REASON_TRACEABILITY",
+
+    "canonical": "Traceability",
+
+    "primary_domain": "food_safety",
+
+    "secondary_domains": [
+      "supply_chain"
+    ],
+
+    "trigger_actions": [
+      "ACT_TRACE",
+      "ACT_RECORD",
+      "ACT_VERIFY"
+    ],
+
+    "trigger_objects": [
+      "OBJ_PRODUCT",
+      "OBJ_BATCH",
+      "OBJ_RAW_MATERIALS"
+    ],
+
+    "trigger_standards": [
+      "STD_FSSC22000",
+      "STD_BRCGS"
+    ],
+
+    "trigger_metrics": [
+      "KPI_TRACEABILITY_TIME"
+    ],
+
+    "confidence": 0.97
+  },
+
+  "sanitation": {
+
+    "reasoning_id": "REASON_SANITATION",
+
+    "canonical": "Cleaning and Sanitation",
+
+    "primary_domain": "food_safety",
+
+    "secondary_domains": [
+      "maintenance"
+    ],
+
+    "trigger_actions": [
+      "ACT_CLEAN",
+      "ACT_SANITIZE",
+      "ACT_DISINFECT"
+    ],
+
+    "trigger_objects": [
+      "OBJ_EQUIPMENT",
+      "OBJ_FACILITY"
+    ],
+
+    "trigger_metrics": [
+      "KPI_CLEANING_COMPLIANCE",
+      "KPI_MICRO_RESULTS"
+    ],
+
+    "confidence": 0.98
+  },
+  
+  "supply_chain_management": {
+    "reasoning_id": "REASON_SUPPLY_CHAIN",
+    "canonical": "Supply Chain Management",
+
+    "description": "Planning, sourcing, movement and control of materials across the value chain.",
+
+    "primary_domain": "supply_chain",
+
+    "secondary_domains": [
+      "procurement",
+      "warehouse_management",
+      "inventory_management",
+      "supplier_quality"
+    ],
+
+    "trigger_actions": [
+      "ACT_PROCURE",
+      "ACT_SOURCE",
+      "ACT_RECEIVE",
+      "ACT_STORE",
+      "ACT_SHIP",
+      "ACT_DELIVER",
+      "ACT_TRANSFER",
+      "ACT_TRACK",
+      "ACT_VERIFY"
+    ],
+
+    "trigger_objects": [
+      "OBJ_SUPPLIER",
+      "OBJ_RAW_MATERIALS",
+      "OBJ_MATERIALS",
+      "OBJ_WAREHOUSE",
+      "OBJ_INVENTORY"
+    ],
+
+    "trigger_standards": [
+      "STD_ISO9001",
+      "STD_BRCGS",
+      "STD_FSSC22000"
+    ],
+
+    "trigger_methodologies": [
+      "METH_FIFO",
+      "METH_FEFO",
+      "METH_5S"
+    ],
+
+    "trigger_skills": [
+      "SKILL_SUPPLIER_MANAGEMENT",
+      "SKILL_INVENTORY_MANAGEMENT",
+      "SKILL_LOGISTICS"
+    ],
+
+    "trigger_metrics": [
+      "KPI_OTD",
+      "KPI_INVENTORY_ACCURACY",
+      "KPI_SUPPLIER_PERFORMANCE"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "procurement": {
+
+    "reasoning_id": "REASON_PROCUREMENT",
+
+    "canonical": "Procurement",
+
+    "primary_domain": "procurement",
+
+    "secondary_domains": [
+      "supplier_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_PURCHASE",
+      "ACT_PROCURE",
+      "ACT_SOURCE",
+      "ACT_ORDER",
+      "ACT_APPROVE"
+    ],
+
+    "trigger_objects": [
+      "OBJ_SUPPLIER",
+      "OBJ_RAW_MATERIALS",
+      "OBJ_PURCHASE_ORDER"
+    ],
+
+    "trigger_metrics": [
+      "KPI_PROCUREMENT_COST",
+      "KPI_SUPPLIER_PERFORMANCE"
+    ],
+
+    "confidence": 0.98
+  },
+
+  "supplier_quality": {
+
+    "reasoning_id": "REASON_SUPPLIER_QUALITY",
+
+    "canonical": "Supplier Quality",
+
+    "primary_domain": "supplier_quality",
+
+    "secondary_domains": [
+      "quality_management",
+      "procurement"
+    ],
+
+    "trigger_actions": [
+      "ACT_APPROVE",
+      "ACT_EVALUATE",
+      "ACT_AUDIT",
+      "ACT_VERIFY",
+      "ACT_MONITOR"
+    ],
+
+    "trigger_objects": [
+      "OBJ_SUPPLIER",
+      "OBJ_RAW_MATERIALS"
+    ],
+
+    "trigger_standards": [
+      "STD_ISO9001",
+      "STD_BRCGS",
+      "STD_FSSC22000"
+    ],
+
+    "trigger_metrics": [
+      "KPI_SUPPLIER_PERFORMANCE",
+      "KPI_SUPPLIER_DEFECT_RATE",
+      "KPI_INCOMING_REJECTION"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "warehouse_management": {
+
+    "reasoning_id": "REASON_WAREHOUSE",
+
+    "canonical": "Warehouse Management",
+
+    "primary_domain": "warehouse_management",
+
+    "secondary_domains": [
+      "inventory_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_STORE",
+      "ACT_RECEIVE",
+      "ACT_DISPATCH",
+      "ACT_TRANSFER",
+      "ACT_PICK"
+    ],
+
+    "trigger_objects": [
+      "OBJ_WAREHOUSE",
+      "OBJ_INVENTORY",
+      "OBJ_PRODUCT"
+    ],
+
+    "trigger_methodologies": [
+      "METH_FIFO",
+      "METH_FEFO",
+      "METH_5S"
+    ],
+
+    "trigger_metrics": [
+      "KPI_STORAGE_UTILIZATION",
+      "KPI_PICKING_ACCURACY"
+    ],
+
+    "confidence": 0.97
+  },
+
+  "inventory_management": {
+
+    "reasoning_id": "REASON_INVENTORY",
+
+    "canonical": "Inventory Management",
+
+    "primary_domain": "inventory_management",
+
+    "secondary_domains": [
+      "warehouse_management",
+      "supply_chain"
+    ],
+
+    "trigger_actions": [
+      "ACT_COUNT",
+      "ACT_TRACK",
+      "ACT_RECONCILE",
+      "ACT_VERIFY",
+      "ACT_MONITOR"
+    ],
+
+    "trigger_objects": [
+      "OBJ_INVENTORY",
+      "OBJ_RAW_MATERIALS",
+      "OBJ_FINISHED_GOODS"
+    ],
+
+    "trigger_metrics": [
+      "KPI_INVENTORY_ACCURACY",
+      "KPI_STOCK_TURNOVER",
+      "KPI_STOCK_VARIANCE"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "logistics": {
+
+    "reasoning_id": "REASON_LOGISTICS",
+
+    "canonical": "Logistics",
+
+    "primary_domain": "logistics",
+
+    "secondary_domains": [
+      "distribution",
+      "transportation"
+    ],
+
+    "trigger_actions": [
+      "ACT_SHIP",
+      "ACT_DELIVER",
+      "ACT_TRANSPORT",
+      "ACT_ROUTE"
+    ],
+
+    "trigger_objects": [
+      "OBJ_PRODUCT",
+      "OBJ_CUSTOMER",
+      "OBJ_VEHICLE"
+    ],
+
+    "trigger_metrics": [
+      "KPI_OTD",
+      "KPI_DELIVERY_ACCURACY",
+      "KPI_FREIGHT_COST"
+    ],
+
+    "confidence": 0.97
+  },
+
+  "receiving_inspection": {
+
+    "reasoning_id": "REASON_RECEIVING",
+
+    "canonical": "Incoming Material Inspection",
+
+    "primary_domain": "quality_control",
+
+    "secondary_domains": [
+      "supplier_quality"
+    ],
+
+    "trigger_actions": [
+      "ACT_RECEIVE",
+      "ACT_INSPECT",
+      "ACT_ACCEPT",
+      "ACT_REJECT"
+    ],
+
+    "trigger_objects": [
+      "OBJ_RAW_MATERIALS",
+      "OBJ_SUPPLIER"
+    ],
+
+    "trigger_metrics": [
+      "KPI_INCOMING_REJECTION",
+      "KPI_SUPPLIER_PERFORMANCE"
+    ],
+
+    "confidence": 0.98
+  },
+  
+  "business_analytics": {
+    "reasoning_id": "REASON_BUSINESS_ANALYTICS",
+    "canonical": "Business Analytics",
+    "description": "Using business data to improve organizational decision making.",
+
+    "primary_domain": "business_analytics",
+
+    "secondary_domains": [
+      "data_analytics",
+      "business_intelligence"
+    ],
+
+    "trigger_actions": [
+      "ACT_ANALYZE",
+      "ACT_VISUALIZE",
+      "ACT_REPORT",
+      "ACT_MONITOR",
+      "ACT_FORECAST"
+    ],
+
+    "trigger_technologies": [
+      "TECH_POWER_BI",
+      "TECH_TABLEAU",
+      "TECH_SQL",
+      "TECH_PYTHON",
+      "TECH_EXCEL"
+    ],
+
+    "trigger_skills": [
+      "SKILL_BUSINESS_ANALYTICS",
+      "SKILL_DATA_ANALYSIS",
+      "SKILL_DATA_VISUALIZATION"
+    ],
+
+    "trigger_metrics": [
+      "KPI_DASHBOARD_USAGE",
+      "KPI_REPORTING_ACCURACY"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "business_intelligence": {
+
+    "reasoning_id": "REASON_BUSINESS_INTELLIGENCE",
+
+    "canonical": "Business Intelligence",
+
+    "primary_domain": "business_intelligence",
+
+    "secondary_domains": [
+      "business_analytics"
+    ],
+
+    "trigger_actions": [
+      "ACT_REPORT",
+      "ACT_VISUALIZE",
+      "ACT_PRESENT"
+    ],
+
+    "trigger_technologies": [
+      "TECH_POWER_BI",
+      "TECH_TABLEAU"
+    ],
+
+    "confidence": 0.97
+  },
+
+  "digital_transformation": {
+
+    "reasoning_id": "REASON_DIGITAL_TRANSFORMATION",
+
+    "canonical": "Digital Transformation",
+
+    "primary_domain": "digital_transformation",
+
+    "secondary_domains": [
+      "innovation",
+      "business_analytics"
+    ],
+
+    "trigger_actions": [
+      "ACT_DIGITIZE",
+      "ACT_AUTOMATE",
+      "ACT_TRANSFORM",
+      "ACT_MODERNIZE"
+    ],
+
+    "trigger_technologies": [
+      "TECH_AI",
+      "TECH_MACHINE_LEARNING",
+      "TECH_PYTHON",
+      "TECH_SQL"
+    ],
+
+    "confidence": 0.96
+  },
+
+  "artificial_intelligence": {
+
+    "reasoning_id": "REASON_AI",
+
+    "canonical": "Artificial Intelligence",
+
+    "primary_domain": "artificial_intelligence",
+
+    "secondary_domains": [
+      "data_science"
+    ],
+
+    "trigger_actions": [
+      "ACT_PREDICT",
+      "ACT_CLASSIFY",
+      "ACT_AUTOMATE"
+    ],
+
+    "trigger_technologies": [
+      "TECH_MACHINE_LEARNING",
+      "TECH_PYTHON"
+    ],
+
+    "confidence": 0.95
+  },
+
+  "finance": {
+
+    "reasoning_id": "REASON_FINANCE",
+
+    "canonical": "Finance",
+
+    "primary_domain": "finance",
+
+    "secondary_domains": [
+      "cost_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_REDUCE",
+      "ACT_OPTIMIZE",
+      "ACT_ANALYZE",
+      "ACT_CONTROL"
+    ],
+
+    "trigger_metrics": [
+      "KPI_REVENUE",
+      "KPI_PROFIT",
+      "KPI_MARGIN",
+      "KPI_COST"
+    ],
+
+    "confidence": 0.97
+  },
+
+  "cost_management": {
+
+    "reasoning_id": "REASON_COST_MANAGEMENT",
+
+    "canonical": "Cost Management",
+
+    "primary_domain": "finance",
+
+    "secondary_domains": [
+      "operations_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_REDUCE",
+      "ACT_SAVE",
+      "ACT_OPTIMIZE"
+    ],
+
+    "trigger_metrics": [
+      "KPI_COST",
+      "KPI_COST_PER_UNIT",
+      "KPI_OPERATIONAL_COST"
+    ],
+
+    "confidence": 0.98
+  },
+
+  "project_management": {
+
+    "reasoning_id": "REASON_PROJECT_MANAGEMENT",
+
+    "canonical": "Project Management",
+
+    "primary_domain": "project_management",
+
+    "secondary_domains": [
+      "leadership"
+    ],
+
+    "trigger_actions": [
+      "ACT_PLAN",
+      "ACT_EXECUTE",
+      "ACT_DELIVER",
+      "ACT_MANAGE"
+    ],
+
+    "trigger_skills": [
+      "SKILL_PROJECT_MANAGEMENT",
+      "SKILL_AGILE",
+      "SKILL_SCRUM"
+    ],
+
+    "confidence": 0.98
+  },
+
+  "performance_management": {
+
+    "reasoning_id": "REASON_PERFORMANCE_MANAGEMENT",
+
+    "canonical": "Performance Management",
+
+    "primary_domain": "performance_management",
+
+    "secondary_domains": [
+      "leadership"
+    ],
+
+    "trigger_actions": [
+      "ACT_MONITOR",
+      "ACT_MEASURE",
+      "ACT_EVALUATE"
+    ],
+
+    "trigger_metrics": [
+      "KPI_PRODUCTIVITY",
+      "KPI_EFFICIENCY",
+      "KPI_OEE"
+    ],
+
+    "confidence": 0.99
+  },
+
+  "customer_excellence": {
+
+    "reasoning_id": "REASON_CUSTOMER_EXCELLENCE",
+
+    "canonical": "Customer Excellence",
+
+    "primary_domain": "customer_management",
+
+    "secondary_domains": [
+      "quality_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_SERVE",
+      "ACT_SUPPORT",
+      "ACT_RESOLVE",
+      "ACT_RESPOND"
+    ],
+
+    "trigger_objects": [
+      "OBJ_CUSTOMERS",
+      "OBJ_CUSTOMER_COMPLAINTS"
+    ],
+
+    "trigger_metrics": [
+      "KPI_CUSTOMER_COMPLAINTS",
+      "KPI_CUSTOMER_SATISFACTION"
+    ],
+
+    "confidence": 0.97
+  },
+
+  "innovation": {
+
+    "reasoning_id": "REASON_INNOVATION",
+
+    "canonical": "Innovation",
+
+    "primary_domain": "innovation",
+
+    "secondary_domains": [
+      "continuous_improvement"
+    ],
+
+    "trigger_actions": [
+      "ACT_INNOVATE",
+      "ACT_CREATE",
+      "ACT_DEVELOP"
+    ],
+
+    "confidence": 0.94
+  },
+
+  "sustainability": {
+
+    "reasoning_id": "REASON_SUSTAINABILITY",
+
+    "canonical": "Sustainability",
+
+    "primary_domain": "sustainability",
+
+    "secondary_domains": [
+      "operations_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_REDUCE",
+      "ACT_CONSERVE",
+      "ACT_RECYCLE"
+    ],
+
+    "trigger_metrics": [
+      "KPI_WASTE",
+      "KPI_ENERGY_USAGE"
+    ],
+
+    "confidence": 0.93
+  },
+
+  "risk_management": {
+
+    "reasoning_id": "REASON_RISK_MANAGEMENT",
+
+    "canonical": "Risk Management",
+
+    "primary_domain": "risk_management",
+
+    "secondary_domains": [
+      "quality_management",
+      "food_safety_management"
+    ],
+
+    "trigger_actions": [
+      "ACT_ASSESS",
+      "ACT_IDENTIFY",
+      "ACT_MITIGATE",
+      "ACT_PREVENT"
+    ],
+
+    "trigger_methodologies": [
+      "METH_FMEA",
+      "METH_HACCP",
+      "METH_RISK_ASSESSMENT"
+    ],
+
+    "confidence": 0.99
+  }
 }

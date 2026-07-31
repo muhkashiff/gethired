@@ -2,91 +2,945 @@
   "lean manufacturing": {
     "entity_id": "METH_LEAN",
     "canonical": "Lean Manufacturing",
+    "aliases": [
+      "Lean",
+      "Lean Production",
+      "Lean System"
+    ],
     "category": "continuous_improvement",
-    "business_area": "operations"
+    "business_area": "operations",
+    "description": "Methodology focused on eliminating waste and maximizing customer value.",
+    "related_domains": [
+      "operations",
+      "continuous_improvement",
+      "manufacturing"
+    ],
+    "related_standards": [
+      "ISO 9001"
+    ],
+    "related_kpis": [
+      "Production Yield",
+      "Waste",
+      "Throughput",
+      "Cycle Time",
+      "OEE"
+    ],
+    "impact_weight": 0.98
   },
+
   "six sigma": {
     "entity_id": "METH_SIX_SIGMA",
     "canonical": "Six Sigma",
+    "aliases": [
+      "6 Sigma",
+      "SixSigma"
+    ],
     "category": "continuous_improvement",
-    "business_area": "quality"
+    "business_area": "quality",
+    "description": "Data-driven methodology for reducing process variation and defects.",
+    "related_domains": [
+      "quality",
+      "continuous_improvement"
+    ],
+    "related_standards": [
+      "ISO 9001"
+    ],
+    "related_kpis": [
+      "Defect Rate",
+      "Sigma Level",
+      "Cpk",
+      "Cp",
+      "PPM"
+    ],
+    "impact_weight": 0.99
   },
-  "kaizen": {
-    "entity_id": "METH_KAIZEN",
-    "canonical": "Kaizen",
-    "category": "continuous_improvement",
-    "business_area": "operations"
-  },
-  "5s": {
-    "entity_id": "METH_5S",
-    "canonical": "5S",
-    "category": "workplace_organization",
-    "business_area": "operations"
-  },
-  "tpm": {
-    "entity_id": "METH_TPM",
-    "canonical": "Total Productive Maintenance",
-    "category": "maintenance",
-    "business_area": "maintenance"
-  },
-  "rca": {
-    "entity_id": "METH_RCA",
-    "canonical": "Root Cause Analysis",
-    "category": "problem_solving",
-    "business_area": "quality"
-  },
-  "capa": {
-    "entity_id": "METH_CAPA",
-    "canonical": "Corrective and Preventive Action",
-    "category": "quality_system",
-    "business_area": "quality"
-  },
-  "spc": {
-    "entity_id": "METH_SPC",
-    "canonical": "Statistical Process Control",
-    "category": "quality_tools",
-    "business_area": "quality"
-  },
-  "pdca": {
-    "entity_id": "METH_PDCA",
-    "canonical": "Plan Do Check Act",
-    "category": "continuous_improvement",
-    "business_area": "management"
-  },
+
   "dmaic": {
     "entity_id": "METH_DMAIC",
     "canonical": "DMAIC",
+    "aliases": [
+      "Define Measure Analyze Improve Control"
+    ],
     "category": "six_sigma",
-    "business_area": "quality"
+    "business_area": "quality",
+    "description": "Structured Six Sigma improvement methodology.",
+    "related_domains": [
+      "quality",
+      "continuous_improvement"
+    ],
+    "related_standards": [
+      "ISO 9001"
+    ],
+    "related_kpis": [
+      "Cpk",
+      "Cp",
+      "Defect Rate",
+      "Yield"
+    ],
+    "impact_weight": 0.97
   },
-  "fmea": {
-    "entity_id": "METH_FMEA",
-    "canonical": "Failure Mode and Effects Analysis",
-    "category": "risk",
-    "business_area": "quality"
+
+  "kaizen": {
+    "entity_id": "METH_KAIZEN",
+    "canonical": "Kaizen",
+    "aliases": [
+      "Continuous Improvement"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations",
+    "description": "Japanese methodology emphasizing small continuous improvements.",
+    "related_domains": [
+      "continuous_improvement",
+      "operations"
+    ],
+    "related_standards": [
+      "ISO 9001"
+    ],
+    "related_kpis": [
+      "Waste",
+      "Productivity",
+      "Yield",
+      "Cycle Time"
+    ],
+    "impact_weight": 0.96
   },
-  "8d": {
-    "entity_id": "METH_8D",
-    "canonical": "8D Problem Solving",
-    "category": "problem_solving",
-    "business_area": "quality"
+
+  "pdca": {
+    "entity_id": "METH_PDCA",
+    "canonical": "Plan Do Check Act",
+    "aliases": [
+      "Deming Cycle",
+      "PDCA Cycle"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "management",
+    "description": "Iterative management methodology for continual improvement.",
+    "related_domains": [
+      "management",
+      "continuous_improvement"
+    ],
+    "related_standards": [
+      "ISO 9001",
+      "ISO 22000"
+    ],
+    "related_kpis": [
+      "Corrective Actions",
+      "Audit Findings",
+      "Customer Satisfaction"
+    ],
+    "impact_weight": 0.95
   },
-  "fishbone": {
-    "entity_id": "METH_FISHBONE",
-    "canonical": "Fishbone Analysis",
-    "category": "problem_solving",
-    "business_area": "quality"
+
+  "5s": {
+    "entity_id": "METH_5S",
+    "canonical": "5S Workplace Organization",
+    "aliases": [
+      "5S",
+      "Five S"
+    ],
+    "category": "workplace_organization",
+    "business_area": "operations",
+    "description": "Methodology for workplace organization and visual management.",
+    "related_domains": [
+      "operations",
+      "manufacturing"
+    ],
+    "related_standards": [
+      "ISO 9001",
+      "GMP"
+    ],
+    "related_kpis": [
+      "Productivity",
+      "Safety",
+      "Audit Score"
+    ],
+    "impact_weight": 0.93
   },
-  "pareto": {
-    "entity_id": "METH_PARETO",
-    "canonical": "Pareto Analysis",
-    "category": "quality_tools",
-    "business_area": "quality"
-  },
+
   "gemba": {
     "entity_id": "METH_GEMBA",
     "canonical": "Gemba Walk",
+    "aliases": [
+      "Gemba",
+      "Gemba Walk"
+    ],
     "category": "leadership",
-    "business_area": "operations"
+    "business_area": "operations",
+    "description": "Leadership practice of observing processes at the workplace.",
+    "related_domains": [
+      "leadership",
+      "operations"
+    ],
+    "related_standards": [
+      "ISO 9001"
+    ],
+    "related_kpis": [
+      "Process Compliance",
+      "Safety",
+      "Productivity"
+    ],
+    "impact_weight": 0.91
+  },
+
+  "visual management": {
+    "entity_id": "METH_VISUAL_MANAGEMENT",
+    "canonical": "Visual Management",
+    "aliases": [
+      "Visual Controls"
+    ],
+    "category": "lean",
+    "business_area": "operations",
+    "description": "Use of visual indicators to improve process communication and control.",
+    "related_domains": [
+      "operations"
+    ],
+    "related_standards": [
+      "Lean Manufacturing"
+    ],
+    "related_kpis": [
+      "Response Time",
+      "Productivity"
+    ],
+    "impact_weight": 0.89
+  },
+  
+  "a3 problem solving": {
+    "entity_id": "METH_A3",
+    "canonical": "A3 Problem Solving",
+    "aliases": ["A3", "Toyota A3"],
+    "category": "problem_solving",
+    "business_area": "quality",
+    "description": "Structured problem-solving methodology using A3 reports.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.95
+  },
+
+  "5 why": {
+    "entity_id": "METH_5WHY",
+    "canonical": "5 Why Analysis",
+    "aliases": ["5 Whys", "Five Why"],
+    "category": "problem_solving",
+    "business_area": "quality",
+    "description": "Root cause identification through repeated questioning.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.95
+  },
+
+  "control plan": {
+    "entity_id": "METH_CONTROL_PLAN",
+    "canonical": "Control Plan",
+    "aliases": [],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Process monitoring and product quality control methodology.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.94
+  },
+
+  "quality risk assessment": {
+    "entity_id": "METH_QRA",
+    "canonical": "Quality Risk Assessment",
+    "aliases": ["Risk Assessment"],
+    "category": "risk_management",
+    "business_area": "quality",
+    "description": "Assessment of product and process risks.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.93
+  },
+
+  "hazard analysis": {
+    "entity_id": "METH_HAZARD_ANALYSIS",
+    "canonical": "Hazard Analysis",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Systematic identification of food safety hazards.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.97
+  },
+
+  "risk based thinking": {
+    "entity_id": "METH_RBT",
+    "canonical": "Risk-Based Thinking",
+    "aliases": [],
+    "category": "risk_management",
+    "business_area": "quality",
+    "description": "ISO-based preventive management methodology.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.94
+  },
+
+  "process mapping": {
+    "entity_id": "METH_PROCESS_MAPPING",
+    "canonical": "Process Mapping",
+    "aliases": ["Process Flow Mapping"],
+    "category": "process_improvement",
+    "business_area": "operations",
+    "description": "Visual representation of operational workflows.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.92
+  },
+
+  "value stream mapping": {
+    "entity_id": "METH_VSM",
+    "canonical": "Value Stream Mapping",
+    "aliases": ["VSM"],
+    "category": "lean",
+    "business_area": "operations",
+    "description": "Lean methodology for identifying waste across value streams.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.96
+  },
+
+  "standard work": {
+    "entity_id": "METH_STANDARD_WORK",
+    "canonical": "Standard Work",
+    "aliases": [],
+    "category": "lean",
+    "business_area": "operations",
+    "description": "Documented best practice for performing operations.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.95
+  },
+
+    "kanban": {
+    "entity_id": "METH_KANBAN",
+    "canonical": "Kanban",
+    "aliases": [],
+    "category": "lean",
+    "business_area": "operations",
+    "description": "Pull-based production scheduling methodology.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.93
+  },
+
+  "poka yoke": {
+    "entity_id": "METH_POKAYOKE",
+    "canonical": "Poka-Yoke",
+    "aliases": ["Mistake Proofing"],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Mistake-proofing methodology.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.97
+  },
+
+  "smed": {
+    "entity_id": "METH_SMED",
+    "canonical": "Single Minute Exchange of Die",
+    "aliases": [],
+    "category": "lean",
+    "business_area": "operations",
+    "description": "Methodology for reducing equipment changeover time.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.95
+  },
+
+  "line balancing": {
+    "entity_id": "METH_LINE_BALANCING",
+    "canonical": "Line Balancing",
+    "aliases": [],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Optimization of production line workloads.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.92
+  },
+
+  "change management": {
+    "entity_id": "METH_CHANGE_MANAGEMENT",
+    "canonical": "Change Management",
+    "aliases": [],
+    "category": "management",
+    "business_area": "leadership",
+    "description": "Structured management of organizational change.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.91
+  },
+
+  "management review": {
+    "entity_id": "METH_MANAGEMENT_REVIEW",
+    "canonical": "Management Review",
+    "aliases": [],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Periodic evaluation of management systems.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.90
+  },
+
+  "internal audit": {
+    "entity_id": "METH_INTERNAL_AUDIT",
+    "canonical": "Internal Audit",
+    "aliases": [],
+    "category": "audit",
+    "business_area": "quality",
+    "description": "Systematic internal verification methodology.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.93
+  },
+
+  "supplier audit": {
+    "entity_id": "METH_SUPPLIER_AUDIT",
+    "canonical": "Supplier Audit",
+    "aliases": [],
+    "category": "audit",
+    "business_area": "supply_chain",
+    "description": "Evaluation methodology for supplier compliance.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.92
+  },
+
+  "mass balance": {
+    "entity_id": "METH_MASS_BALANCE",
+    "canonical": "Mass Balance",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Verification methodology for traceability and inventory reconciliation.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.95
+  },
+
+  "traceability": {
+    "entity_id": "METH_TRACEABILITY",
+    "canonical": "Traceability",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Product tracking methodology across the supply chain.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.96
+  },
+  
+    "jidoka": {
+    "entity_id": "METH_JIDOKA",
+    "canonical": "Jidoka",
+    "aliases": [
+      "autonomation"
+    ],
+    "category": "lean",
+    "business_area": "operations",
+    "description": "Stopping production automatically when abnormality occurs.",
+    "related_domains": [
+      "operations",
+      "quality"
+    ]
+  },
+
+  "heijunka": {
+    "entity_id": "METH_HEIJUNKA",
+    "canonical": "Heijunka",
+    "aliases": [
+      "production leveling"
+    ],
+    "category": "lean",
+    "business_area": "operations",
+    "description": "Production leveling methodology.",
+    "related_domains": [
+      "operations"
+    ]
+  },
+
+  
+  "hoshin kanri": {
+    "entity_id": "METH_HOSHIN_KANRI",
+    "canonical": "Hoshin Kanri",
+    "aliases": [
+      "policy deployment"
+    ],
+    "category": "strategy",
+    "business_area": "management",
+    "description": "Strategic deployment methodology.",
+    "related_domains": [
+      "leadership",
+      "management"
+    ]
+  },
+
+    "swot analysis": {
+    "entity_id": "METH_SWOT",
+    "canonical": "SWOT Analysis",
+    "aliases": [
+      "swot"
+    ],
+    "category": "strategy",
+    "business_area": "management",
+    "description": "Strategic planning methodology.",
+    "related_domains": [
+      "management"
+    ]
+  },
+
+  "pestle analysis": {
+    "entity_id": "METH_PESTLE",
+    "canonical": "PESTLE Analysis",
+    "aliases": [
+      "pest analysis"
+    ],
+    "category": "strategy",
+    "business_area": "management",
+    "description": "External business environment analysis.",
+    "related_domains": [
+      "management"
+    ]
+  },
+
+  "critical path method": {
+    "entity_id": "METH_CPM",
+    "canonical": "Critical Path Method",
+    "aliases": [
+      "cpm"
+    ],
+    "category": "project_management",
+    "business_area": "management",
+    "description": "Project scheduling methodology.",
+    "related_domains": [
+      "project_management"
+    ]
+  },
+
+  "pert": {
+    "entity_id": "METH_PERT",
+    "canonical": "Program Evaluation Review Technique",
+    "aliases": [
+      "program evaluation review technique"
+    ],
+    "category": "project_management",
+    "business_area": "management",
+    "description": "Project planning methodology.",
+    "related_domains": [
+      "project_management"
+    ]
+  },
+
+  "brainstorming": {
+    "entity_id": "METH_BRAINSTORMING",
+    "canonical": "Brainstorming",
+    "aliases": [],
+    "category": "problem_solving",
+    "business_area": "management",
+    "description": "Collaborative idea generation methodology.",
+    "related_domains": [
+      "leadership",
+      "continuous_improvement"
+    ]
+  },
+
+  "nominal group technique": {
+    "entity_id": "METH_NGT",
+    "canonical": "Nominal Group Technique",
+    "aliases": [
+      "ngt"
+    ],
+    "category": "decision_making",
+    "business_area": "management",
+    "description": "Structured group decision-making methodology.",
+    "related_domains": [
+      "management"
+    ]
+  },
+
+  "delphi method": {
+    "entity_id": "METH_DELPHI",
+    "canonical": "Delphi Method",
+    "aliases": [],
+    "category": "decision_making",
+    "business_area": "management",
+    "description": "Expert consensus methodology.",
+    "related_domains": [
+      "management"
+    ]
+  },
+
+  "benchmarking": {
+    "entity_id": "METH_BENCHMARKING",
+    "canonical": "Benchmarking",
+    "aliases": [],
+    "category": "continuous_improvement",
+    "business_area": "operations",
+    "description": "Comparing performance against industry best practices.",
+    "related_domains": [
+      "operations",
+      "quality"
+    ]
+  },
+
+  "cost benefit analysis": {
+    "entity_id": "METH_CBA",
+    "canonical": "Cost Benefit Analysis",
+    "aliases": [
+      "cba"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "Financial evaluation methodology.",
+    "related_domains": [
+      "finance"
+    ]
+  },
+  
+  "design of experiments": {
+    "entity_id": "METH_DOE",
+    "canonical": "Design of Experiments",
+    "aliases": [
+      "doe",
+      "experimental design"
+    ],
+    "category": "quality_engineering",
+    "business_area": "quality",
+    "description": "Statistical methodology for optimizing process variables.",
+    "related_domains": [
+      "quality",
+      "continuous_improvement",
+      "operations"
+    ]
+  },
+
+  "measurement system analysis": {
+    "entity_id": "METH_MSA",
+    "canonical": "Measurement System Analysis",
+    "aliases": [
+      "msa"
+    ],
+    "category": "quality_engineering",
+    "business_area": "quality",
+    "description": "Evaluates measurement system capability.",
+    "related_domains": [
+      "quality"
+    ]
+  },
+
+  "gage r&r": {
+    "entity_id": "METH_GRR",
+    "canonical": "Gage Repeatability and Reproducibility",
+    "aliases": [
+      "gr&r",
+      "gage repeatability reproducibility",
+      "gage rr"
+    ],
+    "category": "quality_engineering",
+    "business_area": "quality",
+    "description": "Measurement variation analysis methodology.",
+    "related_domains": [
+      "quality"
+    ]
+  },
+
+  "apqp": {
+    "entity_id": "METH_APQP",
+    "canonical": "Advanced Product Quality Planning",
+    "aliases": [
+      "advanced product quality planning"
+    ],
+    "category": "quality_planning",
+    "business_area": "quality",
+    "description": "Structured product quality planning methodology.",
+    "related_domains": [
+      "quality",
+      "project_management"
+    ]
+  },
+
+  "ppap": {
+    "entity_id": "METH_PPAP",
+    "canonical": "Production Part Approval Process",
+    "aliases": [
+      "production part approval process"
+    ],
+    "category": "quality_planning",
+    "business_area": "quality",
+    "description": "Supplier approval methodology.",
+    "related_domains": [
+      "quality",
+      "supply_chain"
+    ]
+  },
+
+    "sipoc": {
+    "entity_id": "METH_SIPOC",
+    "canonical": "SIPOC",
+    "aliases": [
+      "supplier input process output customer"
+    ],
+    "category": "process_mapping",
+    "business_area": "operations",
+    "description": "High-level process mapping methodology.",
+    "related_domains": [
+      "operations",
+      "quality"
+    ]
+  },
+
+  "voice of customer": {
+    "entity_id": "METH_VOC",
+    "canonical": "Voice of Customer",
+    "aliases": [
+      "voc"
+    ],
+    "category": "customer",
+    "business_area": "customer",
+    "description": "Capturing customer requirements.",
+    "related_domains": [
+      "customer",
+      "quality"
+    ]
+  },
+
+  "quality function deployment": {
+    "entity_id": "METH_QFD",
+    "canonical": "Quality Function Deployment",
+    "aliases": [
+      "qfd",
+      "house of quality"
+    ],
+    "category": "quality_planning",
+    "business_area": "quality",
+    "description": "Customer requirement translation methodology.",
+    "related_domains": [
+      "quality",
+      "customer"
+    ]
+  },
+
+  "house of quality": {
+    "entity_id": "METH_QFD",
+    "canonical": "Quality Function Deployment",
+    "aliases": [],
+    "category": "quality_planning",
+    "business_area": "quality",
+    "description": "Planning matrix used in QFD.",
+    "related_domains": [
+      "quality"
+    ]
+  },
+
+  "theory of constraints": {
+    "entity_id": "METH_TOC",
+    "canonical": "Theory of Constraints",
+    "aliases": [
+      "toc"
+    ],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Improvement methodology focused on system bottlenecks.",
+    "related_domains": [
+      "operations",
+      "continuous_improvement"
+    ]
+  },
+
+    "time study": {
+    "entity_id": "METH_TIME_STUDY",
+    "canonical": "Time Study",
+    "aliases": [
+      "work measurement"
+    ],
+    "category": "industrial_engineering",
+    "business_area": "operations",
+    "description": "Method for determining standard work time.",
+    "related_domains": [
+      "operations"
+    ]
+  },
+
+  "motion study": {
+    "entity_id": "METH_MOTION_STUDY",
+    "canonical": "Motion Study",
+    "aliases": [],
+    "category": "industrial_engineering",
+    "business_area": "operations",
+    "description": "Methodology for eliminating unnecessary motion.",
+    "related_domains": [
+      "operations"
+    ]
+  },
+  
+  "agile": {
+    "entity_id": "METH_AGILE",
+    "canonical": "Agile",
+    "aliases": [
+      "agile methodology"
+    ],
+    "category": "project_management",
+    "business_area": "management",
+    "description": "Iterative project delivery methodology.",
+    "related_domains": [
+      "project_management",
+      "leadership"
+    ]
+  },
+
+  "scrum": {
+    "entity_id": "METH_SCRUM",
+    "canonical": "Scrum",
+    "aliases": [
+      "scrum framework"
+    ],
+    "category": "project_management",
+    "business_area": "management",
+    "description": "Agile project management framework.",
+    "related_domains": [
+      "project_management"
+    ]
+  },
+
+  "waterfall": {
+    "entity_id": "METH_WATERFALL",
+    "canonical": "Waterfall",
+    "aliases": [],
+    "category": "project_management",
+    "business_area": "management",
+    "description": "Sequential project management methodology.",
+    "related_domains": [
+      "project_management"
+    ]
+  },
+
+  "pmbok": {
+    "entity_id": "METH_PMBOK",
+    "canonical": "PMBOK",
+    "aliases": [
+      "project management body of knowledge"
+    ],
+    "category": "project_management",
+    "business_area": "management",
+    "description": "PMI project management framework.",
+    "related_domains": [
+      "project_management"
+    ]
+  },
+
+  "prince2": {
+    "entity_id": "METH_PRINCE2",
+    "canonical": "PRINCE2",
+    "aliases": [],
+    "category": "project_management",
+    "business_area": "management",
+    "description": "Structured project management methodology.",
+    "related_domains": [
+      "project_management"
+    ]
+  },
+
+  "iso 31000": {
+    "entity_id": "METH_ISO31000",
+    "canonical": "ISO 31000 Risk Management",
+    "aliases": [
+      "risk management framework"
+    ],
+    "category": "risk_management",
+    "business_area": "governance",
+    "description": "International risk management framework.",
+    "related_domains": [
+      "risk_management"
+    ]
+  },
+
+  "hazop": {
+    "entity_id": "METH_HAZOP",
+    "canonical": "Hazard and Operability Study",
+    "aliases": [
+      "hazard operability study"
+    ],
+    "category": "risk_management",
+    "business_area": "operations",
+    "description": "Structured process hazard analysis.",
+    "related_domains": [
+      "risk_management",
+      "food_safety"
+    ]
+  },
+
+  "fault tree analysis": {
+    "entity_id": "METH_FTA",
+    "canonical": "Fault Tree Analysis",
+    "aliases": [
+      "fta"
+    ],
+    "category": "risk_management",
+    "business_area": "quality",
+    "description": "Failure investigation methodology.",
+    "related_domains": [
+      "quality"
+    ]
+  },
+
+  "event tree analysis": {
+    "entity_id": "METH_ETA",
+    "canonical": "Event Tree Analysis",
+    "aliases": [
+      "eta"
+    ],
+    "category": "risk_management",
+    "business_area": "quality",
+    "description": "Forward event consequence analysis.",
+    "related_domains": [
+      "risk_management"
+    ]
+  },
+
+  "bowtie analysis": {
+    "entity_id": "METH_BOWTIE",
+    "canonical": "Bowtie Analysis",
+    "aliases": [
+      "bow tie"
+    ],
+    "category": "risk_management",
+    "business_area": "operations",
+    "description": "Barrier-based risk visualization methodology.",
+    "related_domains": [
+      "risk_management"
+    ]
+  },
+
+  "itil": {
+    "entity_id": "METH_ITIL",
+    "canonical": "ITIL",
+    "aliases": [
+      "information technology infrastructure library"
+    ],
+    "category": "service_management",
+    "business_area": "it",
+    "description": "IT service management framework.",
+    "related_domains": [
+      "service_management"
+    ]
+  },
+
+  "cobit": {
+    "entity_id": "METH_COBIT",
+    "canonical": "COBIT",
+    "aliases": [],
+    "category": "governance",
+    "business_area": "it",
+    "description": "IT governance framework.",
+    "related_domains": [
+      "governance"
+    ]
+  },
+
+  "devops": {
+    "entity_id": "METH_DEVOPS",
+    "canonical": "DevOps",
+    "aliases": [],
+    "category": "software_delivery",
+    "business_area": "technology",
+    "description": "Continuous software delivery methodology.",
+    "related_domains": [
+      "technology"
+    ]
+  },
+
+  "design thinking": {
+    "entity_id": "METH_DESIGN_THINKING",
+    "canonical": "Design Thinking",
+    "aliases": [],
+    "category": "innovation",
+    "business_area": "strategy",
+    "description": "Human-centered innovation methodology.",
+    "related_domains": [
+      "innovation"
+    ]
   }
 }

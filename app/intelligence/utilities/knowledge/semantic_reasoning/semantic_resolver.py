@@ -5,21 +5,30 @@ Master semantic reasoning engine.
 
 Pipeline
 
-Entities
-      ↓
+Knowledge Entities
+        ↓
+Semantic Entities
+        ↓
 Dependency Resolver
-      ↓
+        ↓
+Business Statement Builder
+        ↓
 Cluster Builder
-      ↓
+        ↓
 Cluster Classifier
-      ↓
-Business Metadata
-      ↓
+        ↓
+Metadata Builder
+        ↓
 Semantic Result
 """
+from dataclasses import dataclass, field
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.dependency_resolver import (
     DependencyResolver,
+)
+
+from app.intelligence.utilities.knowledge.semantic_reasoning.business_statement_builder import (
+    BusinessStatementBuilder,
 )
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.cluster_builder import (
@@ -30,36 +39,39 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.cluster_classifier 
     ClusterClassifier,
 )
 
-from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
-    SemanticResolution,
-    SemanticMetadata,
-    SemanticStatistics,
+from app.intelligence.utilities.knowledge.semantic_reasoning.metadata_builder import (
+    MetadataBuilder,
 )
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
-        SemanticEntity,
-    )
-from app.intelligence.utilities.knowledge.semantic_reasoning.business_statement_builder import (
-    BusinessStatementBuilder,
+    SemanticResolution,
+    SemanticEntity,
 )
+
 
 class SemanticResolver:
 
     def __init__(self):
 
-        self.statement_builder = BusinessStatementBuilder()
-
         self.dependency_resolver = DependencyResolver()
+
+        self.statement_builder = BusinessStatementBuilder()
 
         self.cluster_builder = ClusterBuilder()
 
         self.cluster_classifier = ClusterClassifier()
+
+        self.metadata_builder = MetadataBuilder()
 
     # ---------------------------------------------------------
 
     def resolve(self, facts):
 
         result = SemanticResolution()
+
+        # =====================================================
+        # Collect entities from interpretations
+        # =====================================================
 
         entities = []
 
@@ -69,44 +81,48 @@ class SemanticResolver:
 
             entities.extend(interpretation.entities)
 
-        # ------------------------------------------
+        # =====================================================
         # Convert KnowledgeEntity -> SemanticEntity
-        # ------------------------------------------
+        # =====================================================
 
         entities = self._convert_entities(entities)
 
         result.entities = entities
 
-        # -----------------------------------------------------
+        # =====================================================
         # Dependencies
-        # -----------------------------------------------------
+        # =====================================================
 
-        dependencies = self.dependency_resolver.resolve(entities)
+        dependencies = self.dependency_resolver.resolve(
+            entities
+        )
 
         result.dependencies = dependencies
 
+        # =====================================================
+        # Business Statements
+        # =====================================================
 
-        business_statements = (
-                self.statement_builder.build(
-                    entities,
-                    dependencies,
-                )
-            )
+        business_statements = self.statement_builder.build(
+            entities,
+            dependencies,
+        )
 
+        result.business_statements = business_statements
 
-        # -----------------------------------------------------
+        # =====================================================
         # Clusters
-        # -----------------------------------------------------
+        # =====================================================
 
         clusters = self.cluster_builder.build(
             business_statements
         )
 
-        classified = []
+        classified_clusters = []
 
         for cluster in clusters:
 
-            classified.append(
+            classified_clusters.append(
 
                 self.cluster_classifier.classify(
                     cluster
@@ -114,19 +130,19 @@ class SemanticResolver:
 
             )
 
-        result.clusters = classified
+        result.clusters = classified_clusters
 
-        # -----------------------------------------------------
+        # =====================================================
         # Metadata
-        # -----------------------------------------------------
+        # =====================================================
 
-        result.metadata = self._build_metadata(
+        result.metadata = self.metadata_builder.build(
             result
         )
 
-        # -----------------------------------------------------
+        # =====================================================
         # Confidence
-        # -----------------------------------------------------
+        # =====================================================
 
         result.confidence = self._calculate_confidence(
             result
@@ -135,160 +151,20 @@ class SemanticResolver:
         return result
 
     # ---------------------------------------------------------
-
-    # ---------------------------------------------------------
-
-    def _build_metadata(self, result):
-
-        metadata = SemanticMetadata()
-
-        # ---------------------------------------
-        # Primary Domain
-        # ---------------------------------------
-
-        domains = [
-
-            e
-
-            for e in result.entities
-
-            if e.entity_type == "domain"
-
-        ]
-
-        if domains:
-
-            metadata.primary_domain = domains[0].entity_id
-
-            metadata.primary_business_area = domains[0].business_area
-
-        # ---------------------------------------
-        # Highest Semantic Type
-        # ---------------------------------------
-
-        if result.clusters:
-
-            metadata.semantic_type = result.clusters[0].semantic_type
-
-        # ---------------------------------------
-        # Achievement
-        # ---------------------------------------
-
-        metadata.achievement = any(
-
-            c.semantic_type in (
-
-                "achievement",
-
-                "certification",
-
-                "continuous_improvement",
-
-            )
-
-            for c in result.clusters
-
-        )
-
-        # ---------------------------------------
-        # Statistics
-        # ---------------------------------------
-
-        metadata.statistics = SemanticStatistics(
-
-            entities=len(result.entities),
-
-            dependencies=len(result.dependencies),
-
-            clusters=len(result.clusters),
-
-            actions=sum(
-
-                1
-
-                for e in result.entities
-
-                if e.entity_type == "action"
-
-            ),
-
-            objects=sum(
-
-                1
-
-                for e in result.entities
-
-                if e.entity_type == "object"
-
-            ),
-
-            domains=sum(
-
-                1
-
-                for e in result.entities
-
-                if e.entity_type == "domain"
-
-            ),
-
-            metrics=sum(
-
-                1
-
-                for e in result.entities
-
-                if e.entity_type == "metric"
-
-            ),
-
-            measurements=sum(
-
-                1
-
-                for e in result.entities
-
-                if e.entity_type == "measurement"
-
-            ),
-
-            methodologies=sum(
-
-                1
-
-                for e in result.entities
-
-                if e.entity_type == "methodology"
-
-            ),
-
-            standards=sum(
-
-                1
-
-                for e in result.entities
-
-                if e.entity_type == "standard"
-
-            ),
-
-        )
-
-        return metadata
-
+    # Overall confidence
     # ---------------------------------------------------------
 
     def _calculate_confidence(self, result):
 
-        if not result.entities:
+        if not result.clusters:
 
             return 0.0
 
         scores = [
 
-            e.confidence
+            cluster.confidence
 
-            for e in result.entities
+            for cluster in result.clusters
 
         ]
 
@@ -300,33 +176,38 @@ class SemanticResolver:
 
         )
 
-    def _convert_entities(self, entities):
+    # ---------------------------------------------------------
+    # Convert parser entities into semantic entities
+    # ---------------------------------------------------------
 
-        from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
-            SemanticEntity,
-        )
+    def _convert_entities(self, entities):
 
         converted = []
 
-        for e in entities:
+        for entity in entities:
 
             converted.append(
 
                 SemanticEntity(
 
-                    entity_id=e.entity_id,
-                    entity_type=e.entity_type,
-                    canonical=e.canonical,
+                    entity_id=entity.entity_id,
 
-                    # IMPORTANT
-                    original=e.matched_text,
+                    entity_type=entity.entity_type,
 
-                    category=e.category,
-                    business_area=e.business_area,
+                    canonical=entity.canonical,
 
-                    confidence=e.confidence,
+                    original=entity.matched_text,
 
-                    metadata=e.metadata,
+                    matched_text=entity.matched_text,
+
+                    category=entity.category,
+
+                    business_area=entity.business_area,
+
+                    confidence=entity.confidence,
+
+                    metadata=entity.metadata,
+
                 )
 
             )

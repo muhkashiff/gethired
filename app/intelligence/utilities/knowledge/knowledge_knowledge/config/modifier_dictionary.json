@@ -1,71 +1,1260 @@
 {
   "successfully": {
+    "entity_id": "MOD_SUCCESSFULLY",
     "canonical": "Successfully",
+    "aliases": [
+      "Successfully",
+      "Successfully Completed",
+      "Successfully Delivered"
+    ],
     "category": "achievement",
-    "strength": 0.90,
-    "executive_weight": 0.80
+    "modifier_type": "achievement",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.85,
+    "resume_weight": 0.90,
+    "ats_weight": 0.80,
+    "ai_importance": 0.95,
+    "scope": "general",
+    "confidence": 0.98,
+    "description": "Indicates successful completion of a responsibility or initiative.",
+    "reasoning_tags": [
+      "achievement",
+      "execution",
+      "delivery"
+    ]
   },
 
-  "strategically": {
-    "canonical": "Strategically",
-    "category": "strategy",
-    "strength": 1.00,
-    "executive_weight": 1.00
-  },
-
-  "cross-functional": {
-    "canonical": "Cross Functional",
-    "category": "leadership",
-    "strength": 1.00,
-    "executive_weight": 1.00
-  },
-
-  "enterprise-wide": {
-    "canonical": "Enterprise Wide",
-    "category": "executive_scope",
-    "strength": 1.00,
-    "executive_weight": 1.00
-  },
-
-  "globally": {
-    "canonical": "Global",
-    "category": "scope",
-    "strength": 0.95,
-    "executive_weight": 0.95
-  },
-
-  "independently": {
-    "canonical": "Independent",
-    "category": "ownership",
-    "strength": 0.85,
-    "executive_weight": 0.70
-  },
-
-  "consistently": {
-    "canonical": "Consistent",
+  "effectively": {
+    "entity_id": "MOD_EFFECTIVELY",
+    "canonical": "Effectively",
+    "aliases": [
+      "Effectively",
+      "Highly Effectively"
+    ],
     "category": "performance",
-    "strength": 0.80,
-    "executive_weight": 0.70
-  },
-
-  "significantly": {
-    "canonical": "Significant",
-    "category": "impact",
-    "strength": 0.95,
-    "executive_weight": 0.85
-  },
-
-  "rapidly": {
-    "canonical": "Rapid",
-    "category": "speed",
-    "strength": 0.80,
-    "executive_weight": 0.60
+    "modifier_type": "quality",
+    "semantic_polarity": "positive",
+    "strength_score": 0.87,
+    "executive_weight": 0.82,
+    "resume_weight": 0.85,
+    "ats_weight": 0.75,
+    "ai_importance": 0.92,
+    "scope": "general",
+    "confidence": 0.97,
+    "description": "Indicates effective execution of work.",
+    "reasoning_tags": [
+      "performance",
+      "execution"
+    ]
   },
 
   "efficiently": {
-    "canonical": "Efficient",
+    "entity_id": "MOD_EFFICIENTLY",
+    "canonical": "Efficiently",
+    "aliases": [
+      "Efficiently",
+      "Highly Efficiently"
+    ],
     "category": "efficiency",
-    "strength": 0.85,
-    "executive_weight": 0.70
+    "modifier_type": "performance",
+    "semantic_polarity": "positive",
+    "strength_score": 0.88,
+    "executive_weight": 0.80,
+    "resume_weight": 0.88,
+    "ats_weight": 0.78,
+    "ai_importance": 0.93,
+    "scope": "operations",
+    "confidence": 0.98,
+    "description": "Indicates improved operational efficiency.",
+    "reasoning_tags": [
+      "lean",
+      "efficiency",
+      "operations"
+    ]
+  },
+
+  "consistently": {
+    "entity_id": "MOD_CONSISTENTLY",
+    "canonical": "Consistently",
+    "aliases": [
+      "Consistently",
+      "On a Consistent Basis"
+    ],
+    "category": "performance",
+    "modifier_type": "reliability",
+    "semantic_polarity": "positive",
+    "strength_score": 0.84,
+    "executive_weight": 0.76,
+    "resume_weight": 0.82,
+    "ats_weight": 0.70,
+    "ai_importance": 0.90,
+    "scope": "general",
+    "confidence": 0.96,
+    "description": "Indicates sustained performance over time.",
+    "reasoning_tags": [
+      "reliability",
+      "performance"
+    ]
+  },
+
+  "significantly": {
+    "entity_id": "MOD_SIGNIFICANTLY",
+    "canonical": "Significantly",
+    "aliases": [
+      "Significantly",
+      "Substantially"
+    ],
+    "category": "impact",
+    "modifier_type": "impact",
+    "semantic_polarity": "positive",
+    "strength_score": 0.98,
+    "executive_weight": 0.95,
+    "resume_weight": 0.95,
+    "ats_weight": 0.85,
+    "ai_importance": 0.99,
+    "scope": "executive",
+    "confidence": 0.99,
+    "description": "Represents major measurable impact.",
+    "reasoning_tags": [
+      "impact",
+      "business_value",
+      "results"
+    ]
+  },
+
+  "substantially": {
+    "entity_id": "MOD_SUBSTANTIALLY",
+    "canonical": "Substantially",
+    "aliases": [
+      "Substantially",
+      "Considerably"
+    ],
+    "category": "impact",
+    "modifier_type": "impact",
+    "semantic_polarity": "positive",
+    "strength_score": 0.97,
+    "executive_weight": 0.94,
+    "resume_weight": 0.94,
+    "ats_weight": 0.84,
+    "ai_importance": 0.98,
+    "scope": "executive",
+    "confidence": 0.99,
+    "reasoning_tags": [
+      "large_impact"
+    ]
+  },
+  
+  "strategically": {
+    "entity_id": "MOD_STRATEGICALLY",
+    "canonical": "Strategically",
+    "aliases": [
+      "Strategically",
+      "Strategic"
+    ],
+    "category": "strategy",
+    "modifier_type": "strategic_execution",
+    "semantic_polarity": "positive",
+    "strength_score": 1.00,
+    "executive_weight": 1.00,
+    "resume_weight": 0.98,
+    "ats_weight": 0.90,
+    "ai_importance": 1.00,
+    "scope": "executive",
+    "confidence": 0.99,
+    "description": "Indicates alignment with organizational strategy.",
+    "reasoning_tags": [
+      "strategy",
+      "leadership",
+      "planning"
+    ]
+  },
+
+  "proactively": {
+    "entity_id": "MOD_PROACTIVELY",
+    "canonical": "Proactively",
+    "aliases": [
+      "Proactively",
+      "Proactive"
+    ],
+    "category": "initiative",
+    "modifier_type": "ownership",
+    "semantic_polarity": "positive",
+    "strength_score": 0.95,
+    "executive_weight": 0.90,
+    "resume_weight": 0.92,
+    "ats_weight": 0.82,
+    "ai_importance": 0.96,
+    "scope": "general",
+    "confidence": 0.98,
+    "description": "Shows initiative before issues arise.",
+    "reasoning_tags": [
+      "initiative",
+      "ownership"
+    ]
+  },
+
+  "cross-functional": {
+    "entity_id": "MOD_CROSS_FUNCTIONAL",
+    "canonical": "Cross Functional",
+    "aliases": [
+      "Cross Functional",
+      "Cross-Functional",
+      "Cross Functional Teams"
+    ],
+    "category": "leadership",
+    "modifier_type": "collaboration",
+    "semantic_polarity": "positive",
+    "strength_score": 1.00,
+    "executive_weight": 1.00,
+    "resume_weight": 0.98,
+    "ats_weight": 0.90,
+    "ai_importance": 1.00,
+    "scope": "enterprise",
+    "confidence": 0.99,
+    "description": "Indicates collaboration across departments.",
+    "reasoning_tags": [
+      "collaboration",
+      "leadership",
+      "matrix"
+    ]
+  },
+
+  "collaboratively": {
+    "entity_id": "MOD_COLLABORATIVELY",
+    "canonical": "Collaboratively",
+    "aliases": [
+      "Collaboratively",
+      "In Collaboration"
+    ],
+    "category": "teamwork",
+    "modifier_type": "collaboration",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.82,
+    "resume_weight": 0.88,
+    "ats_weight": 0.78,
+    "ai_importance": 0.92,
+    "scope": "general",
+    "confidence": 0.97,
+    "reasoning_tags": [
+      "teamwork",
+      "communication"
+    ]
+  },
+
+  "enterprise-wide": {
+    "entity_id": "MOD_ENTERPRISE_WIDE",
+    "canonical": "Enterprise Wide",
+    "aliases": [
+      "Enterprise Wide",
+      "Enterprise-wide"
+    ],
+    "category": "executive_scope",
+    "modifier_type": "scope",
+    "semantic_polarity": "positive",
+    "strength_score": 1.00,
+    "executive_weight": 1.00,
+    "resume_weight": 1.00,
+    "ats_weight": 0.95,
+    "ai_importance": 1.00,
+    "scope": "enterprise",
+    "confidence": 0.99,
+    "description": "Applies to organization-wide initiatives.",
+    "reasoning_tags": [
+      "enterprise",
+      "executive"
+    ]
+  },
+
+  "organization-wide": {
+    "entity_id": "MOD_ORGANIZATION_WIDE",
+    "canonical": "Organization Wide",
+    "aliases": [
+      "Organization Wide",
+      "Organisation Wide",
+      "Organization-wide"
+    ],
+    "category": "executive_scope",
+    "modifier_type": "scope",
+    "semantic_polarity": "positive",
+    "strength_score": 0.98,
+    "executive_weight": 0.98,
+    "resume_weight": 0.97,
+    "ats_weight": 0.92,
+    "ai_importance": 0.99,
+    "scope": "enterprise",
+    "confidence": 0.99,
+    "reasoning_tags": [
+      "organization",
+      "enterprise"
+    ]
+  },
+
+  "globally": {
+    "entity_id": "MOD_GLOBALLY",
+    "canonical": "Globally",
+    "aliases": [
+      "Globally",
+      "Global"
+    ],
+    "category": "scope",
+    "modifier_type": "geographical_scope",
+    "semantic_polarity": "positive",
+    "strength_score": 0.98,
+    "executive_weight": 0.96,
+    "resume_weight": 0.95,
+    "ats_weight": 0.88,
+    "ai_importance": 0.98,
+    "scope": "global",
+    "confidence": 0.99,
+    "reasoning_tags": [
+      "international",
+      "global"
+    ]
+  },
+
+  "regionally": {
+    "entity_id": "MOD_REGIONALLY",
+    "canonical": "Regionally",
+    "aliases": [
+      "Regionally",
+      "Regional"
+    ],
+    "category": "scope",
+    "modifier_type": "geographical_scope",
+    "semantic_polarity": "positive",
+    "strength_score": 0.88,
+    "executive_weight": 0.80,
+    "resume_weight": 0.85,
+    "ats_weight": 0.76,
+    "ai_importance": 0.90,
+    "scope": "regional",
+    "confidence": 0.97
+  },
+
+  "company-wide": {
+    "entity_id": "MOD_COMPANY_WIDE",
+    "canonical": "Company Wide",
+    "aliases": [
+      "Company Wide",
+      "Company-wide"
+    ],
+    "category": "scope",
+    "modifier_type": "organizational_scope",
+    "semantic_polarity": "positive",
+    "strength_score": 0.96,
+    "executive_weight": 0.95,
+    "resume_weight": 0.94,
+    "ats_weight": 0.90,
+    "ai_importance": 0.97,
+    "scope": "organization",
+    "confidence": 0.99
+  },
+
+  "executive-level": {
+    "entity_id": "MOD_EXECUTIVE_LEVEL",
+    "canonical": "Executive Level",
+    "aliases": [
+      "Executive Level",
+      "Executive-level"
+    ],
+    "category": "executive_scope",
+    "modifier_type": "leadership",
+    "semantic_polarity": "positive",
+    "strength_score": 1.00,
+    "executive_weight": 1.00,
+    "resume_weight": 1.00,
+    "ats_weight": 0.95,
+    "ai_importance": 1.00,
+    "scope": "executive",
+    "confidence": 1.00
+  },
+  
+  "independently": {
+    "entity_id": "MOD_INDEPENDENTLY",
+    "canonical": "Independently",
+    "aliases": [
+      "Independently",
+      "Worked Independently"
+    ],
+    "category": "ownership",
+    "modifier_type": "autonomy",
+    "semantic_polarity": "positive",
+    "strength_score": 0.88,
+    "executive_weight": 0.78,
+    "resume_weight": 0.90,
+    "ats_weight": 0.80,
+    "ai_importance": 0.93,
+    "scope": "individual",
+    "confidence": 0.98,
+    "description": "Performed responsibilities without supervision.",
+    "reasoning_tags": [
+      "ownership",
+      "initiative",
+      "autonomy"
+    ]
+  },
+
+  "autonomously": {
+    "entity_id": "MOD_AUTONOMOUSLY",
+    "canonical": "Autonomously",
+    "aliases": [
+      "Autonomously",
+      "Autonomous"
+    ],
+    "category": "ownership",
+    "modifier_type": "autonomy",
+    "semantic_polarity": "positive",
+    "strength_score": 0.92,
+    "executive_weight": 0.82,
+    "resume_weight": 0.93,
+    "ats_weight": 0.82,
+    "ai_importance": 0.95,
+    "scope": "individual",
+    "confidence": 0.98
+  },
+
+  "directly": {
+    "entity_id": "MOD_DIRECTLY",
+    "canonical": "Directly",
+    "aliases": [
+      "Directly",
+      "Direct Responsibility"
+    ],
+    "category": "ownership",
+    "modifier_type": "responsibility",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.86,
+    "resume_weight": 0.91,
+    "ats_weight": 0.83,
+    "ai_importance": 0.94,
+    "scope": "management",
+    "confidence": 0.98
+  },
+
+  "personally": {
+    "entity_id": "MOD_PERSONALLY",
+    "canonical": "Personally",
+    "aliases": [
+      "Personally",
+      "Personally Led"
+    ],
+    "category": "ownership",
+    "modifier_type": "personal_accountability",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.85,
+    "resume_weight": 0.90,
+    "ats_weight": 0.80,
+    "ai_importance": 0.94,
+    "scope": "individual",
+    "confidence": 0.98
+  },
+
+  "solely": {
+    "entity_id": "MOD_SOLELY",
+    "canonical": "Solely",
+    "aliases": [
+      "Solely",
+      "Single Handedly"
+    ],
+    "category": "ownership",
+    "modifier_type": "individual_contribution",
+    "semantic_polarity": "positive",
+    "strength_score": 0.95,
+    "executive_weight": 0.88,
+    "resume_weight": 0.94,
+    "ats_weight": 0.84,
+    "ai_importance": 0.96,
+    "scope": "individual",
+    "confidence": 0.97
+  },
+
+  "accountable": {
+    "entity_id": "MOD_ACCOUNTABLE",
+    "canonical": "Accountable",
+    "aliases": [
+      "Accountable",
+      "Held Accountable"
+    ],
+    "category": "leadership",
+    "modifier_type": "responsibility",
+    "semantic_polarity": "positive",
+    "strength_score": 0.94,
+    "executive_weight": 0.92,
+    "resume_weight": 0.93,
+    "ats_weight": 0.86,
+    "ai_importance": 0.97,
+    "scope": "management",
+    "confidence": 0.99
+  },
+
+  "responsible": {
+    "entity_id": "MOD_RESPONSIBLE",
+    "canonical": "Responsible",
+    "aliases": [
+      "Responsible",
+      "Responsible For"
+    ],
+    "category": "leadership",
+    "modifier_type": "responsibility",
+    "semantic_polarity": "positive",
+    "strength_score": 0.85,
+    "executive_weight": 0.82,
+    "resume_weight": 0.88,
+    "ats_weight": 0.80,
+    "ai_importance": 0.92,
+    "scope": "general",
+    "confidence": 0.98
+  },
+
+  "owned": {
+    "entity_id": "MOD_OWNED",
+    "canonical": "Owned",
+    "aliases": [
+      "Owned",
+      "Owned End-to-End"
+    ],
+    "category": "ownership",
+    "modifier_type": "ownership",
+    "semantic_polarity": "positive",
+    "strength_score": 0.98,
+    "executive_weight": 0.95,
+    "resume_weight": 0.96,
+    "ats_weight": 0.90,
+    "ai_importance": 0.99,
+    "scope": "enterprise",
+    "confidence": 0.99
+  },
+
+  "led": {
+    "entity_id": "MOD_LED",
+    "canonical": "Led",
+    "aliases": [
+      "Led",
+      "Lead"
+    ],
+    "category": "leadership",
+    "modifier_type": "leadership",
+    "semantic_polarity": "positive",
+    "strength_score": 1.00,
+    "executive_weight": 1.00,
+    "resume_weight": 1.00,
+    "ats_weight": 0.95,
+    "ai_importance": 1.00,
+    "scope": "leadership",
+    "confidence": 1.00
+  },
+
+  "managed": {
+    "entity_id": "MOD_MANAGED",
+    "canonical": "Managed",
+    "aliases": [
+      "Managed",
+      "Managing"
+    ],
+    "category": "leadership",
+    "modifier_type": "management",
+    "semantic_polarity": "positive",
+    "strength_score": 0.98,
+    "executive_weight": 0.98,
+    "resume_weight": 0.97,
+    "ats_weight": 0.92,
+    "ai_importance": 0.99,
+    "scope": "management",
+    "confidence": 0.99
+  },
+
+  "supervised": {
+    "entity_id": "MOD_SUPERVISED",
+    "canonical": "Supervised",
+    "aliases": [
+      "Supervised",
+      "Supervision"
+    ],
+    "category": "leadership",
+    "modifier_type": "people_management",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.86,
+    "resume_weight": 0.90,
+    "ats_weight": 0.84,
+    "ai_importance": 0.95,
+    "scope": "people",
+    "confidence": 0.98
+  },
+  
+  "rapidly": {
+    "entity_id": "MOD_RAPIDLY",
+    "canonical": "Rapidly",
+    "aliases": [
+      "Rapidly",
+      "Rapid"
+    ],
+    "category": "speed",
+    "modifier_type": "execution_speed",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.82,
+    "resume_weight": 0.90,
+    "ats_weight": 0.80,
+    "ai_importance": 0.93,
+    "scope": "general",
+    "confidence": 0.98,
+    "reasoning_tags": [
+      "speed",
+      "execution"
+    ]
+  },
+
+  "quickly": {
+    "entity_id": "MOD_QUICKLY",
+    "canonical": "Quickly",
+    "aliases": [
+      "Quickly",
+      "Quick"
+    ],
+    "category": "speed",
+    "modifier_type": "execution_speed",
+    "semantic_polarity": "positive",
+    "strength_score": 0.86,
+    "executive_weight": 0.75,
+    "resume_weight": 0.86,
+    "ats_weight": 0.75,
+    "ai_importance": 0.90,
+    "scope": "general",
+    "confidence": 0.97
+  },
+
+  "timely": {
+    "entity_id": "MOD_TIMELY",
+    "canonical": "Timely",
+    "aliases": [
+      "Timely",
+      "On Time"
+    ],
+    "category": "delivery",
+    "modifier_type": "schedule",
+    "semantic_polarity": "positive",
+    "strength_score": 0.84,
+    "executive_weight": 0.76,
+    "resume_weight": 0.84,
+    "ats_weight": 0.74,
+    "ai_importance": 0.89,
+    "scope": "general",
+    "confidence": 0.97
+  },
+
+  "ahead of schedule": {
+    "entity_id": "MOD_AHEAD_OF_SCHEDULE",
+    "canonical": "Ahead of Schedule",
+    "aliases": [
+      "Ahead of Schedule",
+      "Ahead Schedule",
+      "Before Deadline"
+    ],
+    "category": "delivery",
+    "modifier_type": "schedule",
+    "semantic_polarity": "positive",
+    "strength_score": 0.95,
+    "executive_weight": 0.90,
+    "resume_weight": 0.95,
+    "ats_weight": 0.86,
+    "ai_importance": 0.96,
+    "scope": "project",
+    "confidence": 0.99
+  },
+
+  "on time": {
+    "entity_id": "MOD_ON_TIME",
+    "canonical": "On Time",
+    "aliases": [
+      "On Time",
+      "Within Schedule"
+    ],
+    "category": "delivery",
+    "modifier_type": "schedule",
+    "semantic_polarity": "positive",
+    "strength_score": 0.88,
+    "executive_weight": 0.82,
+    "resume_weight": 0.88,
+    "ats_weight": 0.80,
+    "ai_importance": 0.92,
+    "scope": "general",
+    "confidence": 0.98
+  },
+
+  "real-time": {
+    "entity_id": "MOD_REAL_TIME",
+    "canonical": "Real Time",
+    "aliases": [
+      "Real-Time",
+      "Realtime",
+      "Real Time"
+    ],
+    "category": "technology",
+    "modifier_type": "speed",
+    "semantic_polarity": "positive",
+    "strength_score": 0.94,
+    "executive_weight": 0.90,
+    "resume_weight": 0.92,
+    "ats_weight": 0.86,
+    "ai_importance": 0.95,
+    "scope": "technology",
+    "confidence": 0.99
+  },
+
+  "immediately": {
+    "entity_id": "MOD_IMMEDIATELY",
+    "canonical": "Immediately",
+    "aliases": [
+      "Immediately",
+      "Immediate"
+    ],
+    "category": "responsiveness",
+    "modifier_type": "response_time",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.82,
+    "resume_weight": 0.88,
+    "ats_weight": 0.78,
+    "ai_importance": 0.91,
+    "scope": "general",
+    "confidence": 0.98
+  },
+
+  "promptly": {
+    "entity_id": "MOD_PROMPTLY",
+    "canonical": "Promptly",
+    "aliases": [
+      "Promptly"
+    ],
+    "category": "responsiveness",
+    "modifier_type": "response_time",
+    "semantic_polarity": "positive",
+    "strength_score": 0.87,
+    "executive_weight": 0.78,
+    "resume_weight": 0.86,
+    "ats_weight": 0.76,
+    "ai_importance": 0.90,
+    "scope": "general",
+    "confidence": 0.97
+  },
+
+  "accelerated": {
+    "entity_id": "MOD_ACCELERATED",
+    "canonical": "Accelerated",
+    "aliases": [
+      "Accelerated",
+      "Acceleration"
+    ],
+    "category": "speed",
+    "modifier_type": "performance_gain",
+    "semantic_polarity": "positive",
+    "strength_score": 0.95,
+    "executive_weight": 0.90,
+    "resume_weight": 0.94,
+    "ats_weight": 0.86,
+    "ai_importance": 0.97,
+    "scope": "operations",
+    "confidence": 0.99
+  },
+
+  "streamlined": {
+    "entity_id": "MOD_STREAMLINED",
+    "canonical": "Streamlined",
+    "aliases": [
+      "Streamlined",
+      "Simplified"
+    ],
+    "category": "optimization",
+    "modifier_type": "process_improvement",
+    "semantic_polarity": "positive",
+    "strength_score": 0.96,
+    "executive_weight": 0.92,
+    "resume_weight": 0.95,
+    "ats_weight": 0.88,
+    "ai_importance": 0.98,
+    "scope": "operations",
+    "confidence": 0.99,
+    "reasoning_tags": [
+      "lean",
+      "optimization",
+      "efficiency"
+    ]
+  },
+  
+  "optimized": {
+    "entity_id": "MOD_OPTIMIZED",
+    "canonical": "Optimized",
+    "aliases": [
+      "Optimized",
+      "Optimisation",
+      "Optimization"
+    ],
+    "category": "optimization",
+    "modifier_type": "process_improvement",
+    "semantic_polarity": "positive",
+    "strength_score": 0.99,
+    "executive_weight": 0.96,
+    "resume_weight": 0.98,
+    "ats_weight": 0.90,
+    "ai_importance": 1.00,
+    "scope": "operations",
+    "confidence": 0.99,
+    "description": "Indicates measurable optimization of process, cost, or performance.",
+    "reasoning_tags": [
+      "lean",
+      "continuous_improvement",
+      "efficiency"
+    ]
+  },
+
+  "improved": {
+    "entity_id": "MOD_IMPROVED",
+    "canonical": "Improved",
+    "aliases": [
+      "Improved",
+      "Enhancing"
+    ],
+    "category": "improvement",
+    "modifier_type": "performance_gain",
+    "semantic_polarity": "positive",
+    "strength_score": 0.95,
+    "executive_weight": 0.90,
+    "resume_weight": 0.95,
+    "ats_weight": 0.88,
+    "ai_importance": 0.97,
+    "scope": "general",
+    "confidence": 0.99
+  },
+
+  "enhanced": {
+    "entity_id": "MOD_ENHANCED",
+    "canonical": "Enhanced",
+    "aliases": [
+      "Enhanced",
+      "Enhancement"
+    ],
+    "category": "improvement",
+    "modifier_type": "performance_gain",
+    "semantic_polarity": "positive",
+    "strength_score": 0.94,
+    "executive_weight": 0.89,
+    "resume_weight": 0.94,
+    "ats_weight": 0.86,
+    "ai_importance": 0.96,
+    "scope": "general",
+    "confidence": 0.99
+  },
+
+  "modernized": {
+    "entity_id": "MOD_MODERNIZED",
+    "canonical": "Modernized",
+    "aliases": [
+      "Modernized",
+      "Modernised"
+    ],
+    "category": "innovation",
+    "modifier_type": "transformation",
+    "semantic_polarity": "positive",
+    "strength_score": 0.96,
+    "executive_weight": 0.92,
+    "resume_weight": 0.95,
+    "ats_weight": 0.88,
+    "ai_importance": 0.98,
+    "scope": "enterprise",
+    "confidence": 0.99
+  },
+
+  "automated": {
+    "entity_id": "MOD_AUTOMATED",
+    "canonical": "Automated",
+    "aliases": [
+      "Automated",
+      "Automation"
+    ],
+    "category": "digital_transformation",
+    "modifier_type": "technology",
+    "semantic_polarity": "positive",
+    "strength_score": 0.99,
+    "executive_weight": 0.96,
+    "resume_weight": 0.98,
+    "ats_weight": 0.94,
+    "ai_importance": 1.00,
+    "scope": "technology",
+    "confidence": 1.00,
+    "reasoning_tags": [
+      "automation",
+      "digital",
+      "efficiency"
+    ]
+  },
+
+  "standardized": {
+    "entity_id": "MOD_STANDARDIZED",
+    "canonical": "Standardized",
+    "aliases": [
+      "Standardized",
+      "Standardised"
+    ],
+    "category": "governance",
+    "modifier_type": "standardization",
+    "semantic_polarity": "positive",
+    "strength_score": 0.93,
+    "executive_weight": 0.90,
+    "resume_weight": 0.93,
+    "ats_weight": 0.86,
+    "ai_importance": 0.96,
+    "scope": "organization",
+    "confidence": 0.99
+  },
+
+  "simplified": {
+    "entity_id": "MOD_SIMPLIFIED",
+    "canonical": "Simplified",
+    "aliases": [
+      "Simplified"
+    ],
+    "category": "optimization",
+    "modifier_type": "process_improvement",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.82,
+    "resume_weight": 0.90,
+    "ats_weight": 0.82,
+    "ai_importance": 0.92,
+    "scope": "operations",
+    "confidence": 0.98
+  },
+
+  "innovatively": {
+    "entity_id": "MOD_INNOVATIVELY",
+    "canonical": "Innovatively",
+    "aliases": [
+      "Innovatively",
+      "Innovative"
+    ],
+    "category": "innovation",
+    "modifier_type": "innovation",
+    "semantic_polarity": "positive",
+    "strength_score": 0.98,
+    "executive_weight": 0.95,
+    "resume_weight": 0.96,
+    "ats_weight": 0.90,
+    "ai_importance": 0.99,
+    "scope": "enterprise",
+    "confidence": 0.99
+  },
+
+  "sustainably": {
+    "entity_id": "MOD_SUSTAINABLY",
+    "canonical": "Sustainably",
+    "aliases": [
+      "Sustainably",
+      "Sustainable"
+    ],
+    "category": "sustainability",
+    "modifier_type": "environmental",
+    "semantic_polarity": "positive",
+    "strength_score": 0.88,
+    "executive_weight": 0.82,
+    "resume_weight": 0.88,
+    "ats_weight": 0.80,
+    "ai_importance": 0.90,
+    "scope": "organization",
+    "confidence": 0.98
+  },
+
+  "continuously": {
+    "entity_id": "MOD_CONTINUOUSLY",
+    "canonical": "Continuously",
+    "aliases": [
+      "Continuously",
+      "Continuous"
+    ],
+    "category": "continuous_improvement",
+    "modifier_type": "continuous",
+    "semantic_polarity": "positive",
+    "strength_score": 0.94,
+    "executive_weight": 0.90,
+    "resume_weight": 0.93,
+    "ats_weight": 0.86,
+    "ai_importance": 0.97,
+    "scope": "general",
+    "confidence": 0.99,
+    "reasoning_tags": [
+      "kaizen",
+      "lean",
+      "continuous_improvement"
+    ]
+  },
+  
+  "dramatically": {
+    "entity_id": "MOD_DRAMATICALLY",
+    "canonical": "Dramatically",
+    "aliases": ["Dramatically"],
+    "category": "impact",
+    "modifier_type": "executive_amplifier",
+    "semantic_polarity": "positive",
+    "strength_score": 1.00,
+    "executive_weight": 1.00,
+    "resume_weight": 1.00,
+    "ats_weight": 0.95,
+    "ai_importance": 1.00,
+    "scope": "executive",
+    "confidence": 1.00,
+    "description": "Indicates extremely high measurable impact.",
+    "reasoning_tags": [
+      "business_impact",
+      "executive"
+    ]
+  },
+
+  "remarkably": {
+    "entity_id": "MOD_REMARKABLY",
+    "canonical": "Remarkably",
+    "aliases": ["Remarkably"],
+    "category": "impact",
+    "modifier_type": "executive_amplifier",
+    "semantic_polarity": "positive",
+    "strength_score": 0.99,
+    "executive_weight": 0.97,
+    "resume_weight": 0.98,
+    "ats_weight": 0.92,
+    "ai_importance": 0.99,
+    "scope": "executive",
+    "confidence": 0.99
+  },
+
+  "exceptionally": {
+    "entity_id": "MOD_EXCEPTIONALLY",
+    "canonical": "Exceptionally",
+    "aliases": [
+      "Exceptionally",
+      "Exceptional"
+    ],
+    "category": "performance",
+    "modifier_type": "executive_amplifier",
+    "semantic_polarity": "positive",
+    "strength_score": 0.99,
+    "executive_weight": 0.98,
+    "resume_weight": 0.98,
+    "ats_weight": 0.92,
+    "ai_importance": 0.99,
+    "scope": "executive",
+    "confidence": 1.00
+  },
+
+  "highly": {
+    "entity_id": "MOD_HIGHLY",
+    "canonical": "Highly",
+    "aliases": [
+      "Highly"
+    ],
+    "category": "performance",
+    "modifier_type": "intensity",
+    "semantic_polarity": "positive",
+    "strength_score": 0.94,
+    "executive_weight": 0.90,
+    "resume_weight": 0.92,
+    "ats_weight": 0.84,
+    "ai_importance": 0.95,
+    "scope": "general",
+    "confidence": 0.99
+  },
+
+  "rigorously": {
+    "entity_id": "MOD_RIGOROUSLY",
+    "canonical": "Rigorously",
+    "aliases": [
+      "Rigorously"
+    ],
+    "category": "quality",
+    "modifier_type": "precision",
+    "semantic_polarity": "positive",
+    "strength_score": 0.95,
+    "executive_weight": 0.90,
+    "resume_weight": 0.94,
+    "ats_weight": 0.88,
+    "ai_importance": 0.97,
+    "scope": "quality",
+    "confidence": 0.99,
+    "reasoning_tags": [
+      "audit",
+      "compliance",
+      "quality"
+    ]
+  },
+
+  "systematically": {
+    "entity_id": "MOD_SYSTEMATICALLY",
+    "canonical": "Systematically",
+    "aliases": [
+      "Systematically"
+    ],
+    "category": "operations",
+    "modifier_type": "methodology",
+    "semantic_polarity": "positive",
+    "strength_score": 0.93,
+    "executive_weight": 0.88,
+    "resume_weight": 0.92,
+    "ats_weight": 0.85,
+    "ai_importance": 0.95,
+    "scope": "operations",
+    "confidence": 0.99
+  },
+
+  "comprehensively": {
+    "entity_id": "MOD_COMPREHENSIVELY",
+    "canonical": "Comprehensively",
+    "aliases": [
+      "Comprehensively"
+    ],
+    "category": "execution",
+    "modifier_type": "coverage",
+    "semantic_polarity": "positive",
+    "strength_score": 0.95,
+    "executive_weight": 0.92,
+    "resume_weight": 0.94,
+    "ats_weight": 0.88,
+    "ai_importance": 0.97,
+    "scope": "organization",
+    "confidence": 0.99
+  },
+
+  "accurately": {
+    "entity_id": "MOD_ACCURATELY",
+    "canonical": "Accurately",
+    "aliases": [
+      "Accurately"
+    ],
+    "category": "quality",
+    "modifier_type": "precision",
+    "semantic_polarity": "positive",
+    "strength_score": 0.90,
+    "executive_weight": 0.82,
+    "resume_weight": 0.89,
+    "ats_weight": 0.82,
+    "ai_importance": 0.92,
+    "scope": "general",
+    "confidence": 0.98
+  },
+
+  "precisely": {
+    "entity_id": "MOD_PRECISELY",
+    "canonical": "Precisely",
+    "aliases": [
+      "Precisely"
+    ],
+    "category": "quality",
+    "modifier_type": "precision",
+    "semantic_polarity": "positive",
+    "strength_score": 0.92,
+    "executive_weight": 0.84,
+    "resume_weight": 0.91,
+    "ats_weight": 0.84,
+    "ai_importance": 0.94,
+    "scope": "general",
+    "confidence": 0.98
+  },
+
+  "aggressively": {
+    "entity_id": "MOD_AGGRESSIVELY",
+    "canonical": "Aggressively",
+    "aliases": [
+      "Aggressively"
+    ],
+    "category": "strategy",
+    "modifier_type": "business_drive",
+    "semantic_polarity": "positive",
+    "strength_score": 0.92,
+    "executive_weight": 0.90,
+    "resume_weight": 0.90,
+    "ats_weight": 0.82,
+    "ai_importance": 0.94,
+    "scope": "executive",
+    "confidence": 0.97
+  },
+
+  "seamlessly": {
+    "entity_id": "MOD_SEAMLESSLY",
+    "canonical": "Seamlessly",
+    "aliases": [
+      "Seamlessly"
+    ],
+    "category": "execution",
+    "modifier_type": "quality_execution",
+    "semantic_polarity": "positive",
+    "strength_score": 0.93,
+    "executive_weight": 0.86,
+    "resume_weight": 0.92,
+    "ats_weight": 0.84,
+    "ai_importance": 0.95,
+    "scope": "general",
+    "confidence": 0.98
+  },
+
+  "flawlessly": {
+    "entity_id": "MOD_FLAWLESSLY",
+    "canonical": "Flawlessly",
+    "aliases": [
+      "Flawlessly"
+    ],
+    "category": "quality",
+    "modifier_type": "execution_quality",
+    "semantic_polarity": "positive",
+    "strength_score": 0.97,
+    "executive_weight": 0.94,
+    "resume_weight": 0.96,
+    "ats_weight": 0.90,
+    "ai_importance": 0.98,
+    "scope": "general",
+    "confidence": 0.99
+  },
+
+  "fully": {
+    "entity_id": "MOD_FULLY",
+    "canonical": "Fully",
+    "aliases": [
+      "Fully"
+    ],
+    "category": "completion",
+    "modifier_type": "completion",
+    "semantic_polarity": "positive",
+    "strength_score": 0.84,
+    "executive_weight": 0.78,
+    "resume_weight": 0.84,
+    "ats_weight": 0.74,
+    "ai_importance": 0.88,
+    "scope": "general",
+    "confidence": 0.97
+  },
+
+  "compliantly": {
+    "entity_id": "MOD_COMPLIANTLY",
+    "canonical": "Compliantly",
+    "aliases": [
+      "Compliantly",
+      "In Compliance"
+    ],
+    "category": "compliance",
+    "modifier_type": "regulatory",
+    "semantic_polarity": "positive",
+    "strength_score": 0.96,
+    "executive_weight": 0.92,
+    "resume_weight": 0.95,
+    "ats_weight": 0.90,
+    "ai_importance": 0.98,
+    "scope": "quality",
+    "confidence": 0.99,
+    "reasoning_tags": [
+      "ISO",
+      "BRCGS",
+      "FSSC22000",
+      "Compliance"
+    ]
   }
 }

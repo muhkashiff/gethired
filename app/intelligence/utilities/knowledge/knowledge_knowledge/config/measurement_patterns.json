@@ -1,35 +1,673 @@
 {
-    "operators": [
+  "version": "3.0",
+  "schema": "enterprise_measurement_patterns",
 
-        "to",
+  "comparison_operators": {
+    "increase": [
+      "to",
+      "up to",
+      "towards"
+    ],
 
-        "by",
+    "difference": [
+      "by",
+      "minus",
+      "plus"
+    ],
 
-        "of",
+    "ownership": [
+      "of",
+      "for",
+      "per"
+    ],
 
-        "over",
+    "range": [
+      "between",
+      "from",
+      "through",
+      "across"
+    ],
 
-        "under",
+    "limit": [
+      "under",
+      "below",
+      "less than",
+      "underneath"
+    ],
 
-        "within"
+    "maximum": [
+      "over",
+      "above",
+      "greater than",
+      "more than",
+      "exceeding"
+    ],
 
+    "time": [
+      "within",
+      "during",
+      "over",
+      "across",
+      "throughout",
+      "per",
+      "each"
+    ]
+  },
+
+  "measurement_symbols": {
+
+    "percentage": [
+      "%",
+      "percent",
+      "percentage",
+      "pct"
     ],
 
     "currency": [
-
-        "$",
-
-        "usd"
-
+      "$",
+      "usd",
+      "cad",
+      "eur",
+      "gbp",
+      "pkr",
+      "aed",
+      "sar",
+      "inr",
+      "¥",
+      "€",
+      "£",
+      "₨"
     ],
 
-    "multipliers": {
+    "temperature": [
+      "°c",
+      "°f",
+      "celsius",
+      "fahrenheit"
+    ],
 
-        "k":1000,
+    "weight": [
+      "kg",
+      "g",
+      "gram",
+      "grams",
+      "kilogram",
+      "kilograms",
+      "lb",
+      "lbs",
+      "ton",
+      "tons",
+      "mt"
+    ],
 
-        "m":1000000,
+    "volume": [
+      "l",
+      "liter",
+      "litre",
+      "liters",
+      "litres",
+      "ml",
+      "cc",
+      "m3",
+      "gallon"
+    ],
 
-        "b":1000000000
+    "distance": [
+      "mm",
+      "cm",
+      "m",
+      "meter",
+      "metre",
+      "km",
+      "inch",
+      "ft"
+    ]
+  },
 
-    }
+  "numeric_multipliers": {
+
+    "k": 1000,
+    "thousand": 1000,
+
+    "m": 1000000,
+    "million": 1000000,
+
+    "b": 1000000000,
+    "billion": 1000000000,
+
+    "t": 1000000000000,
+    "trillion": 1000000000000
+  },
+
+  "number_formats": {
+
+    "decimal_separator": ".",
+
+    "thousand_separators": [
+      ",",
+      " "
+    ],
+
+    "negative_formats": [
+      "-100",
+      "(100)"
+    ],
+
+    "scientific_notation": true
+  },
+  
+  "time_units": {
+    "second": [
+      "s",
+      "sec",
+      "second",
+      "seconds"
+    ],
+
+    "minute": [
+      "min",
+      "minute",
+      "minutes"
+    ],
+
+    "hour": [
+      "hr",
+      "hrs",
+      "hour",
+      "hours"
+    ],
+
+    "day": [
+      "day",
+      "days"
+    ],
+
+    "week": [
+      "week",
+      "weeks"
+    ],
+
+    "month": [
+      "month",
+      "months"
+    ],
+
+    "quarter": [
+      "quarter",
+      "qtr",
+      "q1",
+      "q2",
+      "q3",
+      "q4"
+    ],
+
+    "year": [
+      "yr",
+      "yrs",
+      "year",
+      "years",
+      "annually"
+    ]
+  },
+
+  "production_units": {
+
+    "pieces": [
+      "piece",
+      "pieces",
+      "pcs"
+    ],
+
+    "units": [
+      "unit",
+      "units"
+    ],
+
+    "cartons": [
+      "carton",
+      "cartons",
+      "ctn"
+    ],
+
+    "cases": [
+      "case",
+      "cases"
+    ],
+
+    "bottles": [
+      "bottle",
+      "bottles"
+    ],
+
+    "packs": [
+      "pack",
+      "packs"
+    ],
+
+    "pallets": [
+      "pallet",
+      "pallets"
+    ],
+
+    "containers": [
+      "container",
+      "containers"
+    ],
+
+    "shipments": [
+      "shipment",
+      "shipments"
+    ]
+  },
+
+  "financial_units": {
+
+    "revenue": [
+      "revenue",
+      "sales",
+      "turnover"
+    ],
+
+    "profit": [
+      "profit",
+      "net profit",
+      "gross profit"
+    ],
+
+    "margin": [
+      "margin",
+      "gross margin",
+      "profit margin"
+    ],
+
+    "cost": [
+      "cost",
+      "expense",
+      "spend"
+    ],
+
+    "budget": [
+      "budget"
+    ],
+
+    "investment": [
+      "investment",
+      "capex",
+      "opex"
+    ]
+  },
+
+  "quality_units": {
+
+    "ppm": [
+      "ppm",
+      "parts per million"
+    ],
+
+    "cpk": [
+      "cpk"
+    ],
+
+    "cp": [
+      "cp"
+    ],
+
+    "sigma": [
+      "sigma",
+      "six sigma"
+    ],
+
+    "dpmo": [
+      "dpmo"
+    ],
+
+    "defect_rate": [
+      "defect rate",
+      "defects"
+    ],
+
+    "yield": [
+      "yield"
+    ],
+
+    "scrap": [
+      "scrap"
+    ],
+
+    "rework": [
+      "rework"
+    ]
+  },
+
+  "food_safety_units": {
+
+    "cfu": [
+      "cfu",
+      "cfu/ml",
+      "cfu/g"
+    ],
+
+    "brix": [
+      "brix",
+      "°brix"
+    ],
+
+    "ph": [
+      "ph"
+    ],
+
+    "temperature": [
+      "pasteurization temperature",
+      "holding temperature"
+    ],
+
+    "microbiology": [
+      "tpc",
+      "tmc",
+      "yeast",
+      "mold",
+      "coliform",
+      "e.coli",
+      "salmonella"
+    ]
+  },
+
+  "logistics_units": {
+
+    "lead_time": [
+      "lead time"
+    ],
+
+    "inventory": [
+      "inventory",
+      "stock"
+    ],
+
+    "days_inventory": [
+      "dio",
+      "days inventory outstanding"
+    ],
+
+    "turnover": [
+      "inventory turns",
+      "inventory turnover"
+    ],
+
+    "delivery": [
+      "otif",
+      "otif%",
+      "on time delivery"
+    ]
+  },
+
+  "hr_units": {
+
+    "employees": [
+      "employee",
+      "employees",
+      "fte"
+    ],
+
+    "training_hours": [
+      "training hour",
+      "training hours"
+    ],
+
+    "retention": [
+      "retention"
+    ],
+
+    "engagement": [
+      "engagement"
+    ]
+  },
+
+  "technology_units": {
+
+    "servers": [
+      "server",
+      "servers"
+    ],
+
+    "users": [
+      "user",
+      "users"
+    ],
+
+    "api": [
+      "api",
+      "apis"
+    ],
+
+    "database": [
+      "database",
+      "databases"
+    ],
+
+    "records": [
+      "record",
+      "records"
+    ]
+  },
+  
+  "frequency_patterns": {
+
+    "per_second": [
+      "per second",
+      "/sec",
+      "/s"
+    ],
+
+    "per_minute": [
+      "per minute",
+      "/min"
+    ],
+
+    "per_hour": [
+      "per hour",
+      "/hr",
+      "/hour"
+    ],
+
+    "per_shift": [
+      "per shift",
+      "each shift",
+      "every shift"
+    ],
+
+    "per_day": [
+      "per day",
+      "/day",
+      "daily",
+      "every day"
+    ],
+
+    "per_week": [
+      "per week",
+      "weekly"
+    ],
+
+    "per_month": [
+      "per month",
+      "monthly"
+    ],
+
+    "per_quarter": [
+      "per quarter",
+      "quarterly"
+    ],
+
+    "per_year": [
+      "per year",
+      "annually",
+      "yearly"
+    ]
+  },
+
+  "comparison_patterns": {
+
+    "greater_than": [
+      ">",
+      "greater than",
+      "more than",
+      "above",
+      "over",
+      "exceeding"
+    ],
+
+    "less_than": [
+      "<",
+      "less than",
+      "below",
+      "under"
+    ],
+
+    "greater_equal": [
+      ">=",
+      "at least",
+      "minimum",
+      "not less than"
+    ],
+
+    "less_equal": [
+      "<=",
+      "maximum",
+      "up to",
+      "not more than"
+    ],
+
+    "equal": [
+      "=",
+      "equal to",
+      "exactly"
+    ],
+
+    "between": [
+      "between",
+      "from",
+      "ranging from"
+    ]
+  },
+
+  "range_patterns": {
+
+    "to": [
+      "to"
+    ],
+
+    "through": [
+      "through"
+    ],
+
+    "up_to": [
+      "up to"
+    ],
+
+    "from_to": [
+      "from",
+      "to"
+    ]
+  },
+
+  "trend_patterns": {
+
+    "increase": [
+      "increase",
+      "increased",
+      "improved",
+      "boosted",
+      "raised",
+      "grew",
+      "expanded",
+      "enhanced"
+    ],
+
+    "decrease": [
+      "decrease",
+      "decreased",
+      "reduced",
+      "lowered",
+      "cut",
+      "minimized",
+      "eliminated"
+    ],
+
+    "stable": [
+      "maintained",
+      "sustained",
+      "retained",
+      "held"
+    ],
+
+    "optimization": [
+      "optimized",
+      "streamlined",
+      "automated",
+      "standardized",
+      "simplified"
+    ]
+  },
+
+  "percentage_patterns": {
+
+    "absolute": [
+      "%",
+      "percent",
+      "percentage",
+      "pct"
+    ],
+
+    "growth": [
+      "% increase",
+      "% improvement",
+      "% growth"
+    ],
+
+    "reduction": [
+      "% reduction",
+      "% decrease"
+    ]
+  },
+
+  "ratio_patterns": {
+
+    "per": [
+      "per"
+    ],
+
+    "ratio": [
+      ":",
+      "ratio"
+    ],
+
+    "fraction": [
+      "/"
+    ]
+  },
+
+  "confidence_rules": {
+
+    "contains_number": 0.20,
+
+    "contains_unit": 0.20,
+
+    "contains_metric": 0.25,
+
+    "contains_modifier": 0.15,
+
+    "contains_trend": 0.20
+  },
+
+  "normalization": {
+
+    "remove_commas": true,
+
+    "trim_spaces": true,
+
+    "convert_percent_to_decimal": false,
+
+    "standardize_currency": true,
+
+    "normalize_case": true
+  }
 }

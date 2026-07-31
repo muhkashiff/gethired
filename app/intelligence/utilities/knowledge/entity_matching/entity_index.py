@@ -1,8 +1,15 @@
 """
 Entity Index
 
+
 Loads every ontology dictionary into one searchable index.
 """
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[5]
+sys.path.append(str(ROOT))
 
 from app.intelligence.utilities.knowledge.repository.repository import Repository
 
@@ -45,7 +52,7 @@ class EntityIndex:
             elif entity_type == "domain":
                 entity = self.repository.get_domain(key)
 
-            elif entity_type == "standard":
+            elif entity_type == "certificate":
                 entity = self.repository.get_certification(key)
 
             elif entity_type == "technology":
@@ -56,6 +63,9 @@ class EntityIndex:
 
             elif entity_type == "skill":
                 entity = self.repository.get_skill(key)
+
+            elif entity_type == "standard":
+                            entity = self.repository.get_standard(key)
 
             if entity is None:
                 continue
@@ -135,7 +145,7 @@ class EntityIndex:
 
         self._load_dictionary("domains", "domain")
 
-        self._load_dictionary("certifications", "standard")
+        self._load_dictionary("certifications", "certification")
 
         self._load_dictionary("technologies", "technology")
 
@@ -143,14 +153,34 @@ class EntityIndex:
 
         self._load_dictionary("skills", "skill")
 
-    # --------------------------------------------------
+        self._load_dictionary("standards", "standard")
 
     def keys(self):
-
-        return self.index.keys()
-
+    
+                return self.index.keys()
+    
+            # --------------------------------------------------
+    
+    def get(self, key):
+    
+                return self.index.get(key.lower())            
+        
+    # --------------------------------------------------# --------------------------------------------------
+    # Debug
     # --------------------------------------------------
 
-    def get(self, key):
+if __name__ == "__main__":
 
-        return self.index.get(key.lower())
+    print("Creating EntityIndex...")
+
+    index = EntityIndex()
+
+    print("Loaded", len(index.index), "search terms")
+
+    print("gmp:", index.get("gmp"))
+    print("iso9001:", index.get("iso9001"))
+    print("fssc22000:", index.get("fssc22000"))
+
+        
+
+        

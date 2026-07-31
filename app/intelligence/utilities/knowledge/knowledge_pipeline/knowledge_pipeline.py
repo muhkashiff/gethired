@@ -330,13 +330,20 @@ class KnowledgePipeline:
             )
 
         # ==================================================
+        # Semantic Resolution
+        # ==================================================
+
+        semantic_result = self.semantic_resolver.resolve(
+            document.facts
+        )
+
+        # ==================================================
         # Build Knowledge Graph
         # ==================================================
 
         graph_document = self.graph_builder.build(
-
-            knowledge_document = document
-
+            knowledge_document=document,
+            semantic_result=semantic_result,
         )
 
         # ==================================================
@@ -344,20 +351,13 @@ class KnowledgePipeline:
         # ==================================================
 
         knowledge_profile = self.profile_builder.build(
-
             graph_document
-
-        )
-
-        semantic_result = self.semantic_resolver.resolve(
-            document.facts
         )
 
         # ==================================================
         # Unified Pipeline Result
         # ==================================================
 
-        
         return PipelineResult(
 
             knowledge_document=document,
@@ -368,6 +368,4 @@ class KnowledgePipeline:
 
             semantic_result=semantic_result,
 
-            )
-
-        
+        )

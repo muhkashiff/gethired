@@ -1,19 +1,1276 @@
 {
   "python": {
-    "entity_id": "PYTHON",
+    "entity_id": "TECH_PYTHON",
     "canonical": "Python",
-    "category": "programming_language"
+    "aliases": [
+      "python programming"
+    ],
+    "category": "programming_language",
+    "business_area": "technology",
+    "description": "Programming language widely used for automation, analytics and AI.",
+    "related_domains": [
+      "analytics",
+      "software_development",
+      "artificial_intelligence"
+    ]
   },
 
   "sql": {
-    "entity_id": "SQL",
+    "entity_id": "TECH_SQL",
     "canonical": "SQL",
-    "category": "database"
+    "aliases": [
+      "structured query language"
+    ],
+    "category": "database",
+    "business_area": "technology",
+    "description": "Language for querying relational databases.",
+    "related_domains": [
+      "analytics",
+      "database"
+    ]
   },
 
+  "r": {
+    "entity_id": "TECH_R",
+    "canonical": "R",
+    "aliases": [],
+    "category": "programming_language",
+    "business_area": "analytics",
+    "description": "Statistical programming language.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "java": {
+    "entity_id": "TECH_JAVA",
+    "canonical": "Java",
+    "aliases": [],
+    "category": "programming_language",
+    "business_area": "technology",
+    "description": "General-purpose programming language.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "c++": {
+    "entity_id": "TECH_CPP",
+    "canonical": "C++",
+    "aliases": [
+      "cpp"
+    ],
+    "category": "programming_language",
+    "business_area": "technology",
+    "description": "Object-oriented programming language.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "javascript": {
+    "entity_id": "TECH_JAVASCRIPT",
+    "canonical": "JavaScript",
+    "aliases": [
+      "js"
+    ],
+    "category": "programming_language",
+    "business_area": "technology",
+    "description": "Programming language for web development.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "html": {
+    "entity_id": "TECH_HTML",
+    "canonical": "HTML",
+    "aliases": [],
+    "category": "web",
+    "business_area": "technology",
+    "description": "Markup language for web pages.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "css": {
+    "entity_id": "TECH_CSS",
+    "canonical": "CSS",
+    "aliases": [],
+    "category": "web",
+    "business_area": "technology",
+    "description": "Stylesheet language for web interfaces.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "pandas": {
+    "entity_id": "TECH_PANDAS",
+    "canonical": "Pandas",
+    "aliases": [],
+    "category": "python_library",
+    "business_area": "analytics",
+    "description": "Python data analysis library.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "numpy": {
+    "entity_id": "TECH_NUMPY",
+    "canonical": "NumPy",
+    "aliases": [],
+    "category": "python_library",
+    "business_area": "analytics",
+    "description": "Numerical computing library.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "scikit-learn": {
+    "entity_id": "TECH_SCIKIT_LEARN",
+    "canonical": "Scikit-learn",
+    "aliases": [
+      "sklearn"
+    ],
+    "category": "machine_learning",
+    "business_area": "analytics",
+    "description": "Machine learning library.",
+    "related_domains": [
+      "artificial_intelligence"
+    ]
+  },
+
+  "tensorflow": {
+    "entity_id": "TECH_TENSORFLOW",
+    "canonical": "TensorFlow",
+    "aliases": [],
+    "category": "deep_learning",
+    "business_area": "artificial_intelligence",
+    "description": "Deep learning framework.",
+    "related_domains": [
+      "artificial_intelligence"
+    ]
+  },
+
+  "pytorch": {
+    "entity_id": "TECH_PYTORCH",
+    "canonical": "PyTorch",
+    "aliases": [],
+    "category": "deep_learning",
+    "business_area": "artificial_intelligence",
+    "description": "Deep learning framework.",
+    "related_domains": [
+      "artificial_intelligence"
+    ]
+  },
+
+  "xgboost": {
+    "entity_id": "TECH_XGBOOST",
+    "canonical": "XGBoost",
+    "aliases": [],
+    "category": "machine_learning",
+    "business_area": "analytics",
+    "description": "Gradient boosting framework.",
+    "related_domains": [
+      "artificial_intelligence"
+    ]
+  },
+
+  "opencv": {
+    "entity_id": "TECH_OPENCV",
+    "canonical": "OpenCV",
+    "aliases": [],
+    "category": "computer_vision",
+    "business_area": "artificial_intelligence",
+    "description": "Computer vision library.",
+    "related_domains": [
+      "artificial_intelligence"
+    ]
+  },
+  
+  "postgresql": {
+    "entity_id": "TECH_POSTGRESQL",
+    "canonical": "PostgreSQL",
+    "aliases": [
+      "postgres"
+    ],
+    "category": "database",
+    "business_area": "technology",
+    "description": "Open-source relational database.",
+    "related_domains": [
+      "database",
+      "analytics"
+    ]
+  },
+
+  "mysql": {
+    "entity_id": "TECH_MYSQL",
+    "canonical": "MySQL",
+    "aliases": [],
+    "category": "database",
+    "business_area": "technology",
+    "description": "Relational database management system.",
+    "related_domains": [
+      "database"
+    ]
+  },
+
+  "microsoft sql server": {
+    "entity_id": "TECH_SQLSERVER",
+    "canonical": "Microsoft SQL Server",
+    "aliases": [
+      "sql server",
+      "mssql"
+    ],
+    "category": "database",
+    "business_area": "technology",
+    "description": "Enterprise relational database platform.",
+    "related_domains": [
+      "database"
+    ]
+  },
+
+  "oracle database": {
+    "entity_id": "TECH_ORACLE_DB",
+    "canonical": "Oracle Database",
+    "aliases": [
+      "oracle"
+    ],
+    "category": "database",
+    "business_area": "technology",
+    "description": "Enterprise relational database.",
+    "related_domains": [
+      "database"
+    ]
+  },
+
+  "mongodb": {
+    "entity_id": "TECH_MONGODB",
+    "canonical": "MongoDB",
+    "aliases": [],
+    "category": "nosql_database",
+    "business_area": "technology",
+    "description": "Document-oriented NoSQL database.",
+    "related_domains": [
+      "database"
+    ]
+  },
+
+  "sqlite": {
+    "entity_id": "TECH_SQLITE",
+    "canonical": "SQLite",
+    "aliases": [],
+    "category": "database",
+    "business_area": "technology",
+    "description": "Embedded SQL database.",
+    "related_domains": [
+      "database"
+    ]
+  },
+
+  "redis": {
+    "entity_id": "TECH_REDIS",
+    "canonical": "Redis",
+    "aliases": [],
+    "category": "cache",
+    "business_area": "technology",
+    "description": "In-memory cache and database.",
+    "related_domains": [
+      "technology"
+    ]
+  },
+
+  "aws": {
+    "entity_id": "TECH_AWS",
+    "canonical": "Amazon Web Services",
+    "aliases": [
+      "amazon web services"
+    ],
+    "category": "cloud",
+    "business_area": "technology",
+    "description": "Cloud computing platform.",
+    "related_domains": [
+      "cloud"
+    ]
+  },
+
+  "azure": {
+    "entity_id": "TECH_AZURE",
+    "canonical": "Microsoft Azure",
+    "aliases": [],
+    "category": "cloud",
+    "business_area": "technology",
+    "description": "Cloud computing platform.",
+    "related_domains": [
+      "cloud"
+    ]
+  },
+
+  "google cloud": {
+    "entity_id": "TECH_GCP",
+    "canonical": "Google Cloud Platform",
+    "aliases": [
+      "gcp"
+    ],
+    "category": "cloud",
+    "business_area": "technology",
+    "description": "Cloud computing platform.",
+    "related_domains": [
+      "cloud"
+    ]
+  },
+
+  "docker": {
+    "entity_id": "TECH_DOCKER",
+    "canonical": "Docker",
+    "aliases": [],
+    "category": "containerization",
+    "business_area": "technology",
+    "description": "Containerization platform.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "docker compose": {
+    "entity_id": "TECH_DOCKER_COMPOSE",
+    "canonical": "Docker Compose",
+    "aliases": [],
+    "category": "containerization",
+    "business_area": "technology",
+    "description": "Multi-container orchestration tool.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "kubernetes": {
+    "entity_id": "TECH_KUBERNETES",
+    "canonical": "Kubernetes",
+    "aliases": [
+      "k8s"
+    ],
+    "category": "orchestration",
+    "business_area": "technology",
+    "description": "Container orchestration platform.",
+    "related_domains": [
+      "cloud"
+    ]
+  },
+
+  "git": {
+    "entity_id": "TECH_GIT",
+    "canonical": "Git",
+    "aliases": [],
+    "category": "version_control",
+    "business_area": "technology",
+    "description": "Distributed version control system.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "github": {
+    "entity_id": "TECH_GITHUB",
+    "canonical": "GitHub",
+    "aliases": [],
+    "category": "version_control",
+    "business_area": "technology",
+    "description": "Git repository hosting platform.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "gitlab": {
+    "entity_id": "TECH_GITLAB",
+    "canonical": "GitLab",
+    "aliases": [],
+    "category": "version_control",
+    "business_area": "technology",
+    "description": "DevOps platform.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "flask": {
+    "entity_id": "TECH_FLASK",
+    "canonical": "Flask",
+    "aliases": [],
+    "category": "web_framework",
+    "business_area": "technology",
+    "description": "Python web framework.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "fastapi": {
+    "entity_id": "TECH_FASTAPI",
+    "canonical": "FastAPI",
+    "aliases": [],
+    "category": "web_framework",
+    "business_area": "technology",
+    "description": "High-performance Python API framework.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "django": {
+    "entity_id": "TECH_DJANGO",
+    "canonical": "Django",
+    "aliases": [],
+    "category": "web_framework",
+    "business_area": "technology",
+    "description": "Python web development framework.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+
+  "rest api": {
+    "entity_id": "TECH_REST_API",
+    "canonical": "REST API",
+    "aliases": [
+      "restful api"
+    ],
+    "category": "api",
+    "business_area": "technology",
+    "description": "REST-based application programming interface.",
+    "related_domains": [
+      "software_development"
+    ]
+  },
+  
   "tableau": {
-    "entity_id": "TABLEAU",
+    "entity_id": "TECH_TABLEAU",
     "canonical": "Tableau",
-    "category": "analytics"
+    "aliases": [],
+    "category": "business_intelligence",
+    "business_area": "analytics",
+    "description": "Business intelligence and visualization platform.",
+    "related_domains": [
+      "analytics",
+      "business_intelligence"
+    ]
+  },
+
+  "power bi": {
+    "entity_id": "TECH_POWER_BI",
+    "canonical": "Microsoft Power BI",
+    "aliases": [
+      "powerbi"
+    ],
+    "category": "business_intelligence",
+    "business_area": "analytics",
+    "description": "Business intelligence and reporting platform.",
+    "related_domains": [
+      "analytics",
+      "business_intelligence"
+    ]
+  },
+
+  "qlik sense": {
+    "entity_id": "TECH_QLIK_SENSE",
+    "canonical": "Qlik Sense",
+    "aliases": [
+      "qlik"
+    ],
+    "category": "business_intelligence",
+    "business_area": "analytics",
+    "description": "Self-service analytics platform.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "looker": {
+    "entity_id": "TECH_LOOKER",
+    "canonical": "Looker",
+    "aliases": [],
+    "category": "business_intelligence",
+    "business_area": "analytics",
+    "description": "Business intelligence platform.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "looker studio": {
+    "entity_id": "TECH_LOOKER_STUDIO",
+    "canonical": "Looker Studio",
+    "aliases": [
+      "google data studio"
+    ],
+    "category": "business_intelligence",
+    "business_area": "analytics",
+    "description": "Google dashboard and reporting platform.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "excel": {
+    "entity_id": "TECH_EXCEL",
+    "canonical": "Microsoft Excel",
+    "aliases": [
+      "ms excel"
+    ],
+    "category": "spreadsheet",
+    "business_area": "analytics",
+    "description": "Spreadsheet analysis platform.",
+    "related_domains": [
+      "analytics",
+      "finance"
+    ]
+  },
+
+  "power query": {
+    "entity_id": "TECH_POWER_QUERY",
+    "canonical": "Power Query",
+    "aliases": [],
+    "category": "etl",
+    "business_area": "analytics",
+    "description": "Excel and Power BI data transformation engine.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "power pivot": {
+    "entity_id": "TECH_POWER_PIVOT",
+    "canonical": "Power Pivot",
+    "aliases": [],
+    "category": "analytics",
+    "business_area": "analytics",
+    "description": "Excel analytical data model.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "dax": {
+    "entity_id": "TECH_DAX",
+    "canonical": "Data Analysis Expressions",
+    "aliases": [],
+    "category": "analytics_language",
+    "business_area": "analytics",
+    "description": "Calculation language for Power BI.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "vba": {
+    "entity_id": "TECH_VBA",
+    "canonical": "Visual Basic for Applications",
+    "aliases": [],
+    "category": "programming_language",
+    "business_area": "automation",
+    "description": "Microsoft Office automation language.",
+    "related_domains": [
+      "automation"
+    ]
+  },
+
+  "matplotlib": {
+    "entity_id": "TECH_MATPLOTLIB",
+    "canonical": "Matplotlib",
+    "aliases": [],
+    "category": "python_library",
+    "business_area": "analytics",
+    "description": "Python plotting library.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "seaborn": {
+    "entity_id": "TECH_SEABORN",
+    "canonical": "Seaborn",
+    "aliases": [],
+    "category": "python_library",
+    "business_area": "analytics",
+    "description": "Statistical visualization library.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "plotly": {
+    "entity_id": "TECH_PLOTLY",
+    "canonical": "Plotly",
+    "aliases": [],
+    "category": "python_library",
+    "business_area": "analytics",
+    "description": "Interactive visualization framework.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "jupyter notebook": {
+    "entity_id": "TECH_JUPYTER",
+    "canonical": "Jupyter Notebook",
+    "aliases": [
+      "jupyter"
+    ],
+    "category": "development_environment",
+    "business_area": "analytics",
+    "description": "Interactive Python notebook environment.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "anaconda": {
+    "entity_id": "TECH_ANACONDA",
+    "canonical": "Anaconda",
+    "aliases": [],
+    "category": "development_environment",
+    "business_area": "analytics",
+    "description": "Python data science distribution.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "apache spark": {
+    "entity_id": "TECH_SPARK",
+    "canonical": "Apache Spark",
+    "aliases": [
+      "spark"
+    ],
+    "category": "big_data",
+    "business_area": "analytics",
+    "description": "Distributed data processing engine.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "hadoop": {
+    "entity_id": "TECH_HADOOP",
+    "canonical": "Apache Hadoop",
+    "aliases": [],
+    "category": "big_data",
+    "business_area": "analytics",
+    "description": "Distributed storage and processing platform.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "sas": {
+    "entity_id": "TECH_SAS",
+    "canonical": "SAS",
+    "aliases": [],
+    "category": "analytics",
+    "business_area": "analytics",
+    "description": "Statistical analysis platform.",
+    "related_domains": [
+      "analytics"
+    ]
+  },
+
+  "minitab": {
+    "entity_id": "TECH_MINITAB",
+    "canonical": "Minitab",
+    "aliases": [],
+    "category": "statistics",
+    "business_area": "quality",
+    "description": "Statistical quality analysis software.",
+    "related_domains": [
+      "quality",
+      "six_sigma"
+    ]
+  },
+
+  "jmp": {
+    "entity_id": "TECH_JMP",
+    "canonical": "JMP",
+    "aliases": [],
+    "category": "statistics",
+    "business_area": "quality",
+    "description": "Statistical discovery software.",
+    "related_domains": [
+      "quality"
+    ]
+  },
+  
+  "sap": {
+    "entity_id": "TECH_SAP",
+    "canonical": "SAP ERP",
+    "aliases": [
+      "sap erp",
+      "sap ecc",
+      "sap s4hana",
+      "sap s/4 hana"
+    ],
+    "category": "erp",
+    "business_area": "enterprise",
+    "description": "Enterprise Resource Planning platform.",
+    "related_domains": [
+      "operations",
+      "finance",
+      "supply_chain"
+    ]
+  },
+
+  "oracle erp": {
+    "entity_id": "TECH_ORACLE_ERP",
+    "canonical": "Oracle ERP",
+    "aliases": [
+      "oracle enterprise resource planning"
+    ],
+    "category": "erp",
+    "business_area": "enterprise",
+    "description": "Enterprise resource planning software.",
+    "related_domains": [
+      "operations",
+      "finance"
+    ]
+  },
+
+  "microsoft dynamics 365": {
+    "entity_id": "TECH_D365",
+    "canonical": "Microsoft Dynamics 365",
+    "aliases": [
+      "dynamics 365",
+      "ms dynamics"
+    ],
+    "category": "erp",
+    "business_area": "enterprise",
+    "description": "Enterprise business management platform.",
+    "related_domains": [
+      "operations"
+    ]
+  },
+
+  "mes": {
+    "entity_id": "TECH_MES",
+    "canonical": "Manufacturing Execution System",
+    "aliases": [
+      "manufacturing execution system"
+    ],
+    "category": "manufacturing_system",
+    "business_area": "operations",
+    "description": "Production execution and monitoring software.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "scada": {
+    "entity_id": "TECH_SCADA",
+    "canonical": "SCADA",
+    "aliases": [
+      "supervisory control and data acquisition"
+    ],
+    "category": "industrial_automation",
+    "business_area": "operations",
+    "description": "Industrial monitoring and supervisory control system.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "plc": {
+    "entity_id": "TECH_PLC",
+    "canonical": "Programmable Logic Controller",
+    "aliases": [
+      "programmable logic controller"
+    ],
+    "category": "industrial_automation",
+    "business_area": "operations",
+    "description": "Industrial automation controller.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "siemens plc": {
+    "entity_id": "TECH_SIEMENS_PLC",
+    "canonical": "Siemens PLC",
+    "aliases": [
+      "siemens s7"
+    ],
+    "category": "industrial_automation",
+    "business_area": "operations",
+    "description": "Siemens programmable logic controller.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "allen bradley": {
+    "entity_id": "TECH_ALLEN_BRADLEY",
+    "canonical": "Allen Bradley PLC",
+    "aliases": [
+      "rockwell plc"
+    ],
+    "category": "industrial_automation",
+    "business_area": "operations",
+    "description": "Rockwell industrial automation controller.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "factorytalk": {
+    "entity_id": "TECH_FACTORYTALK",
+    "canonical": "FactoryTalk",
+    "aliases": [],
+    "category": "scada",
+    "business_area": "operations",
+    "description": "Rockwell automation SCADA platform.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "wonderware": {
+    "entity_id": "TECH_WONDERWARE",
+    "canonical": "Wonderware",
+    "aliases": [
+      "aveva wonderware"
+    ],
+    "category": "scada",
+    "business_area": "operations",
+    "description": "Industrial SCADA software.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "ignition": {
+    "entity_id": "TECH_IGNITION",
+    "canonical": "Ignition",
+    "aliases": [
+      "inductive automation ignition"
+    ],
+    "category": "scada",
+    "business_area": "operations",
+    "description": "Industrial automation platform.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "historians": {
+    "entity_id": "TECH_HISTORIAN",
+    "canonical": "Process Historian",
+    "aliases": [
+      "historian"
+    ],
+    "category": "industrial_data",
+    "business_area": "operations",
+    "description": "Industrial process data historian.",
+    "related_domains": [
+      "manufacturing"
+    ]
+  },
+
+  "opc ua": {
+    "entity_id": "TECH_OPCUA",
+    "canonical": "OPC UA",
+    "aliases": [
+      "opc"
+    ],
+    "category": "industrial_protocol",
+    "business_area": "automation",
+    "description": "Industrial communication protocol.",
+    "related_domains": [
+      "automation"
+    ]
+  },
+
+  "modbus": {
+    "entity_id": "TECH_MODBUS",
+    "canonical": "Modbus",
+    "aliases": [],
+    "category": "industrial_protocol",
+    "business_area": "automation",
+    "description": "Industrial communication protocol.",
+    "related_domains": [
+      "automation"
+    ]
+  },
+
+  "barcode system": {
+    "entity_id": "TECH_BARCODE",
+    "canonical": "Barcode System",
+    "aliases": [
+      "barcode scanner"
+    ],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "description": "Barcode tracking technology.",
+    "related_domains": [
+      "inventory"
+    ]
+  },
+
+  "rfid": {
+    "entity_id": "TECH_RFID",
+    "canonical": "RFID",
+    "aliases": [
+      "radio frequency identification"
+    ],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "description": "Radio-frequency identification technology.",
+    "related_domains": [
+      "inventory"
+    ]
+  },
+
+  "cmms": {
+    "entity_id": "TECH_CMMS",
+    "canonical": "Computerized Maintenance Management System",
+    "aliases": [
+      "maintenance software"
+    ],
+    "category": "maintenance",
+    "business_area": "maintenance",
+    "description": "Maintenance planning software.",
+    "related_domains": [
+      "maintenance"
+    ]
+  },
+
+  "maximo": {
+    "entity_id": "TECH_MAXIMO",
+    "canonical": "IBM Maximo",
+    "aliases": [],
+    "category": "maintenance",
+    "business_area": "maintenance",
+    "description": "Enterprise asset management software.",
+    "related_domains": [
+      "maintenance"
+    ]
+  },
+
+  "cmrp": {
+    "entity_id": "TECH_CMRP",
+    "canonical": "Maintenance Reliability Platform",
+    "aliases": [],
+    "category": "maintenance",
+    "business_area": "maintenance",
+    "description": "Maintenance reliability systems.",
+    "related_domains": [
+      "maintenance"
+    ]
+  },
+
+  "erpnext": {
+    "entity_id": "TECH_ERPNEXT",
+    "canonical": "ERPNext",
+    "aliases": [],
+    "category": "erp",
+    "business_area": "enterprise",
+    "description": "Open-source ERP platform.",
+    "related_domains": [
+      "operations"
+    ]
+  },
+  
+  "lims": {
+    "entity_id": "TECH_LIMS",
+    "canonical": "Laboratory Information Management System",
+    "aliases": [
+      "LIMS"
+    ],
+    "category": "laboratory",
+    "business_area": "quality",
+    "description": "Laboratory information management software.",
+    "related_domains": [
+      "quality",
+      "food_safety"
+    ]
+  },
+
+  "hplc": {
+    "entity_id": "TECH_HPLC",
+    "canonical": "High Performance Liquid Chromatography",
+    "aliases": [],
+    "category": "laboratory_equipment",
+    "business_area": "quality",
+    "description": "Analytical chromatography instrument.",
+    "related_domains": [
+      "laboratory"
+    ]
+  },
+
+  "gas chromatography": {
+    "entity_id": "TECH_GC",
+    "canonical": "Gas Chromatography",
+    "aliases": [
+      "GC"
+    ],
+    "category": "laboratory_equipment",
+    "business_area": "quality",
+    "description": "Chemical analysis instrument.",
+    "related_domains": [
+      "laboratory"
+    ]
+  },
+
+  "uv spectrophotometer": {
+    "entity_id": "TECH_UV",
+    "canonical": "UV Spectrophotometer",
+    "aliases": [
+      "spectrophotometer"
+    ],
+    "category": "laboratory_equipment",
+    "business_area": "quality",
+    "description": "Optical analytical instrument.",
+    "related_domains": [
+      "laboratory"
+    ]
+  },
+
+  "ph meter": {
+    "entity_id": "TECH_PH_METER",
+    "canonical": "pH Meter",
+    "aliases": [
+      "ph meter"
+    ],
+    "category": "laboratory_equipment",
+    "business_area": "quality",
+    "description": "Measures pH of samples.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "refractometer": {
+    "entity_id": "TECH_REFRACTOMETER",
+    "canonical": "Refractometer",
+    "aliases": [
+      "brix meter"
+    ],
+    "category": "laboratory_equipment",
+    "business_area": "quality",
+    "description": "Measures soluble solids (Brix).",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "brix meter": {
+    "entity_id": "TECH_BRIX",
+    "canonical": "Brix Meter",
+    "aliases": [
+      "refractometer"
+    ],
+    "category": "laboratory_equipment",
+    "business_area": "quality",
+    "description": "Measures beverage sugar concentration.",
+    "related_domains": [
+      "beverage"
+    ]
+  },
+
+  "autoclave": {
+    "entity_id": "TECH_AUTOCLAVE",
+    "canonical": "Autoclave",
+    "aliases": [],
+    "category": "laboratory_equipment",
+    "business_area": "food_safety",
+    "description": "Sterilization equipment.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "incubator": {
+    "entity_id": "TECH_INCUBATOR",
+    "canonical": "Incubator",
+    "aliases": [],
+    "category": "laboratory_equipment",
+    "business_area": "food_safety",
+    "description": "Microbiology incubation equipment.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "laminar flow": {
+    "entity_id": "TECH_LAMINAR",
+    "canonical": "Laminar Flow Cabinet",
+    "aliases": [
+      "biosafety cabinet"
+    ],
+    "category": "laboratory_equipment",
+    "business_area": "food_safety",
+    "description": "Sterile microbiological workstation.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "metal detector": {
+    "entity_id": "TECH_METAL_DETECTOR",
+    "canonical": "Metal Detector",
+    "aliases": [],
+    "category": "inspection",
+    "business_area": "food_safety",
+    "description": "Detects metallic contaminants.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "x-ray inspection": {
+    "entity_id": "TECH_XRAY",
+    "canonical": "X-Ray Inspection System",
+    "aliases": [
+      "xray inspection"
+    ],
+    "category": "inspection",
+    "business_area": "food_safety",
+    "description": "Foreign body detection system.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "checkweigher": {
+    "entity_id": "TECH_CHECKWEIGHER",
+    "canonical": "Checkweigher",
+    "aliases": [],
+    "category": "inspection",
+    "business_area": "operations",
+    "description": "Automatic weight verification system.",
+    "related_domains": [
+      "operations"
+    ]
+  },
+
+  "cip": {
+    "entity_id": "TECH_CIP",
+    "canonical": "Clean In Place",
+    "aliases": [
+      "clean in place"
+    ],
+    "category": "food_processing",
+    "business_area": "food_safety",
+    "description": "Automated cleaning system.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "sip": {
+    "entity_id": "TECH_SIP",
+    "canonical": "Sterilize In Place",
+    "aliases": [
+      "sterilize in place"
+    ],
+    "category": "food_processing",
+    "business_area": "food_safety",
+    "description": "Automated sterilization process.",
+    "related_domains": [
+      "food_safety"
+    ]
+  },
+
+  "pasteurizer": {
+    "entity_id": "TECH_PASTEURIZER",
+    "canonical": "Pasteurizer",
+    "aliases": [],
+    "category": "food_processing",
+    "business_area": "operations",
+    "description": "Thermal processing equipment.",
+    "related_domains": [
+      "beverage"
+    ]
+  },
+
+  "uht": {
+    "entity_id": "TECH_UHT",
+    "canonical": "Ultra High Temperature Processing",
+    "aliases": [],
+    "category": "food_processing",
+    "business_area": "operations",
+    "description": "Ultra high temperature sterilization technology.",
+    "related_domains": [
+      "beverage"
+    ]
+  },
+
+  "homogenizer": {
+    "entity_id": "TECH_HOMOGENIZER",
+    "canonical": "Homogenizer",
+    "aliases": [],
+    "category": "food_processing",
+    "business_area": "operations",
+    "description": "Particle size reduction equipment.",
+    "related_domains": [
+      "beverage"
+    ]
+  },
+
+  "tetra pak filler": {
+    "entity_id": "TECH_TETRAPAK",
+    "canonical": "Tetra Pak Filling Machine",
+    "aliases": [
+      "tetra pak"
+    ],
+    "category": "packaging",
+    "business_area": "operations",
+    "description": "Aseptic beverage packaging system.",
+    "related_domains": [
+      "beverage"
+    ]
+  },
+
+  "pet blow molding": {
+    "entity_id": "TECH_PET_BLOW",
+    "canonical": "PET Blow Molding Machine",
+    "aliases": [
+      "pet blowing machine"
+    ],
+    "category": "packaging",
+    "business_area": "operations",
+    "description": "PET bottle manufacturing equipment.",
+    "related_domains": [
+      "beverage"
+    ]
+  },
+
+  "reverse osmosis": {
+    "entity_id": "TECH_RO",
+    "canonical": "Reverse Osmosis System",
+    "aliases": [
+      "ro plant"
+    ],
+    "category": "water_treatment",
+    "business_area": "operations",
+    "description": "Industrial water purification technology.",
+    "related_domains": [
+      "water_treatment"
+    ]
+  },
+
+  "water treatment plant": {
+    "entity_id": "TECH_WTP",
+    "canonical": "Water Treatment Plant",
+    "aliases": [
+      "wtp"
+    ],
+    "category": "water_treatment",
+    "business_area": "operations",
+    "description": "Industrial water treatment facility.",
+    "related_domains": [
+      "water_treatment"
+    ]
   }
 }

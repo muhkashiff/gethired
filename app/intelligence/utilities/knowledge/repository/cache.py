@@ -57,3 +57,5 @@ class RepositoryCache:
     skills: dict = field(default_factory=dict)
 
     methodologies: dict = field(default_factory=dict)
+
+    standards: dict = field(default_factory=dict)

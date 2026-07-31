@@ -1,335 +1,1671 @@
 {
   "lead": {
     "entity_id": "ACT_LEAD",
+    "canonical": "Lead",
     "base": "lead",
+    "past": "leaded",
     "gerund": "leading",
-    "category": "leadership"
+    "aliases": [
+      "lead",
+      "leaded"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
   },
-  "leading": {
-    "entity_id": "ACT_LEAD",
-    "base": "lead",
-    "gerund": "leading",
-    "category": "leadership"
-  },
-  "led": {
-    "entity_id": "ACT_LEAD",
-    "base": "lead",
-    "gerund": "leading",
-    "category": "leadership"
-  },
-
   "manage": {
     "entity_id": "ACT_MANAGE",
+    "canonical": "Manage",
     "base": "manage",
+    "past": "managed",
     "gerund": "managing",
-    "category": "management"
+    "aliases": [
+      "manage",
+      "manageed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
   },
-  "managing": {
-    "entity_id": "ACT_MANAGE",
-    "base": "manage",
-    "gerund": "managing",
-    "category": "management"
+  "supervise": {
+    "entity_id": "ACT_SUPERVISE",
+    "canonical": "Supervise",
+    "base": "supervise",
+    "past": "supervised",
+    "gerund": "supervising",
+    "aliases": [
+      "supervise",
+      "superviseed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
   },
-  "managed": {
-    "entity_id": "ACT_MANAGE",
-    "base": "manage",
-    "gerund": "managing",
-    "category": "management"
+  "direct": {
+    "entity_id": "ACT_DIRECT",
+    "canonical": "Direct",
+    "base": "direct",
+    "past": "directed",
+    "gerund": "directing",
+    "aliases": [
+      "direct",
+      "directed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
   },
-
-  "implement": {
-        "entity_id": "ACT_IMPLEMENT",
-        "base": "implement",
-        "gerund": "implementing",
-        "category": "implementation",
-        "aliases": [
-            "implemented",
-            "implements",
-            "implement"
-        ]
-    },
-  "implementing": {
-    "entity_id": "ACT_IMPLEMENT",
-    "base": "implement",
-    "gerund": "implementing",
-    "category": "implementation"
-  },
-  "implemented": {
-    "entity_id": "ACT_IMPLEMENT",
-    "base": "implement",
-    "gerund": "implementing",
-    "category": "implementation"
-  },
-
-  "develop": {
-    "entity_id": "ACT_DEVELOP",
-    "base": "develop",
-    "gerund": "developing",
-    "category": "development"
-  },
-  "developing": {
-    "entity_id": "ACT_DEVELOP",
-    "base": "develop",
-    "gerund": "developing",
-    "category": "development"
-  },
-  "developed": {
-    "entity_id": "ACT_DEVELOP",
-    "base": "develop",
-    "gerund": "developing",
-    "category": "development"
-  },
-
-  "create": {
-    "entity_id": "ACT_CREATE",
-    "base": "create",
-    "gerund": "creating",
-    "category": "creation"
-  },
-  "creating": {
-    "entity_id": "ACT_CREATE",
-    "base": "create",
-    "gerund": "creating",
-    "category": "creation"
-  },
-  "created": {
-    "entity_id": "ACT_CREATE",
-    "base": "create",
-    "gerund": "creating",
-    "category": "creation"
-  },
-
-  "design": {
-    "entity_id": "ACT_DESIGN",
-    "base": "design",
-    "gerund": "designing",
-    "category": "design"
-  },
-  "designing": {
-    "entity_id": "ACT_DESIGN",
-    "base": "design",
-    "gerund": "designing",
-    "category": "design"
-  },
-  "designed": {
-    "entity_id": "ACT_DESIGN",
-    "base": "design",
-    "gerund": "designing",
-    "category": "design"
-  },
-
-  "improve": {
-    "entity_id": "ACT_IMPROVE",
-    "base": "improve",
-    "gerund": "improving",
-    "category": "improvement"
-  },
-  "improving": {
-    "entity_id": "ACT_IMPROVE",
-    "base": "improve",
-    "gerund": "improving",
-    "category": "improvement"
-  },
-  "improved": {
-    "entity_id": "ACT_IMPROVE",
-    "base": "improve",
-    "gerund": "improving",
-    "category": "improvement"
-  },
-
-  "reduce": {
-    "entity_id": "ACT_REDUCE",
-    "base": "reduce",
-    "gerund": "reducing",
-    "category": "optimization"
-  },
-  "reducing": {
-    "entity_id": "ACT_REDUCE",
-    "base": "reduce",
-    "gerund": "reducing",
-    "category": "optimization"
-  },
-  "reduced": {
-    "entity_id": "ACT_REDUCE",
-    "base": "reduce",
-    "gerund": "reducing",
-    "category": "optimization"
-  },
-
-  "increase": {
-    "entity_id": "ACT_INCREASE",
-    "base": "increase",
-    "gerund": "increasing",
-    "category": "optimization"
-  },
-  "increasing": {
-    "entity_id": "ACT_INCREASE",
-    "base": "increase",
-    "gerund": "increasing",
-    "category": "optimization"
-  },
-  "increased": {
-    "entity_id": "ACT_INCREASE",
-    "base": "increase",
-    "gerund": "increasing",
-    "category": "optimization"
-  },
-
-  "optimize": {
-    "entity_id": "ACT_OPTIMIZE",
-    "base": "optimize",
-    "gerund": "optimizing",
-    "category": "optimization"
-  },
-  "optimizing": {
-    "entity_id": "ACT_OPTIMIZE",
-    "base": "optimize",
-    "gerund": "optimizing",
-    "category": "optimization"
-  },
-  "optimized": {
-    "entity_id": "ACT_OPTIMIZE",
-    "base": "optimize",
-    "gerund": "optimizing",
-    "category": "optimization"
-  },
-
-  "achieve": {
-    "entity_id": "ACT_ACHIEVE",
-    "base": "achieve",
-    "gerund": "achieving",
-    "category": "achievement"
-  },
-  "achieving": {
-    "entity_id": "ACT_ACHIEVE",
-    "base": "achieve",
-    "gerund": "achieving",
-    "category": "achievement"
-  },
-  "achieved": {
-    "entity_id": "ACT_ACHIEVE",
-    "base": "achieve",
-    "gerund": "achieving",
-    "category": "achievement"
-  },
-
-  "certify": {
-    "entity_id": "ACT_CERTIFY",
-    "base": "certify",
-    "gerund": "certifying",
-    "category": "certification"
-  },
-  "certifying": {
-    "entity_id": "ACT_CERTIFY",
-    "base": "certify",
-    "gerund": "certifying",
-    "category": "certification"
-  },
-  "certified": {
-    "entity_id": "ACT_CERTIFY",
-    "base": "certify",
-    "gerund": "certifying",
-    "category": "certification"
-  },
-
-  "train": {
-    "entity_id": "ACT_TRAIN",
-    "base": "train",
-    "gerund": "training",
-    "category": "people_development"
-  },
-  "training": {
-    "entity_id": "ACT_TRAIN",
-    "base": "train",
-    "gerund": "training",
-    "category": "people_development"
-  },
-  "trained": {
-    "entity_id": "ACT_TRAIN",
-    "base": "train",
-    "gerund": "training",
-    "category": "people_development"
-  },
-
-  "coach": {
-    "entity_id": "ACT_COACH",
-    "base": "coach",
-    "gerund": "coaching",
-    "category": "people_development"
-  },
-  "coaching": {
-    "entity_id": "ACT_COACH",
-    "base": "coach",
-    "gerund": "coaching",
-    "category": "people_development"
-  },
-  "coached": {
-    "entity_id": "ACT_COACH",
-    "base": "coach",
-    "gerund": "coaching",
-    "category": "people_development"
-  },
-
   "mentor": {
     "entity_id": "ACT_MENTOR",
+    "canonical": "Mentor",
     "base": "mentor",
+    "past": "mentored",
     "gerund": "mentoring",
-    "category": "people_development"
+    "aliases": [
+      "mentor",
+      "mentored"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
   },
-  "mentoring": {
-    "entity_id": "ACT_MENTOR",
-    "base": "mentor",
-    "gerund": "mentoring",
-    "category": "people_development"
+  "coach": {
+    "entity_id": "ACT_COACH",
+    "canonical": "Coach",
+    "base": "coach",
+    "past": "coached",
+    "gerund": "coaching",
+    "aliases": [
+      "coach",
+      "coached"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
   },
-  "mentored": {
-    "entity_id": "ACT_MENTOR",
-    "base": "mentor",
-    "gerund": "mentoring",
-    "category": "people_development"
+  "guide": {
+    "entity_id": "ACT_GUIDE",
+    "canonical": "Guide",
+    "base": "guide",
+    "past": "guided",
+    "gerund": "guiding",
+    "aliases": [
+      "guide",
+      "guideed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "coordinate": {
+    "entity_id": "ACT_COORDINATE",
+    "canonical": "Coordinate",
+    "base": "coordinate",
+    "past": "coordinated",
+    "gerund": "coordinating",
+    "aliases": [
+      "coordinate",
+      "coordinateed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "delegate": {
+    "entity_id": "ACT_DELEGATE",
+    "canonical": "Delegate",
+    "base": "delegate",
+    "past": "delegated",
+    "gerund": "delegating",
+    "aliases": [
+      "delegate",
+      "delegateed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "inspire": {
+    "entity_id": "ACT_INSPIRE",
+    "canonical": "Inspire",
+    "base": "inspire",
+    "past": "inspired",
+    "gerund": "inspiring",
+    "aliases": [
+      "inspire",
+      "inspireed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "organize": {
+    "entity_id": "ACT_ORGANIZE",
+    "canonical": "Organize",
+    "base": "organize",
+    "past": "organized",
+    "gerund": "organizing",
+    "aliases": [
+      "organize",
+      "organizeed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "plan": {
+    "entity_id": "ACT_PLAN",
+    "canonical": "Plan",
+    "base": "plan",
+    "past": "planed",
+    "gerund": "planing",
+    "aliases": [
+      "plan",
+      "planed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "schedule": {
+    "entity_id": "ACT_SCHEDULE",
+    "canonical": "Schedule",
+    "base": "schedule",
+    "past": "scheduled",
+    "gerund": "scheduling",
+    "aliases": [
+      "schedule",
+      "scheduleed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "control": {
+    "entity_id": "ACT_CONTROL",
+    "canonical": "Control",
+    "base": "control",
+    "past": "controled",
+    "gerund": "controling",
+    "aliases": [
+      "control",
+      "controled"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "administer": {
+    "entity_id": "ACT_ADMINISTER",
+    "canonical": "Administer",
+    "base": "administer",
+    "past": "administered",
+    "gerund": "administering",
+    "aliases": [
+      "administer",
+      "administered"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "oversee": {
+    "entity_id": "ACT_OVERSEE",
+    "canonical": "Oversee",
+    "base": "oversee",
+    "past": "overseed",
+    "gerund": "overseing",
+    "aliases": [
+      "oversee",
+      "overseeed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "facilitate": {
+    "entity_id": "ACT_FACILITATE",
+    "canonical": "Facilitate",
+    "base": "facilitate",
+    "past": "facilitated",
+    "gerund": "facilitating",
+    "aliases": [
+      "facilitate",
+      "facilitateed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "govern": {
+    "entity_id": "ACT_GOVERN",
+    "canonical": "Govern",
+    "base": "govern",
+    "past": "governed",
+    "gerund": "governing",
+    "aliases": [
+      "govern",
+      "governed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "chair": {
+    "entity_id": "ACT_CHAIR",
+    "canonical": "Chair",
+    "base": "chair",
+    "past": "chaired",
+    "gerund": "chairing",
+    "aliases": [
+      "chair",
+      "chaired"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "mobilize": {
+    "entity_id": "ACT_MOBILIZE",
+    "canonical": "Mobilize",
+    "base": "mobilize",
+    "past": "mobilized",
+    "gerund": "mobilizing",
+    "aliases": [
+      "mobilize",
+      "mobilizeed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "assign": {
+    "entity_id": "ACT_ASSIGN",
+    "canonical": "Assign",
+    "base": "assign",
+    "past": "assigned",
+    "gerund": "assigning",
+    "aliases": [
+      "assign",
+      "assigned"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "monitor": {
+    "entity_id": "ACT_MONITOR",
+    "canonical": "Monitor",
+    "base": "monitor",
+    "past": "monitored",
+    "gerund": "monitoring",
+    "aliases": [
+      "monitor",
+      "monitored"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "support": {
+    "entity_id": "ACT_SUPPORT",
+    "canonical": "Support",
+    "base": "support",
+    "past": "supported",
+    "gerund": "supporting",
+    "aliases": [
+      "support",
+      "supported"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "execute": {
+    "entity_id": "ACT_EXECUTE",
+    "canonical": "Execute",
+    "base": "execute",
+    "past": "executed",
+    "gerund": "executing",
+    "aliases": [
+      "execute",
+      "executeed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "perform": {
+    "entity_id": "ACT_PERFORM",
+    "canonical": "Perform",
+    "base": "perform",
+    "past": "performed",
+    "gerund": "performing",
+    "aliases": [
+      "perform",
+      "performed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "develop": {
+    "entity_id": "ACT_DEVELOP",
+    "canonical": "Develop",
+    "base": "develop",
+    "past": "developed",
+    "gerund": "developing",
+    "aliases": [
+      "develop",
+      "developed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "create": {
+    "entity_id": "ACT_CREATE",
+    "canonical": "Create",
+    "base": "create",
+    "past": "created",
+    "gerund": "creating",
+    "aliases": [
+      "create",
+      "createed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "design": {
+    "entity_id": "ACT_DESIGN",
+    "canonical": "Design",
+    "base": "design",
+    "past": "designed",
+    "gerund": "designing",
+    "aliases": [
+      "design",
+      "designed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "implement": {
+    "entity_id": "ACT_IMPLEMENT",
+    "canonical": "Implement",
+    "base": "implement",
+    "past": "implemented",
+    "gerund": "implementing",
+    "aliases": [
+      "implement",
+      "implemented"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "establish": {
+    "entity_id": "ACT_ESTABLISH",
+    "canonical": "Establish",
+    "base": "establish",
+    "past": "established",
+    "gerund": "establishing",
+    "aliases": [
+      "establish",
+      "established"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "improve": {
+    "entity_id": "ACT_IMPROVE",
+    "canonical": "Improve",
+    "base": "improve",
+    "past": "improved",
+    "gerund": "improving",
+    "aliases": [
+      "improve",
+      "improveed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "optimize": {
+    "entity_id": "ACT_OPTIMIZE",
+    "canonical": "Optimize",
+    "base": "optimize",
+    "past": "optimized",
+    "gerund": "optimizing",
+    "aliases": [
+      "optimize",
+      "optimizeed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "reduce": {
+    "entity_id": "ACT_REDUCE",
+    "canonical": "Reduce",
+    "base": "reduce",
+    "past": "reduced",
+    "gerund": "reducing",
+    "aliases": [
+      "reduce",
+      "reduceed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "increase": {
+    "entity_id": "ACT_INCREASE",
+    "canonical": "Increase",
+    "base": "increase",
+    "past": "increased",
+    "gerund": "increasing",
+    "aliases": [
+      "increase",
+      "increaseed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "audit": {
+    "entity_id": "ACT_AUDIT",
+    "canonical": "Audit",
+    "base": "audit",
+    "past": "audited",
+    "gerund": "auditing",
+    "aliases": [
+      "audit",
+      "audited"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "inspect": {
+    "entity_id": "ACT_INSPECT",
+    "canonical": "Inspect",
+    "base": "inspect",
+    "past": "inspected",
+    "gerund": "inspecting",
+    "aliases": [
+      "inspect",
+      "inspected"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "verify": {
+    "entity_id": "ACT_VERIFY",
+    "canonical": "Verify",
+    "base": "verify",
+    "past": "verifyed",
+    "gerund": "verifying",
+    "aliases": [
+      "verify",
+      "verifyed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "validate": {
+    "entity_id": "ACT_VALIDATE",
+    "canonical": "Validate",
+    "base": "validate",
+    "past": "validated",
+    "gerund": "validating",
+    "aliases": [
+      "validate",
+      "validateed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "test": {
+    "entity_id": "ACT_TEST",
+    "canonical": "Test",
+    "base": "test",
+    "past": "tested",
+    "gerund": "testing",
+    "aliases": [
+      "test",
+      "tested"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "measure": {
+    "entity_id": "ACT_MEASURE",
+    "canonical": "Measure",
+    "base": "measure",
+    "past": "measured",
+    "gerund": "measuring",
+    "aliases": [
+      "measure",
+      "measureed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "analyze": {
+    "entity_id": "ACT_ANALYZE",
+    "canonical": "Analyze",
+    "base": "analyze",
+    "past": "analyzed",
+    "gerund": "analyzing",
+    "aliases": [
+      "analyze",
+      "analyzeed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "evaluate": {
+    "entity_id": "ACT_EVALUATE",
+    "canonical": "Evaluate",
+    "base": "evaluate",
+    "past": "evaluated",
+    "gerund": "evaluating",
+    "aliases": [
+      "evaluate",
+      "evaluateed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "review": {
+    "entity_id": "ACT_REVIEW",
+    "canonical": "Review",
+    "base": "review",
+    "past": "reviewed",
+    "gerund": "reviewing",
+    "aliases": [
+      "review",
+      "reviewed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "investigate": {
+    "entity_id": "ACT_INVESTIGATE",
+    "canonical": "Investigate",
+    "base": "investigate",
+    "past": "investigated",
+    "gerund": "investigating",
+    "aliases": [
+      "investigate",
+      "investigateed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "resolve": {
+    "entity_id": "ACT_RESOLVE",
+    "canonical": "Resolve",
+    "base": "resolve",
+    "past": "resolved",
+    "gerund": "resolving",
+    "aliases": [
+      "resolve",
+      "resolveed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "correct": {
+    "entity_id": "ACT_CORRECT",
+    "canonical": "Correct",
+    "base": "correct",
+    "past": "corrected",
+    "gerund": "correcting",
+    "aliases": [
+      "correct",
+      "corrected"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "prevent": {
+    "entity_id": "ACT_PREVENT",
+    "canonical": "Prevent",
+    "base": "prevent",
+    "past": "prevented",
+    "gerund": "preventing",
+    "aliases": [
+      "prevent",
+      "prevented"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "document": {
+    "entity_id": "ACT_DOCUMENT",
+    "canonical": "Document",
+    "base": "document",
+    "past": "documented",
+    "gerund": "documenting",
+    "aliases": [
+      "document",
+      "documented"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "standardize": {
+    "entity_id": "ACT_STANDARDIZE",
+    "canonical": "Standardize",
+    "base": "standardize",
+    "past": "standardized",
+    "gerund": "standardizing",
+    "aliases": [
+      "standardize",
+      "standardizeed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "certify": {
+    "entity_id": "ACT_CERTIFY",
+    "canonical": "Certify",
+    "base": "certify",
+    "past": "certifyed",
+    "gerund": "certifying",
+    "aliases": [
+      "certify",
+      "certifyed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "train": {
+    "entity_id": "ACT_TRAIN",
+    "canonical": "Train",
+    "base": "train",
+    "past": "trained",
+    "gerund": "training",
+    "aliases": [
+      "train",
+      "trained"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "calibrate": {
+    "entity_id": "ACT_CALIBRATE",
+    "canonical": "Calibrate",
+    "base": "calibrate",
+    "past": "calibrated",
+    "gerund": "calibrating",
+    "aliases": [
+      "calibrate",
+      "calibrateed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "sanitize": {
+    "entity_id": "ACT_SANITIZE",
+    "canonical": "Sanitize",
+    "base": "sanitize",
+    "past": "sanitized",
+    "gerund": "sanitizing",
+    "aliases": [
+      "sanitize",
+      "sanitizeed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "clean": {
+    "entity_id": "ACT_CLEAN",
+    "canonical": "Clean",
+    "base": "clean",
+    "past": "cleaned",
+    "gerund": "cleaning",
+    "aliases": [
+      "clean",
+      "cleaned"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  
+  "control_process": {
+    "entity_id": "ACT_CONTROL_PROCESS",
+    "canonical": "Control",
+    "base": "control",
+    "past": "controled",
+    "gerund": "controling",
+    "aliases": [
+      "control",
+      "controled"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "approve": {
+    "entity_id": "ACT_APPROVE",
+    "canonical": "Approve",
+    "base": "approve",
+    "past": "approved",
+    "gerund": "approving",
+    "aliases": [
+      "approve",
+      "approveed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "release": {
+    "entity_id": "ACT_RELEASE",
+    "canonical": "Release",
+    "base": "release",
+    "past": "released",
+    "gerund": "releasing",
+    "aliases": [
+      "release",
+      "releaseed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "trace": {
+    "entity_id": "ACT_TRACE",
+    "canonical": "Trace",
+    "base": "trace",
+    "past": "traced",
+    "gerund": "tracing",
+    "aliases": [
+      "trace",
+      "traceed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  "comply": {
+    "entity_id": "ACT_COMPLY",
+    "canonical": "Comply",
+    "base": "comply",
+    "past": "complyed",
+    "gerund": "complying",
+    "aliases": [
+      "comply",
+      "complyed"
+    ],
+    "category": "Quality",
+    "business_area": "Quality",
+    "impact_weight": 1.0
+  },
+  
+  "manufacture": {
+    "entity_id": "ACT_MANUFACTURE",
+    "canonical": "Manufacture",
+    "base": "manufacture",
+    "past": "manufactured",
+    "gerund": "manufacturing",
+    "aliases": [
+      "manufacture",
+      "manufactureed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "produce": {
+    "entity_id": "ACT_PRODUCE",
+    "canonical": "Produce",
+    "base": "produce",
+    "past": "produced",
+    "gerund": "producing",
+    "aliases": [
+      "produce",
+      "produceed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "assemble": {
+    "entity_id": "ACT_ASSEMBLE",
+    "canonical": "Assemble",
+    "base": "assemble",
+    "past": "assembled",
+    "gerund": "assembling",
+    "aliases": [
+      "assemble",
+      "assembleed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "blend": {
+    "entity_id": "ACT_BLEND",
+    "canonical": "Blend",
+    "base": "blend",
+    "past": "blended",
+    "gerund": "blending",
+    "aliases": [
+      "blend",
+      "blended"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "mix": {
+    "entity_id": "ACT_MIX",
+    "canonical": "Mix",
+    "base": "mix",
+    "past": "mixed",
+    "gerund": "mixing",
+    "aliases": [
+      "mix",
+      "mixed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "fill": {
+    "entity_id": "ACT_FILL",
+    "canonical": "Fill",
+    "base": "fill",
+    "past": "filled",
+    "gerund": "filling",
+    "aliases": [
+      "fill",
+      "filled"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "package": {
+    "entity_id": "ACT_PACKAGE",
+    "canonical": "Package",
+    "base": "package",
+    "past": "packaged",
+    "gerund": "packaging",
+    "aliases": [
+      "package",
+      "packageed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "label": {
+    "entity_id": "ACT_LABEL",
+    "canonical": "Label",
+    "base": "label",
+    "past": "labeled",
+    "gerund": "labeling",
+    "aliases": [
+      "label",
+      "labeled"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "store": {
+    "entity_id": "ACT_STORE",
+    "canonical": "Store",
+    "base": "store",
+    "past": "stored",
+    "gerund": "storing",
+    "aliases": [
+      "store",
+      "storeed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "transport": {
+    "entity_id": "ACT_TRANSPORT",
+    "canonical": "Transport",
+    "base": "transport",
+    "past": "transported",
+    "gerund": "transporting",
+    "aliases": [
+      "transport",
+      "transported"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
   },
   "maintain": {
     "entity_id": "ACT_MAINTAIN",
+    "canonical": "Maintain",
     "base": "maintain",
+    "past": "maintained",
     "gerund": "maintaining",
-    "category": "sustainment"
+    "aliases": [
+      "maintain",
+      "maintained"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
   },
-  "maintained": {
-    "entity_id": "ACT_MAINTAIN",
-    "base": "maintain",
-    "gerund": "maintaining",
-    "category": "sustainment"
+  "repair": {
+    "entity_id": "ACT_REPAIR",
+    "canonical": "Repair",
+    "base": "repair",
+    "past": "repaired",
+    "gerund": "repairing",
+    "aliases": [
+      "repair",
+      "repaired"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
   },
-  "maintaining": {
-    "entity_id": "ACT_MAINTAIN",
-    "base": "maintain",
-    "gerund": "maintaining",
-    "category": "sustainment"
+  "install": {
+    "entity_id": "ACT_INSTALL",
+    "canonical": "Install",
+    "base": "install",
+    "past": "installed",
+    "gerund": "installing",
+    "aliases": [
+      "install",
+      "installed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
   },
-
-  "establish": {
-    "entity_id": "ACT_ESTABLISH",
-    "base": "establish",
-    "gerund": "establishing",
-    "category": "establishment"
+  "commission": {
+    "entity_id": "ACT_COMMISSION",
+    "canonical": "Commission",
+    "base": "commission",
+    "past": "commissioned",
+    "gerund": "commissioning",
+    "aliases": [
+      "commission",
+      "commissioned"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
   },
-  "established": {
-    "entity_id": "ACT_ESTABLISH",
-    "base": "establish",
-    "gerund": "establishing",
-    "category": "establishment"
+  "operate": {
+    "entity_id": "ACT_OPERATE",
+    "canonical": "Operate",
+    "base": "operate",
+    "past": "operated",
+    "gerund": "operating",
+    "aliases": [
+      "operate",
+      "operateed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
   },
-  "establishing": {
-    "entity_id": "ACT_ESTABLISH",
-    "base": "establish",
-    "gerund": "establishing",
-    "category": "establishment"
+  "startup": {
+    "entity_id": "ACT_STARTUP",
+    "canonical": "Startup",
+    "base": "startup",
+    "past": "startuped",
+    "gerund": "startuping",
+    "aliases": [
+      "startup",
+      "startuped"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
   },
-  "performed": {
-    "entity_id": "ACT_PERFORM",
-    "base": "perform",
-    "gerund": "performing",
-    "category": "performance"
-  }
+  "shutdown": {
+    "entity_id": "ACT_SHUTDOWN",
+    "canonical": "Shutdown",
+    "base": "shutdown",
+    "past": "shutdowned",
+    "gerund": "shutdowning",
+    "aliases": [
+      "shutdown",
+      "shutdowned"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "troubleshoot": {
+    "entity_id": "ACT_TROUBLESHOOT",
+    "canonical": "Troubleshoot",
+    "base": "troubleshoot",
+    "past": "troubleshooted",
+    "gerund": "troubleshooting",
+    "aliases": [
+      "troubleshoot",
+      "troubleshooted"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "upgrade": {
+    "entity_id": "ACT_UPGRADE",
+    "canonical": "Upgrade",
+    "base": "upgrade",
+    "past": "upgraded",
+    "gerund": "upgrading",
+    "aliases": [
+      "upgrade",
+      "upgradeed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "automate": {
+    "entity_id": "ACT_AUTOMATE",
+    "canonical": "Automate",
+    "base": "automate",
+    "past": "automated",
+    "gerund": "automating",
+    "aliases": [
+      "automate",
+      "automateed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "forecast": {
+    "entity_id": "ACT_FORECAST",
+    "canonical": "Forecast",
+    "base": "forecast",
+    "past": "forecasted",
+    "gerund": "forecasting",
+    "aliases": [
+      "forecast",
+      "forecasted"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "procure": {
+    "entity_id": "ACT_PROCURE",
+    "canonical": "Procure",
+    "base": "procure",
+    "past": "procured",
+    "gerund": "procuring",
+    "aliases": [
+      "procure",
+      "procureed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "purchase": {
+    "entity_id": "ACT_PURCHASE",
+    "canonical": "Purchase",
+    "base": "purchase",
+    "past": "purchased",
+    "gerund": "purchasing",
+    "aliases": [
+      "purchase",
+      "purchaseed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "receive": {
+    "entity_id": "ACT_RECEIVE",
+    "canonical": "Receive",
+    "base": "receive",
+    "past": "received",
+    "gerund": "receiving",
+    "aliases": [
+      "receive",
+      "receiveed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "dispatch": {
+    "entity_id": "ACT_DISPATCH",
+    "canonical": "Dispatch",
+    "base": "dispatch",
+    "past": "dispatched",
+    "gerund": "dispatching",
+    "aliases": [
+      "dispatch",
+      "dispatched"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "ship": {
+    "entity_id": "ACT_SHIP",
+    "canonical": "Ship",
+    "base": "ship",
+    "past": "shiped",
+    "gerund": "shiping",
+    "aliases": [
+      "ship",
+      "shiped"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "inventory": {
+    "entity_id": "ACT_INVENTORY",
+    "canonical": "Inventory",
+    "base": "inventory",
+    "past": "inventoryed",
+    "gerund": "inventorying",
+    "aliases": [
+      "inventory",
+      "inventoryed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "reconcile": {
+    "entity_id": "ACT_RECONCILE",
+    "canonical": "Reconcile",
+    "base": "reconcile",
+    "past": "reconciled",
+    "gerund": "reconciling",
+    "aliases": [
+      "reconcile",
+      "reconcileed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "count": {
+    "entity_id": "ACT_COUNT",
+    "canonical": "Count",
+    "base": "count",
+    "past": "counted",
+    "gerund": "counting",
+    "aliases": [
+      "count",
+      "counted"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
+  "cycle": {
+    "entity_id": "ACT_CYCLE",
+    "canonical": "Cycle",
+    "base": "cycle",
+    "past": "cycled",
+    "gerund": "cycling",
+    "aliases": [
+      "cycle",
+      "cycleed"
+    ],
+    "category": "Manufacturing",
+    "business_area": "Manufacturing",
+    "impact_weight": 1.0
+  },
   
+  "budget": {
+    "entity_id": "ACT_BUDGET",
+    "canonical": "Budget",
+    "base": "budget",
+    "past": "budgeted",
+    "gerund": "budgeting",
+    "aliases": [
+      "budget",
+      "budgeted"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "forecast_finance": {
+    "entity_id": "ACT_FORECAST_FINANCE",
+    "canonical": "Forecast",
+    "base": "forecast",
+    "past": "forecasted",
+    "gerund": "forecasting",
+    "aliases": [
+      "forecast",
+      "forecasted"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "negotiate": {
+    "entity_id": "ACT_NEGOTIATE",
+    "canonical": "Negotiate",
+    "base": "negotiate",
+    "past": "negotiated",
+    "gerund": "negotiating",
+    "aliases": [
+      "negotiate",
+      "negotiateed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "sell": {
+    "entity_id": "ACT_SELL",
+    "canonical": "Sell",
+    "base": "sell",
+    "past": "selled",
+    "gerund": "selling",
+    "aliases": [
+      "sell",
+      "selled"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "market": {
+    "entity_id": "ACT_MARKET",
+    "canonical": "Market",
+    "base": "market",
+    "past": "marketed",
+    "gerund": "marketing",
+    "aliases": [
+      "market",
+      "marketed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "promote": {
+    "entity_id": "ACT_PROMOTE",
+    "canonical": "Promote",
+    "base": "promote",
+    "past": "promoted",
+    "gerund": "promoting",
+    "aliases": [
+      "promote",
+      "promoteed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "communicate": {
+    "entity_id": "ACT_COMMUNICATE",
+    "canonical": "Communicate",
+    "base": "communicate",
+    "past": "communicated",
+    "gerund": "communicating",
+    "aliases": [
+      "communicate",
+      "communicateed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "present": {
+    "entity_id": "ACT_PRESENT",
+    "canonical": "Present",
+    "base": "present",
+    "past": "presented",
+    "gerund": "presenting",
+    "aliases": [
+      "present",
+      "presented"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "report": {
+    "entity_id": "ACT_REPORT",
+    "canonical": "Report",
+    "base": "report",
+    "past": "reported",
+    "gerund": "reporting",
+    "aliases": [
+      "report",
+      "reported"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "collaborate": {
+    "entity_id": "ACT_COLLABORATE",
+    "canonical": "Collaborate",
+    "base": "collaborate",
+    "past": "collaborated",
+    "gerund": "collaborating",
+    "aliases": [
+      "collaborate",
+      "collaborateed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "innovate": {
+    "entity_id": "ACT_INNOVATE",
+    "canonical": "Innovate",
+    "base": "innovate",
+    "past": "innovated",
+    "gerund": "innovating",
+    "aliases": [
+      "innovate",
+      "innovateed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "benchmark": {
+    "entity_id": "ACT_BENCHMARK",
+    "canonical": "Benchmark",
+    "base": "benchmark",
+    "past": "benchmarked",
+    "gerund": "benchmarking",
+    "aliases": [
+      "benchmark",
+      "benchmarked"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "strategize": {
+    "entity_id": "ACT_STRATEGIZE",
+    "canonical": "Strategize",
+    "base": "strategize",
+    "past": "strategized",
+    "gerund": "strategizing",
+    "aliases": [
+      "strategize",
+      "strategizeed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "consult": {
+    "entity_id": "ACT_CONSULT",
+    "canonical": "Consult",
+    "base": "consult",
+    "past": "consulted",
+    "gerund": "consulting",
+    "aliases": [
+      "consult",
+      "consulted"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "advise": {
+    "entity_id": "ACT_ADVISE",
+    "canonical": "Advise",
+    "base": "advise",
+    "past": "advised",
+    "gerund": "advising",
+    "aliases": [
+      "advise",
+      "adviseed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "recruit": {
+    "entity_id": "ACT_RECRUIT",
+    "canonical": "Recruit",
+    "base": "recruit",
+    "past": "recruited",
+    "gerund": "recruiting",
+    "aliases": [
+      "recruit",
+      "recruited"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "hire": {
+    "entity_id": "ACT_HIRE",
+    "canonical": "Hire",
+    "base": "hire",
+    "past": "hired",
+    "gerund": "hiring",
+    "aliases": [
+      "hire",
+      "hireed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "onboard": {
+    "entity_id": "ACT_ONBOARD",
+    "canonical": "Onboard",
+    "base": "onboard",
+    "past": "onboarded",
+    "gerund": "onboarding",
+    "aliases": [
+      "onboard",
+      "onboarded"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "retain": {
+    "entity_id": "ACT_RETAIN",
+    "canonical": "Retain",
+    "base": "retain",
+    "past": "retained",
+    "gerund": "retaining",
+    "aliases": [
+      "retain",
+      "retained"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "engage": {
+    "entity_id": "ACT_ENGAGE",
+    "canonical": "Engage",
+    "base": "engage",
+    "past": "engaged",
+    "gerund": "engaging",
+    "aliases": [
+      "engage",
+      "engageed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "serve": {
+    "entity_id": "ACT_SERVE",
+    "canonical": "Serve",
+    "base": "serve",
+    "past": "served",
+    "gerund": "serving",
+    "aliases": [
+      "serve",
+      "serveed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "respond": {
+    "entity_id": "ACT_RESPOND",
+    "canonical": "Respond",
+    "base": "respond",
+    "past": "responded",
+    "gerund": "responding",
+    "aliases": [
+      "respond",
+      "responded"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "escalate": {
+    "entity_id": "ACT_ESCALATE",
+    "canonical": "Escalate",
+    "base": "escalate",
+    "past": "escalated",
+    "gerund": "escalating",
+    "aliases": [
+      "escalate",
+      "escalateed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "prioritize": {
+    "entity_id": "ACT_PRIORITIZE",
+    "canonical": "Prioritize",
+    "base": "prioritize",
+    "past": "prioritized",
+    "gerund": "prioritizing",
+    "aliases": [
+      "prioritize",
+      "prioritizeed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "transform": {
+    "entity_id": "ACT_TRANSFORM",
+    "canonical": "Transform",
+    "base": "transform",
+    "past": "transformed",
+    "gerund": "transforming",
+    "aliases": [
+      "transform",
+      "transformed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "digitize": {
+    "entity_id": "ACT_DIGITIZE",
+    "canonical": "Digitize",
+    "base": "digitize",
+    "past": "digitized",
+    "gerund": "digitizing",
+    "aliases": [
+      "digitize",
+      "digitizeed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "integrate": {
+    "entity_id": "ACT_INTEGRATE",
+    "canonical": "Integrate",
+    "base": "integrate",
+    "past": "integrated",
+    "gerund": "integrating",
+    "aliases": [
+      "integrate",
+      "integrateed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "configure": {
+    "entity_id": "ACT_CONFIGURE",
+    "canonical": "Configure",
+    "base": "configure",
+    "past": "configured",
+    "gerund": "configuring",
+    "aliases": [
+      "configure",
+      "configureed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "secure": {
+    "entity_id": "ACT_SECURE",
+    "canonical": "Secure",
+    "base": "secure",
+    "past": "secured",
+    "gerund": "securing",
+    "aliases": [
+      "secure",
+      "secureed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  },
+  "govern_data": {
+    "entity_id": "ACT_GOVERN_DATA",
+    "canonical": "Govern",
+    "base": "govern",
+    "past": "governed",
+    "gerund": "governing",
+    "aliases": [
+      "govern",
+      "governed"
+    ],
+    "category": "Business",
+    "business_area": "Business",
+    "impact_weight": 1.0
+  }
 }

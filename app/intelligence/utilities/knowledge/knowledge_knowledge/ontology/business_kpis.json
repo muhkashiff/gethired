@@ -1,522 +1,1265 @@
 {
-  "production yield": {
-    "entity_id": "KPI_PRODUCTION_YIELD",
-    "canonical": "Production Yield",
+  "operational excellence": {
+    "entity_id": "BKPI_OPERATIONAL_EXCELLENCE",
+    "canonical": "Operational Excellence",
+    "aliases": ["OE"],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Overall operational performance across manufacturing processes.",
+    "related_metrics": ["Overall Equipment Effectiveness","Production Yield","Downtime","Throughput","Scrap"],
+    "higher_is_better": true,
+    "impact_weight": 1.0
   },
-  "productivity": {
-    "entity_id": "KPI_PRODUCTIVITY",
-    "canonical": "Productivity",
+
+  "manufacturing excellence": {
+    "entity_id": "BKPI_MANUFACTURING_EXCELLENCE",
+    "canonical": "Manufacturing Excellence",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "World-class manufacturing performance.",
+    "related_metrics": ["Production Output","Production Yield","Overall Equipment Effectiveness","Waste"],
+    "higher_is_better": true,
+    "impact_weight": 1.0
   },
-  "efficiency": {
-    "entity_id": "KPI_EFFICIENCY",
-    "canonical": "Efficiency",
+
+  "production efficiency": {
+    "entity_id": "BKPI_PRODUCTION_EFFICIENCY",
+    "canonical": "Production Efficiency",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Efficiency of converting resources into finished products.",
+    "related_metrics": ["Production Yield","Throughput","Capacity Utilization"],
+    "higher_is_better": true,
+    "impact_weight": 0.98
   },
-  "oee": {
-    "entity_id": "KPI_OEE",
-    "canonical": "OEE",
+
+  "production performance": {
+    "entity_id": "BKPI_PRODUCTION_PERFORMANCE",
+    "canonical": "Production Performance",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Overall production performance.",
+    "related_metrics": ["Production Output","Throughput","Production Yield"],
+    "higher_is_better": true,
+    "impact_weight": 0.98
   },
-  "capacity utilization": {
-    "entity_id": "KPI_CAPACITY_UTILIZATION",
-    "canonical": "Capacity Utilization",
+
+  "production reliability": {
+    "entity_id": "BKPI_PRODUCTION_RELIABILITY",
+    "canonical": "Production Reliability",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "Stable production without interruptions.",
+    "related_metrics": ["Downtime","Equipment Availability"],
+    "higher_is_better": true,
+    "impact_weight": 0.95
   },
-  "production waste": {
-    "entity_id": "KPI_PRODUCTION_WASTE",
-    "canonical": "Production Waste",
+
+  "line efficiency": {
+    "entity_id": "BKPI_LINE_EFFICIENCY",
+    "canonical": "Line Efficiency",
+    "aliases": ["Production Line Efficiency"],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": false
+    "description": "Efficiency of production line utilization.",
+    "related_metrics": ["Overall Equipment Effectiveness","Throughput"],
+    "higher_is_better": true,
+    "impact_weight": 0.96
   },
-  "downtime": {
-    "entity_id": "KPI_DOWNTIME",
-    "canonical": "Downtime",
+
+  "asset utilization": {
+    "entity_id": "BKPI_ASSET_UTILIZATION",
+    "canonical": "Asset Utilization",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "hours",
-    "higher_is_better": false
+    "description": "Effective use of manufacturing assets.",
+    "related_metrics": ["Capacity Utilization","Equipment Availability"],
+    "higher_is_better": true,
+    "impact_weight": 0.95
   },
-  "equipment availability": {
-    "entity_id": "KPI_EQUIPMENT_AVAILABILITY",
-    "canonical": "Equipment Availability",
+
+  "capacity optimization": {
+    "entity_id": "BKPI_CAPACITY_OPTIMIZATION",
+    "canonical": "Capacity Optimization",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Optimized use of production capacity.",
+    "related_metrics": ["Capacity Utilization"],
+    "higher_is_better": true,
+    "impact_weight": 0.95
   },
-  "throughput": {
-    "entity_id": "KPI_THROUGHPUT",
-    "canonical": "Throughput",
+
+  "throughput improvement": {
+    "entity_id": "BKPI_THROUGHPUT_IMPROVEMENT",
+    "canonical": "Throughput Improvement",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "Improved production throughput.",
+    "related_metrics": ["Throughput"],
+    "higher_is_better": true,
+    "impact_weight": 0.93
   },
-  "cycle time": {
-    "entity_id": "KPI_CYCLE_TIME",
-    "canonical": "Cycle Time",
+
+  "yield optimization": {
+    "entity_id": "BKPI_YIELD_OPTIMIZATION",
+    "canonical": "Yield Optimization",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "hours",
-    "higher_is_better": true
+    "description": "Optimization of production yield.",
+    "related_metrics": ["Production Yield"],
+    "higher_is_better": true,
+    "impact_weight": 0.97
   },
-  "changeover time": {
-    "entity_id": "KPI_CHANGEOVER_TIME",
-    "canonical": "Changeover Time",
+
+  "waste reduction": {
+    "entity_id": "BKPI_WASTE_REDUCTION",
+    "canonical": "Waste Reduction",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "hours",
-    "higher_is_better": true
+    "description": "Reduction of manufacturing waste.",
+    "related_metrics": ["Waste","Scrap"],
+    "higher_is_better": true,
+    "impact_weight": 0.97
   },
-  "line speed": {
-    "entity_id": "KPI_LINE_SPEED",
-    "canonical": "Line Speed",
+
+  "scrap reduction": {
+    "entity_id": "BKPI_SCRAP_REDUCTION",
+    "canonical": "Scrap Reduction",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "Reduction in manufacturing scrap.",
+    "related_metrics": ["Scrap"],
+    "higher_is_better": true,
+    "impact_weight": 0.95
   },
-  "inventory accuracy": {
-    "entity_id": "KPI_INVENTORY_ACCURACY",
-    "canonical": "Inventory Accuracy",
+
+  "downtime reduction": {
+    "entity_id": "BKPI_DOWNTIME_REDUCTION",
+    "canonical": "Downtime Reduction",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Reduction of equipment downtime.",
+    "related_metrics": ["Downtime"],
+    "higher_is_better": true,
+    "impact_weight": 0.98
   },
-  "inventory": {
-    "entity_id": "KPI_INVENTORY",
-    "canonical": "Inventory",
+
+  "maintenance excellence": {
+    "entity_id": "BKPI_MAINTENANCE_EXCELLENCE",
+    "canonical": "Maintenance Excellence",
+    "aliases": [],
+    "category": "maintenance",
+    "business_area": "operations",
+    "description": "World-class maintenance performance.",
+    "related_metrics": ["Equipment Availability","Downtime"],
+    "higher_is_better": true,
+    "impact_weight": 0.96
+  },
+
+  "equipment reliability": {
+    "entity_id": "BKPI_EQUIPMENT_RELIABILITY",
+    "canonical": "Equipment Reliability",
+    "aliases": [],
+    "category": "maintenance",
+    "business_area": "operations",
+    "description": "Reliable equipment operation.",
+    "related_metrics": ["Equipment Availability","Downtime"],
+    "higher_is_better": true,
+    "impact_weight": 0.96
+  },
+
+  "equipment effectiveness": {
+    "entity_id": "BKPI_EQUIPMENT_EFFECTIVENESS",
+    "canonical": "Equipment Effectiveness",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "Effective utilization of production equipment.",
+    "related_metrics": ["Overall Equipment Effectiveness"],
+    "higher_is_better": true,
+    "impact_weight": 1.0
   },
-  "stock accuracy": {
-    "entity_id": "KPI_STOCK_ACCURACY",
-    "canonical": "Stock Accuracy",
+
+  "production continuity": {
+    "entity_id": "BKPI_PRODUCTION_CONTINUITY",
+    "canonical": "Production Continuity",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Continuous uninterrupted production.",
+    "related_metrics": ["Downtime","Throughput"],
+    "higher_is_better": true,
+    "impact_weight": 0.94
   },
-  "warehouse accuracy": {
-    "entity_id": "KPI_WAREHOUSE_ACCURACY",
-    "canonical": "Warehouse Accuracy",
+
+  "resource utilization": {
+    "entity_id": "BKPI_RESOURCE_UTILIZATION",
+    "canonical": "Resource Utilization",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Efficient utilization of manufacturing resources.",
+    "related_metrics": ["Capacity Utilization","Production Yield"],
+    "higher_is_better": true,
+    "impact_weight": 0.93
   },
-  "on time delivery": {
-    "entity_id": "KPI_ON_TIME_DELIVERY",
-    "canonical": "On Time Delivery",
+
+  "process optimization": {
+    "entity_id": "BKPI_PROCESS_OPTIMIZATION",
+    "canonical": "Process Optimization",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "hours",
-    "higher_is_better": true
+    "description": "Optimization of manufacturing processes.",
+    "related_metrics": ["Production Yield","Throughput","Waste"],
+    "higher_is_better": true,
+    "impact_weight": 0.97
   },
-  "order fulfillment": {
-    "entity_id": "KPI_ORDER_FULFILLMENT",
-    "canonical": "Order Fulfillment",
+
+  "cycle time reduction": {
+    "entity_id": "BKPI_CYCLE_TIME_REDUCTION",
+    "canonical": "Cycle Time Reduction",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "Reduction of production cycle time.",
+    "related_metrics": ["Throughput"],
+    "higher_is_better": true,
+    "impact_weight": 0.92
   },
-  "schedule adherence": {
-    "entity_id": "KPI_SCHEDULE_ADHERENCE",
-    "canonical": "Schedule Adherence",
+
+  "productivity improvement": {
+    "entity_id": "BKPI_PRODUCTIVITY_IMPROVEMENT",
+    "canonical": "Productivity Improvement",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "Improvement in workforce and machine productivity.",
+    "related_metrics": ["Throughput","Production Output"],
+    "higher_is_better": true,
+    "impact_weight": 0.98
   },
-  "forecast accuracy": {
-    "entity_id": "KPI_FORECAST_ACCURACY",
-    "canonical": "Forecast Accuracy",
+
+  "plant performance": {
+    "entity_id": "BKPI_PLANT_PERFORMANCE",
+    "canonical": "Plant Performance",
+    "aliases": [],
     "category": "operations",
     "business_area": "operations",
-    "unit": "%",
-    "higher_is_better": true
+    "description": "Overall plant operational performance.",
+    "related_metrics": ["Overall Equipment Effectiveness","Production Yield","Downtime","Throughput"],
+    "higher_is_better": true,
+    "impact_weight": 1.0
   },
-  "customer complaints": {
-    "entity_id": "KPI_CUSTOMER_COMPLAINTS",
-    "canonical": "Customer Complaints",
+
+  "process stability": {
+    "entity_id": "BKPI_PROCESS_STABILITY",
+    "canonical": "Process Stability",
+    "aliases": [],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Stable manufacturing process.",
+    "related_metrics": ["Production Yield","Downtime"],
+    "higher_is_better": true,
+    "impact_weight": 0.94
+  },
+
+  "manufacturing consistency": {
+    "entity_id": "BKPI_MANUFACTURING_CONSISTENCY",
+    "canonical": "Manufacturing Consistency",
+    "aliases": [],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Consistent manufacturing output.",
+    "related_metrics": ["Production Yield","Production Output"],
+    "higher_is_better": true,
+    "impact_weight": 0.93
+  },
+
+  "asset performance": {
+    "entity_id": "BKPI_ASSET_PERFORMANCE",
+    "canonical": "Asset Performance",
+    "aliases": [],
+    "category": "maintenance",
+    "business_area": "operations",
+    "description": "Performance of production assets.",
+    "related_metrics": ["Equipment Availability","Overall Equipment Effectiveness"],
+    "higher_is_better": true,
+    "impact_weight": 0.95
+  },
+
+  "lean manufacturing": {
+    "entity_id": "BKPI_LEAN_MANUFACTURING",
+    "canonical": "Lean Manufacturing",
+    "aliases": [],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Lean manufacturing implementation.",
+    "related_metrics": ["Waste","Scrap","Production Yield"],
+    "higher_is_better": true,
+    "impact_weight": 0.95
+  },
+
+  "continuous improvement excellence": {
+    "entity_id": "BKPI_CONTINUOUS_IMPROVEMENT",
+    "canonical": "Continuous Improvement",
+    "aliases": ["CI Excellence"],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Continuous improvement maturity.",
+    "related_metrics": ["Production Yield","Waste","Downtime"],
+    "higher_is_better": true,
+    "impact_weight": 1.0
+  },
+
+  "production optimization": {
+    "entity_id": "BKPI_PRODUCTION_OPTIMIZATION",
+    "canonical": "Production Optimization",
+    "aliases": [],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Optimization of production processes.",
+    "related_metrics": ["Production Yield","Throughput","Capacity Utilization"],
+    "higher_is_better": true,
+    "impact_weight": 0.98
+  },
+
+  "manufacturing productivity": {
+    "entity_id": "BKPI_MANUFACTURING_PRODUCTIVITY",
+    "canonical": "Manufacturing Productivity",
+    "aliases": [],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Manufacturing productivity improvement.",
+    "related_metrics": ["Production Output","Throughput"],
+    "higher_is_better": true,
+    "impact_weight": 0.97
+  },
+
+  "world class manufacturing": {
+    "entity_id": "BKPI_WORLD_CLASS_MANUFACTURING",
+    "canonical": "World Class Manufacturing",
+    "aliases": ["WCM"],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Achievement of world-class manufacturing performance.",
+    "related_metrics": ["Overall Equipment Effectiveness","Production Yield","Waste","Downtime","Throughput"],
+    "higher_is_better": true,
+    "impact_weight": 1.0
+  },
+  
+  "first_pass_yield": {
+    "entity_id": "KPI_FIRST_PASS_YIELD",
+    "canonical": "First Pass Yield",
+    "aliases": ["FPY"],
     "category": "quality",
     "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": false
-  },
-  "customer satisfaction": {
-    "entity_id": "KPI_CUSTOMER_SATISFACTION",
-    "canonical": "Customer Satisfaction",
-    "category": "quality",
-    "business_area": "quality",
+    "description": "Percentage of products meeting specifications without rework.",
     "unit": "%",
-    "higher_is_better": true
+    "higher_is_better": true,
+    "impact_weight": 0.99
   },
-  "audit": {
-    "entity_id": "KPI_AUDIT",
-    "canonical": "Audit",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "certification": {
-    "entity_id": "KPI_CERTIFICATION",
-    "canonical": "Certification",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "defect rate": {
-    "entity_id": "KPI_DEFECT_RATE",
-    "canonical": "Defect Rate",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": true
-  },
-  "reject rate": {
-    "entity_id": "KPI_REJECT_RATE",
-    "canonical": "Reject Rate",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": false
-  },
-  "rework rate": {
-    "entity_id": "KPI_REWORK_RATE",
-    "canonical": "Rework Rate",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": false
-  },
-  "right first time": {
+
+  "right_first_time": {
     "entity_id": "KPI_RIGHT_FIRST_TIME",
     "canonical": "Right First Time",
+    "aliases": ["RFT"],
     "category": "quality",
     "business_area": "quality",
-    "unit": "hours",
-    "higher_is_better": true
+    "description": "Products produced correctly on the first attempt.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.98
   },
-  "capa closure": {
+
+  "customer_complaints": {
+    "entity_id": "KPI_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
+    "aliases": [
+      "complaints",
+      "consumer complaints"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Number of customer complaints received.",
+    "unit": "count",
+    "higher_is_better": false,
+    "impact_weight": 0.98
+  },
+
+  "consumer_complaints": {
+    "entity_id": "KPI_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
+    "aliases": [],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Number of consumer complaints.",
+    "unit": "count",
+    "higher_is_better": false,
+    "impact_weight": 0.98
+  },
+
+  "customer_satisfaction": {
+    "entity_id": "KPI_CUSTOMER_SATISFACTION",
+    "canonical": "Customer Satisfaction",
+    "aliases": [
+      "csat"
+    ],
+    "category": "customer",
+    "business_area": "customer",
+    "description": "Overall customer satisfaction score.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.97
+  },
+
+  "customer_rejection_rate": {
+    "entity_id": "KPI_CUSTOMER_REJECTION_RATE",
+    "canonical": "Customer Rejection Rate",
+    "aliases": [],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Rejected deliveries by customers.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.98
+  },
+
+  "supplier_quality_rating": {
+    "entity_id": "KPI_SUPPLIER_QUALITY_RATING",
+    "canonical": "Supplier Quality Rating",
+    "aliases": [],
+    "category": "supplier",
+    "business_area": "supply_chain",
+    "description": "Performance rating of suppliers.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.93
+  },
+
+  "incoming_rejection_rate": {
+    "entity_id": "KPI_INCOMING_REJECTION_RATE",
+    "canonical": "Incoming Material Rejection Rate",
+    "aliases": [
+      "incoming rejection"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Rejected incoming materials.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.94
+  },
+
+  "audit_score": {
+    "entity_id": "KPI_AUDIT_SCORE",
+    "canonical": "Audit Score",
+    "aliases": [
+      "audit result"
+    ],
+    "category": "compliance",
+    "business_area": "quality",
+    "description": "Score achieved during audits.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.99
+  },
+
+  "audit_findings": {
+    "entity_id": "KPI_AUDIT_FINDINGS",
+    "canonical": "Audit Findings",
+    "aliases": [
+      "audit observations"
+    ],
+    "category": "compliance",
+    "business_area": "quality",
+    "description": "Number of audit findings.",
+    "unit": "count",
+    "higher_is_better": false,
+    "impact_weight": 0.97
+  },
+
+  "major_nonconformities": {
+    "entity_id": "KPI_MAJOR_NONCONFORMITIES",
+    "canonical": "Major Nonconformities",
+    "aliases": [
+      "major ncs"
+    ],
+    "category": "compliance",
+    "business_area": "quality",
+    "description": "Major audit nonconformities.",
+    "unit": "count",
+    "higher_is_better": false,
+    "impact_weight": 1.00
+  },
+
+  "minor_nonconformities": {
+    "entity_id": "KPI_MINOR_NONCONFORMITIES",
+    "canonical": "Minor Nonconformities",
+    "aliases": [
+      "minor ncs"
+    ],
+    "category": "compliance",
+    "business_area": "quality",
+    "description": "Minor audit nonconformities.",
+    "unit": "count",
+    "higher_is_better": false,
+    "impact_weight": 0.92
+  },
+
+  "corrective_action_closure_rate": {
     "entity_id": "KPI_CAPA_CLOSURE",
-    "canonical": "CAPA Closure",
+    "canonical": "Corrective Action Closure Rate",
+    "aliases": [
+      "capa closure"
+    ],
     "category": "quality",
     "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "ncr closure": {
-    "entity_id": "KPI_NCR_CLOSURE",
-    "canonical": "NCR Closure",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "supplier quality": {
-    "entity_id": "KPI_SUPPLIER_QUALITY",
-    "canonical": "Supplier Quality",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "complaint closure": {
-    "entity_id": "KPI_COMPLAINT_CLOSURE",
-    "canonical": "Complaint Closure",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "fssc 22000 compliance": {
-    "entity_id": "KPI_FSSC_22000_COMPLIANCE",
-    "canonical": "FSSC 22000 Compliance",
-    "category": "quality",
-    "business_area": "quality",
+    "description": "Percentage of CAPAs closed on time.",
     "unit": "%",
-    "higher_is_better": true
+    "higher_is_better": true,
+    "impact_weight": 0.96
   },
-  "iso 9001 compliance": {
-    "entity_id": "KPI_ISO_9001_COMPLIANCE",
-    "canonical": "ISO 9001 Compliance",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": true
+
+  "food_safety_incidents": {
+    "entity_id": "KPI_FOOD_SAFETY_INCIDENTS",
+    "canonical": "Food Safety Incidents",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Reported food safety incidents.",
+    "unit": "count",
+    "higher_is_better": false,
+    "impact_weight": 1.00
   },
-  "haccp compliance": {
+
+  "product_recall": {
+    "entity_id": "KPI_PRODUCT_RECALL",
+    "canonical": "Product Recall",
+    "aliases": [
+      "recall"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Product recall occurrence.",
+    "unit": "count",
+    "higher_is_better": false,
+    "impact_weight": 1.00
+  },
+
+  "traceability_time": {
+    "entity_id": "KPI_TRACEABILITY_TIME",
+    "canonical": "Traceability Time",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Time required to complete product traceability.",
+    "unit": "minutes",
+    "higher_is_better": false,
+    "impact_weight": 0.95
+  },
+
+  "haccp_compliance": {
     "entity_id": "KPI_HACCP_COMPLIANCE",
     "canonical": "HACCP Compliance",
-    "category": "quality",
-    "business_area": "quality",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Compliance with HACCP system.",
     "unit": "%",
-    "higher_is_better": true
+    "higher_is_better": true,
+    "impact_weight": 0.99
   },
-  "gmp compliance": {
+
+  "gmp_compliance": {
     "entity_id": "KPI_GMP_COMPLIANCE",
     "canonical": "GMP Compliance",
-    "category": "quality",
-    "business_area": "quality",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Compliance with GMP requirements.",
     "unit": "%",
-    "higher_is_better": true
+    "higher_is_better": true,
+    "impact_weight": 0.98
   },
-  "food safety score": {
-    "entity_id": "KPI_FOOD_SAFETY_SCORE",
-    "canonical": "Food Safety Score",
-    "category": "quality",
-    "business_area": "quality",
+
+  "sanitation_compliance": {
+    "entity_id": "KPI_SANITATION_COMPLIANCE",
+    "canonical": "Sanitation Compliance",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Compliance with sanitation procedures.",
     "unit": "%",
-    "higher_is_better": true
+    "higher_is_better": true,
+    "impact_weight": 0.97
   },
-  "quality score": {
-    "entity_id": "KPI_QUALITY_SCORE",
-    "canonical": "Quality Score",
-    "category": "quality",
-    "business_area": "quality",
+
+  "microbiological_compliance": {
+    "entity_id": "KPI_MICROBIOLOGICAL_COMPLIANCE",
+    "canonical": "Microbiological Compliance",
+    "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Percentage of microbiological tests meeting specifications.",
     "unit": "%",
-    "higher_is_better": true
+    "higher_is_better": true,
+    "impact_weight": 0.99
   },
-  "process capability": {
-    "entity_id": "KPI_PROCESS_CAPABILITY",
-    "canonical": "Process Capability",
-    "category": "quality",
-    "business_area": "quality",
+  
+  "net_promoter_score": {
+    "entity_id": "KPI_NPS",
+    "canonical": "Net Promoter Score",
+    "aliases": [
+      "NPS"
+    ],
+    "category": "customer",
+    "business_area": "customer",
+    "description": "Customer loyalty measurement.",
+    "unit": "score",
+    "higher_is_better": true,
+    "impact_weight": 0.95
+  },
+
+  "customer_retention": {
+    "entity_id": "KPI_CUSTOMER_RETENTION",
+    "canonical": "Customer Retention",
+    "aliases": [],
+    "category": "customer",
+    "business_area": "customer",
+    "description": "Percentage of retained customers.",
     "unit": "%",
-    "higher_is_better": true
+    "higher_is_better": true,
+    "impact_weight": 0.94
   },
-  "cpk": {
-    "entity_id": "KPI_CPK",
-    "canonical": "Cpk",
-    "category": "quality",
-    "business_area": "quality",
-    "unit": "%",
-    "higher_is_better": true
+
+  "customer_acquisition": {
+    "entity_id": "KPI_CUSTOMER_ACQUISITION",
+    "canonical": "Customer Acquisition",
+    "aliases": [],
+    "category": "customer",
+    "business_area": "customer",
+    "description": "Number of new customers acquired.",
+    "unit": "customers",
+    "higher_is_better": true,
+    "impact_weight": 0.87
   },
-  "cost": {
-    "entity_id": "KPI_COST",
-    "canonical": "Cost",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": false
-  },
-  "cost savings": {
-    "entity_id": "KPI_COST_SAVINGS",
-    "canonical": "Cost Savings",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": false
-  },
-  "revenue": {
-    "entity_id": "KPI_REVENUE",
-    "canonical": "Revenue",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "profit": {
-    "entity_id": "KPI_PROFIT",
-    "canonical": "Profit",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "gross margin": {
-    "entity_id": "KPI_GROSS_MARGIN",
-    "canonical": "Gross Margin",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "operating margin": {
-    "entity_id": "KPI_OPERATING_MARGIN",
-    "canonical": "Operating Margin",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "budget variance": {
-    "entity_id": "KPI_BUDGET_VARIANCE",
-    "canonical": "Budget Variance",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "cost per unit": {
-    "entity_id": "KPI_COST_PER_UNIT",
-    "canonical": "Cost per Unit",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": false
-  },
-  "roi": {
-    "entity_id": "KPI_ROI",
-    "canonical": "ROI",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "working capital": {
-    "entity_id": "KPI_WORKING_CAPITAL",
-    "canonical": "Working Capital",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "cash flow": {
-    "entity_id": "KPI_CASH_FLOW",
-    "canonical": "Cash Flow",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "ebitda": {
-    "entity_id": "KPI_EBITDA",
-    "canonical": "EBITDA",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "inventory cost": {
-    "entity_id": "KPI_INVENTORY_COST",
-    "canonical": "Inventory Cost",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": false
-  },
-  "procurement savings": {
-    "entity_id": "KPI_PROCUREMENT_SAVINGS",
-    "canonical": "Procurement Savings",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": true
-  },
-  "waste cost": {
-    "entity_id": "KPI_WASTE_COST",
-    "canonical": "Waste Cost",
-    "category": "finance",
-    "business_area": "finance",
-    "unit": "$",
-    "higher_is_better": false
-  },
-  "training": {
-    "entity_id": "KPI_TRAINING",
-    "canonical": "Training",
+
+  "employee_turnover": {
+    "entity_id": "KPI_EMPLOYEE_TURNOVER",
+    "canonical": "Employee Turnover",
+    "aliases": [
+      "Turnover Rate"
+    ],
     "category": "people",
     "business_area": "people",
-    "unit": "count",
-    "higher_is_better": true
+    "description": "Percentage of employees leaving the organization.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.90
   },
-  "employee engagement": {
-    "entity_id": "KPI_EMPLOYEE_ENGAGEMENT",
-    "canonical": "Employee Engagement",
-    "category": "people",
-    "business_area": "people",
-    "unit": "count",
-    "higher_is_better": true
-  },
+
   "absenteeism": {
     "entity_id": "KPI_ABSENTEEISM",
     "canonical": "Absenteeism",
+    "aliases": [],
     "category": "people",
     "business_area": "people",
-    "unit": "count",
-    "higher_is_better": false
+    "description": "Employee absenteeism rate.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.86
   },
-  "turnover": {
-    "entity_id": "KPI_TURNOVER",
-    "canonical": "Turnover",
+
+  "training_completion": {
+    "entity_id": "KPI_TRAINING_COMPLETION",
+    "canonical": "Training Completion",
+    "aliases": [],
     "category": "people",
     "business_area": "people",
-    "unit": "count",
-    "higher_is_better": false
+    "description": "Training completion percentage.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.88
   },
-  "team size": {
-    "entity_id": "KPI_TEAM_SIZE",
-    "canonical": "Team Size",
-    "category": "people",
-    "business_area": "people",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "leadership": {
-    "entity_id": "KPI_LEADERSHIP",
-    "canonical": "Leadership",
-    "category": "people",
-    "business_area": "people",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "coaching": {
-    "entity_id": "KPI_COACHING",
-    "canonical": "Coaching",
-    "category": "people",
-    "business_area": "people",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "mentoring": {
-    "entity_id": "KPI_MENTORING",
-    "canonical": "Mentoring",
-    "category": "people",
-    "business_area": "people",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "safety training": {
-    "entity_id": "KPI_SAFETY_TRAINING",
-    "canonical": "Safety Training",
-    "category": "people",
-    "business_area": "people",
-    "unit": "count",
-    "higher_is_better": true
-  },
-  "competency": {
+
+  "competency_score": {
     "entity_id": "KPI_COMPETENCY",
-    "canonical": "Competency",
+    "canonical": "Competency Score",
+    "aliases": [],
     "category": "people",
     "business_area": "people",
+    "description": "Employee competency assessment score.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.86
+  },
+
+  "safety_incidents": {
+    "entity_id": "KPI_SAFETY_INCIDENTS",
+    "canonical": "Safety Incidents",
+    "aliases": [
+      "Incidents"
+    ],
+    "category": "safety",
+    "business_area": "people",
+    "description": "Total recordable safety incidents.",
     "unit": "count",
-    "higher_is_better": true
+    "higher_is_better": false,
+    "impact_weight": 0.94
+  },
+
+  "lost_time_injury_frequency": {
+    "entity_id": "KPI_LTIFR",
+    "canonical": "Lost Time Injury Frequency Rate",
+    "aliases": [
+      "LTIFR",
+      "LTI Frequency"
+    ],
+    "category": "safety",
+    "business_area": "people",
+    "description": "Lost time injuries per million hours worked.",
+    "unit": "rate",
+    "higher_is_better": false,
+    "impact_weight": 0.96
+  },
+
+  "near_miss_reporting": {
+    "entity_id": "KPI_NEAR_MISS",
+    "canonical": "Near Miss Reporting",
+    "aliases": [],
+    "category": "safety",
+    "business_area": "people",
+    "description": "Near miss reports submitted.",
+    "unit": "count",
+    "higher_is_better": true,
+    "impact_weight": 0.82
+  },
+
+  "energy_consumption": {
+    "entity_id": "KPI_ENERGY",
+    "canonical": "Energy Consumption",
+    "aliases": [],
+    "category": "sustainability",
+    "business_area": "operations",
+    "description": "Energy consumed during production.",
+    "unit": "kWh",
+    "higher_is_better": false,
+    "impact_weight": 0.83
+  },
+
+  "water_consumption": {
+    "entity_id": "KPI_WATER",
+    "canonical": "Water Consumption",
+    "aliases": [],
+    "category": "sustainability",
+    "business_area": "operations",
+    "description": "Water usage.",
+    "unit": "liters",
+    "higher_is_better": false,
+    "impact_weight": 0.84
+  },
+  
+  "gross_profit": {
+    "entity_id": "KPI_GROSS_PROFIT",
+    "canonical": "Gross Profit",
+    "aliases": [],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "Gross profit generated.",
+    "unit": "$",
+    "higher_is_better": true,
+    "impact_weight": 0.98
+  },
+
+  "net_profit": {
+    "entity_id": "KPI_NET_PROFIT",
+    "canonical": "Net Profit",
+    "aliases": [],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "Net profit after expenses.",
+    "unit": "$",
+    "higher_is_better": true,
+    "impact_weight": 1.00
+  },
+
+  "operating_cost": {
+    "entity_id": "KPI_OPERATING_COST",
+    "canonical": "Operating Cost",
+    "aliases": [
+      "Operational Cost"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "Total operating cost.",
+    "unit": "$",
+    "higher_is_better": false,
+    "impact_weight": 0.96
+  },
+
+  "cost_savings": {
+    "entity_id": "KPI_COST_SAVINGS",
+    "canonical": "Cost Savings",
+    "aliases": [],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "Cost reduction achieved.",
+    "unit": "$",
+    "higher_is_better": true,
+    "impact_weight": 0.97
+  },
+
+  "return_on_investment": {
+    "entity_id": "KPI_ROI",
+    "canonical": "Return on Investment",
+    "aliases": [
+      "ROI"
+    ],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "Investment return.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.98
+  },
+
+  "cash_flow": {
+    "entity_id": "KPI_CASH_FLOW",
+    "canonical": "Cash Flow",
+    "aliases": [],
+    "category": "finance",
+    "business_area": "finance",
+    "description": "Business cash flow.",
+    "unit": "$",
+    "higher_is_better": true,
+    "impact_weight": 0.95
+  },
+
+  "forecast_accuracy": {
+    "entity_id": "KPI_FORECAST_ACCURACY",
+    "canonical": "Forecast Accuracy",
+    "aliases": [],
+    "category": "supply_chain",
+    "business_area": "supply_chain",
+    "description": "Demand forecast accuracy.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.90
+  },
+
+  "supplier_otif": {
+    "entity_id": "KPI_SUPPLIER_OTIF",
+    "canonical": "Supplier OTIF",
+    "aliases": [
+      "Supplier On Time In Full"
+    ],
+    "category": "supply_chain",
+    "business_area": "supply_chain",
+    "description": "Supplier delivery performance.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.93
+  },
+
+  "inventory_turnover": {
+    "entity_id": "KPI_INVENTORY_TURNOVER",
+    "canonical": "Inventory Turnover",
+    "aliases": [],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "description": "Inventory turnover ratio.",
+    "unit": "ratio",
+    "higher_is_better": true,
+    "impact_weight": 0.94
+  },
+
+  "inventory_days": {
+    "entity_id": "KPI_DAYS_INVENTORY",
+    "canonical": "Days Inventory Outstanding",
+    "aliases": [
+      "DIO"
+    ],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "description": "Average inventory holding days.",
+    "unit": "days",
+    "higher_is_better": false,
+    "impact_weight": 0.92
+  },
+
+  "stock_accuracy": {
+    "entity_id": "KPI_STOCK_ACCURACY",
+    "canonical": "Stock Accuracy",
+    "aliases": [],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "description": "Inventory record accuracy.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.91
+  },
+
+  "stockout_rate": {
+    "entity_id": "KPI_STOCKOUT_RATE",
+    "canonical": "Stockout Rate",
+    "aliases": [],
+    "category": "inventory",
+    "business_area": "supply_chain",
+    "description": "Frequency of stockouts.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.90
+  },
+
+  "warehouse_utilization": {
+    "entity_id": "KPI_WAREHOUSE_UTILIZATION",
+    "canonical": "Warehouse Utilization",
+    "aliases": [],
+    "category": "warehouse",
+    "business_area": "supply_chain",
+    "description": "Warehouse space utilization.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.87
+  },
+
+  "order_accuracy": {
+    "entity_id": "KPI_ORDER_ACCURACY",
+    "canonical": "Order Accuracy",
+    "aliases": [],
+    "category": "warehouse",
+    "business_area": "supply_chain",
+    "description": "Correct customer orders shipped.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.92
+  },
+
+  "pick_accuracy": {
+    "entity_id": "KPI_PICK_ACCURACY",
+    "canonical": "Picking Accuracy",
+    "aliases": [],
+    "category": "warehouse",
+    "business_area": "supply_chain",
+    "description": "Warehouse picking accuracy.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.89
+  },
+
+  "transport_cost": {
+    "entity_id": "KPI_TRANSPORT_COST",
+    "canonical": "Transportation Cost",
+    "aliases": [],
+    "category": "logistics",
+    "business_area": "supply_chain",
+    "description": "Transportation cost.",
+    "unit": "$",
+    "higher_is_better": false,
+    "impact_weight": 0.90
+  },
+
+  "delivery_lead_time": {
+    "entity_id": "KPI_DELIVERY_LEAD_TIME",
+    "canonical": "Delivery Lead Time",
+    "aliases": [],
+    "category": "logistics",
+    "business_area": "supply_chain",
+    "description": "Customer delivery lead time.",
+    "unit": "days",
+    "higher_is_better": false,
+    "impact_weight": 0.91
+  },
+
+  "fleet_utilization": {
+    "entity_id": "KPI_FLEET_UTILIZATION",
+    "canonical": "Fleet Utilization",
+    "aliases": [],
+    "category": "logistics",
+    "business_area": "supply_chain",
+    "description": "Vehicle utilization.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.86
+  },
+
+  "mean_time_between_failures": {
+    "entity_id": "KPI_MTBF",
+    "canonical": "Mean Time Between Failures",
+    "aliases": [
+      "MTBF"
+    ],
+    "category": "maintenance",
+    "business_area": "operations",
+    "description": "Average operating time between failures.",
+    "unit": "hours",
+    "higher_is_better": true,
+    "impact_weight": 0.94
+  },
+
+  "mean_time_to_repair": {
+    "entity_id": "KPI_MTTR",
+    "canonical": "Mean Time To Repair",
+    "aliases": [
+      "MTTR"
+    ],
+    "category": "maintenance",
+    "business_area": "operations",
+    "description": "Average repair duration.",
+    "unit": "hours",
+    "higher_is_better": false,
+    "impact_weight": 0.93
+  },
+  
+  "carbon_footprint": {
+    "entity_id": "KPI_CARBON_FOOTPRINT",
+    "canonical": "Carbon Footprint",
+    "aliases": ["CO2 Emissions"],
+    "category": "sustainability",
+    "business_area": "sustainability",
+    "description": "Total greenhouse gas emissions.",
+    "unit": "tons CO2e",
+    "higher_is_better": false,
+    "impact_weight": 0.90
+  },
+
+  "energy_efficiency": {
+    "entity_id": "KPI_ENERGY_EFFICIENCY",
+    "canonical": "Energy Efficiency",
+    "aliases": [],
+    "category": "sustainability",
+    "business_area": "operations",
+    "description": "Energy consumed per production unit.",
+    "unit": "kWh/unit",
+    "higher_is_better": false,
+    "impact_weight": 0.88
+  },
+
+  "water_efficiency": {
+    "entity_id": "KPI_WATER_EFFICIENCY",
+    "canonical": "Water Efficiency",
+    "aliases": [],
+    "category": "sustainability",
+    "business_area": "operations",
+    "description": "Water consumed per production unit.",
+    "unit": "L/unit",
+    "higher_is_better": false,
+    "impact_weight": 0.88
+  },
+
+  "waste_recycling_rate": {
+    "entity_id": "KPI_RECYCLING_RATE",
+    "canonical": "Waste Recycling Rate",
+    "aliases": [],
+    "category": "sustainability",
+    "business_area": "operations",
+    "description": "Percentage of waste recycled.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.84
+  },
+
+  "environmental_compliance": {
+    "entity_id": "KPI_ENVIRONMENTAL_COMPLIANCE",
+    "canonical": "Environmental Compliance",
+    "aliases": [],
+    "category": "compliance",
+    "business_area": "environment",
+    "description": "Compliance with environmental regulations.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.94
+  },
+
+  "digitalization_rate": {
+    "entity_id": "KPI_DIGITALIZATION",
+    "canonical": "Digitalization Rate",
+    "aliases": [],
+    "category": "digital",
+    "business_area": "digital_transformation",
+    "description": "Business process digitalization.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.82
+  },
+
+  "automation_rate": {
+    "entity_id": "KPI_AUTOMATION",
+    "canonical": "Automation Rate",
+    "aliases": [],
+    "category": "digital",
+    "business_area": "operations",
+    "description": "Percentage of automated operations.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.86
+  },
+
+  "dashboard_adoption": {
+    "entity_id": "KPI_DASHBOARD_ADOPTION",
+    "canonical": "Dashboard Adoption",
+    "aliases": [],
+    "category": "analytics",
+    "business_area": "business_intelligence",
+    "description": "Business dashboard utilization.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.76
+  },
+
+  "project_completion": {
+    "entity_id": "KPI_PROJECT_COMPLETION",
+    "canonical": "Project Completion",
+    "aliases": [],
+    "category": "project",
+    "business_area": "project_management",
+    "description": "Completed projects.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.88
+  },
+
+  "project_schedule_variance": {
+    "entity_id": "KPI_SCHEDULE_VARIANCE",
+    "canonical": "Schedule Variance",
+    "aliases": [],
+    "category": "project",
+    "business_area": "project_management",
+    "description": "Deviation from project schedule.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.84
+  },
+
+  "project_cost_variance": {
+    "entity_id": "KPI_COST_VARIANCE",
+    "canonical": "Cost Variance",
+    "aliases": [],
+    "category": "project",
+    "business_area": "project_management",
+    "description": "Deviation from project budget.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.86
+  },
+
+  "sales_growth": {
+    "entity_id": "KPI_SALES_GROWTH",
+    "canonical": "Sales Growth",
+    "aliases": [],
+    "category": "sales",
+    "business_area": "sales",
+    "description": "Increase in sales.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.95
+  },
+
+  "market_share": {
+    "entity_id": "KPI_MARKET_SHARE",
+    "canonical": "Market Share",
+    "aliases": [],
+    "category": "sales",
+    "business_area": "sales",
+    "description": "Percentage market share.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.95
+  },
+
+  "store_profitability": {
+    "entity_id": "KPI_STORE_PROFITABILITY",
+    "canonical": "Store Profitability",
+    "aliases": [],
+    "category": "retail",
+    "business_area": "retail",
+    "description": "Retail store profitability.",
+    "unit": "$",
+    "higher_is_better": true,
+    "impact_weight": 0.90
+  },
+
+  "shrinkage": {
+    "entity_id": "KPI_SHRINKAGE",
+    "canonical": "Inventory Shrinkage",
+    "aliases": [],
+    "category": "retail",
+    "business_area": "retail",
+    "description": "Inventory losses.",
+    "unit": "%",
+    "higher_is_better": false,
+    "impact_weight": 0.88
+  },
+
+  "balanced_scorecard": {
+    "entity_id": "KPI_BALANCED_SCORECARD",
+    "canonical": "Balanced Scorecard",
+    "aliases": [],
+    "category": "strategy",
+    "business_area": "executive",
+    "description": "Overall strategic performance.",
+    "unit": "score",
+    "higher_is_better": true,
+    "impact_weight": 1.00
+  },
+
+  "business_performance": {
+    "entity_id": "KPI_BUSINESS_PERFORMANCE",
+    "canonical": "Business Performance",
+    "aliases": [],
+    "category": "strategy",
+    "business_area": "executive",
+    "description": "Overall business performance.",
+    "unit": "score",
+    "higher_is_better": true,
+    "impact_weight": 1.00
+  },
+
+  "business_growth": {
+    "entity_id": "KPI_BUSINESS_GROWTH",
+    "canonical": "Business Growth",
+    "aliases": [],
+    "category": "strategy",
+    "business_area": "executive",
+    "description": "Overall organizational growth.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 1.00
+  },
+
+  "strategic_objectives": {
+    "entity_id": "KPI_STRATEGIC_OBJECTIVES",
+    "canonical": "Strategic Objectives Achievement",
+    "aliases": [],
+    "category": "strategy",
+    "business_area": "executive",
+    "description": "Achievement of strategic objectives.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 1.00
+  },
+
+  "business_continuity": {
+    "entity_id": "KPI_BUSINESS_CONTINUITY",
+    "canonical": "Business Continuity",
+    "aliases": [],
+    "category": "risk",
+    "business_area": "executive",
+    "description": "Business continuity readiness.",
+    "unit": "%",
+    "higher_is_better": true,
+    "impact_weight": 0.95
   }
 }

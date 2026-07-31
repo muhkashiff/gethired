@@ -42,6 +42,8 @@ class Repository:
 
         self.cache.metrics = self._read(self.paths.metrics)
 
+        self.cache.standards = self._read(self.paths.standards)
+
         self.cache.business_kpis = self._read(
             self.paths.business_kpis
         )
@@ -208,6 +210,12 @@ class Repository:
         data = self.cache.methodologies.get(phrase)
 
         return self._entity(data)
+
+    def get_standard(self, phrase):
+    
+            data = self.cache.standards.get(phrase)
+    
+            return self._entity(data)
     # =========================================================
     # Backward Compatible API
     # =========================================================
@@ -270,6 +278,9 @@ class Repository:
     def skills(self):
         return self.cache.skills
     
+    def standards(self):
+            return self.cache.standards
+    
     
     def methodologies(self):
         return self.cache.methodologies
@@ -307,6 +318,8 @@ class Repository:
             "skills": self.cache.skills,
 
             "methodologies": self.cache.methodologies,
+
+            "standards": self.cache.standards,
 
         }
 
