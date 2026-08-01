@@ -5,9 +5,7 @@ Splits complex resume sentences into
 independent semantic clauses.
 """
 
-import json
 import re
-from pathlib import Path
 
 from app.intelligence.utilities.knowledge.knowledge_models.clause_models import Clause
 from app.intelligence.utilities.knowledge.repository.repository import Repository
@@ -18,8 +16,54 @@ class ClauseParser:
     def __init__(self):
 
         self.repository = Repository()
-
         self.rules = self.repository.get_clause_patterns()
+
+        # -------------------------------
+        # Schema Compatibility Layer
+        # -------------------------------
+
+        self.split_tokens = (
+            self.rules.get("split_tokens")
+            or self.rules.get("split_words")
+            or []
+        )
+
+        self.protected_phrases = (
+            self.rules.get("protected_phrases")
+            or self.rules.get("preserve_phrases")
+            or []
+        )
+
+        self.protected_phrases.extend(
+            self.rules.get("compound_entities", [])
+        )
+
+        self.protected_phrases.extend(
+            self.rules.get("keep_together", [])
+        )
+
+        # remove duplicates while preserving order
+        self.protected_phrases = list(
+            dict.fromkeys(self.protected_phrases)
+        )
+
+        # compile split regex once
+        if self.split_tokens:
+
+            escaped = [
+                rf"\b{re.escape(token)}\b"
+                for token in self.split_tokens
+            ]
+
+            self.split_regex = re.compile(
+                "|".join(escaped),
+                flags=re.IGNORECASE
+            )
+
+        else:
+
+            self.split_regex = None
+
     # -------------------------------------------------------
 
     def parse(self, sentence):
@@ -28,33 +72,29 @@ class ClauseParser:
 
         clauses = self._split(sentence)
 
-        results = []
+        return [
 
-        for i, clause in enumerate(clauses):
+            Clause(
 
-            results.append(
+                text=clause,
 
-                Clause(
+                index=i + 1,
 
-                    text=clause,
+                parent_sentence=sentence,
 
-                    index=i + 1,
+                confidence=1.0,
 
-                    parent_sentence=sentence,
+                is_independent=True,
 
-                    confidence=1.0,
+                clause_type="semantic",
 
-                    is_independent=True,
-
-                    clause_type="semantic",
-
-                    source="rule"
-
-                )
+                source="rule"
 
             )
 
-        return results
+            for i, clause in enumerate(clauses)
+
+        ]
 
     # -------------------------------------------------------
 
@@ -62,33 +102,49 @@ class ClauseParser:
 
         text = sentence
 
-        # protect phrases that should never split
         protected = {}
 
-        for i, phrase in enumerate(self.rules["preserve_phrases"]):
+        # -----------------------------------------
+        # Protect multi-word phrases
+        # -----------------------------------------
 
-            token = f"__PHRASE{i}__"
+        for i, phrase in enumerate(self.protected_phrases):
+
+            token = f"__PHRASE_{i}__"
 
             protected[token] = phrase
 
+            pattern = re.escape(phrase)
+
             text = re.sub(
-                phrase,
+
+                pattern,
+
                 token,
+
                 text,
+
                 flags=re.IGNORECASE
+
             )
 
-        separators = []
+        # -----------------------------------------
+        # Split
+        # -----------------------------------------
 
-        for word in self.rules["split_words"]:
+        if self.split_regex:
 
-            separators.append(rf"\b{re.escape(word)}\b")
+            pieces = self.split_regex.split(text)
 
-        regex = "|".join(separators)
+        else:
 
-        pieces = re.split(regex, text)
+            pieces = [text]
 
-        final = []
+        # -----------------------------------------
+        # Restore protected phrases
+        # -----------------------------------------
+
+        clauses = []
 
         for piece in pieces:
 
@@ -101,6 +157,6 @@ class ClauseParser:
 
                 piece = piece.replace(token, phrase)
 
-            final.append(piece)
+            clauses.append(piece)
 
-        return final
+        return clauses

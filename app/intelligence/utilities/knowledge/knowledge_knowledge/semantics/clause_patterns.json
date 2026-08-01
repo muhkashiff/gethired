@@ -1,29 +1,1279 @@
 {
-    "split_words": [
-        "and",
-        "while",
-        "before",
-        "after",
-        "then",
-        "thereby",
-        "thus",
-        "resulting in",
-        "leading to",
-        "allowing",
-        "enabling",
-        "which",
-        "that",
-        "while also"
+  
+  "primary_clause_separators": [
+
+    "and",
+    "while",
+    "before",
+    "after",
+    "then",
+    "next",
+    "subsequently",
+    "finally",
+
+    "thereby",
+    "thus",
+    "hence",
+    "therefore",
+    "consequently",
+    "accordingly",
+
+    "resulting in",
+    "leading to",
+    "contributing to",
+    "driving",
+    "creating",
+    "producing",
+
+    "allowing",
+    "enabling",
+    "facilitating",
+    "supporting",
+
+    "which",
+    "that",
+    "who",
+    "whose",
+    "where",
+
+    "while also",
+    "as well as",
+    "in addition",
+    "along with",
+    "including",
+
+    "followed by",
+    "together with",
+    "combined with",
+
+    "using",
+    "utilizing",
+    "leveraging",
+    "through",
+
+    "via",
+    "across",
+    "throughout"
+  ],
+
+  "secondary_clause_separators": [
+
+    ",",
+
+    ";",
+
+    "—",
+
+    "-",
+
+    ":",
+
+    "(",
+
+    ")",
+
+    "[",
+
+    "]"
+  ],
+
+  "causal_relationships": [
+
+    "resulting in",
+
+    "leading to",
+
+    "causing",
+
+    "thereby",
+
+    "thus",
+
+    "therefore",
+
+    "which improved",
+
+    "which reduced",
+
+    "which increased",
+
+    "which enabled",
+
+    "which delivered"
+  ],
+
+  "sequence_indicators": [
+
+    "first",
+
+    "second",
+
+    "third",
+
+    "next",
+
+    "then",
+
+    "afterwards",
+
+    "subsequently",
+
+    "finally"
+  ],
+
+    "quality_management": [
+
+      "quality assurance",
+
+      "quality management",
+
+      "quality control",
+
+      "quality management system",
+
+      "quality policy",
+
+      "quality objectives",
+
+      "quality manual",
+
+      "quality audit",
+
+      "quality inspection",
+
+      "quality improvement",
+
+      "quality excellence",
+
+      "quality metrics",
+
+      "quality culture"
+
     ],
 
-    "preserve_phrases": [
-        "quality assurance",
-        "food safety",
-        "cross-functional",
-        "customer complaints",
-        "production yield",
-        "supplier quality",
-        "fssc 22000",
-        "iso 9001"
+    "food_safety": [
+
+      "food safety",
+
+      "food safety culture",
+
+      "food safety management system",
+
+      "food safety policy",
+
+      "food safety objectives",
+
+      "food safety audit",
+
+      "food defense",
+
+      "food fraud",
+
+      "food hygiene",
+
+      "food contamination",
+
+      "food quality"
+
+    ],
+
+    "manufacturing": [
+
+      "production yield",
+
+      "production planning",
+
+      "production scheduling",
+
+      "production efficiency",
+
+      "production line",
+
+      "manufacturing process",
+
+      "manufacturing excellence",
+
+      "lean manufacturing",
+
+      "batch production",
+
+      "continuous production"
+
+    ],
+
+    "continuous_improvement": [
+
+      "continuous improvement",
+
+      "process improvement",
+
+      "operational excellence",
+
+      "business excellence",
+
+      "root cause analysis",
+
+      "corrective and preventive action",
+
+      "failure mode and effects analysis",
+
+      "statistical process control",
+
+      "preventive maintenance",
+
+      "predictive maintenance",
+
+      "total productive maintenance",
+
+      "total quality management",
+
+      "value stream mapping"
+
+    ],
+
+    "leadership": [
+
+      "cross functional",
+
+      "cross-functional",
+
+      "cross functional team",
+
+      "executive leadership",
+
+      "people development",
+
+      "change management",
+
+      "strategic planning",
+
+      "business transformation",
+
+      "organizational excellence"
+
+    ],
+
+    "customer": [
+
+      "customer complaints",
+
+      "customer satisfaction",
+
+      "customer experience",
+
+      "customer requirements",
+
+      "customer feedback",
+
+      "customer service"
+
+    ],
+
+    "supplier": [
+
+      "supplier quality",
+
+      "supplier management",
+
+      "supplier qualification",
+
+      "supplier approval",
+
+      "supplier audit",
+
+      "supplier evaluation",
+
+      "incoming material inspection"
+
+    ],
+
+    "warehouse_supply_chain": [
+
+      "warehouse management",
+
+      "inventory management",
+
+      "inventory control",
+
+      "supply chain",
+
+      "supply chain management",
+
+      "distribution network",
+
+      "material handling",
+
+      "stock reconciliation"
+
+    ],
+    
+ 
+    "standards": [
+
+      "iso 9001",
+
+      "iso 14001",
+
+      "iso 22000",
+
+      "iso 17025",
+
+      "iso 45001",
+
+      "fssc 22000",
+
+      "brcgs food safety",
+
+      "brcgs packaging",
+
+      "haccp plan",
+
+      "hazard analysis critical control point",
+
+      "good manufacturing practices",
+
+      "good laboratory practices",
+
+      "good hygiene practices",
+
+      "preventive controls qualified individual",
+
+      "pcqi",
+
+      "gfsi benchmark",
+
+      "codex alimentarius"
+
+    ],
+
+    "methodologies": [
+
+      "lean manufacturing",
+
+      "lean six sigma",
+
+      "six sigma",
+
+      "green belt",
+
+      "black belt",
+
+      "kaizen event",
+
+      "dmaic methodology",
+
+      "pdca cycle",
+
+      "5s methodology",
+
+      "fishbone analysis",
+
+      "pareto analysis",
+
+      "root cause analysis",
+
+      "corrective and preventive action",
+
+      "failure mode and effects analysis",
+
+      "statistical process control",
+
+      "design of experiments",
+
+      "value stream mapping",
+
+      "total productive maintenance",
+
+      "overall equipment effectiveness",
+
+      "single minute exchange of die"
+
+    ],
+
+    "technology": [
+
+      "python",
+
+      "sql",
+
+      "postgresql",
+
+      "mysql",
+
+      "sqlite",
+
+      "oracle database",
+
+      "microsoft sql server",
+
+      "power bi",
+
+      "tableau",
+
+      "excel power query",
+
+      "excel power pivot",
+
+      "machine learning",
+
+      "artificial intelligence",
+
+      "business intelligence",
+
+      "predictive analytics",
+
+      "data analytics",
+
+      "data visualization",
+
+      "process automation",
+
+      "robotic process automation",
+
+      "digital transformation"
+
+    ],
+
+    "enterprise_systems": [
+
+      "sap erp",
+
+      "sap hana",
+
+      "sap qm",
+
+      "sap mm",
+
+      "sap pp",
+
+      "sap ewm",
+
+      "oracle erp",
+
+      "oracle netsuite",
+
+      "microsoft dynamics",
+
+      "epicor erp",
+
+      "infor erp",
+
+      "mes system",
+
+      "manufacturing execution system",
+
+      "warehouse management system",
+
+      "enterprise resource planning",
+
+      "customer relationship management",
+
+      "crm system",
+
+      "enterprise asset management"
+
+    ],
+
+    "programming": [
+
+      "object oriented programming",
+
+      "data science",
+
+      "data engineering",
+
+      "data pipeline",
+
+      "data warehouse",
+
+      "feature engineering",
+
+      "predictive modeling",
+
+      "supervised learning",
+
+      "unsupervised learning",
+
+      "deep learning",
+
+      "natural language processing",
+
+      "large language model"
+
+    ],
+
+    "cloud": [
+
+      "microsoft azure",
+
+      "azure machine learning",
+
+      "amazon web services",
+
+      "aws s3",
+
+      "google cloud platform",
+
+      "docker container",
+
+      "docker compose",
+
+      "kubernetes cluster",
+
+      "github actions",
+
+      "ci cd pipeline"
+    ],
+    
+    "manufacturing_operations": [
+
+      "overall equipment effectiveness",
+
+      "production efficiency",
+
+      "line efficiency",
+
+      "line balancing",
+
+      "change over",
+
+      "changeover time",
+
+      "production downtime",
+
+      "planned downtime",
+
+      "unplanned downtime",
+
+      "capacity utilization",
+
+      "machine utilization",
+
+      "cycle time",
+
+      "throughput",
+
+      "first pass yield",
+
+      "production losses",
+
+      "production waste",
+
+      "material loss",
+
+      "yield improvement",
+
+      "manufacturing excellence",
+
+      "world class manufacturing"
+    ],
+
+    "food_safety_microbiology": [
+
+      "total plate count",
+
+      "total microbial count",
+
+      "total viable count",
+
+      "yeast and mold",
+
+      "coliform bacteria",
+
+      "e coli",
+
+      "escherichia coli",
+
+      "salmonella spp",
+
+      "listeria monocytogenes",
+
+      "bacillus cereus",
+
+      "staphylococcus aureus",
+
+      "microbiological testing",
+
+      "environmental monitoring",
+
+      "swab testing",
+
+      "water microbiology"
+    ],
+
+    "juice_beverage_industry": [
+
+      "juice processing",
+
+      "juice manufacturing",
+
+      "fruit juice",
+
+      "juice concentrate",
+
+      "ready to drink",
+
+      "tetra pack",
+
+      "pet bottle",
+
+      "glass bottle",
+
+      "aseptic filling",
+
+      "hot fill",
+
+      "cold fill",
+
+      "pasteurization process",
+
+      "homogenization",
+
+      "brix adjustment",
+
+      "citric acid dosing",
+
+      "syrup preparation",
+
+      "water treatment plant",
+
+      "cip system",
+
+      "clean in place",
+
+      "blow molding",
+
+      "pet blowing"
+    ],
+
+    "quality_laboratory": [
+
+      "laboratory analysis",
+
+      "chemical analysis",
+
+      "physical analysis",
+
+      "sensory evaluation",
+
+      "calibration program",
+
+      "method validation",
+
+      "measurement uncertainty",
+
+      "sample preparation",
+
+      "laboratory information management system",
+
+      "analytical balance",
+
+      "ph meter",
+
+      "refractometer",
+
+      "viscometer",
+
+      "spectrophotometer"
+    ],
+
+    "supply_chain": [
+
+      "inventory optimization",
+
+      "warehouse operations",
+
+      "distribution planning",
+
+      "supplier performance",
+
+      "supplier qualification",
+
+      "vendor approval",
+
+      "incoming inspection",
+
+      "goods receiving",
+
+      "material reconciliation",
+
+      "stock accuracy",
+
+      "cycle counting",
+
+      "inventory reconciliation",
+
+      "warehouse inventory"
+    ],
+
+    "retail_operations": [
+
+      "store operations",
+
+      "retail operations",
+
+      "merchandise planning",
+
+      "category management",
+
+      "customer loyalty",
+
+      "sales growth",
+
+      "sales target",
+
+      "inventory shrinkage",
+
+      "mystery shopper",
+
+      "cash reconciliation",
+
+      "store profitability"
+    ],
+
+    "executive_business": [
+
+      "business strategy",
+
+      "strategic execution",
+
+      "business growth",
+
+      "organizational transformation",
+
+      "operational strategy",
+
+      "business optimization",
+
+      "cost optimization",
+
+      "profit optimization",
+
+      "stakeholder management",
+
+      "executive reporting",
+
+      "performance management",
+
+      "business performance",
+
+      "data driven decision making",
+
+      "key performance indicators",
+
+      "business intelligence dashboard"
+    ],
+    
+    "finance": [
+
+      "cost reduction",
+
+      "cost savings",
+
+      "cost optimization",
+
+      "operating expense",
+
+      "capital expenditure",
+
+      "return on investment",
+
+      "net present value",
+
+      "internal rate of return",
+
+      "gross margin",
+
+      "net margin",
+
+      "profit margin",
+
+      "budget management",
+
+      "budget planning",
+
+      "financial forecasting",
+
+      "financial analysis",
+
+      "working capital",
+
+      "cash flow",
+
+      "business profitability",
+
+      "revenue growth",
+
+      "sales growth"
+    ],
+
+    "human_resources": [
+
+      "talent acquisition",
+
+      "performance management",
+
+      "employee engagement",
+
+      "employee retention",
+
+      "employee development",
+
+      "leadership development",
+
+      "succession planning",
+
+      "organizational development",
+
+      "competency framework",
+
+      "training effectiveness",
+
+      "learning management system",
+
+      "workforce planning",
+
+      "people analytics",
+
+      "team development",
+
+      "change leadership"
+    ],
+
+    "project_management": [
+
+      "project management",
+
+      "program management",
+
+      "portfolio management",
+
+      "project planning",
+
+      "project execution",
+
+      "project governance",
+
+      "project scheduling",
+
+      "risk register",
+
+      "critical path",
+
+      "project charter",
+
+      "project scope",
+
+      "project deliverables",
+
+      "stakeholder communication",
+
+      "resource allocation",
+
+      "earned value management"
+    ],
+
+    "artificial_intelligence": [
+
+      "artificial intelligence",
+
+      "machine learning",
+
+      "deep learning",
+
+      "predictive analytics",
+
+      "predictive modeling",
+
+      "natural language processing",
+
+      "large language model",
+
+      "computer vision",
+
+      "data science",
+
+      "data engineering",
+
+      "business analytics",
+
+      "advanced analytics",
+
+      "feature engineering",
+
+      "model deployment",
+
+      "model validation",
+
+      "neural network"
+    ],
+
+    "data_platforms": [
+
+      "business intelligence",
+
+      "data visualization",
+
+      "power bi",
+
+      "tableau desktop",
+
+      "tableau server",
+
+      "microsoft fabric",
+
+      "azure synapse",
+
+      "sql server",
+
+      "postgresql database",
+
+      "oracle database",
+
+      "data warehouse",
+
+      "data lake",
+
+      "etl pipeline",
+
+      "data pipeline",
+
+      "master data management"
+    ],
+
+    "regulatory_compliance": [
+
+      "regulatory compliance",
+
+      "legal compliance",
+
+      "compliance management",
+
+      "internal controls",
+
+      "document control",
+
+      "records management",
+
+      "change control",
+
+      "risk assessment",
+
+      "risk management",
+
+      "management review",
+
+      "compliance audit",
+
+      "supplier compliance",
+
+      "customer compliance"
+    ],
+
+    "environment_sustainability": [
+
+      "environmental management",
+
+      "energy efficiency",
+
+      "carbon footprint",
+
+      "greenhouse gas",
+
+      "waste reduction",
+
+      "water conservation",
+
+      "sustainability reporting",
+
+      "environmental compliance",
+
+      "esg reporting",
+
+      "circular economy"
+    ],
+
+    "procurement": [
+
+      "strategic sourcing",
+
+      "vendor management",
+
+      "contract management",
+
+      "procurement strategy",
+
+      "supplier relationship management",
+
+      "purchase planning",
+
+      "category strategy",
+
+      "vendor qualification"
+    ],
+
+    "executive_business_two": [
+
+      "business continuity",
+
+      "business resilience",
+
+      "corporate governance",
+
+      "business transformation",
+
+      "operational transformation",
+
+      "digital strategy",
+
+      "digital transformation",
+
+      "innovation management",
+
+      "strategic initiatives",
+
+      "business expansion",
+
+      "enterprise architecture",
+
+      "executive committee",
+
+      "board reporting",
+
+      "performance dashboard",
+
+      "executive dashboard"
+    ],
+
+  "preserve_acronyms": [
+
+    "AI",
+    "ML",
+    "LLM",
+    "NLP",
+    "BI",
+    "KPI",
+    "OKR",
+    "ROI",
+    "OEE",
+    "OTIF",
+    "RCA",
+    "CAPA",
+    "FMEA",
+    "SPC",
+    "DOE",
+    "DMAIC",
+    "PDCA",
+    "TPM",
+    "TQM",
+    "MES",
+    "ERP",
+    "SAP",
+    "CRM",
+    "WMS",
+    "LIMS",
+    "SQL",
+    "API",
+    "ETL",
+    "CI/CD",
+    "AWS",
+    "GCP",
+    "PLC",
+    "SCADA",
+    "GMP",
+    "GHP",
+    "GLP",
+    "HACCP",
+    "FSSC",
+    "BRCGS",
+    "ISO",
+    "PCQI",
+    "CQI",
+    "IRCA",
+    "CFU",
+    "TPC",
+    "TMC",
+    "pH",
+    "Brix",
+    "PET",
+    "RTD",
+    "QA",
+    "QC",
+    "QMS",
+    "HSE",
+    "SHE",
+    "ESG",
+    "FMCG"
+  ],
+
+  "non_breakable_patterns": [
+
+    "ISO 9001:2015",
+    "ISO 22000:2018",
+    "FSSC 22000 Version 6",
+    "BRCGS Global Standard Food Safety",
+    "Corrective and Preventive Action",
+    "Root Cause Analysis",
+    "Failure Mode and Effects Analysis",
+    "Statistical Process Control",
+    "Overall Equipment Effectiveness",
+    "Food Safety Management System",
+    "Quality Management System",
+    "Customer Relationship Management",
+    "Enterprise Resource Planning",
+    "Warehouse Management System",
+    "Manufacturing Execution System",
+    "Business Intelligence Dashboard",
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Natural Language Processing",
+    "Data Driven Decision Making",
+    "Total Productive Maintenance",
+    "Continuous Improvement",
+    "Lean Manufacturing",
+    "Six Sigma"
+  ],
+
+  "semantic_groups": {
+
+    "leadership": [
+
+      "lead",
+      "led",
+      "managed",
+      "directed",
+      "supervised",
+      "mentored",
+      "coached"
+    ],
+
+    "improvement": [
+
+      "improved",
+      "optimized",
+      "enhanced",
+      "streamlined",
+      "standardized",
+      "automated"
+    ],
+
+    "cost": [
+
+      "saved",
+      "reduced",
+      "cut",
+      "lowered",
+      "optimized"
+    ],
+
+    "growth": [
+
+      "increased",
+      "boosted",
+      "expanded",
+      "grew",
+      "maximized"
+    ],
+
+    "quality": [
+
+      "validated",
+      "verified",
+      "audited",
+      "certified",
+      "approved"
     ]
+  },
+
+  "clause_merging_rules": {
+
+    "merge_if_same_subject": true,
+
+    "merge_if_same_business_object": true,
+
+    "merge_if_same_kpi": true,
+
+    "merge_if_same_metric": true,
+
+    "merge_if_same_action": false,
+
+    "maximum_clause_distance": 2
+  },
+
+  "dependency_rules": {
+
+    "verb_requires_object": true,
+
+    "metric_requires_number": true,
+
+    "kpi_requires_business_context": true,
+
+    "technology_requires_usage": true,
+
+    "certification_requires_context": false
+  },
+
+  "parser_priority": [
+
+    "standards",
+
+    "certifications",
+
+    "business_kpis",
+
+    "metrics",
+
+    "technologies",
+
+    "methodologies",
+
+    "skills",
+
+    "impact_dictionary",
+
+    "modifiers",
+
+    "measurements"
+  ],
+
+  "entity_resolution": {
+
+    "prefer_canonical": true,
+
+    "allow_alias_lookup": true,
+
+    "enable_fuzzy_matching": true,
+
+    "enable_embedding_matching": true,
+
+    "minimum_similarity": 0.88
+  },
+
+  "context_window": {
+
+    "sentence_window": 1,
+
+    "paragraph_window": 2,
+
+    "resume_section_window": 4
+  },
+
+  "enterprise_settings": {
+
+    "preserve_original_order": true,
+
+    "preserve_nested_entities": true,
+
+    "detect_multiword_entities": true,
+
+    "detect_business_relationships": true,
+
+    "enable_knowledge_graph_linking": true,
+
+    "enable_resume_reasoning": true,
+
+    "enable_enterprise_scoring": true,
+
+    "enable_cross_dictionary_validation": true
+  }
 }

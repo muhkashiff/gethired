@@ -1,294 +1,2434 @@
 {
-    "Production Yield": {
-        "category": "operations",
-        "positive": [
-            "increase",
-            "improve",
-            "maximize",
-            "optimize",
-            "achieve"
-        ],
-        "negative": [
-            "reduce",
-            "decrease",
-            "drop",
-            "lose"
-        ]
-    },
+  "Production Yield": {
+    "entity_id": "MEASURE_PRODUCTION_YIELD",
+    "canonical": "Production Yield",
 
-    "Productivity": {
-        "category": "operations",
-        "positive": [
-            "increase",
-            "improve",
-            "optimize",
-            "maximize"
-        ],
-        "negative": [
-            "reduce",
-            "decrease"
-        ]
-    },
+    "aliases": [
+      "Yield",
+      "Production Yield",
+      "Manufacturing Yield",
+      "Process Yield"
+    ],
 
-    "Efficiency": {
-        "category": "operations",
-        "positive": [
-            "increase",
-            "improve",
-            "optimize"
-        ],
-        "negative": [
-            "reduce",
-            "decrease"
-        ]
-    },
+    "category": "operations",
 
-    "Production Waste": {
-        "category": "operations",
-        "positive": [
-            "reduce",
-            "decrease",
-            "eliminate"
-        ],
-        "negative": [
-            "increase",
-            "grow"
-        ]
-    },
+    "business_area": "manufacturing",
 
-    "Downtime": {
-        "category": "operations",
-        "positive": [
-            "reduce",
-            "decrease",
-            "eliminate"
-        ],
-        "negative": [
-            "increase",
-            "grow"
-        ]
-    },
-
-    "Inventory": {
-        "category": "operations",
-        "positive": [
-            "increase",
-            "optimize",
-            "improve"
-        ],
-        "negative": [
-            "reduce"
-        ]
-    },
-
-    "Inventory Accuracy": {
-        "category": "operations",
-        "positive": [
-            "increase",
-            "improve"
-        ],
-        "negative": [
-            "reduce",
-            "decrease"
-        ]
-    },
-
-    "Customer Complaints": {
-        "category": "quality",
-        "positive": [
-            "reduce",
-            "decrease",
-            "eliminate"
-        ],
-        "negative": [
-            "increase",
-            "grow"
-        ]
-    },
-
-    "Defect Rate": {
-        "category": "quality",
-        "positive": [
-            "reduce",
-            "decrease",
-            "eliminate"
-        ],
-        "negative": [
-            "increase"
-        ]
-    },
-
-    "Audit": {
-        "category": "quality",
-        "positive": [
-            "increase",
-            "complete",
-            "conduct",
-            "achieve"
-        ],
-        "negative": []
-    },
-
-    "Certification": {
-        "category": "quality",
-        "positive": [
-            "achieve",
-            "obtain",
-            "complete",
-            "maintain"
-        ],
-        "negative": [
-            "lose",
-            "fail"
-        ]
-    },
-
-    "Customer Satisfaction": {
-        "category": "quality",
-        "positive": [
-            "increase",
-            "improve"
-        ],
-        "negative": [
-            "reduce",
-            "decrease"
-        ]
-    },
-
-    "Cost": {
-        "category": "finance",
-        "positive": [
-            "reduce",
-            "save",
-            "optimize"
-        ],
-        "negative": [
-            "increase",
-            "raise"
-        ]
-    },
-
-    "Cost Savings": {
-        "category": "finance",
-        "positive": [
-            "increase",
-            "achieve",
-            "generate"
-        ],
-        "negative": [
-            "reduce"
-        ]
-    },
-
-    "Revenue": {
-        "category": "finance",
-        "positive": [
-            "increase",
-            "grow",
-            "improve"
-        ],
-        "negative": [
-            "reduce",
-            "decrease"
-        ]
-    },
-
-    "Profit": {
-        "category": "finance",
-        "positive": [
-            "increase",
-            "grow"
-        ],
-        "negative": [
-            "reduce",
-            "decrease"
-        ]
-    },
-
-    "Training": {
-        "category": "people",
-        "positive": [
-            "conduct",
-            "deliver",
-            "increase",
-            "complete"
-        ],
-        "negative": []
-    },
-
-    "Team Size": {
-        "category": "people",
-        "positive": [
-            "lead",
-            "manage",
-            "supervise"
-        ],
-        "negative": []
-    },
-
-    "Supplier Performance": {
-        "category": "supply_chain",
-        "positive": [
-            "improve",
-            "increase",
-            "optimize"
-        ],
-        "negative": [
-            "reduce"
-        ]
-    },
-
-    "On-Time Delivery": {
-        "category": "supply_chain",
-        "positive": [
-            "increase",
-            "improve"
-        ],
-        "negative": [
-            "reduce"
-        ]
-    },
-
-    "Safety Incidents": {
-        "category": "safety",
-        "positive": [
-            "reduce",
-            "eliminate"
-        ],
-        "negative": [
-            "increase"
-        ]
-    },
-
-    "Lost Time Injury": {
-        "category": "safety",
-        "positive": [
-            "reduce",
-            "eliminate"
-        ],
-        "negative": [
-            "increase"
-        ]
-    },
-    
-  "complaints": {
-    "preferred_direction": "decrease",
-    "positive_effect": "decrease",
-    "business_meaning": "Customer Satisfaction",
-    "impact": 95
-  },
-
-  "yield": {
     "preferred_direction": "increase",
+
     "positive_effect": "increase",
-    "business_meaning": "Production Efficiency",
-    "impact": 90
+
+    "business_meaning": "Operational Efficiency",
+
+    "impact_weight": 95,
+
+    "executive_importance": 0.95,
+
+    "improvement_verbs": [
+      "increase",
+      "improve",
+      "maximize",
+      "optimize",
+      "enhance",
+      "boost",
+      "raise"
+    ],
+
+    "decline_verbs": [
+      "reduce",
+      "decrease",
+      "drop",
+      "lose"
+    ],
+
+    "related_kpis": [
+      "Production Efficiency",
+      "Overall Equipment Effectiveness",
+      "First Pass Yield"
+    ],
+
+    "related_domains": [
+      "manufacturing",
+      "operations",
+      "continuous_improvement"
+    ]
   },
 
-  "downtime": {
+  "Productivity": {
+    "entity_id": "MEASURE_PRODUCTIVITY",
+    "canonical": "Productivity",
+
+    "aliases": [
+      "Productivity",
+      "Operational Productivity"
+    ],
+
+    "category": "operations",
+
+    "business_area": "operations",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Operational Performance",
+
+    "impact_weight": 92,
+
+    "executive_importance": 0.92,
+
+    "improvement_verbs": [
+      "increase",
+      "improve",
+      "optimize",
+      "maximize",
+      "accelerate"
+    ],
+
+    "decline_verbs": [
+      "reduce",
+      "decrease"
+    ]
+  },
+
+  "Efficiency": {
+    "entity_id": "MEASURE_EFFICIENCY",
+
+    "canonical": "Efficiency",
+
+    "aliases": [
+      "Efficiency",
+      "Operational Efficiency",
+      "Process Efficiency"
+    ],
+
+    "category": "operations",
+
+    "business_area": "operations",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Resource Optimization",
+
+    "impact_weight": 90,
+
+    "executive_importance": 0.90,
+
+    "improvement_verbs": [
+      "improve",
+      "increase",
+      "optimize",
+      "streamline",
+      "maximize"
+    ],
+
+    "decline_verbs": [
+      "reduce",
+      "decrease"
+    ]
+  },
+
+  "Overall Equipment Effectiveness": {
+
+    "entity_id": "MEASURE_OEE",
+
+    "canonical": "Overall Equipment Effectiveness",
+
+    "aliases": [
+      "OEE",
+      "Overall Equipment Effectiveness"
+    ],
+
+    "category": "operations",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Manufacturing Performance",
+
+    "impact_weight": 98,
+
+    "executive_importance": 1.00,
+
+    "improvement_verbs": [
+      "increase",
+      "improve",
+      "optimize",
+      "maximize"
+    ],
+
+    "decline_verbs": [
+      "reduce",
+      "decrease"
+    ]
+  },
+
+  "Throughput": {
+
+    "entity_id": "MEASURE_THROUGHPUT",
+
+    "canonical": "Throughput",
+
+    "aliases": [
+      "Production Throughput",
+      "Output Rate"
+    ],
+
+    "category": "operations",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Production Capacity",
+
+    "impact_weight": 88,
+
+    "executive_importance": 0.88,
+
+    "improvement_verbs": [
+      "increase",
+      "maximize",
+      "improve"
+    ],
+
+    "decline_verbs": [
+      "reduce",
+      "decrease"
+    ]
+  },
+
+  "Capacity Utilization": {
+
+    "entity_id": "MEASURE_CAPACITY_UTILIZATION",
+
+    "canonical": "Capacity Utilization",
+
+    "aliases": [
+      "Capacity Utilization",
+      "Capacity Usage"
+    ],
+
+    "category": "operations",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Asset Optimization",
+
+    "impact_weight": 89,
+
+    "executive_importance": 0.89
+  },
+
+  "Cycle Time": {
+
+    "entity_id": "MEASURE_CYCLE_TIME",
+
+    "canonical": "Cycle Time",
+
+    "aliases": [
+      "Cycle Time",
+      "Process Cycle Time"
+    ],
+
+    "category": "operations",
+
+    "business_area": "manufacturing",
+
     "preferred_direction": "decrease",
+
     "positive_effect": "decrease",
+
+    "business_meaning": "Process Speed",
+
+    "impact_weight": 87,
+
+    "executive_importance": 0.87
+  },
+
+  "Changeover Time": {
+
+    "entity_id": "MEASURE_CHANGEOVER",
+
+    "canonical": "Changeover Time",
+
+    "aliases": [
+      "Setup Time",
+      "SMED",
+      "Changeover"
+    ],
+
+    "category": "operations",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Operational Agility",
+
+    "impact_weight": 86
+  },
+  
+  "Customer Complaints": {
+    "entity_id": "MEASURE_CUSTOMER_COMPLAINTS",
+    "canonical": "Customer Complaints",
+
+    "aliases": [
+      "Complaints",
+      "Customer Complaints",
+      "Consumer Complaints",
+      "Complaint Rate"
+    ],
+
+    "category": "quality",
+
+    "business_area": "customer_quality",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Customer Satisfaction",
+
+    "impact_weight": 98,
+
+    "executive_importance": 1.00,
+
+    "improvement_verbs": [
+      "reduce",
+      "decrease",
+      "eliminate",
+      "minimize",
+      "resolve"
+    ],
+
+    "decline_verbs": [
+      "increase",
+      "grow",
+      "escalate"
+    ],
+
+    "related_kpis": [
+      "Customer Satisfaction",
+      "Complaint Closure Time",
+      "Quality Score"
+    ],
+
+    "related_domains": [
+      "quality",
+      "customer_service",
+      "food_safety"
+    ]
+  },
+
+  "Customer Satisfaction": {
+
+    "entity_id": "MEASURE_CUSTOMER_SATISFACTION",
+
+    "canonical": "Customer Satisfaction",
+
+    "aliases": [
+      "CSAT",
+      "Customer Satisfaction Score"
+    ],
+
+    "category": "quality",
+
+    "business_area": "customer",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Customer Experience",
+
+    "impact_weight": 97,
+
+    "executive_importance": 0.98
+  },
+
+  "Defect Rate": {
+
+    "entity_id": "MEASURE_DEFECT_RATE",
+
+    "canonical": "Defect Rate",
+
+    "aliases": [
+      "Defects",
+      "Defect %",
+      "Quality Defects"
+    ],
+
+    "category": "quality",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Product Quality",
+
+    "impact_weight": 96,
+
+    "executive_importance": 0.98
+  },
+
+  "PPM": {
+
+    "entity_id": "MEASURE_PARTS_PER_MILLION",
+
+    "canonical": "Parts Per Million",
+
+    "aliases": [
+      "PPM",
+      "Defects PPM"
+    ],
+
+    "category": "quality",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Quality Performance",
+
+    "impact_weight": 96
+  },
+
+  "First Pass Yield": {
+
+    "entity_id": "MEASURE_FIRST_PASS_YIELD",
+
+    "canonical": "First Pass Yield",
+
+    "aliases": [
+      "FPY",
+      "First Pass Yield"
+    ],
+
+    "category": "quality",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Process Capability",
+
+    "impact_weight": 94
+  },
+
+  "Rework": {
+
+    "entity_id": "MEASURE_REWORK",
+
+    "canonical": "Rework",
+
+    "aliases": [
+      "Rework Rate",
+      "Reprocessing"
+    ],
+
+    "category": "quality",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Process Quality",
+
+    "impact_weight": 90
+  },
+
+  "Audit Score": {
+
+    "entity_id": "MEASURE_AUDIT_SCORE",
+
+    "canonical": "Audit Score",
+
+    "aliases": [
+      "Audit Result",
+      "Audit Rating",
+      "Compliance Score"
+    ],
+
+    "category": "quality",
+
+    "business_area": "quality_systems",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Management System Compliance",
+
+    "impact_weight": 95
+  },
+
+  "CAPA Effectiveness": {
+
+    "entity_id": "MEASURE_CAPA_EFFECTIVENESS",
+
+    "canonical": "CAPA Effectiveness",
+
+    "aliases": [
+      "CAPA",
+      "Corrective Action Effectiveness"
+    ],
+
+    "category": "quality",
+
+    "business_area": "quality_systems",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Continuous Improvement",
+
+    "impact_weight": 92
+  },
+
+  "Process Capability": {
+
+    "entity_id": "MEASURE_PROCESS_CAPABILITY",
+
+    "canonical": "Process Capability",
+
+    "aliases": [
+      "Cpk",
+      "Cp",
+      "Process Capability Index"
+    ],
+
+    "category": "quality",
+
+    "business_area": "statistical_quality",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Process Stability",
+
+    "impact_weight": 94
+  },
+
+  "Quality Cost": {
+
+    "entity_id": "MEASURE_COST_OF_QUALITY",
+
+    "canonical": "Cost of Quality",
+
+    "aliases": [
+      "COQ",
+      "Quality Cost"
+    ],
+
+    "category": "quality",
+
+    "business_area": "finance",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Financial Quality Performance",
+
+    "impact_weight": 90
+  },
+  
+  "Brix": {
+    "entity_id": "MEASURE_BRIX",
+    "canonical": "Brix",
+
+    "aliases": [
+      "°Brix",
+      "Brix Value",
+      "Sugar Content",
+      "Soluble Solids"
+    ],
+
+    "category": "food_quality",
+
+    "business_area": "juice_manufacturing",
+
+    "preferred_direction": "target",
+
+    "positive_effect": "maintain_target",
+
+    "business_meaning": "Product Specification Compliance",
+
+    "impact_weight": 95,
+
+    "executive_importance": 0.95,
+
+    "related_domains": [
+      "quality",
+      "food_safety",
+      "manufacturing"
+    ]
+  },
+
+  "pH": {
+
+    "entity_id": "MEASURE_PH",
+
+    "canonical": "pH",
+
+    "aliases": [
+      "Acidity",
+      "Product pH"
+    ],
+
+    "category": "food_quality",
+
+    "business_area": "food_safety",
+
+    "preferred_direction": "target",
+
+    "positive_effect": "maintain_target",
+
+    "business_meaning": "Microbiological Stability",
+
+    "impact_weight": 95
+  },
+
+  "Pasteurization Temperature": {
+
+    "entity_id": "MEASURE_PASTEURIZATION",
+
+    "canonical": "Pasteurization Temperature",
+
+    "aliases": [
+      "Pasteurization",
+      "Heat Treatment",
+      "Thermal Processing"
+    ],
+
+    "category": "food_safety",
+
+    "business_area": "juice_processing",
+
+    "preferred_direction": "target",
+
+    "positive_effect": "maintain_target",
+
+    "business_meaning": "Food Safety Compliance",
+
+    "impact_weight": 100
+  },
+
+  "CCP Compliance": {
+
+    "entity_id": "MEASURE_CCP",
+
+    "canonical": "Critical Control Point Compliance",
+
+    "aliases": [
+      "CCP",
+      "Critical Control Point",
+      "CCP Monitoring"
+    ],
+
+    "category": "food_safety",
+
+    "business_area": "food_safety",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Food Safety Assurance",
+
+    "impact_weight": 100
+  },
+
+  "Total Plate Count": {
+
+    "entity_id": "MEASURE_TPC",
+
+    "canonical": "Total Plate Count",
+
+    "aliases": [
+      "TPC",
+      "Total Plate Count",
+      "Total Viable Count",
+      "TVC"
+    ],
+
+    "category": "microbiology",
+
+    "business_area": "laboratory",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Microbiological Quality",
+
+    "impact_weight": 99
+  },
+
+  "Yeast and Mold": {
+
+    "entity_id": "MEASURE_YEAST_MOLD",
+
+    "canonical": "Yeast and Mold",
+
+    "aliases": [
+      "Yeast",
+      "Mold",
+      "Yeast & Mold"
+    ],
+
+    "category": "microbiology",
+
+    "business_area": "food_safety",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Shelf Life",
+
+    "impact_weight": 98
+  },
+
+  "Coliform": {
+
+    "entity_id": "MEASURE_COLIFORM",
+
+    "canonical": "Coliform",
+
+    "aliases": [
+      "Coliform Bacteria",
+      "Total Coliform"
+    ],
+
+    "category": "microbiology",
+
+    "business_area": "food_safety",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Sanitation Effectiveness",
+
+    "impact_weight": 99
+  },
+
+  "E. coli": {
+
+    "entity_id": "MEASURE_ECOLI",
+
+    "canonical": "Escherichia coli",
+
+    "aliases": [
+      "E Coli",
+      "E. coli",
+      "Escherichia coli"
+    ],
+
+    "category": "pathogen",
+
+    "business_area": "food_safety",
+
+    "preferred_direction": "eliminate",
+
+    "positive_effect": "eliminate",
+
+    "business_meaning": "Food Safety Risk",
+
+    "impact_weight": 100
+  },
+
+  "Salmonella": {
+
+    "entity_id": "MEASURE_SALMONELLA",
+
+    "canonical": "Salmonella",
+
+    "aliases": [
+      "Salmonella spp"
+    ],
+
+    "category": "pathogen",
+
+    "business_area": "food_safety",
+
+    "preferred_direction": "eliminate",
+
+    "positive_effect": "eliminate",
+
+    "business_meaning": "Critical Food Safety Hazard",
+
+    "impact_weight": 100
+  },
+
+  "Water Quality": {
+
+    "entity_id": "MEASURE_WATER_QUALITY",
+
+    "canonical": "Water Quality",
+
+    "aliases": [
+      "Process Water",
+      "Water Treatment"
+    ],
+
+    "category": "food_safety",
+
+    "business_area": "utilities",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Manufacturing Safety",
+
+    "impact_weight": 96
+  },
+
+  "CIP Effectiveness": {
+
+    "entity_id": "MEASURE_CIP",
+
+    "canonical": "Clean In Place Effectiveness",
+
+    "aliases": [
+      "CIP",
+      "Clean In Place"
+    ],
+
+    "category": "sanitation",
+
+    "business_area": "food_safety",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Equipment Hygiene",
+
+    "impact_weight": 97
+  },
+
+  "Food Safety Audit Score": {
+
+    "entity_id": "MEASURE_FS_AUDIT",
+
+    "canonical": "Food Safety Audit Score",
+
+    "aliases": [
+      "BRCGS Audit",
+      "FSSC Audit",
+      "Food Safety Audit"
+    ],
+
+    "category": "food_safety",
+
+    "business_area": "quality_systems",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Compliance",
+
+    "impact_weight": 98
+  },
+  
+  "Revenue": {
+    "entity_id": "MEASURE_REVENUE",
+    "canonical": "Revenue",
+
+    "aliases": [
+      "Sales Revenue",
+      "Business Revenue",
+      "Turnover"
+    ],
+
+    "category": "finance",
+
+    "business_area": "commercial",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Business Growth",
+
+    "impact_weight": 100,
+
+    "executive_importance": 1.00,
+
+    "improvement_verbs": [
+      "increase",
+      "grow",
+      "boost",
+      "maximize",
+      "expand"
+    ],
+
+    "decline_verbs": [
+      "reduce",
+      "decrease",
+      "lose"
+    ]
+  },
+
+  "Gross Profit": {
+
+    "entity_id": "MEASURE_GROSS_PROFIT",
+
+    "canonical": "Gross Profit",
+
+    "aliases": [
+      "Gross Margin Profit"
+    ],
+
+    "category": "finance",
+
+    "business_area": "finance",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Profitability",
+
+    "impact_weight": 99
+  },
+
+  "Net Profit": {
+
+    "entity_id": "MEASURE_NET_PROFIT",
+
+    "canonical": "Net Profit",
+
+    "aliases": [
+      "Net Income",
+      "Bottom Line"
+    ],
+
+    "category": "finance",
+
+    "business_area": "finance",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Business Performance",
+
+    "impact_weight": 100
+  },
+
+  "EBITDA": {
+
+    "entity_id": "MEASURE_EBITDA",
+
+    "canonical": "EBITDA",
+
+    "aliases": [
+      "Operating EBITDA"
+    ],
+
+    "category": "finance",
+
+    "business_area": "finance",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Operating Profitability",
+
+    "impact_weight": 98
+  },
+
+  "Gross Margin": {
+
+    "entity_id": "MEASURE_GROSS_MARGIN",
+
+    "canonical": "Gross Margin",
+
+    "aliases": [
+      "Margin"
+    ],
+
+    "category": "finance",
+
+    "business_area": "commercial",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Profit Margin",
+
+    "impact_weight": 96
+  },
+
+  "Cost": {
+
+    "entity_id": "MEASURE_COST",
+
+    "canonical": "Cost",
+
+    "aliases": [
+      "Operating Cost",
+      "Manufacturing Cost",
+      "Expense"
+    ],
+
+    "category": "finance",
+
+    "business_area": "operations",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Cost Optimization",
+
+    "impact_weight": 99,
+
+    "improvement_verbs": [
+      "reduce",
+      "save",
+      "optimize",
+      "minimize",
+      "lower"
+    ],
+
+    "decline_verbs": [
+      "increase",
+      "raise"
+    ]
+  },
+
+  "Cost Savings": {
+
+    "entity_id": "MEASURE_COST_SAVINGS",
+
+    "canonical": "Cost Savings",
+
+    "aliases": [
+      "Savings",
+      "Annual Savings"
+    ],
+
+    "category": "finance",
+
+    "business_area": "operations",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Financial Improvement",
+
+    "impact_weight": 100
+  },
+
+  "Return on Investment": {
+
+    "entity_id": "MEASURE_ROI",
+
+    "canonical": "Return on Investment",
+
+    "aliases": [
+      "ROI"
+    ],
+
+    "category": "finance",
+
+    "business_area": "executive",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Investment Effectiveness",
+
+    "impact_weight": 99
+  },
+
+  "Budget Variance": {
+
+    "entity_id": "MEASURE_BUDGET_VARIANCE",
+
+    "canonical": "Budget Variance",
+
+    "aliases": [
+      "Budget Performance"
+    ],
+
+    "category": "finance",
+
+    "business_area": "finance",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Budget Control",
+
+    "impact_weight": 92
+  },
+
+  "Cash Flow": {
+
+    "entity_id": "MEASURE_CASH_FLOW",
+
+    "canonical": "Cash Flow",
+
+    "aliases": [
+      "Operating Cash Flow"
+    ],
+
+    "category": "finance",
+
+    "business_area": "finance",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Financial Stability",
+
+    "impact_weight": 96
+  },
+
+  "Working Capital": {
+
+    "entity_id": "MEASURE_WORKING_CAPITAL",
+
+    "canonical": "Working Capital",
+
+    "aliases": [
+      "Operating Capital"
+    ],
+
+    "category": "finance",
+
+    "business_area": "finance",
+
+    "preferred_direction": "optimize",
+
+    "positive_effect": "optimize",
+
+    "business_meaning": "Financial Efficiency",
+
+    "impact_weight": 91
+  },
+
+  "Inventory Value": {
+
+    "entity_id": "MEASURE_INVENTORY_VALUE",
+
+    "canonical": "Inventory Value",
+
+    "aliases": [
+      "Stock Value"
+    ],
+
+    "category": "finance",
+
+    "business_area": "supply_chain",
+
+    "preferred_direction": "optimize",
+
+    "positive_effect": "optimize",
+
+    "business_meaning": "Inventory Optimization",
+
+    "impact_weight": 90
+  },
+
+  "Revenue Growth": {
+
+    "entity_id": "MEASURE_REVENUE_GROWTH",
+
+    "canonical": "Revenue Growth",
+
+    "aliases": [
+      "Sales Growth",
+      "Business Growth"
+    ],
+
+    "category": "finance",
+
+    "business_area": "commercial",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Business Expansion",
+
+    "impact_weight": 100
+  },
+
+  "Forecast Accuracy": {
+
+    "entity_id": "MEASURE_FORECAST_ACCURACY",
+
+    "canonical": "Forecast Accuracy",
+
+    "aliases": [
+      "Planning Accuracy"
+    ],
+
+    "category": "finance",
+
+    "business_area": "planning",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Planning Excellence",
+
+    "impact_weight": 89
+  },
+  
+  "Inventory Accuracy": {
+    "entity_id": "MEASURE_INVENTORY_ACCURACY",
+    "canonical": "Inventory Accuracy",
+
+    "aliases": [
+      "Stock Accuracy",
+      "Inventory Reconciliation",
+      "Cycle Count Accuracy"
+    ],
+
+    "category": "supply_chain",
+
+    "business_area": "warehouse",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Inventory Integrity",
+
+    "impact_weight": 96,
+
+    "executive_importance": 0.95
+  },
+
+  "Inventory Turns": {
+
+    "entity_id": "MEASURE_INVENTORY_TURNS",
+
+    "canonical": "Inventory Turns",
+
+    "aliases": [
+      "Inventory Turnover"
+    ],
+
+    "category": "supply_chain",
+
+    "business_area": "warehouse",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Inventory Efficiency",
+
+    "impact_weight": 93
+  },
+
+  "Stock Availability": {
+
+    "entity_id": "MEASURE_STOCK_AVAILABILITY",
+
+    "canonical": "Stock Availability",
+
+    "aliases": [
+      "Product Availability",
+      "Shelf Availability"
+    ],
+
+    "category": "supply_chain",
+
+    "business_area": "distribution",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Customer Service",
+
+    "impact_weight": 95
+  },
+
+  "OTIF": {
+
+    "entity_id": "MEASURE_OTIF",
+
+    "canonical": "On Time In Full",
+
+    "aliases": [
+      "OTIF",
+      "On Time In Full Delivery"
+    ],
+
+    "category": "logistics",
+
+    "business_area": "distribution",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Delivery Performance",
+
+    "impact_weight": 99,
+
+    "executive_importance": 0.99
+  },
+
+  "Lead Time": {
+
+    "entity_id": "MEASURE_LEAD_TIME",
+
+    "canonical": "Lead Time",
+
+    "aliases": [
+      "Supplier Lead Time",
+      "Delivery Lead Time"
+    ],
+
+    "category": "supply_chain",
+
+    "business_area": "procurement",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Supply Chain Agility",
+
+    "impact_weight": 92
+  },
+
+  "Supplier Performance": {
+
+    "entity_id": "MEASURE_SUPPLIER_PERFORMANCE",
+
+    "canonical": "Supplier Performance",
+
+    "aliases": [
+      "Vendor Performance",
+      "Supplier Rating"
+    ],
+
+    "category": "procurement",
+
+    "business_area": "supplier_management",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Supplier Reliability",
+
+    "impact_weight": 94
+  },
+
+  "Supplier Defect Rate": {
+
+    "entity_id": "MEASURE_SUPPLIER_DEFECT_RATE",
+
+    "canonical": "Supplier Defect Rate",
+
+    "aliases": [
+      "Incoming Defects",
+      "Supplier Quality"
+    ],
+
+    "category": "procurement",
+
+    "business_area": "quality",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Supplier Quality",
+
+    "impact_weight": 95
+  },
+
+  "Warehouse Accuracy": {
+
+    "entity_id": "MEASURE_WAREHOUSE_ACCURACY",
+
+    "canonical": "Warehouse Accuracy",
+
+    "aliases": [
+      "Warehouse Inventory Accuracy"
+    ],
+
+    "category": "warehouse",
+
+    "business_area": "warehouse",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Warehouse Excellence",
+
+    "impact_weight": 90
+  },
+
+  "Order Fulfillment": {
+
+    "entity_id": "MEASURE_ORDER_FULFILLMENT",
+
+    "canonical": "Order Fulfillment",
+
+    "aliases": [
+      "Fulfillment Rate",
+      "Order Completion"
+    ],
+
+    "category": "logistics",
+
+    "business_area": "distribution",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Customer Delivery",
+
+    "impact_weight": 96
+  },
+
+  "Fill Rate": {
+
+    "entity_id": "MEASURE_FILL_RATE",
+
+    "canonical": "Fill Rate",
+
+    "aliases": [
+      "Service Level"
+    ],
+
+    "category": "logistics",
+
+    "business_area": "distribution",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Supply Chain Service",
+
+    "impact_weight": 94
+  },
+
+  "Procurement Cost": {
+
+    "entity_id": "MEASURE_PROCUREMENT_COST",
+
+    "canonical": "Procurement Cost",
+
+    "aliases": [
+      "Purchasing Cost",
+      "Buying Cost"
+    ],
+
+    "category": "procurement",
+
+    "business_area": "purchasing",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Procurement Efficiency",
+
+    "impact_weight": 91
+  },
+
+  "Logistics Cost": {
+
+    "entity_id": "MEASURE_LOGISTICS_COST",
+
+    "canonical": "Logistics Cost",
+
+    "aliases": [
+      "Transportation Cost",
+      "Distribution Cost"
+    ],
+
+    "category": "logistics",
+
+    "business_area": "distribution",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Distribution Efficiency",
+
+    "impact_weight": 90
+  },
+
+
+  "Employee Engagement": {
+    "entity_id": "MEASURE_EMPLOYEE_ENGAGEMENT",
+    "canonical": "Employee Engagement",
+
+    "aliases": [
+      "Engagement Score",
+      "Employee Satisfaction"
+    ],
+
+    "category": "people",
+
+    "business_area": "human_resources",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Workforce Effectiveness",
+
+    "impact_weight": 94,
+
+    "executive_importance": 0.95
+  },
+
+  "Employee Retention": {
+
+    "entity_id": "MEASURE_EMPLOYEE_RETENTION",
+
+    "canonical": "Employee Retention",
+
+    "aliases": [
+      "Retention Rate",
+      "Workforce Retention"
+    ],
+
+    "category": "people",
+
+    "business_area": "human_resources",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Talent Stability",
+
+    "impact_weight": 95
+  },
+
+  "Employee Turnover": {
+
+    "entity_id": "MEASURE_EMPLOYEE_TURNOVER",
+
+    "canonical": "Employee Turnover",
+
+    "aliases": [
+      "Turnover Rate",
+      "Staff Turnover"
+    ],
+
+    "category": "people",
+
+    "business_area": "human_resources",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Talent Retention",
+
+    "impact_weight": 95
+  },
+
+  "Training Hours": {
+
+    "entity_id": "MEASURE_TRAINING_HOURS",
+
+    "canonical": "Training Hours",
+
+    "aliases": [
+      "Training",
+      "Learning Hours",
+      "Employee Training"
+    ],
+
+    "category": "people",
+
+    "business_area": "learning_development",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Capability Development",
+
+    "impact_weight": 87
+  },
+
+  "Training Effectiveness": {
+
+    "entity_id": "MEASURE_TRAINING_EFFECTIVENESS",
+
+    "canonical": "Training Effectiveness",
+
+    "aliases": [
+      "Learning Effectiveness"
+    ],
+
+    "category": "people",
+
+    "business_area": "learning_development",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Organizational Capability",
+
+    "impact_weight": 90
+  },
+
+  "Team Size": {
+
+    "entity_id": "MEASURE_TEAM_SIZE",
+
+    "canonical": "Team Size",
+
+    "aliases": [
+      "Employees Managed",
+      "Direct Reports"
+    ],
+
+    "category": "leadership",
+
+    "business_area": "management",
+
+    "preferred_direction": "neutral",
+
+    "positive_effect": "leadership_scope",
+
+    "business_meaning": "Leadership Responsibility",
+
+    "impact_weight": 82
+  },
+
+  "Leadership Effectiveness": {
+
+    "entity_id": "MEASURE_LEADERSHIP_EFFECTIVENESS",
+
+    "canonical": "Leadership Effectiveness",
+
+    "aliases": [
+      "Leadership Performance"
+    ],
+
+    "category": "leadership",
+
+    "business_area": "management",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Organizational Leadership",
+
+    "impact_weight": 96
+  },
+
+  "Performance Rating": {
+
+    "entity_id": "MEASURE_PERFORMANCE_RATING",
+
+    "canonical": "Performance Rating",
+
+    "aliases": [
+      "Performance Score"
+    ],
+
+    "category": "people",
+
+    "business_area": "performance_management",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Employee Performance",
+
+    "impact_weight": 88
+  },
+
+  "Absenteeism": {
+
+    "entity_id": "MEASURE_ABSENTEEISM",
+
+    "canonical": "Absenteeism",
+
+    "aliases": [
+      "Attendance"
+    ],
+
+    "category": "people",
+
+    "business_area": "human_resources",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Workforce Availability",
+
+    "impact_weight": 84
+  },
+
+  "Competency": {
+
+    "entity_id": "MEASURE_COMPETENCY",
+
+    "canonical": "Competency",
+
+    "aliases": [
+      "Skill Competency",
+      "Capability"
+    ],
+
+    "category": "people",
+
+    "business_area": "learning_development",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Workforce Capability",
+
+    "impact_weight": 89
+  },
+
+  "Succession Readiness": {
+
+    "entity_id": "MEASURE_SUCCESSION",
+
+    "canonical": "Succession Readiness",
+
+    "aliases": [
+      "Succession Planning"
+    ],
+
+    "category": "leadership",
+
+    "business_area": "human_resources",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Leadership Continuity",
+
+    "impact_weight": 91
+  },
+
+  "Employee Productivity": {
+
+    "entity_id": "MEASURE_EMPLOYEE_PRODUCTIVITY",
+
+    "canonical": "Employee Productivity",
+
+    "aliases": [
+      "Workforce Productivity"
+    ],
+
+    "category": "people",
+
+    "business_area": "operations",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Operational Performance",
+
+    "impact_weight": 92
+  },
+  
+  "Downtime": {
+    "entity_id": "MEASURE_DOWNTIME",
+    "canonical": "Downtime",
+
+    "aliases": [
+      "Machine Downtime",
+      "Production Downtime",
+      "Equipment Downtime"
+    ],
+
+    "category": "maintenance",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Operational Availability",
+
+    "impact_weight": 98,
+
+    "executive_importance": 0.99
+  },
+
+  "Equipment Availability": {
+
+    "entity_id": "MEASURE_EQUIPMENT_AVAILABILITY",
+
+    "canonical": "Equipment Availability",
+
+    "aliases": [
+      "Availability"
+    ],
+
+    "category": "maintenance",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Asset Performance",
+
+    "impact_weight": 96
+  },
+
+  "Equipment Reliability": {
+
+    "entity_id": "MEASURE_EQUIPMENT_RELIABILITY",
+
+    "canonical": "Equipment Reliability",
+
+    "aliases": [
+      "Reliability"
+    ],
+
+    "category": "maintenance",
+
+    "business_area": "maintenance",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Operational Stability",
+
+    "impact_weight": 95
+  },
+
+  "MTBF": {
+
+    "entity_id": "MEASURE_MTBF",
+
+    "canonical": "Mean Time Between Failures",
+
+    "aliases": [
+      "MTBF"
+    ],
+
+    "category": "maintenance",
+
+    "business_area": "maintenance",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Equipment Reliability",
+
+    "impact_weight": 95
+  },
+
+  "MTTR": {
+
+    "entity_id": "MEASURE_MTTR",
+
+    "canonical": "Mean Time To Repair",
+
+    "aliases": [
+      "MTTR"
+    ],
+
+    "category": "maintenance",
+
+    "business_area": "maintenance",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Maintenance Responsiveness",
+
+    "impact_weight": 93
+  },
+
+  "Breakdowns": {
+
+    "entity_id": "MEASURE_BREAKDOWNS",
+
+    "canonical": "Equipment Breakdowns",
+
+    "aliases": [
+      "Machine Failures",
+      "Failures"
+    ],
+
+    "category": "maintenance",
+
+    "business_area": "maintenance",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Equipment Stability",
+
+    "impact_weight": 95
+  },
+
+  "Safety Incidents": {
+
+    "entity_id": "MEASURE_SAFETY_INCIDENTS",
+
+    "canonical": "Safety Incidents",
+
+    "aliases": [
+      "Incidents",
+      "Safety Events"
+    ],
+
+    "category": "safety",
+
+    "business_area": "health_safety",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Workplace Safety",
+
+    "impact_weight": 100,
+
+    "executive_importance": 1.00
+  },
+
+  "Lost Time Injury": {
+
+    "entity_id": "MEASURE_LTI",
+
+    "canonical": "Lost Time Injury",
+
+    "aliases": [
+      "LTI",
+      "Lost Time Injury Frequency"
+    ],
+
+    "category": "safety",
+
+    "business_area": "health_safety",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Occupational Safety",
+
+    "impact_weight": 100
+  },
+
+  "Near Miss": {
+
+    "entity_id": "MEASURE_NEAR_MISS",
+
+    "canonical": "Near Miss",
+
+    "aliases": [
+      "Near Miss Incident"
+    ],
+
+    "category": "safety",
+
+    "business_area": "health_safety",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Proactive Safety Reporting",
+
+    "impact_weight": 88
+  },
+
+  "Energy Consumption": {
+
+    "entity_id": "MEASURE_ENERGY",
+
+    "canonical": "Energy Consumption",
+
+    "aliases": [
+      "Electricity Consumption",
+      "Power Consumption"
+    ],
+
+    "category": "environment",
+
+    "business_area": "utilities",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Energy Efficiency",
+
+    "impact_weight": 90
+  },
+
+  "Water Consumption": {
+
+    "entity_id": "MEASURE_WATER",
+
+    "canonical": "Water Consumption",
+
+    "aliases": [
+      "Water Usage",
+      "Water Utilization"
+    ],
+
+    "category": "environment",
+
+    "business_area": "utilities",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Resource Efficiency",
+
+    "impact_weight": 90
+  },
+
+  "Carbon Emissions": {
+
+    "entity_id": "MEASURE_CARBON",
+
+    "canonical": "Carbon Emissions",
+
+    "aliases": [
+      "CO2 Emissions",
+      "Greenhouse Gas Emissions"
+    ],
+
+    "category": "environment",
+
+    "business_area": "esg",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Environmental Sustainability",
+
+    "impact_weight": 92
+  },
+
+  "Waste Generation": {
+
+    "entity_id": "MEASURE_WASTE",
+
+    "canonical": "Waste Generation",
+
+    "aliases": [
+      "Production Waste",
+      "Manufacturing Waste"
+    ],
+
+    "category": "environment",
+
+    "business_area": "manufacturing",
+
+    "preferred_direction": "decrease",
+
+    "positive_effect": "decrease",
+
+    "business_meaning": "Operational Sustainability",
+
+    "impact_weight": 91
+  },
+
+  "Waste Recycling": {
+
+    "entity_id": "MEASURE_RECYCLING",
+
+    "canonical": "Waste Recycling",
+
+    "aliases": [
+      "Recycling Rate"
+    ],
+
+    "category": "environment",
+
+    "business_area": "esg",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Circular Economy",
+
+    "impact_weight": 86
+  },
+
+  "Environmental Compliance": {
+
+    "entity_id": "MEASURE_ENVIRONMENTAL_COMPLIANCE",
+
+    "canonical": "Environmental Compliance",
+
+    "aliases": [
+      "Environmental Audit",
+      "Environmental Performance"
+    ],
+
+    "category": "environment",
+
+    "business_area": "esg",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Regulatory Compliance",
+
+    "impact_weight": 95
+  },
+  
+  "AI Model Accuracy": {
+    "entity_id": "MEASURE_AI_MODEL_ACCURACY",
+    "canonical": "AI Model Accuracy",
+
+    "aliases": [
+      "Model Accuracy",
+      "ML Accuracy",
+      "Prediction Accuracy"
+    ],
+
+    "category": "artificial_intelligence",
+
+    "business_area": "data_science",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Model Performance",
+
+    "impact_weight": 97,
+
+    "executive_importance": 0.98
+  },
+
+  "Prediction Accuracy": {
+
+    "entity_id": "MEASURE_PREDICTION_ACCURACY",
+
+    "canonical": "Prediction Accuracy",
+
+    "aliases": [
+      "Forecast Accuracy",
+      "Prediction Performance"
+    ],
+
+    "category": "analytics",
+
+    "business_area": "data_science",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Predictive Analytics",
+
+    "impact_weight": 96
+  },
+
+
+  "Dashboard Adoption": {
+
+    "entity_id": "MEASURE_DASHBOARD_ADOPTION",
+
+    "canonical": "Dashboard Adoption",
+
+    "aliases": [
+      "BI Adoption",
+      "Analytics Adoption"
+    ],
+
+    "category": "business_intelligence",
+
+    "business_area": "analytics",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Decision Support",
+
+    "impact_weight": 88
+  },
+
+  "Automation Rate": {
+
+    "entity_id": "MEASURE_AUTOMATION",
+
+    "canonical": "Automation Rate",
+
+    "aliases": [
+      "Process Automation",
+      "Automation"
+    ],
+
+    "category": "digital_transformation",
+
+    "business_area": "operations",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
     "business_meaning": "Operational Efficiency",
-    "impact": 85
+
+    "impact_weight": 96
+  },
+
+  "Digital Transformation": {
+
+    "entity_id": "MEASURE_DIGITAL_TRANSFORMATION",
+
+    "canonical": "Digital Transformation",
+
+    "aliases": [
+      "Digitalization",
+      "Digital Maturity"
+    ],
+
+    "category": "digital_transformation",
+
+    "business_area": "enterprise",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Enterprise Modernization",
+
+    "impact_weight": 95
+  },
+
+  "Data Quality": {
+
+    "entity_id": "MEASURE_DATA_QUALITY",
+
+    "canonical": "Data Quality",
+
+    "aliases": [
+      "Data Integrity",
+      "Data Accuracy"
+    ],
+
+    "category": "data_management",
+
+    "business_area": "analytics",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Reliable Decision Making",
+
+    "impact_weight": 92
+  },
+
+  "Data Completeness": {
+
+    "entity_id": "MEASURE_DATA_COMPLETENESS",
+
+    "canonical": "Data Completeness",
+
+    "aliases": [
+      "Complete Data"
+    ],
+
+    "category": "data_management",
+
+    "business_area": "analytics",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Information Reliability",
+
+    "impact_weight": 88
+  },
+
+  "Decision Accuracy": {
+
+    "entity_id": "MEASURE_DECISION_ACCURACY",
+
+    "canonical": "Decision Accuracy",
+
+    "aliases": [
+      "Business Decision Accuracy"
+    ],
+
+    "category": "analytics",
+
+    "business_area": "management",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Executive Decision Quality",
+
+    "impact_weight": 94
+  },
+
+  "Business Intelligence": {
+
+    "entity_id": "MEASURE_BUSINESS_INTELLIGENCE",
+
+    "canonical": "Business Intelligence",
+
+    "aliases": [
+      "BI",
+      "Business Analytics"
+    ],
+
+    "category": "analytics",
+
+    "business_area": "executive",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Executive Visibility",
+
+    "impact_weight": 93
+  },
+
+  "Machine Learning Performance": {
+
+    "entity_id": "MEASURE_ML_PERFORMANCE",
+
+    "canonical": "Machine Learning Performance",
+
+    "aliases": [
+      "ML Performance",
+      "Model Performance"
+    ],
+
+    "category": "artificial_intelligence",
+
+    "business_area": "data_science",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "AI Effectiveness",
+
+    "impact_weight": 95
+  },
+
+  "KPI Visibility": {
+
+    "entity_id": "MEASURE_KPI_VISIBILITY",
+
+    "canonical": "KPI Visibility",
+
+    "aliases": [
+      "Executive Dashboard",
+      "KPI Dashboard"
+    ],
+
+    "category": "business_intelligence",
+
+    "business_area": "executive",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Management Reporting",
+
+    "impact_weight": 90
+  },
+
+  "Executive Reporting": {
+
+    "entity_id": "MEASURE_EXECUTIVE_REPORTING",
+
+    "canonical": "Executive Reporting",
+
+    "aliases": [
+      "Board Reporting",
+      "Leadership Reporting"
+    ],
+
+    "category": "management",
+
+    "business_area": "executive",
+
+    "preferred_direction": "increase",
+
+    "positive_effect": "increase",
+
+    "business_meaning": "Executive Communication",
+
+    "impact_weight": 91
   }
 }

@@ -669,5 +669,163 @@
     "standardize_currency": true,
 
     "normalize_case": true
+  },
+  
+  "regex_patterns": {
+    "integer": "\\b\\d+\\b",
+
+    "decimal": "\\b\\d+\\.\\d+\\b",
+
+    "percentage": "\\b\\d+(\\.\\d+)?\\s?%\\b",
+
+    "currency": "(\\$|USD|CAD|EUR|GBP|PKR|AED|SAR|INR)\\s?\\d+[\\d,]*(\\.\\d+)?",
+
+    "range": "\\b\\d+(\\.\\d+)?\\s?(to|-|–)\\s?\\d+(\\.\\d+)?\\b",
+
+    "fraction": "\\b\\d+\\/\\d+\\b",
+
+    "multiplier": "\\b\\d+(\\.\\d+)?\\s?(k|m|b|t)\\b",
+
+    "year": "\\b(19|20)\\d{2}\\b",
+
+    "month_year": "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\s+\\d{4}",
+
+    "duration": "\\b\\d+\\s?(days?|weeks?|months?|years?|hrs?|hours?|minutes?)\\b"
+  },
+
+  "entity_priority": [
+    "business_kpis",
+    "metrics",
+    "impact_dictionary",
+    "measurement_patterns",
+    "modifiers",
+    "skills",
+    "technologies",
+    "methodologies"
+  ],
+
+  "unit_conversion": {
+    "kg_to_g": 1000,
+    "g_to_kg": 0.001,
+
+    "ton_to_kg": 1000,
+    "lb_to_kg": 0.453592,
+
+    "l_to_ml": 1000,
+    "ml_to_l": 0.001,
+
+    "m_to_cm": 100,
+    "cm_to_mm": 10,
+    "km_to_m": 1000,
+
+    "hour_to_min": 60,
+    "day_to_hour": 24,
+    "week_to_day": 7,
+    "month_to_day": 30,
+    "year_to_day": 365
+  },
+
+  "numeric_validation": {
+    "allow_negative": false,
+    "allow_zero": true,
+    "max_reasonable_percentage": 100,
+    "max_reasonable_probability": 1.0,
+    "normalize_currency": true,
+    "normalize_multiplier": true
+  },
+
+  "measurement_context": {
+    "before_keywords": [
+      "from",
+      "approximately",
+      "around",
+      "about",
+      "nearly",
+      "almost"
+    ],
+
+    "after_keywords": [
+      "to",
+      "within",
+      "per",
+      "annually",
+      "monthly",
+      "daily",
+      "weekly"
+    ]
+  },
+
+  "parser_priority": {
+    "percentage": 100,
+    "currency": 95,
+    "ratio": 90,
+    "time": 85,
+    "quantity": 80,
+    "temperature": 75,
+    "weight": 70,
+    "volume": 70,
+    "distance": 65,
+    "count": 60
+  },
+
+  "confidence_scoring": {
+    "number_detected": 0.15,
+    "unit_detected": 0.15,
+    "modifier_detected": 0.10,
+    "kpi_detected": 0.25,
+    "trend_detected": 0.15,
+    "impact_detected": 0.20
+  },
+
+  "semantic_relationships": {
+    "increase": [
+      "improved",
+      "raised",
+      "boosted",
+      "grew",
+      "expanded"
+    ],
+
+    "decrease": [
+      "reduced",
+      "lowered",
+      "cut",
+      "eliminated",
+      "minimized"
+    ],
+
+    "maintain": [
+      "maintained",
+      "sustained",
+      "retained"
+    ],
+
+    "optimize": [
+      "optimized",
+      "streamlined",
+      "automated",
+      "standardized"
+    ]
+  },
+
+  "normalization_rules": {
+    "trim_whitespace": true,
+    "lowercase_matching": true,
+    "preserve_original_case": true,
+    "remove_duplicate_spaces": true,
+    "remove_thousand_separator": true,
+    "normalize_unicode": true
+  },
+
+  "enterprise_settings": {
+    "extract_multiple_measurements": true,
+    "allow_nested_measurements": true,
+    "calculate_improvement": true,
+    "calculate_reduction": true,
+    "detect_ranges": true,
+    "detect_trends": true,
+    "detect_timeframe": true,
+    "auto_normalize_units": true,
+    "enable_ai_reasoning": true
   }
 }

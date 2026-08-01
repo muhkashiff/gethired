@@ -1,14 +1,15 @@
 """
-Action Extractor
+Enterprise Action Extractor
 
 Repository-driven Action Extractor.
 
-Identifies one or more actions from a sentence using the
-central ontology repository.
-
-No JSON files are opened here.
-
-Repository is the single source of truth.
+Features
+--------
+✓ Repository Dependency Injection
+✓ Multi-word Action Detection
+✓ Duplicate Removal
+✓ Enterprise Confidence
+✓ Backward Compatible
 """
 
 import re
@@ -22,123 +23,176 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.action_mode
 
 class ActionExtractor:
 
-    def __init__(self):
+    ####################################################################
+    # INITIALIZATION
+    ####################################################################
 
-        self.repository = Repository()
+    def __init__(self, repository=None):
 
-    # ----------------------------------------------------------
-    # Backward compatible API
-    # ----------------------------------------------------------
+        self.repository = repository or Repository()
 
-    def extract(self, sentence: str) -> ActionKnowledge:
-        """
-        Returns the first detected action.
+        self.max_ngram = 4
 
-        Existing parser code can continue calling extract()
-        without modification.
-        """
+    ####################################################################
+    # BACKWARD COMPATIBLE
+    ####################################################################
+
+    def extract(self, sentence):
 
         actions = self.extract_all(sentence)
 
         if actions:
+
             return actions[0]
 
         return ActionKnowledge()
 
-    # ----------------------------------------------------------
-    # Extract every action
-    # ----------------------------------------------------------
+    ####################################################################
+    # EXTRACT ALL ACTIONS
+    ####################################################################
 
-    def extract_all(self, sentence: str):
+    def extract_all(self, sentence):
 
         results = []
 
+        seen = set()
+
         sentence_lower = sentence.lower()
 
-        token_index = 0
+        matches = list(
+            re.finditer(r"\b[\w-]+\b", sentence_lower)
+        )
 
-        pattern = re.compile(r"\b[\w-]+\b")
+        words = [m.group() for m in matches]
 
-        for match in pattern.finditer(sentence_lower):
+        ################################################################
+        # NGRAM SEARCH
+        ################################################################
 
-            word = match.group()
+        for n in range(self.max_ngram, 0, -1):
 
-            # --------------------------------------------
-            # Repository lookup
-            # --------------------------------------------
+            for i in range(len(words) - n + 1):
 
-            entity = self.repository.get_action(word)
+                phrase = " ".join(
+                    words[i:i+n]
+                )
 
-            if entity is None:
+                entity = self.repository.get_action(
+                    phrase
+                )
 
-                token_index += 1
-                continue
+                if entity is None:
+                    continue
 
-            metadata = entity.metadata
+                if entity.entity_id in seen:
+                    continue
 
-            base = metadata.get("base", word)
+                seen.add(entity.entity_id)
 
-            gerund = metadata.get(
-                "gerund",
-                base + "ing"
-            )
+                metadata = entity.metadata
 
-            # --------------------------------------------
-            # Build Knowledge Model
-            # --------------------------------------------
+                confidence = self._confidence(
+                    phrase,
+                    entity
+                )
 
-            results.append(
+                results.append(
 
-                ActionKnowledge(
+                    ActionKnowledge(
 
-                    found=True,
+                        found=True,
 
-                    confidence=0.95,
+                        confidence=confidence,
 
-                    # -----------------------
-                    # Linguistics
-                    # -----------------------
+                        original=phrase,
 
-                    original=word,
+                        base=metadata.get(
+                            "base",
+                            entity.canonical
+                        ),
 
-                    base=base,
+                        gerund=metadata.get(
+                            "gerund",
+                            ""
+                        ),
 
-                    gerund=gerund,
+                        category=entity.category,
 
-                    category=entity.category,
+                        entity_id=entity.entity_id,
 
-                    # -----------------------
-                    # Ontology
-                    # -----------------------
+                        business_area=entity.business_area,
 
-                    entity_id=entity.entity_id,
+                        impact_weight=entity.impact_weight,
 
-                    business_area=entity.business_area,
+                        source="ontology",
 
-                    impact_weight=entity.impact_weight,
+                        metadata=metadata,
 
-                    source="ontology",
+                        start_char=matches[i].start(),
 
-                    metadata=metadata,
+                        end_char=matches[
+                            i+n-1
+                        ].end(),
 
-                    # -----------------------
-                    # Position
-                    # -----------------------
+                        token_index=i,
 
-                    start_char=match.start(),
+                        sentence_index=0,
 
-                    end_char=match.end(),
+                        clause_candidate=True,
 
-                    token_index=token_index,
+                        entity_type="action",
 
-                    sentence_index=0,
+                        matched_phrase=phrase,
 
-                    clause_candidate=True,
+                        matched_alias=(
+                            phrase.lower()
+                            != entity.canonical.lower()
+                        )
+
+                    )
 
                 )
 
+        ################################################################
+        # SORT
+        ################################################################
+
+        results.sort(
+
+            key=lambda x: (
+
+                x.token_index,
+
+                -x.confidence
+
             )
 
-            token_index += 1
+        )
 
         return results
+
+    ####################################################################
+    # CONFIDENCE
+    ####################################################################
+
+    def _confidence(self,
+                    phrase,
+                    entity):
+
+        canonical = entity.canonical.lower()
+
+        if phrase.lower() == canonical:
+
+            return 0.99
+
+        if phrase.lower() in [
+
+            a.lower()
+
+            for a in entity.aliases
+
+        ]:
+
+            return 0.95
+
+        return 0.90

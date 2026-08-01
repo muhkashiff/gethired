@@ -56,6 +56,12 @@ class ActionKnowledge:
 
     entity_id: str = ""
 
+    entity_type: str = ""
+
+    matched_phrase: str = ""
+
+    matched_alias: bool = False
+
     business_area: str = ""
 
     impact_weight: float = 1.0

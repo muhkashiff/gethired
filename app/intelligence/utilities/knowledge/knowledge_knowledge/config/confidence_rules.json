@@ -1,15 +1,666 @@
 {
-  "verb_found":0.25,
+  "version": "3.0",
+  "schema": "enterprise_confidence_rules",
 
-  "object_found":0.20,
+  "base_weights": {
 
-  "domain_found":0.20,
+    "action_verb_found": {
+      "weight": 0.18,
+      "description": "Strong action verb detected."
+    },
 
-  "metric_found":0.15,
+    "business_object_found": {
+      "weight": 0.12,
+      "description": "Business object or process detected."
+    },
 
-  "numeric_value":0.10,
+    "business_domain_found": {
+      "weight": 0.12,
+      "description": "Mapped business domain identified."
+    },
 
-  "modifier_found":0.10,
+    "kpi_found": {
+      "weight": 0.14,
+      "description": "Known KPI matched."
+    },
 
-  "max_confidence":1.0
+    "metric_found": {
+      "weight": 0.10,
+      "description": "Business metric detected."
+    },
+
+    "technology_found": {
+      "weight": 0.08,
+      "description": "Technology identified."
+    },
+
+    "methodology_found": {
+      "weight": 0.08,
+      "description": "Methodology detected."
+    },
+
+    "skill_found": {
+      "weight": 0.08,
+      "description": "Skill matched."
+    },
+
+    "modifier_found": {
+      "weight": 0.05,
+      "description": "Executive modifier detected."
+    },
+
+    "certification_found": {
+      "weight": 0.05,
+      "description": "Certification matched."
+    }
+  },
+
+  "measurement_weights": {
+
+    "numeric_value": {
+      "weight": 0.08
+    },
+
+    "percentage": {
+      "weight": 0.08
+    },
+
+    "currency": {
+      "weight": 0.09
+    },
+
+    "time_period": {
+      "weight": 0.05
+    },
+
+    "unit_of_measure": {
+      "weight": 0.04
+    }
+  },
+
+  "relationship_weights": {
+
+    "impact_dictionary_match": {
+      "weight": 0.10
+    },
+
+    "business_kpi_match": {
+      "weight": 0.12
+    },
+
+    "cross_dictionary_match": {
+      "weight": 0.10
+    },
+
+    "knowledge_graph_match": {
+      "weight": 0.12
+    }
+  },
+
+  "normalization": {
+
+    "maximum_confidence": 1.0,
+
+    "minimum_confidence": 0.0,
+
+    "normalize_score": true
+  },
+  
+  "confidence_bonuses": {
+
+    "quantified_achievement": {
+      "weight": 0.12,
+      "description": "Achievement contains measurable business result."
+    },
+
+    "multiple_kpi_match": {
+      "weight": 0.08,
+      "description": "Multiple KPIs detected in one statement."
+    },
+
+    "multiple_metric_match": {
+      "weight": 0.06,
+      "description": "Multiple metrics detected."
+    },
+
+    "executive_modifier": {
+      "weight": 0.08,
+      "description": "Executive-level modifier detected."
+    },
+
+    "cross_dictionary_match": {
+      "weight": 0.10,
+      "description": "Entities validated across multiple dictionaries."
+    },
+
+    "technology_and_methodology": {
+      "weight": 0.07,
+      "description": "Technology and methodology support each other."
+    },
+
+    "certification_support": {
+      "weight": 0.06,
+      "description": "Certification validates claimed experience."
+    },
+
+    "leadership_signal": {
+      "weight": 0.08,
+      "description": "Leadership action identified."
+    },
+
+    "ownership_signal": {
+      "weight": 0.07,
+      "description": "Ownership or accountability detected."
+    },
+
+    "business_impact": {
+      "weight": 0.10,
+      "description": "Financial or operational business impact identified."
+    }
+  },
+
+  "confidence_penalties": {
+
+    "missing_action_verb": {
+      "penalty": -0.15
+    },
+
+    "missing_business_object": {
+      "penalty": -0.10
+    },
+
+    "missing_metric": {
+      "penalty": -0.08
+    },
+
+    "missing_numeric_value": {
+      "penalty": -0.07
+    },
+
+    "weak_modifier": {
+      "penalty": -0.03
+    },
+
+    "unknown_entity": {
+      "penalty": -0.12
+    },
+
+    "conflicting_domain": {
+      "penalty": -0.15
+    },
+
+    "duplicate_entity": {
+      "penalty": -0.05
+    },
+
+    "ambiguous_measurement": {
+      "penalty": -0.08
+    },
+
+    "unverified_claim": {
+      "penalty": -0.10
+    }
+  },
+
+  "executive_multipliers": {
+
+    "enterprise_scope": 1.20,
+
+    "global_scope": 1.18,
+
+    "regional_scope": 1.12,
+
+    "plant_scope": 1.08,
+
+    "department_scope": 1.05,
+
+    "team_scope": 1.03,
+
+    "individual_scope": 1.00
+  },
+
+  "experience_multipliers": {
+
+    "strategic_leadership": 1.20,
+
+    "senior_management": 1.16,
+
+    "middle_management": 1.10,
+
+    "technical_specialist": 1.06,
+
+    "individual_contributor": 1.00
+  },
+
+  "industry_multipliers": {
+
+    "food_safety": 1.12,
+
+    "quality": 1.10,
+
+    "manufacturing": 1.08,
+
+    "operations": 1.08,
+
+    "supply_chain": 1.07,
+
+    "finance": 1.10,
+
+    "technology": 1.09,
+
+    "healthcare": 1.11,
+
+    "energy": 1.08,
+
+    "retail": 1.05
+  },
+
+  "ai_importance_weights": {
+
+    "business_kpi": 1.20,
+
+    "impact_dictionary": 1.18,
+
+    "metric": 1.15,
+
+    "technology": 1.10,
+
+    "methodology": 1.08,
+
+    "certification": 1.08,
+
+    "modifier": 1.05,
+
+    "skill": 1.00
+  },
+  
+  "achievement_confidence": {
+
+    "required_components": {
+
+      "action": {
+        "weight": 0.20
+      },
+
+      "business_object": {
+        "weight": 0.15
+      },
+
+      "business_domain": {
+        "weight": 0.10
+      },
+
+      "metric": {
+        "weight": 0.10
+      },
+
+      "numeric_measurement": {
+        "weight": 0.15
+      },
+
+      "impact": {
+        "weight": 0.15
+      },
+
+      "modifier": {
+        "weight": 0.05
+      },
+
+      "technology_or_methodology": {
+        "weight": 0.10
+      }
+    },
+
+    "minimum_required": [
+      "action",
+      "business_object"
+    ]
+  },
+
+  "sentence_confidence": {
+
+    "contains_action": 0.15,
+
+    "contains_measurement": 0.15,
+
+    "contains_business_entity": 0.15,
+
+    "contains_business_domain": 0.10,
+
+    "contains_modifier": 0.08,
+
+    "contains_kpi": 0.12,
+
+    "contains_metric": 0.10,
+
+    "contains_technology": 0.08,
+
+    "contains_methodology": 0.07
+  },
+
+  "resume_section_weights": {
+
+    "professional_summary": 1.20,
+
+    "experience": 1.30,
+
+    "projects": 1.15,
+
+    "achievements": 1.25,
+
+    "education": 0.85,
+
+    "certifications": 1.10,
+
+    "skills": 0.90,
+
+    "leadership": 1.15
+  },
+
+  "knowledge_graph_confidence": {
+
+    "direct_entity_match": {
+      "weight": 0.30
+    },
+
+    "semantic_entity_match": {
+      "weight": 0.20
+    },
+
+    "cross_dictionary_validation": {
+      "weight": 0.20
+    },
+
+    "domain_relationship": {
+      "weight": 0.15
+    },
+
+    "impact_relationship": {
+      "weight": 0.15
+    }
+  },
+
+  "relationship_confidence": {
+
+    "verb_to_object": 0.20,
+
+    "object_to_metric": 0.15,
+
+    "metric_to_kpi": 0.15,
+
+    "technology_to_methodology": 0.10,
+
+    "certification_to_methodology": 0.10,
+
+    "domain_to_business_area": 0.10,
+
+    "impact_to_business_goal": 0.20
+  },
+
+  "entity_confidence": {
+
+    "exact_match": 1.00,
+
+    "canonical_match": 0.98,
+
+    "alias_match": 0.95,
+
+    "semantic_match": 0.90,
+
+    "embedding_match": 0.88,
+
+    "fuzzy_match": 0.82,
+
+    "partial_match": 0.75
+  },
+
+  "context_confidence": {
+
+    "same_sentence": 1.00,
+
+    "same_paragraph": 0.95,
+
+    "same_resume_section": 0.90,
+
+    "cross_section": 0.80
+  },
+
+  "business_reasoning": {
+
+    "supports_business_goal": 0.15,
+
+    "supports_financial_goal": 0.15,
+
+    "supports_operational_goal": 0.15,
+
+    "supports_quality_goal": 0.15,
+
+    "supports_food_safety_goal": 0.15,
+
+    "supports_customer_goal": 0.10,
+
+    "supports_people_goal": 0.10,
+
+    "supports_sustainability_goal": 0.05
+  },
+
+  "explainability": {
+
+    "store_reasoning_path": true,
+
+    "store_triggered_rules": true,
+
+    "store_missing_rules": true,
+
+    "store_bonus_rules": true,
+
+    "store_penalty_rules": true,
+
+    "store_final_confidence": true
+  },
+  
+  "confidence_thresholds": {
+
+    "very_low": {
+      "minimum": 0.00,
+      "maximum": 0.30,
+      "label": "Very Low Confidence",
+      "action": "Reject"
+    },
+
+    "low": {
+      "minimum": 0.30,
+      "maximum": 0.50,
+      "label": "Low Confidence",
+      "action": "Needs Human Review"
+    },
+
+    "medium": {
+      "minimum": 0.50,
+      "maximum": 0.70,
+      "label": "Medium Confidence",
+      "action": "Accept with Validation"
+    },
+
+    "high": {
+      "minimum": 0.70,
+      "maximum": 0.90,
+      "label": "High Confidence",
+      "action": "Automatically Accept"
+    },
+
+    "executive_grade": {
+      "minimum": 0.90,
+      "maximum": 1.00,
+      "label": "Executive Grade Confidence",
+      "action": "Priority Candidate"
+    }
+  },
+
+  "resume_quality_thresholds": {
+
+    "poor": 0.45,
+
+    "acceptable": 0.60,
+
+    "good": 0.75,
+
+    "excellent": 0.88,
+
+    "executive": 0.95
+  },
+
+  "ats_thresholds": {
+
+    "minimum_resume_score": 0.65,
+
+    "minimum_skill_score": 0.60,
+
+    "minimum_experience_score": 0.70,
+
+    "minimum_keyword_score": 0.55,
+
+    "minimum_business_score": 0.70
+  },
+
+  "recommendation_rules": {
+
+    "strongly_recommend": {
+      "minimum_score": 0.90
+    },
+
+    "recommend": {
+      "minimum_score": 0.80
+    },
+
+    "consider": {
+      "minimum_score": 0.70
+    },
+
+    "review": {
+      "minimum_score": 0.55
+    },
+
+    "reject": {
+      "maximum_score": 0.55
+    }
+  },
+
+  "human_review_rules": {
+
+    "missing_action": true,
+
+    "missing_business_object": true,
+
+    "missing_metric": true,
+
+    "conflicting_domains": true,
+
+    "low_confidence_entity": true,
+
+    "duplicate_measurements": true,
+
+    "multiple_possible_matches": true
+  },
+
+  "automatic_rejection": {
+
+    "confidence_below": 0.35,
+
+    "missing_action_and_object": true,
+
+    "invalid_measurement": true,
+
+    "unsupported_entity": true
+  },
+
+  "retry_rules": {
+
+    "retry_unknown_entities": true,
+
+    "retry_fuzzy_matching": true,
+
+    "retry_embedding_matching": true,
+
+    "maximum_attempts": 3
+  },
+
+  "extraction_priority": [
+
+    "business_kpis",
+
+    "metrics",
+
+    "impact_dictionary",
+
+    "technologies",
+
+    "methodologies",
+
+    "certifications",
+
+    "skills",
+
+    "measurement_patterns",
+
+    "modifiers"
+
+  ],
+
+  "parser_settings": {
+
+    "enable_ai_reasoning": true,
+
+    "enable_cross_dictionary_validation": true,
+
+    "enable_entity_disambiguation": true,
+
+    "enable_confidence_explanation": true,
+
+    "enable_resume_scoring": true,
+
+    "enable_resume_ranking": true,
+
+    "enable_business_reasoning": true,
+
+    "enable_graph_validation": true
+  },
+
+  "logging": {
+
+    "store_raw_score": true,
+
+    "store_normalized_score": true,
+
+    "store_triggered_rules": true,
+
+    "store_missing_rules": true,
+
+    "store_entity_matches": true,
+
+    "store_reasoning_path": true,
+
+    "store_ai_decision": true
+  },
+
+  "output_labels": {
+
+    "0.95": "Executive Ready",
+
+    "0.90": "Outstanding",
+
+    "0.85": "Excellent",
+
+    "0.80": "Strong",
+
+    "0.70": "Good",
+
+    "0.60": "Average",
+
+    "0.50": "Weak",
+
+    "0.40": "Poor",
+
+    "0.30": "Very Poor"
+  }
 }

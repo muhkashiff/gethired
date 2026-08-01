@@ -1,21 +1,453 @@
 {
   "lean": "METH_LEAN",
   "lean manufacturing": "METH_LEAN",
+  "lean management": "METH_LEAN",
+  "lean production": "METH_LEAN",
+  "lean operations": "METH_LEAN",
   "toyota production system": "METH_LEAN",
+  "tps": "METH_LEAN",
+  "lean principles": "METH_LEAN",
+  "lean transformation": "METH_LEAN",
+
+  "kaizen": "METH_KAIZEN",
+  "continuous improvement": "METH_KAIZEN",
+  "continuous improvements": "METH_KAIZEN",
+  "kaizen event": "METH_KAIZEN",
+  "kaizen workshop": "METH_KAIZEN",
+
+  "5s": "METH_5S",
+  "five s": "METH_5S",
+  "5 s": "METH_5S",
+  "workplace organization": "METH_5S",
+  "workplace organisation": "METH_5S",
+  "sort set shine standardize sustain": "METH_5S",
+
   "tpm": "METH_TPM",
   "total productive maintenance": "METH_TPM",
-  "5s": "METH_5S",
+  "productive maintenance": "METH_TPM",
+  "autonomous maintenance": "METH_TPM",
+  "planned maintenance": "METH_TPM",
+
+
   "six sigma": "METH_SIX_SIGMA",
+  "6 sigma": "METH_SIX_SIGMA",
+  "sigma": "METH_SIX_SIGMA",
+  "lean six sigma": "METH_SIX_SIGMA",
+  "lss": "METH_SIX_SIGMA",
+  "lean six sigma methodology": "METH_SIX_SIGMA",
+  "lean sigma": "METH_SIX_SIGMA",
+
   "green belt": "METH_SIX_SIGMA",
+  "six sigma green belt": "METH_SIX_SIGMA",
+  "lean six sigma green belt": "METH_SIX_SIGMA",
+  "lssgb": "METH_SIX_SIGMA",
+  "cssgb": "METH_SIX_SIGMA",
+
   "black belt": "METH_SIX_SIGMA",
+  "six sigma black belt": "METH_SIX_SIGMA",
+  "lean six sigma black belt": "METH_SIX_SIGMA",
+  "lssbb": "METH_SIX_SIGMA",
+  "cssbb": "METH_SIX_SIGMA",
+
+  "master black belt": "METH_SIX_SIGMA",
+  "master six sigma black belt": "METH_SIX_SIGMA",
+  "mbb": "METH_SIX_SIGMA",
+
+  "yellow belt": "METH_SIX_SIGMA",
+  "six sigma yellow belt": "METH_SIX_SIGMA",
+  "lean six sigma yellow belt": "METH_SIX_SIGMA",
+  "cssyb": "METH_SIX_SIGMA",
+
+  "white belt": "METH_SIX_SIGMA",
+  "six sigma white belt": "METH_SIX_SIGMA",
+
+  "dmaic": "METH_DMAIC",
+  "define measure analyze improve control": "METH_DMAIC",
+  "define measure analyse improve control": "METH_DMAIC",
+
+  "define": "METH_DMAIC",
+  "measure": "METH_DMAIC",
+  "analyze": "METH_DMAIC",
+  "analyse": "METH_DMAIC",
+  "improve": "METH_DMAIC",
+  "control": "METH_DMAIC",
+
+  "dmadv": "METH_SIX_SIGMA",
+  "define measure analyze design verify": "METH_SIX_SIGMA",
+  "define measure analyse design verify": "METH_SIX_SIGMA",
+
+  "dfss": "METH_SIX_SIGMA",
+  "design for six sigma": "METH_SIX_SIGMA",
+
+  "process capability": "METH_SIX_SIGMA",
+  "capability analysis": "METH_SIX_SIGMA",
+  "cp": "METH_SIX_SIGMA",
+  "cpk": "METH_SIX_SIGMA",
+  "ppk": "METH_SIX_SIGMA",
+  "process capability index": "METH_SIX_SIGMA",
+
+  "statistical improvement": "METH_SIX_SIGMA",
+  "variation reduction": "METH_SIX_SIGMA",
+  "defect reduction": "METH_SIX_SIGMA",
+
   "rca": "METH_RCA",
   "root cause analysis": "METH_RCA",
-  "pdca": "METH_PDCA",
-  "dmaic": "METH_DMAIC",
-  "fmea": "METH_FMEA",
-  "8d": "METH_8D",
-  "pareto": "METH_PARETO",
+  "root cause investigation": "METH_RCA",
+  "root cause identification": "METH_RCA",
+  "cause analysis": "METH_RCA",
+  "problem root cause": "METH_RCA",
+  "failure investigation": "METH_RCA",
+  "incident investigation": "METH_RCA",
+  "nonconformance investigation": "METH_RCA",
+
   "fishbone": "METH_FISHBONE",
+  "fish bone": "METH_FISHBONE",
+  "fishbone analysis": "METH_FISHBONE",
+  "fishbone diagram": "METH_FISHBONE",
+  "cause and effect": "METH_FISHBONE",
+  "cause-effect diagram": "METH_FISHBONE",
+  "cause and effect diagram": "METH_FISHBONE",
   "ishikawa": "METH_FISHBONE",
-  "gemba": "METH_GEMBA"
+  "ishikawa diagram": "METH_FISHBONE",
+  "cause mapping": "METH_FISHBONE",
+
+  "5 why": "METH_5WHY",
+  "5 whys": "METH_5WHY",
+  "five why": "METH_5WHY",
+  "five whys": "METH_5WHY",
+  "why why analysis": "METH_5WHY",
+
+  "pareto": "METH_PARETO",
+  "pareto analysis": "METH_PARETO",
+  "pareto chart": "METH_PARETO",
+  "pareto principle": "METH_PARETO",
+  "80/20 rule": "METH_PARETO",
+  "80 20 rule": "METH_PARETO",
+  "vital few trivial many": "METH_PARETO",
+
+  "problem solving": "METH_8D",
+  "structured problem solving": "METH_8D",
+  "systematic problem solving": "METH_8D",
+  "problem investigation": "METH_8D",
+
+  "8d": "METH_8D",
+  "8 discipline": "METH_8D",
+  "8 disciplines": "METH_8D",
+  "8d methodology": "METH_8D",
+  "8d report": "METH_8D",
+  "global 8d": "METH_8D",
+
+  "corrective action": "METH_CAPA",
+  "preventive action": "METH_CAPA",
+  "corrective preventive action": "METH_CAPA",
+  "corrective and preventive action": "METH_CAPA",
+  "capa": "METH_CAPA",
+  "capa process": "METH_CAPA",
+  "capa system": "METH_CAPA",
+
+  "brainstorming": "METH_BRAINSTORMING",
+  "brain storming": "METH_BRAINSTORMING",
+  "brainstorm": "METH_BRAINSTORMING",
+
+  "decision matrix": "METH_DECISION_MATRIX",
+  "prioritization matrix": "METH_DECISION_MATRIX",
+  "priority matrix": "METH_DECISION_MATRIX",
+
+  "affinity diagram": "METH_AFFINITY_DIAGRAM",
+
+  "problem analysis": "METH_RCA",
+  "cause identification": "METH_RCA",
+  "failure analysis": "METH_RCA",
+  "fault analysis": "METH_RCA",
+  "defect investigation": "METH_RCA",
+
+  "fmea": "METH_FMEA",
+  "failure mode and effects analysis": "METH_FMEA",
+  "failure modes and effects analysis": "METH_FMEA",
+  "failure mode analysis": "METH_FMEA",
+
+  "dfmea": "METH_DFMEA",
+  "design fmea": "METH_DFMEA",
+  "design failure mode and effects analysis": "METH_DFMEA",
+
+  "pfmea": "METH_PFMEA",
+  "process fmea": "METH_PFMEA",
+  "process failure mode and effects analysis": "METH_PFMEA",
+
+  "control plan": "METH_CONTROL_PLAN",
+  "process control plan": "METH_CONTROL_PLAN",
+  "quality control plan": "METH_CONTROL_PLAN",
+
+  "spc": "METH_SPC",
+  "statistical process control": "METH_SPC",
+  "process control charts": "METH_SPC",
+  "control charts": "METH_SPC",
+  "statistical control": "METH_SPC",
+
+  "msa": "METH_MSA",
+  "measurement system analysis": "METH_MSA",
+
+  "gage rr": "METH_GAGE_RR",
+  "gage r&r": "METH_GAGE_RR",
+  "gauge rr": "METH_GAGE_RR",
+  "gauge r&r": "METH_GAGE_RR",
+  "gage repeatability reproducibility": "METH_GAGE_RR",
+  "gauge repeatability reproducibility": "METH_GAGE_RR",
+
+  "doe": "METH_DOE",
+  "design of experiments": "METH_DOE",
+  "experimental design": "METH_DOE",
+
+  "verification": "METH_VERIFICATION",
+  "process verification": "METH_VERIFICATION",
+  "product verification": "METH_VERIFICATION",
+  "verification activities": "METH_VERIFICATION",
+
+  "validation": "METH_VALIDATION",
+  "process validation": "METH_VALIDATION",
+  "product validation": "METH_VALIDATION",
+  "validation protocol": "METH_VALIDATION",
+
+  "sampling": "METH_SAMPLING",
+  "sampling plan": "METH_SAMPLING",
+  "acceptance sampling": "METH_ACCEPTANCE_SAMPLING",
+  "sampling inspection": "METH_ACCEPTANCE_SAMPLING",
+  "incoming inspection": "METH_ACCEPTANCE_SAMPLING",
+
+  "risk assessment": "METH_RISK_ASSESSMENT",
+  "quality risk assessment": "METH_RISK_ASSESSMENT",
+  "operational risk assessment": "METH_RISK_ASSESSMENT",
+  "process risk assessment": "METH_RISK_ASSESSMENT",
+
+  "hazard analysis": "METH_HAZARD_ANALYSIS",
+  "hazard identification": "METH_HAZARD_ANALYSIS",
+
+  "critical control point": "METH_HACCP",
+  "critical control points": "METH_HACCP",
+  "ccp": "METH_HACCP",
+
+  "haccp": "METH_HACCP",
+  "hazard analysis critical control point": "METH_HACCP",
+
+  "harpc": "METH_HARPC",
+  "hazard analysis and risk based preventive controls": "METH_HARPC",
+
+  "prp": "METH_PRP",
+  "prps": "METH_PRP",
+  "prerequisite program": "METH_PRP",
+  "prerequisite programmes": "METH_PRP",
+
+  "oprp": "METH_OPRP",
+  "operational prerequisite programme": "METH_OPRP",
+  "operational prerequisite program": "METH_OPRP",
+
+  "decision tree": "METH_HACCP_DECISION_TREE",
+  "ccp decision tree": "METH_HACCP_DECISION_TREE",
+
+  "verification audit": "METH_VERIFICATION",
+  "validation study": "METH_VALIDATION",
+
+  "pdca": "METH_PDCA",
+  "plan do check act": "METH_PDCA",
+  "plan-do-check-act": "METH_PDCA",
+  "deming cycle": "METH_PDCA",
+
+  "pdsa": "METH_PDSA",
+  "plan do study act": "METH_PDSA",
+  "plan-do-study-act": "METH_PDSA",
+
+  "a3": "METH_A3",
+  "a3 thinking": "METH_A3",
+  "a3 methodology": "METH_A3",
+  "a3 problem solving": "METH_A3",
+  "toyota a3": "METH_A3",
+
+  "gemba": "METH_GEMBA",
+  "gemba walk": "METH_GEMBA",
+  "gemba walks": "METH_GEMBA",
+  "shop floor walk": "METH_GEMBA",
+  "floor walk": "METH_GEMBA",
+
+  "standard work": "METH_STANDARD_WORK",
+  "standardized work": "METH_STANDARD_WORK",
+  "work standardization": "METH_STANDARD_WORK",
+  "work instruction": "METH_STANDARD_WORK",
+
+  "visual management": "METH_VISUAL_MANAGEMENT",
+  "visual controls": "METH_VISUAL_MANAGEMENT",
+  "visual workplace": "METH_VISUAL_MANAGEMENT",
+
+  "vsm": "METH_VALUE_STREAM_MAPPING",
+  "value stream mapping": "METH_VALUE_STREAM_MAPPING",
+  "value stream map": "METH_VALUE_STREAM_MAPPING",
+
+  "smed": "METH_SMED",
+  "single minute exchange of dies": "METH_SMED",
+  "quick changeover": "METH_SMED",
+  "rapid changeover": "METH_SMED",
+
+  "kanban": "METH_KANBAN",
+  "kanban system": "METH_KANBAN",
+  "pull system": "METH_KANBAN",
+  "pull production": "METH_KANBAN",
+
+  "jit": "METH_JIT",
+  "just in time": "METH_JIT",
+  "just-in-time": "METH_JIT",
+
+  "poka yoke": "METH_POKA_YOKE",
+  "poka-yoke": "METH_POKA_YOKE",
+  "mistake proofing": "METH_POKA_YOKE",
+  "error proofing": "METH_POKA_YOKE",
+  "mistake proof": "METH_POKA_YOKE",
+
+  "andon": "METH_ANDON",
+  "andon system": "METH_ANDON",
+  "andon board": "METH_ANDON",
+  "visual alert": "METH_ANDON",
+
+  "heijunka": "METH_HEIJUNKA",
+  "production leveling": "METH_HEIJUNKA",
+  "production levelling": "METH_HEIJUNKA",
+  "load leveling": "METH_HEIJUNKA",
+
+  "hoshin kanri": "METH_HOSHIN_KANRI",
+  "policy deployment": "METH_HOSHIN_KANRI",
+  "strategy deployment": "METH_HOSHIN_KANRI",
+
+  "oee": "METH_OEE",
+  "overall equipment effectiveness": "METH_OEE",
+  "overall equipment efficiency": "METH_OEE",
+
+  "toc": "METH_TOC",
+  "theory of constraints": "METH_TOC",
+  "constraint management": "METH_TOC",
+  "bottleneck analysis": "METH_TOC",
+
+  "line balancing": "METH_LINE_BALANCING",
+  "production balancing": "METH_LINE_BALANCING",
+
+  "continuous flow": "METH_CONTINUOUS_FLOW",
+  "one piece flow": "METH_CONTINUOUS_FLOW",
+  "one-piece flow": "METH_CONTINUOUS_FLOW",
+
+  "cellular manufacturing": "METH_CELLULAR_MANUFACTURING",
+  "manufacturing cell": "METH_CELLULAR_MANUFACTURING",
+
+  "process mapping": "METH_PROCESS_MAPPING",
+  "workflow mapping": "METH_PROCESS_MAPPING",
+  "business process mapping": "METH_PROCESS_MAPPING",
+
+  "capacity planning": "METH_CAPACITY_PLANNING",
+  "production capacity planning": "METH_CAPACITY_PLANNING",
+
+  "bottleneck elimination": "METH_BOTTLENECK_IMPROVEMENT",
+  "constraint elimination": "METH_BOTTLENECK_IMPROVEMENT",
+
+  "continuous improvement program": "METH_KAIZEN",
+  "ci program": "METH_KAIZEN",
+  "ci initiative": "METH_KAIZEN",
+
+  "operational excellence": "METH_OPERATIONAL_EXCELLENCE",
+  "operations excellence": "METH_OPERATIONAL_EXCELLENCE",
+  "business excellence": "METH_OPERATIONAL_EXCELLENCE",
+
+  "best practice": "METH_BEST_PRACTICE",
+  "best practices": "METH_BEST_PRACTICE",
+
+  "agile": "METH_AGILE",
+  "agile methodology": "METH_AGILE",
+  "agile framework": "METH_AGILE",
+  "agile transformation": "METH_AGILE",
+  "agile practices": "METH_AGILE",
+
+  "scrum": "METH_SCRUM",
+  "scrum framework": "METH_SCRUM",
+  "scrum master": "METH_SCRUM",
+  "daily scrum": "METH_SCRUM",
+  "sprint planning": "METH_SCRUM",
+  "sprint review": "METH_SCRUM",
+  "retrospective": "METH_SCRUM",
+
+  "kanban board": "METH_KANBAN",
+  "scrum ban": "METH_KANBAN",
+
+  "safe": "METH_SAFE",
+  "scaled agile": "METH_SAFE",
+  "scaled agile framework": "METH_SAFE",
+
+  "waterfall": "METH_WATERFALL",
+  "waterfall methodology": "METH_WATERFALL",
+  "traditional project management": "METH_WATERFALL",
+
+  "pmp": "METH_PMP",
+  "project management professional": "METH_PMP",
+  "pmi": "METH_PMP",
+
+  "project management": "METH_PROJECT_MANAGEMENT",
+  "program management": "METH_PROGRAM_MANAGEMENT",
+  "portfolio management": "METH_PORTFOLIO_MANAGEMENT",
+
+  "critical path": "METH_CPM",
+  "critical path method": "METH_CPM",
+  "cpm": "METH_CPM",
+
+  "pert": "METH_PERT",
+  "program evaluation review technique": "METH_PERT",
+
+  "risk management": "METH_RISK_MANAGEMENT",
+  "enterprise risk management": "METH_RISK_MANAGEMENT",
+  "erm": "METH_RISK_MANAGEMENT",
+
+  "change management": "METH_CHANGE_MANAGEMENT",
+  "organizational change management": "METH_CHANGE_MANAGEMENT",
+  "ocm": "METH_CHANGE_MANAGEMENT",
+
+  "business process reengineering": "METH_BPR",
+  "bpr": "METH_BPR",
+
+  "business process improvement": "METH_BPI",
+  "bpi": "METH_BPI",
+
+  "digital transformation": "METH_DIGITAL_TRANSFORMATION",
+  "digitalisation": "METH_DIGITAL_TRANSFORMATION",
+  "digitalization": "METH_DIGITAL_TRANSFORMATION",
+
+  "innovation": "METH_INNOVATION",
+  "innovation management": "METH_INNOVATION",
+
+  "design thinking": "METH_DESIGN_THINKING",
+  "human centered design": "METH_DESIGN_THINKING",
+
+  "itil": "METH_ITIL",
+  "information technology infrastructure library": "METH_ITIL",
+  "service management": "METH_ITIL",
+
+  "devops": "METH_DEVOPS",
+  "continuous integration": "METH_DEVOPS",
+  "continuous delivery": "METH_DEVOPS",
+  "ci/cd": "METH_DEVOPS",
+  "cicd": "METH_DEVOPS",
+
+  "business continuity": "METH_BUSINESS_CONTINUITY",
+  "bcp": "METH_BUSINESS_CONTINUITY",
+
+  "disaster recovery": "METH_DISASTER_RECOVERY",
+  "drp": "METH_DISASTER_RECOVERY",
+
+  "knowledge management": "METH_KNOWLEDGE_MANAGEMENT",
+
+  "benchmarking": "METH_BENCHMARKING",
+
+  "balanced scorecard": "METH_BALANCED_SCORECARD",
+  "bsc": "METH_BALANCED_SCORECARD",
+
+  "okr": "METH_OKR",
+  "objectives and key results": "METH_OKR",
+
+  "kpi management": "METH_KPI_MANAGEMENT",
+
+  "business excellence model": "METH_BUSINESS_EXCELLENCE",
+  "efqm": "METH_BUSINESS_EXCELLENCE",
+  "baldrige": "METH_BUSINESS_EXCELLENCE"
 }
