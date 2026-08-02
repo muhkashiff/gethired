@@ -1,179 +1,179 @@
 import sys
 from pathlib import Path
+from pprint import pprint
+
+# ==========================================================
+# Project Root
+# ==========================================================
 
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
 """
-Knowledge Pipeline Integration Test
+Enterprise Pipeline Integration Test
 
-Tests the complete pipeline:
-
-Sentence
-    ↓
-Sentence Parser
-    ↓
-Knowledge Document
-    ↓
-Knowledge Graph
-    ↓
-Knowledge Profile
-    ↓
-Semantic Resolver
-
+KnowledgePipeline
+        ↓
+KnowledgeDocument
+        ↓
+SemanticResult
+        ↓
+GraphDocument
+        ↓
+KnowledgeProfile
+        ↓
+GraphQuery
 """
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline.knowledge_pipeline import (
+# ==========================================================
+# Pipeline
+# ==========================================================
+
+from app.intelligence.utilities.knowledge.knowledge_pipeline import (
     KnowledgePipeline,
 )
 
+# ==========================================================
+# Graph Query
+# ==========================================================
 
-TEST_SENTENCES = [
+from app.intelligence.utilities.knowledge.knowledge_graph.graph_query import (
+    GraphQuery,
+)
 
-    "Implemented FSSC22000 Quality Management System using Lean Manufacturing.",
+# ==========================================================
+# TEST SENTENCE
+# ==========================================================
 
-    "Led cross functional team of 25 employees.",
-
-    "Improved production yield from 70% to 99% using Six Sigma.",
-
-    "Reduced customer complaints by 80%.",
-
-    "Managed Water Treatment Plant operations.",
-
-    "Certified facility against ISO 9001 and FSSC22000.",
-
-    "Optimized production process through Kaizen methodology.",
-
-    "Developed HACCP plans for beverage manufacturing.",
-
-    "Performed Root Cause Analysis using Fishbone Diagram.",
-
-    "Implemented GMP and Food Safety standards.",
-
-]
+TEST_SENTENCE = (
+    "Implemented FSSC 22000 requirements "
+    "and increased Yield from 70% to 99% "
+    "using Root Cause Analysis."
+)
 
 
-def print_header(title):
-
-    print("\n" + "=" * 100)
-    print(title)
-    print("=" * 100)
-
-
-def print_document(document):
-
-    print("\nDOCUMENT")
-
-    print("-" * 50)
-
-    print(f"Sentences : {len(document.sentences)}")
-    print(f"Facts     : {len(document.facts)}")
-    print(f"Confidence: {document.confidence}")
-
-
-def print_graph(graph_document):
-
-    graph = graph_document.graph
-
-    print("\nGRAPH")
-
-    print("-" * 50)
-
-    print(f"Nodes : {graph.node_count}")
-    print(f"Edges : {graph.edge_count}")
-
-    print("\nNode Types")
-
-    counts = {}
-
-    for node in graph.nodes:
-
-        counts[node.node_type] = counts.get(node.node_type, 0) + 1
-
-    for k, v in sorted(counts.items()):
-
-        print(f"{k:15} : {v}")
-
-
-def print_profile(profile):
-
-    print("\nPROFILE")
-
-    print("-" * 50)
-
-    print(f"Overall Score      : {profile.summary.overall_score}")
-    print(f"Seniority Score    : {profile.summary.seniority_score}")
-    print(f"Leadership Score   : {profile.summary.leadership_score}")
-    print(f"Achievement Score  : {profile.summary.achievement_score}")
-
-
-def print_semantic(result):
-
-    print("\nSEMANTIC")
-
-    print("-" * 50)
-
-    print(f"Entities      : {len(result.entities)}")
-    print(f"Dependencies  : {len(result.dependencies)}")
-    print(f"Clusters      : {len(result.clusters)}")
-    print(f"Confidence    : {result.confidence}")
-
-    print("\nMetadata")
-
-    print(result.metadata)
-
-    print("\nClusters")
-
-    for cluster in result.clusters:
-
-        print(
-            f"{cluster.cluster_id}"
-            f" | {cluster.semantic_type}"
-            f" | {cluster.label}"
-            f" | {cluster.confidence}"
-        )
-
-        for entity in cluster.entities:
-
-            print(
-                f"    └── "
-                f"{entity.entity_type}"
-                f" : {entity.canonical}"
-            )
-
-    print("\nDependencies")
-
-    for dep in result.dependencies:
-
-        print(
-
-            f"{dep.source_entity}"
-
-            f" -- {dep.relation} --> "
-
-            f"{dep.target_entity}"
-
-        )
-
+# ==========================================================
+# MAIN
+# ==========================================================
 
 def main():
 
+    print("=" * 80)
+    print("GETHIRED ENTERPRISE PIPELINE TEST")
+    print("=" * 80)
+
+    # ------------------------------------------------------
+    # Pipeline
+    # ------------------------------------------------------
+
     pipeline = KnowledgePipeline()
 
-    for sentence in TEST_SENTENCES:
+    result = pipeline.process(TEST_SENTENCE)
 
-        print_header(sentence)
+    print("\nPIPELINE EXECUTED")
 
-        result = pipeline.process(sentence)
+    # ------------------------------------------------------
+    # Pipeline Result
+    # ------------------------------------------------------
 
-        print_document(result.knowledge_document)
+    print("\nKnowledge Document")
+    pprint(result.knowledge_document)
 
-        print_graph(result.graph_document)
+    print("\nSemantic Result")
+    pprint(result.semantic_result)
 
-        print_profile(result.knowledge_profile)
+    print("\nKnowledge Profile")
+    pprint(result.knowledge_profile)
 
-        print_semantic(result.semantic_result)
+    # ------------------------------------------------------
+    # Graph
+    # ------------------------------------------------------
 
+
+
+    # ------------------------------------------------------
+    # IMPORTANT
+    # ------------------------------------------------------
+    # Change this if your GraphDocument attribute
+    # is named differently.
+    # ------------------------------------------------------
+
+    graph = result.graph_document
+
+    print("\nKnowledge Graph Created")
+
+    print(f"Nodes : {graph.statistics.node_count}")
+    print(f"Edges : {graph.statistics.edge_count}")
+
+    # ------------------------------------------------------
+    # Query Engine
+    # ------------------------------------------------------
+
+    query = GraphQuery(graph)
+
+    # ------------------------------------------------------
+    # Nodes
+    # ------------------------------------------------------
+
+    print("\n---------------------------")
+    print("ALL NODES")
+    print("---------------------------")
+
+    for node in graph.get_nodes():
+
+        print(
+            f"{node.entity_type:<18}"
+            f"{node.canonical}"
+        )
+
+    # ------------------------------------------------------
+    # Edges
+    # ------------------------------------------------------
+
+    print("\n---------------------------")
+    print("ALL RELATIONS")
+    print("---------------------------")
+
+    for edge in graph.get_edges():
+
+        print(edge.reasoning)
+
+    # ------------------------------------------------------
+    # Query Example
+    # ------------------------------------------------------
+
+    print("\n---------------------------")
+    print("QUERY : Standards")
+    print("---------------------------")
+
+    standards = query.find_nodes(
+        entity_type="standard"
+    )
+
+    for standard in standards:
+
+        print(standard.canonical)
+
+    # ------------------------------------------------------
+
+    print("\n---------------------------")
+    print("QUERY : acts_on")
+    print("---------------------------")
+
+    relations = query.find_by_relation(
+        relation="acts_on"
+    )
+
+    for relation in relations:
+
+        print(relation["reasoning"])
+
+    # ------------------------------------------------------
+
+    print("\nPIPELINE TEST COMPLETED")
+
+
+# ==========================================================
 
 if __name__ == "__main__":
 

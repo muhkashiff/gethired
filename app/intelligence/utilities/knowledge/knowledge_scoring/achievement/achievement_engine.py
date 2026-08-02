@@ -1,182 +1,346 @@
 """
-Achievement Engine
+Enterprise Achievement Engine V5
 
-Combines multiple scoring engines into a unified
-achievement intelligence model.
+Graph-native achievement engine.
 
-Current Inputs
+Architecture
 
-- Impact Engine
-- Magnitude Engine
+KnowledgeGraph
+      ↓
+Graph Nodes
+Graph Edges
+      ↓
+Achievement Cards
+      ↓
+Achievement Scores
 
-Future Inputs
+No ImpactEngine
+No MagnitudeEngine
 
-- Business Value
-- Innovation
-- Complexity
-- Executive Visibility
+Enterprise V5
 """
 
-
-from app.intelligence.utilities.knowledge.knowledge_scoring.impact.impact_engine import (
-    ImpactEngine,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_scoring.magnitude.magnitude_engine import (
-    MagnitudeEngine,
-)
+from collections import defaultdict
 
 
 class AchievementEngine:
 
+    ####################################################################
+    # INITIALIZATION
+    ####################################################################
+
     def __init__(self):
+        pass
 
-        self.impact_engine = ImpactEngine()
-
-        self.magnitude_engine = MagnitudeEngine()
-
-    # -----------------------------------------------------
+    ####################################################################
+    # MAIN
+    ####################################################################
 
     def score(self, graph):
-
-        impact = self.impact_engine.score(graph)
-
-        magnitude = self.magnitude_engine.score(graph)
 
         achievements = []
 
         total_score = 0
 
-        # -------------------------------------------------
-        # Merge Impact + Magnitude
-        # -------------------------------------------------
+        impact_total = 0
+        magnitude_total = 0
 
-        for impact_item in impact["measurements"]:
+        # --------------------------------------------------------
+        # Quick lookup
+        # --------------------------------------------------------
 
-            metric = impact_item["metric"]
+        nodes = graph.nodes
 
-            magnitude_item = next(
+        outgoing = defaultdict(list)
 
-                (
-                    item
-                    for item in magnitude["measurements"]
+        for edge in graph.edges.values():
 
-                    if (
-                        item.get("metric") == metric
-                    )
-                ),
+            outgoing[edge.source_id].append(edge)
 
-                None,
+        # --------------------------------------------------------
+        # Every action becomes a possible achievement
+        # --------------------------------------------------------
 
+        for node in nodes.values():
+
+            if node.entity_type.lower() != "action":
+                continue
+
+            action = node
+
+            metric = None
+            measurement = None
+            domain = None
+
+            # ----------------------------------------------------
+            # Traverse graph
+            # ----------------------------------------------------
+
+            for edge in outgoing.get(action.node_id, []):
+
+                target = nodes.get(edge.target_id)
+
+                if target is None:
+                    continue
+
+                t = target.entity_type.lower()
+
+                if t == "metric":
+                    metric = target
+
+                elif t == "measurement":
+                    measurement = target
+
+                elif t == "domain":
+                    domain = target
+
+            # ----------------------------------------------------
+            # Scores
+            # ----------------------------------------------------
+
+            impact_score = self.compute_impact(
+                action,
+                metric,
             )
 
-            if magnitude_item is None:
-
-                magnitude_item = {
-
-                    "metric": metric,
-
-                    "measurement_type": "absolute",
-
-                    "classification": "Unknown",
-
-                    "score": 0,
-
-                    "start_value": None,
-
-                    "end_value": None,
-
-                    "change_value": None,
-
-                    "percent_change": None,
-
-                    "direction": impact_item["direction"],
-
-                }
-            achievement_score = (
-
-                impact_item["score"]
-
-                + magnitude_item["score"]
-
+            magnitude_score = self.compute_magnitude(
+                measurement,
             )
 
-            total_score += achievement_score
+            overall = round(
+                impact_score + magnitude_score,
+                2,
+            )
+
+            total_score += overall
+            impact_total += impact_score
+            magnitude_total += magnitude_score
 
             achievements.append(
 
                 {
 
-                    "metric": metric,
+                    "action":
+                        action.label,
 
-                    "action": impact_item["action"],
+                    "metric":
+                        metric.label if metric else "",
 
-                    "measurement_type": magnitude_item["measurement_type"],
+                    "measurement":
+                        measurement.metadata.get(
+                            "value",
+                            "",
+                        )
+                        if measurement
+                        else "",
 
-                    "from_value": magnitude_item["start"],
+                    "from_value":
+                        measurement.metadata.get(
+                            "from_value"
+                        )
+                        if measurement
+                        else None,
 
-                    "to_value": magnitude_item["end"],
+                    "to_value":
+                        measurement.metadata.get(
+                            "to_value"
+                        )
+                        if measurement
+                        else None,
 
-                    "change_value": magnitude_item["change"],
+                    "change_value":
+                        measurement.metadata.get(
+                            "change_value"
+                        )
+                        if measurement
+                        else None,
 
-                    "percent_change": magnitude_item["percent_change"],
+                    "percent_change":
+                        measurement.metadata.get(
+                            "percent_change"
+                        )
+                        if measurement
+                        else None,
 
-                    "direction": impact_item["direction"],
+                    "direction":
+                        measurement.metadata.get(
+                            "direction",
+                            "",
+                        )
+                        if measurement
+                        else "",
 
-                    "classification": magnitude_item["classification"],
+                    "classification":
+                        self.classification(
+                            measurement
+                        ),
 
-                    "impact_score": impact_item["score"],
+                    "business_area":
+                        metric.business_area
+                        if metric
+                        else "",
 
-                    "magnitude_score": magnitude_item["score"],
+                    "domain":
+                        domain.label
+                        if domain
+                        else "",
 
-                    "overall_score": round(achievement_score, 2),
+                    "impact_score":
+                        impact_score,
 
-                    "business_value": self._business_value(
+                    "magnitude_score":
+                        magnitude_score,
 
-                        achievement_score
+                    "overall_score":
+                        overall,
 
-                    ),
+                    "business_value":
+                        self.business_value(
+                            overall
+                        ),
 
-                    "executive_ready": achievement_score >= 20,
+                    "executive_ready":
+                        overall >= 25,
 
                 }
 
             )
 
-        # -------------------------------------------------
+        # --------------------------------------------------------
+
+        achievements.sort(
+
+            key=lambda x: x["overall_score"],
+
+            reverse=True,
+
+        )
 
         return {
 
-            "achievement_score": round(total_score, 2),
+            "achievement_score":
+                round(total_score, 2),
 
-            "achievement_count": len(achievements),
+            "achievement_count":
+                len(achievements),
 
-            "impact_score": impact["score"],
+            "impact_score":
+                round(impact_total, 2),
 
-            "magnitude_score": magnitude["score"],
+            "magnitude_score":
+                round(magnitude_total, 2),
 
-            "impact": impact,
-
-            "magnitude": magnitude,
-
-            "achievements": achievements,
+            "achievements":
+                achievements,
 
         }
 
-    # -----------------------------------------------------
+    ####################################################################
+    # IMPACT
+    ####################################################################
 
-    def _business_value(self, score):
+    def compute_impact(
+        self,
+        action,
+        metric,
+    ):
 
-        if score >= 25:
+        score = 0
 
+        score += getattr(
+            action,
+            "impact_weight",
+            1,
+        )
+
+        if metric:
+
+            score += getattr(
+                metric,
+                "impact_weight",
+                1,
+            )
+
+        return round(score, 2)
+
+    ####################################################################
+    # MAGNITUDE
+    ####################################################################
+
+    def compute_magnitude(
+        self,
+        measurement,
+    ):
+
+        if measurement is None:
+            return 0
+
+        percent = measurement.metadata.get(
+            "percent_change",
+            0,
+        )
+
+        if percent is None:
+            percent = 0
+
+        if percent >= 100:
+            return 20
+
+        if percent >= 50:
+            return 15
+
+        if percent >= 20:
+            return 10
+
+        if percent >= 10:
+            return 5
+
+        return 2
+
+    ####################################################################
+    # CLASSIFICATION
+    ####################################################################
+
+    def classification(
+        self,
+        measurement,
+    ):
+
+        if measurement is None:
+            return "Unknown"
+
+        percent = measurement.metadata.get(
+            "percent_change",
+            0,
+        )
+
+        if percent >= 100:
             return "Exceptional"
 
-        if score >= 20:
-
+        if percent >= 50:
             return "High"
 
-        if score >= 12:
+        if percent >= 20:
+            return "Moderate"
 
+        return "Low"
+
+    ####################################################################
+    # BUSINESS VALUE
+    ####################################################################
+
+    def business_value(
+        self,
+        score,
+    ):
+
+        if score >= 35:
+            return "Exceptional"
+
+        if score >= 25:
+            return "High"
+
+        if score >= 15:
             return "Moderate"
 
         return "Low"

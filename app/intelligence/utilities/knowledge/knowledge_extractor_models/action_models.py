@@ -1,89 +1,66 @@
 """
-Action Knowledge Model
+Enterprise Action Knowledge Model
 
-Represents an action (verb) identified in a sentence.
+Represents an action detected in a sentence.
 
-Used by
+Examples
 
-- Sentence Parser
-- Clause Parser
-- Knowledge Interpreter
-- Narrative Builder
-- ATS Intelligence
-- Knowledge Graph
+Implemented
+Developed
+Reduced
+Improved
+Led
+Managed
+Optimized
+Designed
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from .base_models import KnowledgeEntity
 
 
 @dataclass
-class ActionKnowledge:
-    """
-    Represents one detected action.
+class ActionKnowledge(KnowledgeEntity):
 
-    Example
-
-        Led cross-functional teams
-
-    original = "led"
-    base = "lead"
-    gerund = "leading"
-    """
-
-    # ---------------------------------------------------------
-    # Detection
-    # ---------------------------------------------------------
-
-    found: bool = False
-
-    confidence: float = 0.0
-
-    # ---------------------------------------------------------
+    ####################################################################
     # Linguistics
-    # ---------------------------------------------------------
+    ####################################################################
 
-    original: str = ""
+    entity_type: str = "action"
+
+    ontology_name: str = "actions"
 
     base: str = ""
 
     gerund: str = ""
 
-    category: str = ""
+    past: str = ""
 
-    # ---------------------------------------------------------
-    # Ontology
-    # ---------------------------------------------------------
+    infinitive: str = ""
 
-    entity_id: str = ""
+    ####################################################################
+    # Action Semantics
+    ####################################################################
 
-    entity_type: str = ""
+    action_family: str = ""
 
-    matched_phrase: str = ""
+    action_group: str = ""
 
-    matched_alias: bool = False
+    business_verb: bool = True
 
-    business_area: str = ""
+    achievement_action: bool = False
 
-    impact_weight: float = 1.0
+    leadership_action: bool = False
 
-    source: str = ""
+    management_action: bool = False
 
-    metadata: dict = field(default_factory=dict)
+    analytical_action: bool = False
 
-    # ---------------------------------------------------------
-    # Position Information
-    # ---------------------------------------------------------
+    operational_action: bool = False
 
-    start_char: int = -1
-
-    end_char: int = -1
-
-    token_index: int = -1
-
-    sentence_index: int = 0
-
-    # ---------------------------------------------------------
-    # Parsing Flags
-    # ---------------------------------------------------------
+    ####################################################################
+    # Parsing
+    ####################################################################
 
     clause_candidate: bool = True

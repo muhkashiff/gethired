@@ -1,9 +1,14 @@
 """
-Leadership Analyzer
+Enterprise Leadership Analyzer
 
-Graph-based Leadership Analyzer
+KnowledgeGraph V5 Compatible
 
-Consumes the KnowledgeGraph instead of raw resume experiences.
+Consumes only KnowledgeGraph.
+
+No dependency on old graph.actions(),
+graph.domains(), etc.
+
+GETHIRED Enterprise V5
 """
 
 from app.intelligence.eng_models.leadership import Leadership
@@ -15,24 +20,39 @@ class LeadershipAnalyzer:
         pass
 
     # ---------------------------------------------------------
+    # Helpers
+    # ---------------------------------------------------------
+
+    def _nodes(self, graph, entity_type):
+        """
+        Returns all nodes of a given entity type.
+        Compatible with KnowledgeGraph V5.
+        """
+
+        return [
+            node
+            for node in graph.nodes.values()
+            if getattr(node, "entity_type", "").lower() == entity_type.lower()
+        ]
+
+    # ---------------------------------------------------------
 
     def analyze(self, graph):
 
         leadership = Leadership()
 
-        actions = graph.actions()
-        domains = graph.domains()
-        metrics = graph.metrics()
+        actions = self._nodes(graph, "action")
+        domains = self._nodes(graph, "domain")
+        metrics = self._nodes(graph, "metric")
 
         score = 0
         evidence = []
 
-        # ---------------------------------------------
-        # Leadership Actions
-        # ---------------------------------------------
+        # --------------------------------------------------
+        # Leadership verbs
+        # --------------------------------------------------
 
         leadership_actions = {
-
             "lead",
             "manage",
             "mentor",
@@ -43,81 +63,85 @@ class LeadershipAnalyzer:
             "coordinate",
             "guide",
             "train",
-
+            "build",
+            "implement",
+            "drive",
+            "improve",
+            "optimize",
         }
 
         for action in actions:
 
-            if action.label.lower() in leadership_actions:
+            label = getattr(action, "label", "").lower()
 
+            if label in leadership_actions:
                 score += 15
                 evidence.append(action.label)
 
-        # ---------------------------------------------
-        # Leadership Domains
-        # ---------------------------------------------
+        # --------------------------------------------------
+        # Leadership domains
+        # --------------------------------------------------
 
         for domain in domains:
 
-            if domain.label.lower() == "leadership":
+            label = getattr(domain, "label", "").lower()
 
+            if label in {
+                "leadership",
+                "management",
+                "operations",
+                "quality management",
+                "food safety",
+            }:
                 score += 20
                 evidence.append(domain.label)
 
-        # ---------------------------------------------
-        # Operational KPIs increase leadership
-        # ---------------------------------------------
+        # --------------------------------------------------
+        # Operational metrics
+        # --------------------------------------------------
 
         for metric in metrics:
 
-            if metric.category in (
+            category = getattr(metric, "category", "").lower()
 
+            if category in {
                 "operations",
                 "quality",
                 "people",
-
-            ):
-
+                "food safety",
+                "performance",
+            }:
                 score += 5
 
-        # ---------------------------------------------
-        # Populate Model
-        # ---------------------------------------------
+        # --------------------------------------------------
+        # Normalize score
+        # --------------------------------------------------
 
-        leadership.people_management = min(score, 100)
+        score = min(score, 100)
 
-        leadership.operational_leadership = min(score, 100)
-
-        leadership.change_management = min(int(score * 0.8), 100)
-
-        leadership.technical_leadership = min(int(score * 0.7), 100)
-
-        leadership.project_management = min(int(score * 0.6), 100)
-
-        leadership.strategic_leadership = min(int(score * 0.5), 100)
-
-        leadership.financial_leadership = min(int(score * 0.4), 100)
-
-        leadership.commercial_leadership = min(int(score * 0.3), 100)
-
-        leadership.stakeholder_management = min(int(score * 0.5), 100)
+        leadership.people_management = score
+        leadership.operational_leadership = score
+        leadership.change_management = min(int(score * 0.80), 100)
+        leadership.technical_leadership = min(int(score * 0.70), 100)
+        leadership.project_management = min(int(score * 0.60), 100)
+        leadership.strategic_leadership = min(int(score * 0.50), 100)
+        leadership.financial_leadership = min(int(score * 0.40), 100)
+        leadership.commercial_leadership = min(int(score * 0.30), 100)
+        leadership.stakeholder_management = min(int(score * 0.50), 100)
 
         leadership.continuous_improvement = min(
-
             int(
-
                 (
                     leadership.change_management
                     + leadership.operational_leadership
                     + leadership.technical_leadership
-                ) / 3
+                )
+                / 3
             ),
             100,
-
         )
 
         values = [
-
             leadership.people_management,
             leadership.strategic_leadership,
             leadership.operational_leadership,
@@ -128,20 +152,15 @@ class LeadershipAnalyzer:
             leadership.stakeholder_management,
             leadership.project_management,
             leadership.continuous_improvement,
-
         ]
 
         leadership.overall_score = round(
-
             sum(values) / len(values),
             2,
-
         )
 
-        leadership.strengths = evidence
-
-        leadership.evidence = evidence
-
+        leadership.strengths = sorted(set(evidence))
+        leadership.evidence = sorted(set(evidence))
         leadership.confidence = 0.95
 
         return leadership

@@ -1,39 +1,35 @@
 """
-Modifier Models
+Enterprise Modifier Knowledge Model
 
-Represents linguistic modifiers that qualify
-actions, scope, impact, or achievement.
+Represents semantic modifiers.
+
+Examples
+
+Reduced
+Increased
+Successfully
+Significantly
+Approximately
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from .base_models import KnowledgeEntity
 
 
 @dataclass
-class ModifierKnowledge:
+class ModifierKnowledge(KnowledgeEntity):
 
-    # Detection
-    found: bool = False
+    """
+    Modifier Entity
 
-    confidence: float = 0.0
+    Used for semantic interpretation.
+    """
 
-    # Linguistics
-    original: str = ""
+    modifier_type: str = ""
 
-    canonical: str = ""
+    polarity: str = ""
 
-    category: str = ""
+    intensity: float = 1.0
 
-    strength: float = 1.0
-
-    executive_weight: float = 1.0
-
-    # Ontology
-    entity_id: str = ""
-
-    business_area: str = ""
-
-    impact_weight: float = 1.0
-
-    source: str = ""
-
-    metadata: dict = field(default_factory=dict)
+    direction: str = ""

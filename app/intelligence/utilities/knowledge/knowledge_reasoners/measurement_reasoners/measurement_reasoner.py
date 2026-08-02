@@ -23,7 +23,7 @@ class MeasurementReasoner:
 
         self.repository = Repository()
 
-        self.rules = self.repository.measurement_semantics()
+        self.rules = self.repository.get_measurement_semantics()
 
     # ----------------------------------------------------------
 

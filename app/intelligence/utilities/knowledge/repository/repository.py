@@ -1,28 +1,24 @@
 """
-Enterprise Ontology Repository
-==============================
+Enterprise Repository V2
 
-Version : 3.0
+Single source of truth for every ontology.
 
 Responsibilities
 ----------------
-✓ Load ontology files
-✓ Validate schema
-✓ Normalize entities
+✓ Load every ontology once
+✓ Create EntityRecord objects
 ✓ Build alias indexes
-✓ Build ID indexes
-✓ Build category indexes
-✓ Build business area indexes
-✓ Build domain indexes
-✓ Build relationship indexes
-✓ Provide unified lookup APIs
-✓ Preserve backward compatibility
+✓ Generic entity lookup
+✓ Backward compatibility
+✓ Future relations support
+
+Version : Enterprise V2
 """
 
 from __future__ import annotations
 
 import json
-from collections import defaultdict
+import re
 
 from app.intelligence.utilities.knowledge.repository.paths import RepositoryPaths
 from app.intelligence.utilities.knowledge.repository.cache import RepositoryCache
@@ -41,527 +37,933 @@ class Repository:
 
         self.cache = RepositoryCache()
 
-        # Enterprise Indexes
-        self.alias_indexes = {}
-        self.id_indexes = {}
-        self.category_indexes = {}
-        self.business_area_indexes = {}
-        self.domain_indexes = {}
-        self.relationship_indexes = {}
-
         self._load()
 
-        self._build_indexes()
-
     ####################################################################
-    # JSON READER
+    # FILE READER
     ####################################################################
 
     def _read(self, path):
 
-        with open(path, encoding="utf-8") as f:
+        with open(path, encoding="utf8") as f:
 
             return json.load(f)
 
     ####################################################################
-    # LOAD ALL KNOWLEDGE FILES
+    # NORMALIZATION
     ####################################################################
 
-    def _load(self):
+    def normalize(self, text: str) -> str:
 
-        self.cache.actions = self._read(self.paths.actions)
+        if text is None:
 
-        self.cache.objects = self._read(self.paths.objects)
+            return ""
 
-        self.cache.metrics = self._read(self.paths.metrics)
+        text = text.lower()
 
-        self.cache.business_kpis = self._read(
-            self.paths.business_kpis
+        text = re.sub(
+
+            r"[^a-z0-9 ]",
+
+            " ",
+
+            text
+
         )
 
-        self.cache.domains = self._read(
-            self.paths.domains
+        text = re.sub(
+
+            r"\s+",
+
+            " ",
+
+            text
+
         )
 
-        self.cache.domain_reasoning = self._read(
-            self.paths.domain_reasoning
-        )
-
-        self.cache.certifications = self._read(
-            self.paths.certifications
-        )
-
-        self.cache.standards = self._read(
-            self.paths.standards
-        )
-
-        self.cache.skills = self._read(
-            self.paths.skills
-        )
-
-        self.cache.methodologies = self._read(
-            self.paths.methodologies
-        )
-
-        self.cache.technologies = self._read(
-            self.paths.technologies
-        )
-
-        self.cache.measurement_patterns = self._read(
-            self.paths.measurement_patterns
-        )
-
-        self.cache.measurement_semantics = self._read(
-            self.paths.measurement_semantics
-        )
-
-        self.cache.modifier_dictionary = self._read(
-            self.paths.modifier_dictionary
-        )
-
-        self.cache.confidence_rules = self._read(
-            self.paths.confidence_rules
-        )
-
-        self.cache.impact_dictionary = self._read(
-            self.paths.impact_dictionary
-        )
-
-        self.cache.clause_patterns = self._read(
-            self.paths.clause_patterns
-        )
-
-        # Optional Files
-
-        try:
-            self.cache.relations = self._read(
-                self.paths.relations
-            )
-        except Exception:
-            self.cache.relations = {}
+        return text.strip()
 
     ####################################################################
-    # ENTITY VALIDATION
+    # ENTITY BUILDER
     ####################################################################
 
-    def _validate_entity(self, data):
+    def _entity(
 
-        if not isinstance(data, dict):
+        self,
 
-            return False
+        data,
 
-        # canonical is mandatory
+        ontology,
 
-        if "canonical" not in data:
+        source="ontology",
 
-            return False
-
-        return True
-
-    ####################################################################
-    # ENTITY NORMALIZATION
-    ####################################################################
-
-    def _entity(self, data, source="ontology"):
+    ):
 
         if not data:
-
-            return None
-
-        if not self._validate_entity(data):
 
             return None
 
         return EntityRecord(
 
             entity_id=data.get(
+
                 "entity_id",
+
                 ""
+
             ),
 
             canonical=data.get(
+
                 "canonical",
-                data.get("base", "")
+
+                data.get(
+
+                    "base",
+
+                    ""
+
+                )
+
             ),
 
             aliases=data.get(
+
                 "aliases",
+
                 []
+
             ),
 
             category=data.get(
+
                 "category",
+
                 ""
+
             ),
 
             business_area=data.get(
+
                 "business_area",
+
                 ""
+
             ),
 
             preferred_direction=data.get(
+
                 "preferred_direction",
+
                 ""
+
             ),
 
             impact_weight=float(
+
                 data.get(
+
                     "impact_weight",
+
                     1.0
+
                 )
+
             ),
 
             business_meaning=data.get(
+
                 "business_meaning",
+
                 ""
+
             ),
+
+            source=source,
 
             metadata=data,
 
-            source=source
+        )
+
+    ####################################################################
+    # LOAD EVERYTHING
+    ####################################################################
+
+    def _load(self):
+
+        """
+        Loads every ontology.
+
+        Index building happens later.
+        """
+
+        self.cache.actions = self._read(
+
+            self.paths.actions
 
         )
-        ####################################################################
-    # ENTERPRISE INDEX BUILDER
+
+        self.cache.objects = self._read(
+
+            self.paths.objects
+
+        )
+
+        self.cache.metrics = self._read(
+
+            self.paths.metrics
+
+        )
+
+        self.cache.business_kpis = self._read(
+
+            self.paths.business_kpis
+
+        )
+
+        self.cache.domains = self._read(
+
+            self.paths.domains
+
+        )
+
+        self.cache.domain_reasoning = self._read(
+
+            self.paths.domain_reasoning
+
+        )
+
+        self.cache.certifications = self._read(
+
+            self.paths.certifications
+
+        )
+
+        self.cache.technologies = self._read(
+
+            self.paths.technologies
+
+        )
+
+        self.cache.measurement_patterns = self._read(
+
+            self.paths.measurement_patterns
+
+        )
+
+        self.cache.measurement_semantics = self._read(
+
+            self.paths.measurement_semantics
+
+        )
+
+        self.cache.modifier_dictionary = self._read(
+
+            self.paths.modifier_dictionary
+
+        )
+
+        self.cache.confidence_rules = self._read(
+
+            self.paths.confidence_rules
+
+        )
+
+        self.cache.clause_patterns = self._read(
+
+            self.paths.clause_patterns
+
+        )
+
+        self.cache.impact_dictionary = self._read(
+
+            self.paths.impact_dictionary
+
+        )
+
+        self.cache.skills = self._read(
+
+            self.paths.skills
+
+        )
+
+        self.cache.methodologies = self._read(
+
+            self.paths.methodologies
+
+        )
+
+        self.cache.standards = self._read(
+
+            self.paths.standards
+
+        )
+        ############################################################
+            # RELATIONS
+        ############################################################
+        
+        self._load_relations()
+        
+        ############################################################
+        # BUILD ENTERPRISE INDEXES
+        ############################################################
+        
+        self._build_indexes()
+
+    ####################################################################
+    # BUILD ONE ALIAS INDEX
+    ####################################################################
+
+    def _build_alias_index(
+
+        self,
+
+        ontology_name,
+
+        ontology,
+
+    ):
+
+        alias_index = {}
+
+        canonical_index = {}
+
+        entity_index = {}
+
+        normalized_index = {}
+
+        for _, data in ontology.items():
+
+            entity = self._entity(
+
+                data,
+
+                ontology_name,
+
+            )
+
+            if entity is None:
+
+                continue
+
+            ########################################################
+            # Entity ID
+            ########################################################
+
+            entity_index[
+
+                entity.entity_id
+
+            ] = entity
+
+            ########################################################
+            # Canonical
+            ########################################################
+
+            canonical = entity.canonical
+
+            canonical_index[
+
+                canonical.lower()
+
+            ] = entity
+
+            normalized_index[
+
+                self.normalize(canonical)
+
+            ] = entity
+
+            ########################################################
+            # Aliases
+            ########################################################
+
+            for alias in entity.aliases:
+
+                alias_index[
+
+                    alias.lower()
+
+                ] = entity
+
+                normalized_index[
+
+                    self.normalize(alias)
+
+                ] = entity
+
+        ############################################################
+
+        self.cache.alias_indexes[
+
+            ontology_name
+
+        ] = alias_index
+
+        self.cache.canonical_indexes[
+
+            ontology_name
+
+        ] = canonical_index
+
+        self.cache.entity_indexes[
+
+            ontology_name
+
+        ] = entity_index
+
+        self.cache.normalized_indexes[
+
+            ontology_name
+
+        ] = normalized_index
+
+    ####################################################################
+    # BUILD ALL INDEXES
     ####################################################################
 
     def _build_indexes(self):
 
-        """
-        Build all enterprise lookup indexes.
+        self._build_alias_index(
 
-        This executes only once during Repository startup.
-        """
+            "actions",
 
-        ontology_tables = {
+            self.cache.actions,
 
-            "actions": self.cache.actions,
+        )
 
-            "objects": self.cache.objects,
+        self._build_alias_index(
 
-            "metrics": self.cache.metrics,
+            "objects",
 
-            "business_kpis": self.cache.business_kpis,
+            self.cache.objects,
 
-            "domains": self.cache.domains,
+        )
 
-            "skills": self.cache.skills,
+        self._build_alias_index(
 
-            "technologies": self.cache.technologies,
+            "metrics",
 
-            "methodologies": self.cache.methodologies,
+            self.cache.metrics,
 
-            "standards": self.cache.standards,
+        )
 
-            "certifications": self.cache.certifications
+        self._build_alias_index(
 
-        }
+            "business_kpis",
 
-        for ontology_name, table in ontology_tables.items():
+            self.cache.business_kpis,
 
-            alias_index = {}
+        )
 
-            id_index = {}
+        self._build_alias_index(
 
-            category_index = defaultdict(list)
+            "domains",
 
-            business_area_index = defaultdict(list)
+            self.cache.domains,
 
-            domain_index = defaultdict(list)
+        )
 
-            canonical_index = {}
+        self._build_alias_index(
 
-            ##############################################################
+            "certifications",
 
-            for key, entity in table.items():
+            self.cache.certifications,
 
-                if not isinstance(entity, dict):
+        )
 
-                    continue
+        self._build_alias_index(
 
-                record = self._entity(entity)
+            "technologies",
 
-                if record is None:
+            self.cache.technologies,
 
-                    continue
+        )
 
-                ##########################################################
-                # Entity ID Index
-                ##########################################################
+        self._build_alias_index(
 
-                if record.entity_id:
+            "skills",
 
-                    id_index[
-                        record.entity_id
-                    ] = record
+            self.cache.skills,
 
-                ##########################################################
-                # Canonical Index
-                ##########################################################
+        )
 
-                if record.canonical:
+        self._build_alias_index(
 
-                    canonical_index[
-                        record.canonical.lower()
-                    ] = record
+            "methodologies",
 
-                    alias_index[
-                        record.canonical.lower()
-                    ] = record
+            self.cache.methodologies,
 
-                ##########################################################
-                # Alias Index
-                ##########################################################
+        )
 
-                for alias in record.aliases:
+        self._build_alias_index(
 
-                    alias_index[
-                        alias.lower()
-                    ] = record
+            "standards",
 
-                ##########################################################
-                # Original JSON Key
-                ##########################################################
+            self.cache.standards,
 
-                alias_index[
-                    key.lower()
-                ] = record
+        )
 
-                ##########################################################
-                # Category Index
-                ##########################################################
-
-                if record.category:
-
-                    category_index[
-                        record.category
-                    ].append(record)
-
-                ##########################################################
-                # Business Area Index
-                ##########################################################
-
-                if record.business_area:
-
-                    business_area_index[
-                        record.business_area
-                    ].append(record)
-
-                ##########################################################
-                # Domain Index
-                ##########################################################
-
-                domain = record.metadata.get(
-                    "domain"
-                )
-
-                if domain:
-
-                    domain_index[
-                        domain
-                    ].append(record)
-
-            ##############################################################
-
-            self.alias_indexes[
-                ontology_name
-            ] = alias_index
-
-            self.id_indexes[
-                ontology_name
-            ] = id_index
-
-            self.category_indexes[
-                ontology_name
-            ] = category_index
-
-            self.business_area_indexes[
-                ontology_name
-            ] = business_area_index
-
-            self.domain_indexes[
-                ontology_name
-            ] = domain_index
-
-        ##############################################################
-        # Build Relations
-        ##############################################################
-
-        self._build_relation_index()
     ####################################################################
-    # GENERIC ENTITY LOOKUP
+    # LOAD RELATIONS
     ####################################################################
 
-    def find_entity(self, ontology_name, phrase):
-        """
-        Generic entity lookup.
+    def _load_relations(self):
 
-        Examples
-        --------
-        repo.find_entity("skills", "Lean")
+        try:
 
-        repo.find_entity("technologies", "Python")
+            self.cache.relations = self._read(
 
-        repo.find_entity("methodologies", "Kaizen")
-        """
+                self.paths.relations
+
+            )
+
+        except Exception:
+
+            self.cache.relations = {}
+
+    ####################################################################
+    # FIND ENTITY
+    ####################################################################
+
+    def find_entity(
+
+        self,
+
+        ontology,
+
+        phrase,
+
+    ):
 
         if phrase is None:
+
             return None
 
-        alias_index = self.alias_indexes.get(
-            ontology_name,
+        ontology = ontology.lower()
+
+        phrase = phrase.strip()
+
+        alias_index = self.cache.alias_indexes.get(
+
+            ontology,
+
             {}
+
         )
 
-        return alias_index.get(
-            str(phrase).lower()
+        canonical_index = self.cache.canonical_indexes.get(
+
+            ontology,
+
+            {}
+
         )
 
+        normalized_index = self.cache.normalized_indexes.get(
+
+            ontology,
+
+            {}
+
+        )
+
+        ##########################################################
+
+        entity = alias_index.get(
+
+            phrase.lower()
+
+        )
+
+        if entity:
+
+            return entity
+
+        ##########################################################
+
+        entity = canonical_index.get(
+
+            phrase.lower()
+
+        )
+
+        if entity:
+
+            return entity
+
+        ##########################################################
+
+        entity = normalized_index.get(
+
+            self.normalize(phrase)
+
+        )
+
+        if entity:
+
+            return entity
+
+        ##########################################################
+
+        return None
     ####################################################################
-    # LOOKUP BY ENTITY ID
+    # FIND ENTITY EXACT
     ####################################################################
 
-    def find_entity_by_id(self,
-                          ontology_name,
-                          entity_id):
+    def find_entity_exact(
 
-        if entity_id is None:
+        self,
+
+        ontology,
+
+        phrase,
+
+    ):
+
+        if phrase is None:
+
             return None
 
-        return self.id_indexes.get(
-            ontology_name,
+        ontology = ontology.lower()
+
+        canonical_index = self.cache.canonical_indexes.get(
+
+            ontology,
+
             {}
-        ).get(entity_id)
 
-    ####################################################################
-    # LOOKUP BY CATEGORY
-    ####################################################################
+        )
 
-    def find_by_category(self,
-                         ontology_name,
-                         category):
+        return canonical_index.get(
 
-        return self.category_indexes.get(
-            ontology_name,
-            {}
-        ).get(category, [])
-
-    ####################################################################
-    # LOOKUP BY BUSINESS AREA
-    ####################################################################
-
-    def find_by_business_area(self,
-                              ontology_name,
-                              business_area):
-
-        return self.business_area_indexes.get(
-            ontology_name,
-            {}
-        ).get(business_area, [])
-
-    ####################################################################
-    # LOOKUP BY DOMAIN
-    ####################################################################
-
-    def find_by_domain(self,
-                       ontology_name,
-                       domain):
-
-        return self.domain_indexes.get(
-            ontology_name,
-            {}
-        ).get(domain, [])
-
-    ####################################################################
-    # RELATION LOOKUP
-    ####################################################################
-
-    def get_relations(self,
-                      entity_id):
-
-        return self.relationship_indexes.get(
-            entity_id,
-            [])
-
-    ####################################################################
-    # SEARCH ACROSS ALL ONTOLOGIES
-    ####################################################################
-
-    def search(self, phrase):
-
-        phrase = str(phrase).lower()
-
-        for ontology_name, alias_index in self.alias_indexes.items():
-
-            entity = alias_index.get(phrase)
-
-            if entity:
-
-                return ontology_name, entity
-
-        return None, None
-
-    ####################################################################
-    # ENTITY EXISTENCE
-    ####################################################################
-
-    def exists(self,
-               ontology_name,
-               phrase):
-
-        return self.find_entity(
-            ontology_name,
-            phrase
-        ) is not None
-
-    ####################################################################
-    # GET ALL ENTITIES
-    ####################################################################
-
-    def get_all_entities(self,
-                         ontology_name):
-
-        return list(
-
-            self.id_indexes.get(
-
-                ontology_name,
-
-                {}
-
-            ).values()
+            phrase.lower()
 
         )
     ####################################################################
-    # BACKWARD COMPATIBLE LOOKUPS
+    # FIND ENTITY BY ID
+    ####################################################################
+
+    def find_entity_by_id(
+
+        self,
+
+        ontology,
+
+        entity_id,
+
+    ):
+
+        ontology = ontology.lower()
+
+        entity_index = self.cache.entity_indexes.get(
+
+            ontology,
+
+            {}
+
+        )
+
+        return entity_index.get(entity_id)
+    ####################################################################
+    # FIND MULTIPLE ENTITIES
+    ####################################################################
+
+    def find_entities(
+
+        self,
+
+        ontology,
+
+        phrases,
+
+    ):
+
+        results = []
+
+        seen = set()
+
+        for phrase in phrases:
+
+            entity = self.find_entity(
+
+                ontology,
+
+                phrase
+
+            )
+
+            if entity is None:
+
+                continue
+
+            if entity.entity_id in seen:
+
+                continue
+
+            seen.add(
+
+                entity.entity_id
+
+            )
+
+            results.append(entity)
+
+        return results
+    ####################################################################
+    # RETURN RAW ONTOLOGY
+    ####################################################################
+
+    def ontology(
+
+        self,
+
+        ontology_name,
+
+    ):
+
+        return getattr(
+
+            self.cache,
+
+            ontology_name,
+
+            {}
+
+        )
+    ####################################################################
+    # BACKWARD COMPATIBILITY
     ####################################################################
 
     def get_action(self, phrase):
-        return self.find_entity("actions", phrase)
+
+        return self.find_entity(
+
+            "actions",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
 
     def get_object(self, phrase):
-        return self.find_entity("objects", phrase)
+
+        return self.find_entity(
+
+            "objects",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
 
     def get_metric(self, phrase):
-        return self.find_entity("metrics", phrase)
 
-    def get_business_kpi(self, phrase):
-        return self.find_entity("business_kpis", phrase)
+        return self.find_entity(
 
-    def get_domain(self, phrase):
-        return self.find_entity("domains", phrase)
+            "metrics",
 
-    def get_skill(self, phrase):
-        return self.find_entity("skills", phrase)
+            phrase
 
-    def get_methodology(self, phrase):
-        return self.find_entity("methodologies", phrase)
+        )
+
+    # ---------------------------------------------------------
 
     def get_standard(self, phrase):
-        return self.find_entity("standards", phrase)
+
+        return self.find_entity(
+
+            "standards",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
+
+    def get_methodology(self, phrase):
+
+        return self.find_entity(
+
+            "methodologies",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
+
+    def get_skill(self, phrase):
+
+        return self.find_entity(
+
+            "skills",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
+
+    def get_domain(self, phrase):
+
+        return self.find_entity(
+
+            "domains",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
 
     def get_certification(self, phrase):
-        return self.find_entity("certifications", phrase)
+
+        return self.find_entity(
+
+            "certifications",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
 
     def get_technology(self, phrase):
-        return self.find_entity("technologies", phrase)
+
+        return self.find_entity(
+
+            "technologies",
+
+            phrase
+
+        )
+
+    # ---------------------------------------------------------
+
+    def get_business_kpi(self, phrase):
+
+        return self.find_entity(
+
+            "business_kpis",
+
+            phrase
+
+        )
+    ####################################################################
+    # RELATIONS
+    ####################################################################
+
+    def get_relations(self):
+
+        return self.cache.relations
+
+
+    # ---------------------------------------------------------
+
+    def get_relation(
+
+        self,
+
+        relation_name,
+
+    ):
+
+        return self.cache.relations.get(
+
+            relation_name,
+
+            {}
+
+        )
+    ####################################################################
+    # RAW DICTIONARIES
+    ####################################################################
+
+    def get_dictionary(
+
+        self,
+
+        name,
+
+    ):
+
+        return getattr(
+
+            self.cache,
+
+            name,
+
+            {}
+
+        )
+
+        ####################################################################
+    # KNOWLEDGE DICTIONARIES
+    ####################################################################
+
+    def get_clause_patterns(self):
+
+        return self.cache.clause_patterns
+
+
+    def get_measurement_patterns(self):
+
+        return self.cache.measurement_patterns
+
+
+    def get_measurement_semantics(self):
+
+        return self.cache.measurement_semantics
+
+
+    def get_modifier_dictionary(self):
+
+        return self.cache.modifier_dictionary
+
+
+    def get_confidence_rules(self):
+
+        return self.cache.confidence_rules
+
+
+    def get_domain_reasoning(self):
+
+        return self.cache.domain_reasoning
+
+
+    def get_impact_dictionary(self):
+
+        return self.cache.impact_dictionary
+    
+    ####################################################################
+    # REPOSITORY SUMMARY
+    ####################################################################
+
+    def summary(self):
+
+        return {
+
+            "actions": len(self.cache.actions),
+
+            "objects": len(self.cache.objects),
+
+            "metrics": len(self.cache.metrics),
+
+            "standards": len(self.cache.standards),
+
+            "methodologies": len(self.cache.methodologies),
+
+            "skills": len(self.cache.skills),
+
+            "technologies": len(self.cache.technologies),
+
+            "certifications": len(self.cache.certifications),
+
+            "domains": len(self.cache.domains),
+
+            "business_kpis": len(self.cache.business_kpis),
+
+        }

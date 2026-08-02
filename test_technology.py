@@ -1,4 +1,4 @@
-from app.parser.extractors.technology_extractor import TechnologyExtractor
+from app.intelligence.utilities.knowledge.knowledge_extractors.technology_extractor import TechnologyExtractor
 
 sample = [
 

@@ -338,20 +338,49 @@ class KnowledgePipeline:
         )
 
         # ==================================================
-        # Build Knowledge Graph
+        # Build Enterprise Knowledge Graph
         # ==================================================
 
-        graph_document = self.graph_builder.build(
-            knowledge_document=document,
-            semantic_result=semantic_result,
+        from app.intelligence.utilities.knowledge.knowledge_graph.knowledge_graph import (
+            KnowledgeGraph,
         )
+
+        enterprise_graph = KnowledgeGraph()
+
+        for statement in semantic_result.business_statements:
+
+            graph = self.graph_builder.build(statement)
+
+            #
+            # Merge nodes
+            #
+            if isinstance(enterprise_graph.nodes, dict):
+
+                enterprise_graph.nodes.update(graph.nodes)
+
+            else:
+
+                enterprise_graph.nodes.extend(graph.nodes)
+
+            #
+            # Merge edges
+            #
+            enterprise_graph.nodes.update(graph.nodes)
+
+            enterprise_graph.edges.update(graph.edges)
+        #
+        # Update statistics if available
+        #
+        if hasattr(enterprise_graph, "update_statistics"):
+
+            enterprise_graph.update_statistics()
 
         # ==================================================
         # Build Knowledge Profile
         # ==================================================
 
         knowledge_profile = self.profile_builder.build(
-            graph_document
+            enterprise_graph
         )
 
         # ==================================================
@@ -362,10 +391,10 @@ class KnowledgePipeline:
 
             knowledge_document=document,
 
-            graph_document=graph_document,
+            semantic_result=semantic_result,
+
+            graph_document=enterprise_graph,
 
             knowledge_profile=knowledge_profile,
-
-            semantic_result=semantic_result,
 
         )

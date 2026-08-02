@@ -35,15 +35,14 @@ class GraphEdge:
     # Graph Connection
     # --------------------------------------------------
 
-    source_node: str = ""
+    source_id: str = ""
 
-    target_node: str = ""
-
+    target_id: str = ""
     # --------------------------------------------------
     # Relationship
     # --------------------------------------------------
 
-    relationship: str = ""
+    relation: str = ""
 
     relationship_label: str = ""
 
@@ -64,3 +63,21 @@ class GraphEdge:
     source: str = "knowledge_pipeline"
 
     metadata: dict = field(default_factory=dict)
+
+    # --------------------------------------------------
+    # BACK COMPATIBILITY
+    # --------------------------------------------------
+
+    @property
+    def source_node(self):
+        return self.source_id
+
+
+    @property
+    def target_node(self):
+        return self.target_id
+
+
+    @property
+    def relationship(self):
+        return self.relation

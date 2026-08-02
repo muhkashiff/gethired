@@ -1,208 +1,462 @@
-"""
-Knowledge Graph Query Engine
-
-Provides reusable graph queries.
-
-Every future AI module should use this instead
-of searching raw resume text.
-"""
-
-from collections import defaultdict
+        
 
 
 class GraphQuery:
-
     def __init__(self, graph):
 
         self.graph = graph
 
-        # ------------------------------------------
-        # Build lookup dictionaries
-        # ------------------------------------------
+    ####################################################################
+            # FIND NODES
+    ####################################################################
 
-        self.node_lookup = {}
+    def find_nodes(
 
-        for node in graph.nodes:
-            self.node_lookup[node.id] = node
+            self,
 
-        self.outgoing = defaultdict(list)
+            entity_type=None,
 
-        self.incoming = defaultdict(list)
+            domain=None,
 
-        for edge in graph.edges:
+            business_area=None,
 
-            self.outgoing[edge.source].append(edge)
+            category=None,
 
-            self.incoming[edge.target].append(edge)
+        ):
+            """
+            Returns nodes matching supplied filters.
 
-    # ==========================================================
-    # Generic
-    # ==========================================================
+            Parameters
+            ----------
+            entity_type : str
 
-    def nodes(self):
+            domain : str
 
-        return self.graph.nodes
+            business_area : str
 
-    def edges(self):
+            category : str
 
-        return self.graph.edges
+            Returns
+            -------
+            list[GraphNode]
+            """
 
-    def node_by_label(self, label):
+            results = []
 
-        for node in self.graph.nodes:
+            for node in self.graph.get_nodes():
 
-            if node.label.lower() == label.lower():
+                if entity_type:
 
-                return node
+                    if node.entity_type.lower() != entity_type.lower():
 
-        return None
+                        continue
 
-    def nodes_by_type(self, node_type):
+                if domain:
 
-        return [
+                    if node.domain.lower() != domain.lower():
 
-            n
+                        continue
 
-            for n in self.graph.nodes
+                if business_area:
 
-            if n.node_type.lower() == node_type.lower()
+                    if node.business_area.lower() != business_area.lower():
 
-        ]
+                        continue
 
-    # ==========================================================
-    # Relationship Queries
-    # ==========================================================
+                if category:
 
-    def children(self, node):
+                    if node.category.lower() != category.lower():
 
-        result = []
+                        continue
 
-        for edge in self.outgoing[node.id]:
+                results.append(node)
 
-            result.append(self.node_lookup[edge.target])
+            return results
+            ####################################################################
+        # FIND SINGLE NODE
+        ####################################################################
 
-        return result
+    def find_node(
 
-    def parents(self, node):
+            self,
 
-        result = []
+            node_id=None,
 
-        for edge in self.incoming[node.id]:
+            canonical=None,
 
-            result.append(self.node_lookup[edge.source])
+        ):
+            """
+            Finds a single node.
 
-        return result
+            Parameters
+            ----------
+            node_id : str
 
-    def relations(self, node):
+            canonical : str
 
-        result = []
+            Returns
+            -------
+            GraphNode | None
+            """
 
-        for edge in self.outgoing[node.id]:
+            # ----------------------------------------------------------
+            # Search by Node ID
+            # ----------------------------------------------------------
 
-            result.append(
+            if node_id:
+
+                return self.graph.get_node(node_id)
+
+            # ----------------------------------------------------------
+            # Search by Canonical Name
+            # ----------------------------------------------------------
+
+            if canonical:
+
+                canonical = canonical.lower().strip()
+
+                for node in self.graph.get_nodes():
+
+                    if node.canonical.lower() == canonical:
+
+                        return node
+
+            return None
+            ####################################################################
+        # FIND EDGES
+        ####################################################################
+
+    def find_edges(
+
+            self,
+
+            relation=None,
+
+            source_id=None,
+
+            target_id=None,
+
+        ):
+            """
+            Returns graph edges matching filters.
+
+            Parameters
+            ----------
+            relation : str
+
+            source_id : str
+
+            target_id : str
+
+            Returns
+            -------
+            list[GraphEdge]
+            """
+
+            results = []
+
+            for edge in self.graph.get_edges():
+
+                # ------------------------------------------------------
+                # Relation
+                # ------------------------------------------------------
+
+                if relation:
+
+                    if edge.relation.lower() != relation.lower():
+
+                        continue
+
+                # ------------------------------------------------------
+                # Source
+                # ------------------------------------------------------
+
+                if source_id:
+
+                    if edge.source_id != source_id:
+
+                        continue
+
+                # ------------------------------------------------------
+                # Target
+                # ------------------------------------------------------
+
+                if target_id:
+
+                    if edge.target_id != target_id:
+
+                        continue
+
+                results.append(edge)
+
+            return results
+        ####################################################################
+        # GET NEIGHBOR NODES
+        ####################################################################
+
+    def neighbors(
+
+            self,
+
+            node_id,
+
+            relation=None,
+
+            direction="both",
+
+        ):
+            """
+            Returns neighboring nodes connected to a node.
+
+            Parameters
+            ----------
+            node_id : str
+
+            relation : str | None
+
+            direction :
+                "out"
+                "in"
+                "both"
+
+            Returns
+            -------
+            list[GraphNode]
+            """
+
+            neighbors = []
+
+            seen = set()
+
+            # ----------------------------------------------------------
+            # Outgoing Relations
+            # ----------------------------------------------------------
+
+            if direction in ("out", "both"):
+
+                outgoing = self.find_edges(
+
+                    relation=relation,
+
+                    source_id=node_id,
+
+                )
+
+                for edge in outgoing:
+
+                    node = self.graph.get_node(
+
+                        edge.target_id
+
+                    )
+
+                    if node and node.node_id not in seen:
+
+                        neighbors.append(node)
+
+                        seen.add(node.node_id)
+
+            # ----------------------------------------------------------
+            # Incoming Relations
+            # ----------------------------------------------------------
+
+            if direction in ("in", "both"):
+
+                incoming = self.find_edges(
+
+                    relation=relation,
+
+                    target_id=node_id,
+
+                )
+
+                for edge in incoming:
+
+                    node = self.graph.get_node(
+
+                        edge.source_id
+
+                    )
+
+                    if node and node.node_id not in seen:
+
+                        neighbors.append(node)
+
+                        seen.add(node.node_id)
+
+            return neighbors
+        ####################################################################
+        # FIND BY RELATION
+        ####################################################################
+
+    def find_by_relation(
+
+            self,
+
+            relation,
+
+            source_id=None,
+
+            target_id=None,
+
+        ):
+            """
+            Finds relationships and returns
+            source/target node pairs.
+
+            Parameters
+            ----------
+            relation : str
+
+            source_id : str | None
+
+            target_id : str | None
+
+            Returns
+            -------
+            list[dict]
+            """
+
+            results = []
+
+            edges = self.find_edges(
+
+                relation=relation,
+
+                source_id=source_id,
+
+                target_id=target_id,
+
+            )
+
+            for edge in edges:
+
+                source = self.graph.get_node(
+
+                    edge.source_id
+
+                )
+
+                target = self.graph.get_node(
+
+                    edge.target_id
+
+                )
+
+                results.append(
+
+                    {
+
+                        "relation": edge.relation,
+
+                        "source": source,
+
+                        "target": target,
+
+                        "confidence": edge.confidence,
+
+                        "reasoning": edge.reasoning,
+
+                    }
+
+                )
+
+            return results
+
+        ####################################################################
+        # SHORTEST PATH (BFS)
+        ####################################################################
+
+    def shortest_path(
+
+            self,
+
+            start_node_id,
+
+            end_node_id,
+
+        ):
+            """
+            Finds the shortest path between two nodes
+            using Breadth-First Search.
+
+            Returns
+            -------
+            list[GraphNode]
+            """
+
+            if start_node_id == end_node_id:
+
+                node = self.graph.get_node(start_node_id)
+
+                return [node] if node else []
+
+            visited = set()
+
+            queue = [
 
                 (
 
-                    edge.relation,
+                    start_node_id,
 
-                    self.node_lookup[edge.target],
+                    [start_node_id],
+
+                )
+
+            ]
+
+            while queue:
+
+                current_node, path = queue.pop(0)
+
+                if current_node in visited:
+
+                    continue
+
+                visited.add(current_node)
+
+                neighbors = self.neighbors(
+
+                    current_node,
+
+                    direction="out",
 
                 )
 
-            )
+                for neighbor in neighbors:
 
-        return result
+                    if neighbor.node_id == end_node_id:
 
-    # ==========================================================
-    # Resume Intelligence Queries
-    # ==========================================================
+                        final_path = path + [
 
-    def achievements(self):
+                            neighbor.node_id
 
-        return self.nodes_by_type("Action")
+                        ]
 
-    def metrics(self):
+                        return [
 
-        return self.nodes_by_type("Metric")
+                            self.graph.get_node(node_id)
 
-    def measurements(self):
+                            for node_id in final_path
 
-        return self.nodes_by_type("Measurement")
+                        ]
 
-    def domains(self):
+                    if neighbor.node_id not in visited:
 
-        return self.nodes_by_type("Domain")
+                        queue.append(
 
-    def objects(self):
+                            (
 
-        return self.nodes_by_type("Object")
+                                neighbor.node_id,
 
-    # ==========================================================
-    # Domain Search
-    # ==========================================================
+                                path + [
 
-    def actions_in_domain(self, domain_name):
+                                    neighbor.node_id
 
-        result = []
+                                ],
 
-        domain = self.node_by_label(domain_name)
+                            )
 
-        if domain is None:
+                        )
 
-            return result
-
-        for edge in self.incoming[domain.id]:
-
-            result.append(
-
-                self.node_lookup[edge.source]
-
-            )
-
-        return result
-
-    # ==========================================================
-    # Metric Search
-    # ==========================================================
-
-    def metric_value(self, metric_name):
-
-        metric = self.node_by_label(metric_name)
-
-        if metric is None:
-
-            return None
-
-        for edge in self.outgoing[metric.id]:
-
-            if edge.relation == "measured_as":
-
-                return self.node_lookup[edge.target]
-
-        return None
-
-    # ==========================================================
-    # Pretty Printing
-    # ==========================================================
-
-    def print_graph(self):
-
-        print("=" * 70)
-
-        print("KNOWLEDGE GRAPH")
-
-        print("=" * 70)
-
-        for node in self.graph.nodes:
-
-            print()
-
-            print(f"{node.node_type}: {node.label}")
-
-            for relation, child in self.relations(node):
-
-                print(
-
-                    f"    └── {relation} ---> {child.label}"
-
-                )
+            return []

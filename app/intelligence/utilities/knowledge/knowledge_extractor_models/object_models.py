@@ -1,52 +1,47 @@
-"""
-Object Knowledge Model
+from dataclasses import dataclass
 
-Represents a business object detected in a sentence.
-
-Examples
-
-FSSC 22000
-ISO 9001
-Production Yield
-Supplier
-Customer Complaints
-Facility
-"""
-
-from dataclasses import dataclass, field
+from .base_models import KnowledgeEntity
 
 
 @dataclass
-class ObjectKnowledge:
+class ObjectKnowledge(KnowledgeEntity):
 
-    # ---------------------------------------------------------
-    # Detection
-    # ---------------------------------------------------------
+    ####################################################################
+    # Entity
+    ####################################################################
 
-    found: bool = False
+    entity_type: str = "object"
 
-    confidence: float = 0.0
+    ontology_name: str = "objects"
 
-    # ---------------------------------------------------------
-    # Linguistic
-    # ---------------------------------------------------------
+    ####################################################################
+    # Business Object
+    ####################################################################
 
-    original: str = ""
+    object_family: str = ""
 
-    canonical: str = ""
+    object_group: str = ""
 
-    category: str = ""
+    tangible: bool = False
 
-    # ---------------------------------------------------------
-    # Ontology
-    # ---------------------------------------------------------
+    intangible: bool = False
 
-    entity_id: str = ""
+    measurable: bool = False
 
-    business_area: str = ""
+    critical: bool = False
 
-    impact_weight: float = 1.0
+    ####################################################################
+    # Classification
+    ####################################################################
 
-    source: str = ""
+    lifecycle: str = ""
 
-    metadata: dict = field(default_factory=dict)
+    ownership: str = ""
+
+    parent_object: str = ""
+
+    ####################################################################
+    # Parsing
+    ####################################################################
+
+    role: str = ""

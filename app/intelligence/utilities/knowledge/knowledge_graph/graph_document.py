@@ -16,7 +16,7 @@ This becomes the top-level object passed to:
 
 from dataclasses import dataclass, field
 
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
+from app.intelligence.utilities.knowledge.knowledge_graph.knowledge_graph import (
     KnowledgeGraph,
 )
 

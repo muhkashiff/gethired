@@ -1,39 +1,70 @@
 """
-Domain Knowledge Model
+Enterprise Domain Knowledge Model
 
-Represents the business domain assigned
-to a clause or achievement.
+Represents business domains extracted from text.
 
 Examples
 
 Food Safety
-Quality
-Manufacturing
+Quality Management
 Operations
 Supply Chain
-Leadership
+Manufacturing
+Retail
+Continuous Improvement
+Business Analytics
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from .base_models import KnowledgeEntity
 
 
 @dataclass
-class DomainKnowledge:
+class DomainKnowledge(KnowledgeEntity):
 
-    found: bool = False
+    ####################################################################
+    # Entity
+    ####################################################################
 
-    confidence: float = 0.0
+    entity_type: str = "domain"
 
-    entity_id: str = ""
+    ontology_name: str = "domains"
 
-    domain: str = ""
+    ####################################################################
+    # Domain Definition
+    ####################################################################
 
-    business_area: str = ""
+    domain_family: str = ""
 
-    impact_weight: float = 1.0
+    parent_domain: str = ""
 
-    source: str = "ontology"
+    business_function: str = ""
 
-    metadata: dict = field(default_factory=dict)
+    ####################################################################
+    # Classification
+    ####################################################################
 
-    reasoning: str = ""
+    strategic: bool = False
+
+    operational: bool = False
+
+    technical: bool = False
+
+    compliance: bool = False
+
+    management: bool = False
+
+    ####################################################################
+    # Enterprise
+    ####################################################################
+
+    enterprise_level: int = 1
+
+    criticality: float = 1.0
+
+    ####################################################################
+    # Knowledge Graph
+    ####################################################################
+
+    graph_node: bool = True

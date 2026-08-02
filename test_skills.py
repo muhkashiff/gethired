@@ -1,6 +1,6 @@
 from app.parser.readers.resume_reader import ResumeReader
 from app.parser.section_detector import SectionDetector
-from app.parser.extractors.skills_extractor import SkillsExtractor
+from app.intelligence.utilities.knowledge.knowledge_extractors.skills_extractor import SkillsExtractor
 
 RESUME = r"D:\Self Projects\gethired\gethired\uploads\project_2\resume_original.docx"
 

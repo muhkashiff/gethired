@@ -1,53 +1,37 @@
 """
-Measurement Knowledge Model
+Enterprise Measurement Knowledge Model
 
-Represents one measurable business KPI.
+Represents quantitative measurements extracted from text.
 
 Examples
 
-Production Yield = 99%
-
-Customer Complaints = -60%
-
-Cost Savings = $2M
-
-NEW
-
-Supports
-
-    • from → to measurements
-    • delta measurements
-    • absolute measurements
-    • percent change
+99%
+70 → 99%
+4 Hours
+15 Days
+$2 Million
+5000 Units
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from .base_models import KnowledgeEntity
 
 
 @dataclass
-class MeasurementKnowledge:
+class MeasurementKnowledge(KnowledgeEntity):
 
-    # =========================================================
-    # Detection
-    # =========================================================
+    ####################################################################
+    # Entity
+    ####################################################################
 
-    found: bool = False
+    entity_type: str = "measurement"
 
-    confidence: float = 0.0
+    ontology_name: str = "measurements"
 
-    # =========================================================
-    # Metric Information
-    # =========================================================
-
-    metric: str = ""
-
-    canonical: str = ""
-
-    category: str = ""
-
-    # =========================================================
-    # Original Measurement
-    # =========================================================
+    ####################################################################
+    # Raw Measurement
+    ####################################################################
 
     value: str = ""
 
@@ -59,15 +43,23 @@ class MeasurementKnowledge:
 
     operator: str = ""
 
-    # =========================================================
-    # NEW
-    # Advanced Measurement Information
-    # =========================================================
+    ####################################################################
+    # Measurement Type
+    ####################################################################
 
     measurement_type: str = ""
-    # range
-    # delta
+
     # absolute
+    # percentage
+    # currency
+    # duration
+    # quantity
+    # ratio
+    # range
+
+    ####################################################################
+    # Change Detection
+    ####################################################################
 
     from_value: float | None = None
 
@@ -79,108 +71,59 @@ class MeasurementKnowledge:
 
     comparison_operator: str = ""
 
-    # =========================================================
-    # Business Interpretation
-    # =========================================================
+    ####################################################################
+    # Direction
+    ####################################################################
 
     direction: str = ""
+
+    # increase
+    # decrease
+    # unchanged
+
+    improvement: bool = False
+    
+
+    ####################################################################
+    # Business Meaning
+    ####################################################################
 
     effect: str = ""
 
     business_meaning: str = ""
 
-    # =========================================================
-    # Ontology
-    # =========================================================
+    ####################################################################
+    # Semantic Links
+    ####################################################################
 
-    entity_id: str = ""
+    # Metric this measurement belongs to
+    metric: str = ""
 
-    business_area: str = ""
+    # Original metric object
+    metric_object: object | None = None
 
-    impact_weight: float = 1.0
+    # Object being measured
+    target: str = ""
 
-    source: str = ""
+    target_object: object | None = None
 
-    # =========================================================
-    # Metadata
-    # =========================================================
+    # Modifier
+    modifier: str = ""
 
-    metadata: dict = field(default_factory=dict)
+    modifier_object: object | None = None
 
-    # =========================================================
-    # Convenience Properties
-    # =========================================================
+    # Standard
+    standard: str = ""
 
-    @property
-    def has_range(self):
+    standard_object: object | None = None
 
-        return (
+    # Domain
+    domain: str = ""
 
-            self.from_value is not None
+    domain_object: object | None = None
 
-            and
+    ####################################################################
+    # Validation
+    ####################################################################
 
-            self.to_value is not None
-
-        )
-
-    # ---------------------------------------------------------
-
-    @property
-    def has_delta(self):
-
-        return self.change_value is not None
-
-    # ---------------------------------------------------------
-
-    @property
-    def is_percentage(self):
-
-        return self.unit == "%"
-
-    # ---------------------------------------------------------
-
-    @property
-    def improvement(self):
-
-        if self.direction.lower() == "increase":
-
-            return True
-
-        if self.direction.lower() == "positive":
-
-            return True
-
-        return False
-
-    # ---------------------------------------------------------
-
-    def summary(self):
-
-        return {
-
-            "metric": self.metric,
-
-            "value": self.value,
-
-            "numeric_value": self.numeric_value,
-
-            "unit": self.unit,
-
-            "measurement_type": self.measurement_type,
-
-            "from_value": self.from_value,
-
-            "to_value": self.to_value,
-
-            "change_value": self.change_value,
-
-            "percent_change": self.percent_change,
-
-            "direction": self.direction,
-
-            "effect": self.effect,
-
-            "confidence": self.confidence,
-
-        }
+    valid_measurement: bool = True

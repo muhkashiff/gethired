@@ -121,6 +121,17 @@ class KnowledgeDocument:
 
     confidence: float = 0.0
 
+    #------------------------------
+    # Standar 
+    #------------------------------
+
+    version: str = ""
+
+    publisher: str = ""
+
+    standard_type: str = ""
+
+
     # -----------------------------
     # Pipeline Objects
     # -----------------------------

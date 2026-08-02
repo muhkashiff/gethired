@@ -24,7 +24,7 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models imp
     BusinessStatement,
 )
 
-from app.intelligence.utilities.knowledge.semantic_reasoning.intent_resolver import (
+from app.intelligence.utilities.knowledge.semantic_reasoning.intent.intent_resolver import (
     IntentResolver,
 )
 

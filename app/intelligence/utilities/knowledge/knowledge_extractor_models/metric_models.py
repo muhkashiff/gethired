@@ -1,57 +1,77 @@
 """
-Metric Knowledge Model
+Enterprise Metric Knowledge Model
 
-Represents a Business KPI detected from a sentence.
+Represents business metrics extracted from text.
 
 Examples
 
-Production Yield
-Customer Complaints
-Downtime
+Yield
 Efficiency
 Productivity
+Quality Score
+Customer Satisfaction
+Downtime
+OEE
+Waste
+Complaint Rate
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from .base_models import KnowledgeEntity
 
 
 @dataclass
-class MetricKnowledge:
+class MetricKnowledge(KnowledgeEntity):
 
-    # ---------------------------------------------------------
-    # Detection
-    # ---------------------------------------------------------
+    ####################################################################
+    # Entity
+    ####################################################################
 
-    found: bool = False
+    entity_type: str = "metric"
 
-    confidence: float = 0.0
+    ontology_name: str = "metrics"
 
-    # ---------------------------------------------------------
-    # Linguistic
-    # ---------------------------------------------------------
+    ####################################################################
+    # Metric Definition
+    ####################################################################
 
-    metric: str = ""
+    metric_family: str = ""
 
-    canonical: str = ""
-
-    category: str = ""
+    metric_group: str = ""
 
     unit: str = ""
 
-    # ---------------------------------------------------------
-    # Ontology
-    # ---------------------------------------------------------
-
-    entity_id: str = ""
-
-    business_area: str = ""
-
-    impact_weight: float = 1.0
-
-    preferred_unit: str = ""
+    ####################################################################
+    # Behaviour
+    ####################################################################
 
     higher_is_better: bool = True
 
-    source: str = ""
+    lower_is_better: bool = False
 
-    metadata: dict = field(default_factory=dict)
+    percentage_metric: bool = False
+
+    financial_metric: bool = False
+
+    quality_metric: bool = False
+
+    productivity_metric: bool = False
+
+    operational_metric: bool = False
+
+    ####################################################################
+    # Business
+    ####################################################################
+
+    kpi: bool = False
+
+    benchmark_available: bool = False
+
+    target_value: float = 0.0
+
+    ####################################################################
+    # Parsing
+    ####################################################################
+
+    measurement_expected: bool = True

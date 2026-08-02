@@ -1,16 +1,15 @@
 """
-Seniority Predictor
+Enterprise Seniority Predictor
 
-Predicts candidate seniority
-from the Knowledge Graph.
+KnowledgeGraph V5 Compatible
 
-This engine NEVER reads resume text.
+Uses only KnowledgeGraph.
 
-It only analyses Graph Nodes.
+No dependency on parser output.
+
+GETHIRED Enterprise V5
 """
-from app.intelligence.utilities.knowledge.knowledge_scoring.engines.leadership_engine import (
-    LeadershipEngine,
-)
+
 from collections import Counter
 
 
@@ -19,7 +18,6 @@ class SeniorityPredictor:
     def __init__(self):
 
         self.weights = {
-
             "leadership": 3,
             "management": 3,
             "strategy": 4,
@@ -27,8 +25,21 @@ class SeniorityPredictor:
             "optimization": 1,
             "analysis": 1,
             "operations": 1,
-
+            "quality": 2,
+            "food safety": 2,
         }
+
+    # ----------------------------------------------------------
+    # Helpers
+    # ----------------------------------------------------------
+
+    def _nodes(self, graph, entity_type):
+
+        return [
+            node
+            for node in graph.nodes.values()
+            if getattr(node, "entity_type", "").lower() == entity_type.lower()
+        ]
 
     # ----------------------------------------------------------
 
@@ -37,66 +48,86 @@ class SeniorityPredictor:
         score = 0
 
         domains = Counter()
-
         actions = Counter()
+        business_areas = Counter()
 
-        for node in graph.nodes:
+        action_nodes = self._nodes(graph, "action")
+        domain_nodes = self._nodes(graph, "domain")
 
-            if node.node_type == "Action":
+        # ------------------------------------------------------
+        # Action Analysis
+        # ------------------------------------------------------
 
-                category = node.category.lower()
+        for node in action_nodes:
 
-                actions[category] += 1
+            category = getattr(node, "category", "").lower()
 
-                score += self.weights.get(category, 0)
+            actions[category] += 1
 
-            elif node.node_type == "Domain":
+            score += self.weights.get(category, 0)
 
-                domains[node.label.lower()] += 1
+            score += getattr(node, "impact_weight", 1)
 
-        # ----------------------------------------
-        # Executive domains
-        # ----------------------------------------
+            area = getattr(node, "business_area", "").lower()
 
-        if domains["leadership"]:
+            if area:
+                business_areas[area] += 1
 
-            score += 4
+        # ------------------------------------------------------
+        # Domain Analysis
+        # ------------------------------------------------------
 
-        if domains["strategy"]:
+        executive_domains = {
+            "leadership": 4,
+            "strategy": 5,
+            "operations": 2,
+            "quality": 2,
+            "food safety": 2,
+            "business excellence": 3,
+        }
 
-            score += 5
+        for node in domain_nodes:
 
-        if domains["operations"]:
+            label = getattr(node, "label", "").lower()
 
-            score += 2
+            domains[label] += 1
 
-        if domains["quality"]:
+            score += executive_domains.get(label, 0)
 
-            score += 2
+        # ------------------------------------------------------
+        # Breadth Bonus
+        # ------------------------------------------------------
 
-        # ----------------------------------------
-        # Predict level
-        # ----------------------------------------
+        score += len(domains)
 
-        if score >= 20:
+        score += min(len(actions), 5)
 
+        # ------------------------------------------------------
+        # Normalize
+        # ------------------------------------------------------
+
+        score = round(score, 2)
+
+        # ------------------------------------------------------
+        # Level Prediction
+        # ------------------------------------------------------
+
+        if score >= 35:
             level = "Executive"
 
-        elif score >= 14:
-
+        elif score >= 25:
             level = "Director"
 
-        elif score >= 9:
-
+        elif score >= 16:
             level = "Manager"
 
-        elif score >= 5:
-
+        elif score >= 8:
             level = "Senior Professional"
 
         else:
-
             level = "Professional"
+
+        # ------------------------------------------------------
 
         return {
 
@@ -107,5 +138,7 @@ class SeniorityPredictor:
             "actions": dict(actions),
 
             "domains": dict(domains),
+
+            "business_areas": dict(business_areas),
 
         }

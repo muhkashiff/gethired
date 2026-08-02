@@ -1,74 +1,44 @@
 """
-Object Extractor
+Enterprise Object Extractor
 
-Extracts ontology-backed business objects.
+Generic Ontology Version
 
-Repository Driven Version
+Enterprise V4
 """
 
-from app.intelligence.utilities.knowledge.repository.repository import Repository
+from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_extractor import (
+    GenericOntologyExtractor,
+)
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.object_models import (
     ObjectKnowledge,
 )
 
 
-class ObjectExtractor:
+class ObjectExtractor(GenericOntologyExtractor):
 
-    def __init__(self):
+    ####################################################################
+    # CONFIGURATION
+    ####################################################################
 
-        self.repository = Repository()
+    ontology_name = "objects"
 
-        self.objects = self.repository.get_dictionary("objects")
+    knowledge_class = ObjectKnowledge
 
-        # longest phrase first
-        self.sorted_objects = sorted(
-            self.objects.keys(),
-            key=len,
-            reverse=True,
-        )
+    entity_type = "object"
 
-    # ------------------------------------------------------------
+    ####################################################################
+    # OBJECT SPECIFIC FIELDS
+    ####################################################################
 
-    def extract(self, sentence):
+    def extra_fields(
 
-        sentence_lower = sentence.lower()
+        self,
 
-        for phrase in self.sorted_objects:
+        entity,
 
-            if phrase in sentence_lower:
+        metadata,
 
-                entity = self.repository.get_object(phrase)
+    ):
 
-                if entity is None:
-                    continue
-
-                return ObjectKnowledge(
-
-                    found=True,
-
-                    original=phrase,
-
-                    canonical=entity.canonical,
-
-                    category=entity.category,
-
-                    confidence=0.95,
-
-                    # ---------------------------------
-                    # Ontology
-                    # ---------------------------------
-
-                    entity_id=entity.entity_id,
-
-                    business_area=entity.business_area,
-
-                    impact_weight=entity.impact_weight,
-                    
-                    source="ontology",
-
-                    metadata=entity.metadata,
-
-                )
-
-        return ObjectKnowledge()
+        return {}

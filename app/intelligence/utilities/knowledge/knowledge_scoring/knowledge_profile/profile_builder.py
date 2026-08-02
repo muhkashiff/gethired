@@ -50,9 +50,16 @@ class ProfileBuilder:
 
     # -----------------------------------------------------
 
-    def build(self, graph_document):
+    def build(self, graph_input):
 
-        graph = graph_document.graph
+        # -------------------------------------------------
+        # Compatibility Layer
+        # -------------------------------------------------
+
+        if hasattr(graph_input, "graph"):
+            graph = graph_input.graph          # Old GraphDocument
+        else:
+            graph = graph_input                # New KnowledgeGraph
 
         # -------------------------------------------------
         # Run Engines

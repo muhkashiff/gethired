@@ -1,90 +1,118 @@
 """
-Metric Extractor
+Enterprise Metric Extractor
 
-Extracts business KPIs
-from resume statements.
+Generic Ontology Version
 
-Repository Driven Version
+Enterprise V4
 """
 
-from app.intelligence.utilities.knowledge.repository.repository import Repository
+from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_extractor import (
+    GenericOntologyExtractor,
+)
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.metric_models import (
     MetricKnowledge,
 )
 
 
-class MetricExtractor:
+class MetricExtractor(GenericOntologyExtractor):
 
-    def __init__(self):
+    ####################################################################
+    # CONFIGURATION
+    ####################################################################
 
-        self.repository = Repository()
+    ontology_name = "metrics"
 
-        # Load KPI dictionary
-        self.metrics = self.repository.get_dictionary("metrics")
+    knowledge_class = MetricKnowledge
 
-        # Longest metric phrases first
-        self.sorted_metrics = sorted(
-            self.metrics.keys(),
-            key=len,
-            reverse=True,
-        )
+    entity_type = "metric"
 
-    # ------------------------------------------------------
+    ####################################################################
+    # METRIC SPECIFIC FIELDS
+    ####################################################################
 
-    def extract(self, sentence):
+    def extra_fields(
 
-        sentence = sentence.lower()
+        self,
 
-        best_match = ""
+        entity,
 
-        # Search longest phrases first
-        for metric in self.sorted_metrics:
+        metadata,
 
-            if metric in sentence:
+    ):
 
-                best_match = metric
-                break
+        return {
 
-        if best_match == "":
+            "preferred_direction": metadata.get(
 
-            return MetricKnowledge()
+                "preferred_direction",
 
-        entity = self.repository.get_metric(best_match)
+                ""
 
-        if entity is None:
-
-            return MetricKnowledge()
-
-        return MetricKnowledge(
-
-            found=True,
-
-            confidence=0.95,
-
-            metric=best_match,
-
-            canonical=entity.canonical,
-
-            category=entity.category,
-
-            unit=entity.preferred_unit,
-
-            entity_id=entity.entity_id,
-
-            business_area=entity.business_area,
-
-            impact_weight=entity.impact_weight,
-
-            source=entity.source,
-
-            metadata=entity.metadata,
-
-            higher_is_better=entity.metadata.get(
-                "higher_is_better",
-                True,
             ),
 
-            preferred_unit=entity.preferred_unit,
+            "positive_effect": metadata.get(
 
-        )
+                "positive_effect",
+
+                ""
+
+            ),
+
+            "business_meaning": metadata.get(
+
+                "business_meaning",
+
+                ""
+
+            ),
+
+            "measurement_type": metadata.get(
+
+                "measurement_type",
+
+                ""
+
+            ),
+
+            "unit": metadata.get(
+
+                "unit",
+
+                ""
+
+            ),
+
+            "polarity": metadata.get(
+
+                "polarity",
+
+                ""
+
+            ),
+
+            "impact": metadata.get(
+
+                "impact",
+
+                0.0,
+
+            ),
+
+            "financial_driver": metadata.get(
+
+                "financial_driver",
+
+                False,
+
+            ),
+
+            "operational_driver": metadata.get(
+
+                "operational_driver",
+
+                False,
+
+            ),
+
+        }

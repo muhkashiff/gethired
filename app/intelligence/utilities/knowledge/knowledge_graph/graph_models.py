@@ -1,266 +1,133 @@
 """
-Knowledge Graph Model
+Enterprise Knowledge Graph Models
 
-Represents the complete semantic graph extracted
-from one resume or one document.
+Defines:
+
+- GraphNode
+- GraphEdge
+- GraphStatistics
+
+Every extracted KnowledgeEntity becomes a GraphNode.
+
+Every KnowledgeRelation becomes a GraphEdge.
+
+Enterprise V5
 """
 
 from dataclasses import dataclass, field
 
-from app.intelligence.utilities.knowledge.knowledge_graph.edge_models import (
-    GraphEdge,
-)
 
-from app.intelligence.utilities.knowledge.knowledge_graph.node_models import (
-    GraphNode,
-)
-
+# ==========================================================
+# GRAPH NODE
+# ==========================================================
 
 @dataclass
-class KnowledgeGraph:
+class GraphNode:
 
-    # --------------------------------------------------
-    # Graph Contents
-    # --------------------------------------------------
+    ####################################################################
+    # Identity
+    ####################################################################
 
-    nodes: list[GraphNode] = field(default_factory=list)
+    node_id: str = ""
 
-    edges: list[GraphEdge] = field(default_factory=list)
+    entity_id: str = ""
 
-    # --------------------------------------------------
-    # Fast Lookup Indexes
-    # --------------------------------------------------
+    entity_type: str = ""
 
-    node_index: dict[str, GraphNode] = field(default_factory=dict)
+    ontology_name: str = ""
 
-    edge_index: dict[str, GraphEdge] = field(default_factory=dict)
+    ####################################################################
+    # Display
+    ####################################################################
 
-    entity_index: dict[str, str] = field(default_factory=dict)
+    label: str = ""
 
-    # --------------------------------------------------
-    # Statistics
-    # --------------------------------------------------
+    canonical: str = ""
+
+    category: str = ""
+
+    ####################################################################
+    # Business
+    ####################################################################
+
+    domain: str = ""
+
+    business_area: str = ""
+
+    impact_weight: float = 1.0
+
+    ####################################################################
+    # Metadata
+    ####################################################################
+
+    metadata: dict = field(default_factory=dict)
+
+    ####################################################################
+    # Graph
+    ####################################################################
+
+    incoming_edges: list = field(default_factory=list)
+
+    outgoing_edges: list = field(default_factory=list)
+
+
+# ==========================================================
+# GRAPH EDGE
+# ==========================================================
+
+@dataclass
+class GraphEdge:
+
+    ####################################################################
+    # Identity
+    ####################################################################
+
+    edge_id: str = ""
+
+    relation: str = ""
+
+    confidence: float = 0.0
+
+    ####################################################################
+    # Source
+    ####################################################################
+
+    source_id: str = ""
+
+    source_type: str = ""
+
+    ####################################################################
+    # Target
+    ####################################################################
+
+    target_id: str = ""
+
+    target_type: str = ""
+
+    ####################################################################
+    # Explainability
+    ####################################################################
+
+    reasoning: str = ""
+
+    ####################################################################
+    # Metadata
+    ####################################################################
+
+    metadata: dict = field(default_factory=dict)
+
+
+# ==========================================================
+# GRAPH STATISTICS
+# ==========================================================
+
+@dataclass
+class GraphStatistics:
 
     node_count: int = 0
 
     edge_count: int = 0
 
-    confidence: float = 0.0
+    entity_counts: dict = field(default_factory=dict)
 
-    # --------------------------------------------------
-    # Metadata
-    # --------------------------------------------------
-
-    source: str = "resume"
-
-    metadata: dict = field(default_factory=dict)
-
-    # ==================================================
-    # Node Management
-    # ==================================================
-
-    def add_node(self, node: GraphNode):
-
-        if node.node_id in self.node_index:
-            return
-
-        self.nodes.append(node)
-
-        self.node_index[node.node_id] = node
-
-        if node.entity_id:
-            self.entity_index[node.entity_id] = node.node_id
-
-        self.node_count = len(self.nodes)
-
-    # --------------------------------------------------
-
-    def add_edge(self, edge: GraphEdge):
-
-        if edge.edge_id in self.edge_index:
-            return
-
-        self.edges.append(edge)
-
-        self.edge_index[edge.edge_id] = edge
-
-        self.edge_count = len(self.edges)
-
-    # ==================================================
-    # Lookup
-    # ==================================================
-
-    def get_node(self, node_id):
-
-        return self.node_index.get(node_id)
-
-    # --------------------------------------------------
-
-    def get_node_by_entity(self, entity_id):
-
-        node_id = self.entity_index.get(entity_id)
-
-        if node_id is None:
-            return None
-
-        return self.node_index.get(node_id)
-
-    # ==================================================
-    # Edge Lookup
-    # ==================================================
-
-    def get_edges_from(self, entity_id):
-
-        return [
-
-            edge
-
-            for edge in self.edges
-
-            if edge.source_node == entity_id
-
-        ]
-
-    # --------------------------------------------------
-
-    def get_edges_to(self, entity_id):
-
-        return [
-
-            edge
-
-            for edge in self.edges
-
-            if edge.target_node == entity_id
-
-        ]
-
-    # ==================================================
-    # Typed Collections
-    # ==================================================
-
-    def actions(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Action"
-
-        ]
-
-    # --------------------------------------------------
-
-    def objects(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Object"
-
-        ]
-
-    # --------------------------------------------------
-
-    def metrics(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Metric"
-
-        ]
-
-    # --------------------------------------------------
-
-    def measurements(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Measurement"
-
-        ]
-
-    # --------------------------------------------------
-
-    def domains(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Domain"
-
-        ]
-
-    # --------------------------------------------------
-
-    def certifications(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Certification"
-
-        ]
-
-    # --------------------------------------------------
-
-    def technologies(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Technology"
-
-        ]
-
-    # --------------------------------------------------
-
-    def modifiers(self):
-
-        return [
-
-            node
-
-            for node in self.nodes
-
-            if node.node_type == "Modifier"
-
-        ]
-
-    # ==================================================
-    # Summary
-    # ==================================================
-
-    def summary(self):
-
-        return {
-
-            "nodes": self.node_count,
-
-            "edges": self.edge_count,
-
-            "confidence": self.confidence,
-
-        }
+    relation_counts: dict = field(default_factory=dict)

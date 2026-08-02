@@ -21,7 +21,7 @@ class GraphNode:
 
     entity_id: str = ""
 
-    node_type: str = ""
+    entity_type: str = ""
 
     label: str = ""
 
@@ -58,6 +58,16 @@ class GraphNode:
     incoming_edges: list = field(default_factory=list)
 
     outgoing_edges: list = field(default_factory=list)
+
+    #-------------------------------------------------
+    # BACK COMPATIBILITY
+    #-------------------------------------------------
+    @property
+    def node_type(self):
+        """
+        Backward compatibility.
+        """
+        return self.entity_type
 
     # -------------------------------------------------
     # Helper Methods

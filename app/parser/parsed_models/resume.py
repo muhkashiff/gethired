@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from .personal_information import PersonalInformation
 from .experience import Experience
 from .education import Education
-from .certification import Certification
+from ...intelligence.utilities.knowledge.knowledge_extractor_models.certification_models import Certification
 from .project import Project
 from .language import Language
 from .award import Award
@@ -11,7 +11,8 @@ from .publication import Publication
 from .achievement import Achievement
 from .membership import Membership
 from .reference import Reference
-from .skill import Skill
+from ...intelligence.utilities.knowledge.knowledge_extractor_models.skill_models import Skill
+
 
 
 @dataclass
@@ -42,3 +43,4 @@ class Resume:
     languages: list[Language] = field(default_factory=list)
 
     references: list[Reference] = field(default_factory=list)
+

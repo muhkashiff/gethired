@@ -17,7 +17,7 @@
             ↓
     KnowledgeProfile
 """
-
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.base_models import KnowledgeEntity
 from dataclasses import dataclass, field
 
 
@@ -26,29 +26,34 @@ from dataclasses import dataclass, field
         # ============================================================
 
 @dataclass
-class SemanticEntity:
+class SemanticEntity(KnowledgeEntity):
 
-            entity_id: str = ""
+        ####################################################################
+        # Semantic-specific fields
+        ####################################################################
 
-            entity_type: str = ""
+        matched_text: str = ""
 
-            canonical: str = ""
+        semantic_role: str = ""
 
-            original: str = ""
+        relation_role: str = ""
 
-            matched_text: str = ""
+        reasoning: str = ""
+        ####################################################################
+        # Backward Compatibility
+        ####################################################################
 
-            category: str = ""
+        @property
+        def name(self):
+            return self.canonical
 
-            business_area: str = ""
+        @property
+        def text(self):
+            return self.original
 
-            confidence: float = 1.0
-
-            impact_weight: float = 1.0
-
-            metadata: dict = field(default_factory=dict)
-
-
+        @property
+        def id(self):
+            return self.entity_id
         # ============================================================
         # Semantic Dependency
         # ============================================================
