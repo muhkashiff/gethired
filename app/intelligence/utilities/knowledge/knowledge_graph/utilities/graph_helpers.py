@@ -1,124 +1,55 @@
 """
 Enterprise Graph Helpers
 
-Reusable helper functions for Knowledge Graph.
+Reusable helper functions used across
 
-These helpers keep every builder extremely small.
+• Builders
+• Validators
+• Optimizer
+• Reasoners
+• Query Engine
 
-Enterprise V5
+Enterprise V7
 """
 
-from typing import List
-
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
-    GraphNode,
-)
+from collections import defaultdict
 
 
 class GraphHelpers:
-    """
-    Collection of helper methods used throughout
-    the Knowledge Graph.
-    """
 
-    # ---------------------------------------------------------
-    # Safe Metadata Access
-    # ---------------------------------------------------------
+    ####################################################################
+    # NODE LOOKUPS
+    ####################################################################
 
     @staticmethod
-    def get(node: GraphNode, key: str, default=None):
-        """
-        Safe metadata getter.
+    def node_by_entity_id(
 
-        Example
+        graph,
 
-        GraphHelpers.get(node,"numeric_value")
-        """
+        entity_id,
 
-        if node.metadata is None:
-            return default
+    ):
 
-        return node.metadata.get(key, default)
+        for node in graph.get_nodes():
 
-    # ---------------------------------------------------------
-    # Numeric Value
-    # ---------------------------------------------------------
+            if node.entity_id == entity_id:
 
-    @staticmethod
-    def numeric(node: GraphNode):
+                return node
 
-        value = GraphHelpers.get(node, "numeric_value")
+        return None
 
-        if value is None:
-            return 0
-
-        return value
-
-    # ---------------------------------------------------------
-    # Percentage Change
-    # ---------------------------------------------------------
+    ####################################################################
+    # TYPE LOOKUP
+    ####################################################################
 
     @staticmethod
-    def percent_change(node: GraphNode):
+    def nodes_by_type(
 
-        value = GraphHelpers.get(node, "percent_change")
+        graph,
 
-        if value is None:
-            return 0
+        entity_type,
 
-        return value
-
-    # ---------------------------------------------------------
-    # Unit
-    # ---------------------------------------------------------
-
-    @staticmethod
-    def unit(node: GraphNode):
-
-        return GraphHelpers.get(node, "unit", "")
-
-    # ---------------------------------------------------------
-    # Business Area
-    # ---------------------------------------------------------
-
-    @staticmethod
-    def business_area(node: GraphNode):
-
-        if node.business_area:
-            return node.business_area
-
-        return GraphHelpers.get(node, "business_area", "")
-
-    # ---------------------------------------------------------
-    # Category
-    # ---------------------------------------------------------
-
-    @staticmethod
-    def category(node: GraphNode):
-
-        if node.category:
-            return node.category
-
-        return GraphHelpers.get(node, "category", "")
-
-    # ---------------------------------------------------------
-    # Domain
-    # ---------------------------------------------------------
-
-    @staticmethod
-    def domain(node: GraphNode):
-
-        if node.domain:
-            return node.domain
-
-        return GraphHelpers.get(node, "domain", "")
-
-    # ---------------------------------------------------------
-    # Node Filtering
-    # ---------------------------------------------------------
-
-    @staticmethod
-    def filter_type(nodes: List[GraphNode], entity_type: str):
+    ):
 
         entity_type = entity_type.lower()
 
@@ -126,37 +57,49 @@ class GraphHelpers:
 
             node
 
-            for node in nodes
+            for node in graph.get_nodes()
 
             if node.entity_type.lower() == entity_type
 
         ]
 
-    # ---------------------------------------------------------
-    # Category Filtering
-    # ---------------------------------------------------------
+    ####################################################################
+    # DOMAIN LOOKUP
+    ####################################################################
 
     @staticmethod
-    def filter_category(nodes, category):
+    def nodes_by_domain(
 
-        category = category.lower()
+        graph,
+
+        domain,
+
+    ):
+
+        domain = domain.lower()
 
         return [
 
             node
 
-            for node in nodes
+            for node in graph.get_nodes()
 
-            if GraphHelpers.category(node).lower() == category
+            if node.domain.lower() == domain
 
         ]
 
-    # ---------------------------------------------------------
-    # Business Area Filtering
-    # ---------------------------------------------------------
+    ####################################################################
+    # BUSINESS AREA LOOKUP
+    ####################################################################
 
     @staticmethod
-    def filter_business_area(nodes, area):
+    def nodes_by_business_area(
+
+        graph,
+
+        area,
+
+    ):
 
         area = area.lower()
 
@@ -164,47 +107,237 @@ class GraphHelpers:
 
             node
 
-            for node in nodes
+            for node in graph.get_nodes()
 
-            if GraphHelpers.business_area(node).lower() == area
+            if node.business_area.lower() == area
 
         ]
 
-    # ---------------------------------------------------------
-    # Has Measurement
-    # ---------------------------------------------------------
+    ####################################################################
+    # EDGE LOOKUPS
+    ####################################################################
 
     @staticmethod
-    def has_measurement(node):
+    def outgoing(
 
-        return GraphHelpers.numeric(node) != 0
+        graph,
 
-    # ---------------------------------------------------------
-    # Label
-    # ---------------------------------------------------------
+        node_id,
+
+        relation=None,
+
+    ):
+
+        edges = [
+
+            edge
+
+            for edge in graph.get_edges()
+
+            if edge.source_id == node_id
+
+        ]
+
+        if relation:
+
+            relation = relation.upper()
+
+            edges = [
+
+                edge
+
+                for edge in edges
+
+                if edge.relation.upper() == relation
+
+            ]
+
+        return edges
+
+    ####################################################################
 
     @staticmethod
-    def label(node):
+    def incoming(
 
-        return node.label or node.canonical
+        graph,
 
-    # ---------------------------------------------------------
-    # Pretty Print
-    # ---------------------------------------------------------
+        node_id,
+
+        relation=None,
+
+    ):
+
+        edges = [
+
+            edge
+
+            for edge in graph.get_edges()
+
+            if edge.target_id == node_id
+
+        ]
+
+        if relation:
+
+            relation = relation.upper()
+
+            edges = [
+
+                edge
+
+                for edge in edges
+
+                if edge.relation.upper() == relation
+
+            ]
+
+        return edges
+
+    ####################################################################
+    # NEIGHBORS
+    ####################################################################
 
     @staticmethod
-    def describe(node):
+    def neighbors(
+
+        graph,
+
+        node_id,
+
+    ):
+
+        output = []
+
+        for edge in graph.get_edges():
+
+            if edge.source_id == node_id:
+
+                node = graph.get_node(
+
+                    edge.target_id
+
+                )
+
+                if node:
+
+                    output.append(node)
+
+            elif edge.target_id == node_id:
+
+                node = graph.get_node(
+
+                    edge.source_id
+
+                )
+
+                if node:
+
+                    output.append(node)
+
+        return output
+
+    ####################################################################
+    # GROUP BY TYPE
+    ####################################################################
+
+    @staticmethod
+    def group_nodes_by_type(
+
+        graph,
+
+    ):
+
+        groups = defaultdict(list)
+
+        for node in graph.get_nodes():
+
+            groups[node.entity_type].append(node)
+
+        return dict(groups)
+
+    ####################################################################
+    # GROUP BY DOMAIN
+    ####################################################################
+
+    @staticmethod
+    def group_nodes_by_domain(
+
+        graph,
+
+    ):
+
+        groups = defaultdict(list)
+
+        for node in graph.get_nodes():
+
+            groups[node.domain].append(node)
+
+        return dict(groups)
+
+    ####################################################################
+    # GROUP BY BUSINESS AREA
+    ####################################################################
+
+    @staticmethod
+    def group_nodes_by_business_area(
+
+        graph,
+
+    ):
+
+        groups = defaultdict(list)
+
+        for node in graph.get_nodes():
+
+            groups[node.business_area].append(node)
+
+        return dict(groups)
+
+    ####################################################################
+    # GRAPH SUMMARY
+    ####################################################################
+
+    @staticmethod
+    def summary(
+
+        graph,
+
+    ):
 
         return {
 
-            "entity_id": node.entity_id,
+            "nodes": len(graph.nodes),
 
-            "entity_type": node.entity_type,
+            "edges": len(graph.edges),
 
-            "label": node.label,
+            "entity_types": len(
 
-            "category": GraphHelpers.category(node),
+                GraphHelpers.group_nodes_by_type(
 
-            "business_area": GraphHelpers.business_area(node),
+                    graph
+
+                )
+
+            ),
+
+            "domains": len(
+
+                GraphHelpers.group_nodes_by_domain(
+
+                    graph
+
+                )
+
+            ),
+
+            "business_areas": len(
+
+                GraphHelpers.group_nodes_by_business_area(
+
+                    graph
+
+                )
+
+            ),
 
         }

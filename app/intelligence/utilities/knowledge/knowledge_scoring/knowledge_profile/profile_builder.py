@@ -1,168 +1,178 @@
 """
-Knowledge Profile Builder
+Enterprise Knowledge Profile Builder
 
-Builds the master KnowledgeProfile object.
-
-Everything returned from this builder is object-oriented.
-
-Current Modules
-
-    • Seniority
-    • Leadership
-    • Achievement
-
-Future Modules
-
-    • Business Value
-    • Executive Readiness
-    • Domain Expertise
-    • Technical Expertise
-    • ATS Profile
-    • Resume Score
+Enterprise V12
 """
 
-from app.intelligence.utilities.knowledge.knowledge_scoring.seniority.seniority_predictor import (
-    SeniorityPredictor,
-)
+from .profile_models import SummaryProfile
 
-from app.intelligence.utilities.knowledge.knowledge_scoring.engines.leadership_engine import (
-    LeadershipEngine,
-)
+from app.intelligence.utilities.knowledge.knowledge_scoring.base.capability_reasoner import CapabilityReasoner
 
-from app.intelligence.utilities.knowledge.knowledge_scoring.achievement.achievement_profile_builder import (
-    AchievementProfileBuilder,
-)
+from ..evidence.generic_evidence_builder import GenericEvidenceBuilder
 
-from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.profile_models import (
-    KnowledgeProfile,
-)
+from ..evidence.evidence_models import DomainEvidence
+from ..evidence.evidence_models import LeadershipEvidence
+from ..evidence.evidence_models import ATSEvidence
+from ..evidence.evidence_models import BusinessValueEvidence
+from ..evidence.evidence_models import TechnicalEvidence
+from ..evidence.evidence_models import ExecutiveEvidence
+
+from ..mappings.domain_mapping import DOMAIN_MAPPING
+from ..mappings.technical_mapping import TECHNICAL_MAPPING
+from ..mappings.leadership_mapping import LEADERSHIP_MAPPING
+from ..mappings.executive_mapping import EXECUTIVE_MAPPING
+from ..mappings.business_value_mapping import BUSINESS_VALUE_MAPPING
+from ..mappings.ats_mapping import ATS_MAPPING
+
+from ..scoring.domain_score_engine import DomainScoreEngine
+from ..scoring.technical_score_engine import TechnicalScoreEngine
+from ..scoring.leadership_score_engine import LeadershipScoreEngine
+from ..scoring.executive_score_engine import ExecutiveScoreEngine
+from ..scoring.business_value_score_engine import BusinessValueScoreEngine
+from ..scoring.ats_score_engine import ATSScoreEngine
+
+from ..predictors.seniority_predictor import SeniorityPredictor
+from ..predictors.executive_predictor import ExecutivePredictor
+from ..predictors.career_predictor import CareerPredictor
 
 
 class ProfileBuilder:
 
     def __init__(self):
 
+        self.reasoner = CapabilityReasoner()
+
+        self.builder = GenericEvidenceBuilder()
+
+        self.domain_engine = DomainScoreEngine()
+        self.technical_engine = TechnicalScoreEngine()
+        self.leadership_engine = LeadershipScoreEngine()
+        self.executive_engine = ExecutiveScoreEngine()
+        self.business_engine = BusinessValueScoreEngine()
+        self.ats_engine = ATSScoreEngine()
+
         self.seniority = SeniorityPredictor()
+        self.executive = ExecutivePredictor()
+        self.career = CareerPredictor()
 
-        self.leadership = LeadershipEngine()
+    # -------------------------------------------------------------
 
-        self.achievement = AchievementProfileBuilder()
+    def build(
 
-    # -----------------------------------------------------
+        self,
 
-    def build(self, graph_input):
+        graph,
 
-        # -------------------------------------------------
-        # Compatibility Layer
-        # -------------------------------------------------
+    ):
 
-        if hasattr(graph_input, "graph"):
-            graph = graph_input.graph          # Old GraphDocument
-        else:
-            graph = graph_input                # New KnowledgeGraph
+        # ---------------------------------------------------------
+        # Capability Reasoning
+        # ---------------------------------------------------------
 
-        # -------------------------------------------------
-        # Run Engines
-        # -------------------------------------------------
+        capability_evidence = self.reasoner.reason(graph)
 
-        seniority_result = self.seniority.predict(graph)
+        # ---------------------------------------------------------
+        # Evidence Objects
+        # ---------------------------------------------------------
 
-        leadership_result = self.leadership.score(graph)
-
-        achievement_result = self.achievement.build(graph)
-
-        # -------------------------------------------------
-        # Master Profile Object
-        # -------------------------------------------------
-
-        profile = KnowledgeProfile()
-
-        # -------------------------------------------------
-        # Achievement
-        # -------------------------------------------------
-
-        profile.achievement = achievement_result
-
-        # -------------------------------------------------
-        # Leadership
-        # -------------------------------------------------
-
-        profile.leadership.score = getattr(
-            leadership_result,
-            "overall_score",
-            0,
+        domain = self.builder.build(
+            capability_evidence,
+            DOMAIN_MAPPING,
+            DomainEvidence,
         )
 
-        profile.leadership.level = getattr(
-            leadership_result,
-            "level",
-            "",
+        technical = self.builder.build(
+            capability_evidence,
+            TECHNICAL_MAPPING,
+            TechnicalEvidence,
         )
 
-        if hasattr(leadership_result, "actions"):
-
-            profile.leadership.actions = leadership_result.actions
-
-        if hasattr(leadership_result, "executive_actions"):
-
-            profile.leadership.executive_actions = (
-                leadership_result.executive_actions
-            )
-
-        # -------------------------------------------------
-        # Seniority
-        # -------------------------------------------------
-
-        profile.seniority.score = seniority_result.get(
-            "score",
-            0,
+        leadership = self.builder.build(
+            capability_evidence,
+            LEADERSHIP_MAPPING,
+            LeadershipEvidence,
         )
 
-        profile.seniority.level = seniority_result.get(
-            "level",
-            "",
+        executive = self.builder.build(
+            capability_evidence,
+            EXECUTIVE_MAPPING,
+            ExecutiveEvidence,
         )
 
-        profile.seniority.actions = seniority_result.get(
-            "actions",
-            {},
+        business = self.builder.build(
+            capability_evidence,
+            BUSINESS_VALUE_MAPPING,
+            BusinessValueEvidence,
         )
 
-        profile.seniority.domains = seniority_result.get(
-            "domains",
-            {},
+        ats = self.builder.build(
+            capability_evidence,
+            ATS_MAPPING,
+            ATSEvidence,
         )
 
-        # -------------------------------------------------
-        # Summary
-        # -------------------------------------------------
+        # ---------------------------------------------------------
+        # Scores
+        # ---------------------------------------------------------
 
-        profile.summary.career_level = profile.seniority.level
+        domain_score = self.domain_engine.score(domain)
 
-        profile.summary.seniority_score = profile.seniority.score
+        technical_score = self.technical_engine.score(technical)
 
-        profile.summary.leadership_score = profile.leadership.score
+        leadership_score = self.leadership_engine.score(leadership)
 
-        profile.summary.achievement_score = (
-            profile.achievement.overall_score
+        executive_score = self.executive_engine.score(executive)
+
+        business_score = self.business_engine.score(business)
+
+        ats_score = self.ats_engine.score(ats)
+
+        # ---------------------------------------------------------
+        # Predictors
+        # ---------------------------------------------------------
+
+        seniority = self.seniority.predict(
+            leadership_score,
+            executive_score,
+            business_score,
         )
 
-        profile.summary.overall_score = self._calculate_overall_score(profile)
+        executive_ready = self.executive.predict(
+            executive_score,
+            leadership_score,
+            business_score,
+        )
 
-        return profile
+        career = self.career.predict(
+            domain_score,
+            technical_score,
+            leadership_score,
+            executive_score,
+            business_score,
+        )
 
-    # -----------------------------------------------------
-    # Helper
-    # -----------------------------------------------------
+        # ---------------------------------------------------------
+        # Final Profile
+        # ---------------------------------------------------------
 
-    def _calculate_overall_score(self, profile):
+        return SummaryProfile(
 
-        return round(
+            domain_score=domain_score,
 
-            profile.summary.seniority_score
-            + profile.summary.leadership_score
-            + profile.summary.achievement_score,
+            technical_score=technical_score,
 
-            2,
+            leadership_score=leadership_score,
+
+            executive_score=executive_score,
+
+            business_value_score=business_score,
+
+            ats_score=ats_score,
+
+            seniority=seniority,
+
+            executive_readiness=executive_ready,
+
+            career_level=career,
 
         )

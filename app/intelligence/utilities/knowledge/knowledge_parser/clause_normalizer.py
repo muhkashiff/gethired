@@ -1,112 +1,106 @@
 """
-Clause Normalizer
+Enterprise Clause Normalizer
 
-Normalizes rebuilt clauses into a consistent
-resume-style format.
+Enterprise V12
 
 Responsibilities
 ----------------
-1. Convert leading gerunds to resume past tense.
-2. Normalize capitalization.
-3. Remove duplicate whitespace.
-4. Ensure clean punctuation.
+1. Normalize whitespace
+2. Normalize punctuation
+3. Normalize capitalization
+4. Remove duplicate clauses
 
-It DOES NOT perform parsing or extraction.
+Input
+-----
+list[str]
+
+Output
+------
+list[str]
 """
 
+from __future__ import annotations
+
 import re
-from copy import deepcopy
 
 
 class ClauseNormalizer:
 
+    ####################################################################
+    # INITIALIZATION
+    ####################################################################
+
     def __init__(self):
         pass
 
-    # ---------------------------------------------------------
-    # Public
-    # ---------------------------------------------------------
+    ####################################################################
+    # PUBLIC
+    ####################################################################
 
     def normalize(
         self,
-        clauses,
-        actions=None,
-    ):
-        """
-        Normalize rebuilt clauses.
-
-        Parameters
-        ----------
-        clauses : List[Clause]
-
-        actions : List[ActionKnowledge]
-
-        Returns
-        -------
-        List[Clause]
-        """
+        clauses: list[str],
+    ) -> list[str]:
 
         normalized = []
 
-        actions = actions or []
+        seen = set()
 
-        for i, clause in enumerate(clauses):
+        for clause in clauses:
 
-            new_clause = deepcopy(clause)
+            text = self._normalize_text(clause)
 
-            text = new_clause.text
+            if not text:
+                continue
 
-            # ---------------------------------------------
-            # Replace leading gerund
-            # ---------------------------------------------
+            key = text.lower()
 
-            # ---------------------------------------------
-            # Replace first detected gerund after modifiers
-            # ---------------------------------------------
+            if key in seen:
+                continue
 
-            for action in actions:
+            seen.add(key)
 
-                if not action.found:
-                    continue
-
-                pattern = rf"\b{re.escape(action.gerund)}\b"
-
-                if re.search(pattern, text, flags=re.IGNORECASE):
-
-                    text = re.sub(
-                        pattern,
-                        action.original,
-                        text,
-                        count=1,
-                        flags=re.IGNORECASE,
-                    )
-
-                    break
-
-            # ---------------------------------------------
-            # Normalize whitespace
-            # ---------------------------------------------
-
-            text = re.sub(r"\s+", " ", text).strip()
-
-            # ---------------------------------------------
-            # Capitalize
-            # ---------------------------------------------
-
-            if text:
-
-                text = text[0].upper() + text[1:]
-
-            # ---------------------------------------------
-            # Clean punctuation
-            # ---------------------------------------------
-
-            text = re.sub(r"\s+\.", ".", text)
-
-            text = re.sub(r"\s+,", ",", text)
-
-            new_clause.text = text
-
-            normalized.append(new_clause)
+            normalized.append(text)
 
         return normalized
+
+    ####################################################################
+    # PRIVATE
+    ####################################################################
+
+    def _normalize_text(
+        self,
+        text: str,
+    ) -> str:
+
+        if not text:
+            return ""
+
+        # ---------------------------------------------
+        # Whitespace
+        # ---------------------------------------------
+
+        text = re.sub(r"\s+", " ", text).strip()
+
+        # ---------------------------------------------
+        # Remove spaces before punctuation
+        # ---------------------------------------------
+
+        text = re.sub(r"\s+([.,;:])", r"\1", text)
+
+        # ---------------------------------------------
+        # Remove repeated punctuation
+        # ---------------------------------------------
+
+        text = re.sub(r"[.]{2,}", ".", text)
+        text = re.sub(r"[,]{2,}", ",", text)
+
+        # ---------------------------------------------
+        # Capitalize first letter
+        # ---------------------------------------------
+
+        if text:
+
+            text = text[0].upper() + text[1:]
+
+        return text

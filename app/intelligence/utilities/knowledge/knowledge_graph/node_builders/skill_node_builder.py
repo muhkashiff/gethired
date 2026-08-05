@@ -1,32 +1,69 @@
 """
-Skill Node Builder
+Enterprise Skill Node Builder
+
+Creates Skill Nodes from Business Statements.
+
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.node_builders.base_node_builder import (
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_node_builder import (
     BaseNodeBuilder,
 )
 
 
 class SkillNodeBuilder(BaseNodeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(fact, "interpretation", None)
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
 
-        if interpretation is None:
+        ################################################################
+        # Business Statement may contain multiple Skills
+        ################################################################
+
+        skills = getattr(
+            statement,
+            "skills",
+            [],
+        )
+
+        if not skills:
             return
 
-        for entity in interpretation.entities:
+        ################################################################
+        # Create Skill Nodes
+        ################################################################
 
-            if entity.entity_type.lower() != "skill":
+        for skill in skills:
+
+            if skill is None:
+                continue
+
+            if not getattr(
+                skill,
+                "found",
+                False,
+            ):
                 continue
 
             node = self.create_node(
 
-                entity=entity,
+                entity=skill,
 
                 entity_type="Skill",
 
             )
 
-            self.register_node(graph, node)
+            self.register_node(
+
+                context,
+
+                node,
+
+            )

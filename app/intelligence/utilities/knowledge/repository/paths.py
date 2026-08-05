@@ -31,7 +31,7 @@ class RepositoryPaths:
 
         self.actions = ONTOLOGY / "actions.json"
 
-        self.objects = ONTOLOGY / "objects.json"
+        self.targets = ONTOLOGY / "targets.json"
 
         self.metrics = ONTOLOGY / "metrics_dictionary.json"
 

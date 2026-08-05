@@ -1,58 +1,101 @@
 """
-Action → Skill Edge Builder
+Enterprise Action → Skill Edge Builder
 
-Enterprise V6
+Creates
+
+Action --------requires--------> Skill
+
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
-    GraphEdge,
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_edge_builder import (
+    BaseEdgeBuilder,
 )
 
 
-class ActionSkillEdgeBuilder:
+class ActionSkillEdgeBuilder(BaseEdgeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(
-            fact,
-            "interpretation",
-            None,
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
+
+        ################################################################
+        # Read Business Statement Collections
+        ################################################################
+
+        actions = getattr(
+            statement,
+            "actions",
+            [],
         )
 
-        if interpretation is None:
+        skills = getattr(
+            statement,
+            "skills",
+            [],
+        )
+
+        if not actions:
             return
 
-        action = interpretation.action
-
-        if not action.found:
+        if not skills:
             return
 
-        for entity in interpretation.entities:
+        ################################################################
+        # Create Edges
+        ################################################################
 
-            if entity.entity_type.lower() != "skill":
+        for action in actions:
+
+            if action is None:
                 continue
 
-            edge = GraphEdge(
+            if not getattr(
+                action,
+                "found",
+                False,
+            ):
+                continue
 
-                edge_id=f"{action.entity_id}_{entity.entity_id}",
+            for skill in skills:
 
-                relation="requires",
+                if skill is None:
+                    continue
 
-                confidence=min(
-                    action.confidence,
-                    entity.confidence,
-                ),
+                if not getattr(
+                    skill,
+                    "found",
+                    False,
+                ):
+                    continue
 
-                source_id=action.entity_id,
+                edge = self.create_edge(
 
-                source_type="Action",
+                    source=action,
 
-                target_id=entity.entity_id,
+                    target=skill,
 
-                target_type="Skill",
+                    relation="requires",
 
-                reasoning="Action requires skill",
+                    reasoning="Action requires skill",
 
-            )
+                    confidence=min(
+                        action.confidence,
+                        skill.confidence,
+                    ),
 
-            graph.add_edge(edge)
+                )
+
+                self.register_edge(
+
+                    context,
+
+                    edge,
+
+                )

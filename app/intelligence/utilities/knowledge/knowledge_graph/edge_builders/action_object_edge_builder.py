@@ -1,73 +1,115 @@
 """
-Action → Object Edge Builder
+Enterprise Action → Target Edge Builder
 
-Enterprise V6
+Parser Layer
+------------
+Object
+
+Business Layer
+--------------
+Target
+
+Creates
+
+Action --------acts_on--------> Target
+
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
-    GraphEdge,
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_edge_builder import (
+    BaseEdgeBuilder,
 )
 
 
-class ActionObjectEdgeBuilder:
+class ActionObjectEdgeBuilder(BaseEdgeBuilder):
+
+    ####################################################################
+    # BUILD
+    ####################################################################
 
     def build(
         self,
-        graph,
-        fact,
-    ):
+        context,
+        statement,
+    ) -> None:
 
-        interpretation = getattr(
-            fact,
-            "interpretation",
-            None,
+        ################################################################
+        # Read Business Statement Collections
+        #
+        # NOTE:
+        # Parser extracts "Object".
+        #
+        # BusinessStatement exposes these Objects as
+        # business Targets.
+        ################################################################
+
+        actions = getattr(
+            statement,
+            "actions",
+            [],
         )
 
-        if interpretation is None:
-            return
-
-        action = getattr(
-            interpretation,
-            "action",
-            None,
+        targets = getattr(
+            statement,
+            "targets",
+            [],
         )
 
-        obj = getattr(
-            interpretation,
-            "object",
-            None,
-        )
-
-        if action is None or obj is None:
+        if not actions:
             return
 
-        if not action.found:
+        if not targets:
             return
 
-        if not obj.found:
-            return
+        ################################################################
+        # Create Edges
+        ################################################################
 
-        edge = GraphEdge(
+        for action in actions:
 
-            edge_id=f"{action.entity_id}_{obj.entity_id}",
+            if action is None:
+                continue
 
-            relation="acts_on",
+            if not getattr(
+                action,
+                "found",
+                False,
+            ):
+                continue
 
-            confidence=min(
-                action.confidence,
-                obj.confidence,
-            ),
+            for target in targets:
 
-            source_id=action.entity_id,
+                if target is None:
+                    continue
 
-            source_type="Action",
+                if not getattr(
+                    target,
+                    "found",
+                    False,
+                ):
+                    continue
 
-            target_id=obj.entity_id,
+                edge = self.create_edge(
 
-            target_type="Object",
+                    source=action,
 
-            reasoning="Action acts on object",
+                    target=target,
 
-        )
+                    relation="acts_on",
 
-        graph.add_edge(edge)
+                    reasoning="Action acts on business target",
+
+                    confidence=min(
+                        action.confidence,
+                        target.confidence,
+                    ),
+
+                )
+
+                self.register_edge(
+
+                    context,
+
+                    edge,
+
+                )

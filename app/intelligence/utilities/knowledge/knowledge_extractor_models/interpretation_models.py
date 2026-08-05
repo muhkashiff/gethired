@@ -17,7 +17,6 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.measurement
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.modifier_models import ModifierKnowledge
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.entity_models import KnowledgeEntity
 
-from app.intelligence.utilities.knowledge.knowledge_dependency.dependency_models import DependencyEdge
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.practice_models import (
     PracticeKnowledge,
 )
@@ -44,8 +43,6 @@ class KnowledgeInterpretation:
     practice: PracticeKnowledge = field(default_factory=PracticeKnowledge)
 
     entities: list[KnowledgeEntity] = field(default_factory=list)
-
-    dependencies: list[DependencyEdge] = field(default_factory=list)
 
     # ---------------------------------------------------------
     # Business Interpretation

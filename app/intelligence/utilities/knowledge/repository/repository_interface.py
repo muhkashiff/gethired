@@ -8,7 +8,7 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def get_object(self, key):
+    def target(self, key):
         pass
 
     @abstractmethod

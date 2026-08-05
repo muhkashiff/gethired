@@ -1,83 +1,133 @@
 """
-Domain → Entity Builder
+Enterprise Domain → Entity Edge Builder
 
-Enterprise V6
+Creates
+
+Domain --------contains--------> Business Entity
+
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
-    GraphEdge,
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_edge_builder import (
+    BaseEdgeBuilder,
 )
 
 
-class DomainEntityEdgeBuilder:
+class DomainEntityEdgeBuilder(BaseEdgeBuilder):
+
+    ####################################################################
+    # BUILD
+    ####################################################################
 
     def build(
         self,
-        graph,
-        fact,
-    ):
+        context,
+        statement,
+    ) -> None:
 
-        interpretation = getattr(
-            fact,
-            "interpretation",
-            None,
+        ################################################################
+        # Read Business Statement Collections
+        ################################################################
+
+        domains = getattr(
+            statement,
+            "domains",
+            [],
         )
 
-        if interpretation is None:
+        if not domains:
             return
 
-        domain = getattr(
-            interpretation,
-            "domain",
-            None,
+        ################################################################
+        # Every Business Entity belongs to a Domain
+        ################################################################
+
+        entities = []
+
+        entities.extend(
+            getattr(statement, "actions", [])
         )
 
-        if domain is None:
-            return
+        entities.extend(
+            getattr(statement, "targets", [])
+        )
 
-        if not domain.found:
-            return
+        entities.extend(
+            getattr(statement, "metrics", [])
+        )
 
-        entities = [
+        entities.extend(
+            getattr(statement, "measurements", [])
+        )
 
-            interpretation.action,
+        entities.extend(
+            getattr(statement, "standards", [])
+        )
 
-            interpretation.object,
+        entities.extend(
+            getattr(statement, "skills", [])
+        )
 
-            interpretation.metric,
+        entities.extend(
+            getattr(statement, "methodologies", [])
+        )
 
-            interpretation.standard,
+        entities.extend(
+            getattr(statement, "kpis", [])
+        )
 
-            interpretation.measurement,
+        ################################################################
+        # Create Edges
+        ################################################################
 
-        ]
+        for domain in domains:
 
-        for entity in entities:
-
-            if entity is None:
+            if domain is None:
                 continue
 
-            if not entity.found:
+            if not getattr(
+                domain,
+                "found",
+                False,
+            ):
                 continue
 
-            edge = GraphEdge(
+            for entity in entities:
 
-                edge_id=f"{domain.entity_id}_{entity.entity_id}",
+                if entity is None:
+                    continue
 
-                relation="contains",
+                if not getattr(
+                    entity,
+                    "found",
+                    False,
+                ):
+                    continue
 
-                confidence=domain.confidence,
+                #
+                # Avoid self-loop
+                #
+                if domain.entity_id == entity.entity_id:
+                    continue
 
-                source_id=domain.entity_id,
+                edge = self.create_edge(
 
-                source_type="Domain",
+                    source=domain,
 
-                target_id=entity.entity_id,
+                    target=entity,
 
-                target_type=entity.entity_type,
+                    relation="contains",
 
-                reasoning="Domain contains entity",
+                    reasoning="Domain contains business entity",
 
-            )
+                    confidence=domain.confidence,
 
-            graph.add_edge(edge)
+                )
+
+                self.register_edge(
+
+                    context,
+
+                    edge,
+
+                )

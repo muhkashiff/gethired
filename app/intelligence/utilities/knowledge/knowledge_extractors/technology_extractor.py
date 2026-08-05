@@ -11,7 +11,7 @@ from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_
 )
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.technology_models import (
-    TechnologyKnowledge,
+    Technology,
 )
 
 
@@ -23,7 +23,7 @@ class TechnologyExtractor(GenericOntologyExtractor):
 
     ontology_name = "technologies"
 
-    knowledge_class = TechnologyKnowledge
+    knowledge_class = Technology
 
     entity_type = "technology"
 

@@ -1,39 +1,69 @@
 """
-Domain Node Builder
+Enterprise Domain Node Builder
+
+Creates Domain Nodes from Business Statements.
+
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.node_builders.base_node_builder import (
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_node_builder import (
     BaseNodeBuilder,
 )
 
 
 class DomainNodeBuilder(BaseNodeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(fact, "interpretation", None)
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
 
-        if interpretation is None:
-            return
+        ################################################################
+        # Business Statement may contain multiple Domains
+        ################################################################
 
-        domain = getattr(
-            interpretation,
-            "domain",
-            None,
+        domains = getattr(
+            statement,
+            "domains",
+            [],
         )
 
-        if domain is None:
+        if not domains:
             return
 
-        if not domain.found:
-            return
+        ################################################################
+        # Create Domain Nodes
+        ################################################################
 
-        node = self.create_node(
+        for domain in domains:
 
-            entity=domain,
+            if domain is None:
+                continue
 
-            entity_type="Domain",
+            if not getattr(
+                domain,
+                "found",
+                False,
+            ):
+                continue
 
-        )
+            node = self.create_node(
 
-        self.register_node(graph, node)
+                entity=domain,
+
+                entity_type="Domain",
+
+            )
+
+            self.register_node(
+
+                context,
+
+                node,
+
+            )

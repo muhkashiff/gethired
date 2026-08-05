@@ -1,64 +1,101 @@
 """
-Action → Standard Edge Builder
+Enterprise Action → Standard Edge Builder
 
-Implement
+Creates
 
-↓
+Action --------complies_with--------> Standard
 
-FSSC22000
-
-Enterprise V6
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
-    GraphEdge,
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_edge_builder import (
+    BaseEdgeBuilder,
 )
 
 
-class ActionStandardEdgeBuilder:
+class ActionStandardEdgeBuilder(BaseEdgeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(
-            fact,
-            "interpretation",
-            None,
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
+
+        ################################################################
+        # Read Business Statement Collections
+        ################################################################
+
+        actions = getattr(
+            statement,
+            "actions",
+            [],
         )
 
-        if interpretation is None:
-            return
-
-        action = interpretation.action
-
-        standard = interpretation.standard
-
-        if not action.found:
-            return
-
-        if not standard.found:
-            return
-
-        edge = GraphEdge(
-
-            edge_id=f"{action.entity_id}_{standard.entity_id}",
-
-            relation="complies_with",
-
-            confidence=min(
-                action.confidence,
-                standard.confidence,
-            ),
-
-            source_id=action.entity_id,
-
-            source_type="Action",
-
-            target_id=standard.entity_id,
-
-            target_type="Standard",
-
-            reasoning="Action implements standard",
-
+        standards = getattr(
+            statement,
+            "standards",
+            [],
         )
 
-        graph.add_edge(edge)
+        if not actions:
+            return
+
+        if not standards:
+            return
+
+        ################################################################
+        # Create Edges
+        ################################################################
+
+        for action in actions:
+
+            if action is None:
+                continue
+
+            if not getattr(
+                action,
+                "found",
+                False,
+            ):
+                continue
+
+            for standard in standards:
+
+                if standard is None:
+                    continue
+
+                if not getattr(
+                    standard,
+                    "found",
+                    False,
+                ):
+                    continue
+
+                edge = self.create_edge(
+
+                    source=action,
+
+                    target=standard,
+
+                    relation="complies_with",
+
+                    reasoning="Action implements standard",
+
+                    confidence=min(
+                        action.confidence,
+                        standard.confidence,
+                    ),
+
+                )
+
+                self.register_edge(
+
+                    context,
+
+                    edge,
+
+                )

@@ -1,202 +1,148 @@
 """
-Clause Segmenter
+Enterprise Clause Segmenter
 
-The ClauseSegmenter is the orchestration layer for clause processing.
+Enterprise V12
+
+Responsibilities
+----------------
+1. Split text into semantic clauses
+2. Normalize clauses
+3. Return clean clause list
+
+NO ontology
+NO extractors
+NO reasoners
+NO interpretations
+NO sentence parsing
 
 Pipeline
 
-Sentence
+Raw Text
     ↓
-ClauseParser
+Clause Splitter
     ↓
-ClauseRebuilder
+Clause Normalizer
     ↓
-ClauseNormalizer
-    ↓
-Extractors
-    ↓
-Reasoners
-    ↓
-Rich Clause objects
+list[str]
 """
 
-from copy import deepcopy
+from __future__ import annotations
 
-from app.intelligence.utilities.knowledge.knowledge_parser.clause_parser import ClauseParser
-from app.intelligence.utilities.knowledge.knowledge_parser.clause_rebuilder import ClauseRebuilder
-from app.intelligence.utilities.knowledge.knowledge_parser.clause_normalizer import ClauseNormalizer
+import re
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor import ActionExtractor
-from app.intelligence.utilities.knowledge.knowledge_extractors.object_extractor import ObjectExtractor
-from app.intelligence.utilities.knowledge.knowledge_extractors.metric_extractor import MetricExtractor
-from app.intelligence.utilities.knowledge.knowledge_extractors.measurement_extractor import MeasurementExtractor
-from app.intelligence.utilities.knowledge.knowledge_extractors.modifier_extractor import ModifierExtractor
-
-from app.intelligence.utilities.knowledge.knowledge_reasoners.domain_reasoner import DomainReasoner
-from app.intelligence.utilities.knowledge.knowledge_reasoners.measurement_reasoners.measurement_reasoner import MeasurementReasoner
-
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretation_models import (
-    KnowledgeInterpretation,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_parser.parser_utils import (
-    ParserUtils,
-)
+from .clause_normalizer import ClauseNormalizer
 
 
 class ClauseSegmenter:
 
+    ####################################################################
+    # INITIALIZATION
+    ####################################################################
+
     def __init__(self):
-
-        self.parser = ClauseParser()
-
-        self.rebuilder = ClauseRebuilder()
 
         self.normalizer = ClauseNormalizer()
 
-        self.action_extractor = ActionExtractor()
+    ####################################################################
+    # MAIN
+    ####################################################################
 
-        self.object_extractor = ObjectExtractor()
+    def segment(
+        self,
+        text: str,
+    ) -> list[str]:
 
-        self.metric_extractor = MetricExtractor()
+        if not text:
+            return []
 
-        self.measurement_extractor = MeasurementExtractor()
+        # ------------------------------------------------------------
+        # Standard cleanup
+        # ------------------------------------------------------------
 
-        self.modifier_extractor = ModifierExtractor()
+        text = text.replace("\n", " ")
+        text = re.sub(r"\s+", " ", text).strip()
 
-        self.domain_reasoner = DomainReasoner()
+        # ------------------------------------------------------------
+        # Initial clause split
+        # ------------------------------------------------------------
 
-        self.measurement_reasoner = MeasurementReasoner()
+        clauses = self._split(text)
 
-        self.utils = ParserUtils()
-
-    # ----------------------------------------------------------
-
-    def segment(self, sentence):
-
-        # -------------------------
-        # Parse
-        # -------------------------
-
-        clauses = self.parser.parse(sentence)
-
-        # -------------------------
-        # Rebuild
-        # -------------------------
-
-        clauses = self.rebuilder.rebuild(clauses)
-
-        # -------------------------
+        # ------------------------------------------------------------
         # Normalize
-        # -------------------------
+        # ------------------------------------------------------------
 
-        actions = self.action_extractor.extract_all(sentence)
+        clauses = self.normalizer.normalize(clauses)
 
-        clauses = self.normalizer.normalize(
-            clauses,
-            actions,
+        # ------------------------------------------------------------
+        # Remove empty clauses
+        # ------------------------------------------------------------
+
+        clauses = [
+
+            clause.strip()
+
+            for clause in clauses
+
+            if clause.strip()
+
+        ]
+
+        return clauses
+
+    ####################################################################
+    # SPLITTER
+    ####################################################################
+
+    def _split(
+        self,
+        text: str,
+    ) -> list[str]:
+
+        """
+        Enterprise clause splitter.
+
+        Splits on
+
+            .
+            ;
+            :
+            and
+            but
+            while
+
+        while preserving meaningful business phrases.
+        """
+
+        if not text:
+            return []
+
+        clauses = re.split(
+
+            r"""
+            \s*;\s*
+            |
+            \.\s+
+            |
+            \s+\band\b\s+
+            |
+            \s+\bbut\b\s+
+            |
+            \s+\bwhile\b\s+
+            """,
+
+            text,
+
+            flags=re.IGNORECASE | re.VERBOSE,
+
         )
 
-        # -------------------------
-        # Enrich every clause
-        # -------------------------
+        return [
 
-        enriched = []
+            clause.strip()
 
-        for clause in clauses:
+            for clause in clauses
 
-            new_clause = deepcopy(clause)
+            if clause.strip()
 
-            action = self.action_extractor.extract(new_clause.text)
-
-            obj = self.object_extractor.extract(new_clause.text)
-
-            domain = self.domain_reasoner.reason(
-                action,
-                obj,
-            )
-
-            metric = self.metric_extractor.extract(
-                new_clause.text,
-            )
-
-            measurement = self.measurement_extractor.extract(
-                new_clause.text,
-                metric,
-            )
-
-            measurement = self.measurement_reasoner.reason(
-                action,
-                measurement,
-            )
-
-            modifiers = self.modifier_extractor.extract(
-                new_clause.text,
-            )
-
-            interpretation = KnowledgeInterpretation(
-
-                action=action,
-
-                object=obj,
-
-                domain=domain,
-
-                metric=metric,
-
-                measurement=measurement,
-
-                modifiers=modifiers,
-
-                achievement=self.utils.is_achievement(
-                    action,
-                    measurement,
-                ),
-
-                quantified=measurement.found,
-
-                semantic_type=self.utils.semantic_type(
-                    domain,
-                ),
-
-                business_area=self.utils.business_area(
-                    domain,
-                ),
-
-                confidence=self.utils.calculate_confidence(
-                    action,
-                    obj,
-                    domain,
-                    metric,
-                    measurement,
-                    modifiers,
-                ),
-            )
-
-            new_clause.action = action
-
-            new_clause.object = obj
-
-            new_clause.domain = domain
-
-            new_clause.metric = metric
-
-            new_clause.measurement = measurement
-
-            new_clause.modifiers = modifiers
-
-            new_clause.interpretation = interpretation
-
-            new_clause.achievement = interpretation.achievement
-
-            new_clause.quantified = interpretation.quantified
-
-            new_clause.semantic_type = interpretation.semantic_type
-
-            new_clause.business_area = interpretation.business_area
-
-            new_clause.confidence = interpretation.confidence
-
-            enriched.append(new_clause)
-
-        return enriched
+        ]

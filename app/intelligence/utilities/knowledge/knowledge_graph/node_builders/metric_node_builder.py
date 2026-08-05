@@ -1,39 +1,69 @@
 """
-Metric Node Builder
+Enterprise Metric Node Builder
 
-Creates Metric Nodes.
+Creates Metric Nodes from Business Statements.
 
-Enterprise V6
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.node_builders.base_node_builder import (
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_node_builder import (
     BaseNodeBuilder,
 )
 
 
 class MetricNodeBuilder(BaseNodeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(fact, "interpretation", None)
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
 
-        if interpretation is None:
-            return
+        ################################################################
+        # Business Statement may contain multiple Metrics
+        ################################################################
 
-        metric = getattr(interpretation, "metric", None)
-
-        if metric is None:
-            return
-
-        if not metric.found:
-            return
-
-        node = self.create_node(
-
-            entity=metric,
-
-            entity_type="Metric",
-
+        metrics = getattr(
+            statement,
+            "metrics",
+            [],
         )
 
-        self.register_node(graph, node)
+        if not metrics:
+            return
+
+        ################################################################
+        # Create Metric Nodes
+        ################################################################
+
+        for metric in metrics:
+
+            if metric is None:
+                continue
+
+            if not getattr(
+                metric,
+                "found",
+                False,
+            ):
+                continue
+
+            node = self.create_node(
+
+                entity=metric,
+
+                entity_type="Metric",
+
+            )
+
+            self.register_node(
+
+                context,
+
+                node,
+
+            )

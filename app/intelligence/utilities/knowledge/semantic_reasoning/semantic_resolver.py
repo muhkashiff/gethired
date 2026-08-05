@@ -1,7 +1,9 @@
 """
-Semantic Resolver
+Enterprise Semantic Resolver
 
-Master semantic reasoning engine.
+Master semantic reasoning pipeline.
+
+Enterprise V11
 
 Pipeline
 
@@ -12,6 +14,8 @@ Semantic Entities
 Dependency Resolver
         ↓
 Business Statement Builder
+            • creates StatementRelation
+            • groups entities
         ↓
 Cluster Builder
         ↓
@@ -19,9 +23,8 @@ Cluster Classifier
         ↓
 Metadata Builder
         ↓
-Semantic Result
+Semantic Resolution
 """
-from dataclasses import dataclass, field
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.dependency_resolver import (
     DependencyResolver,
@@ -51,6 +54,10 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models imp
 
 class SemanticResolver:
 
+    ####################################################################
+    # INITIALIZE
+    ####################################################################
+
     def __init__(self):
 
         self.dependency_resolver = DependencyResolver()
@@ -63,15 +70,23 @@ class SemanticResolver:
 
         self.metadata_builder = MetadataBuilder()
 
-    # ---------------------------------------------------------
+    ####################################################################
+    # RESOLVE
+    ####################################################################
 
-    def resolve(self, facts):
+    def resolve(
+
+        self,
+
+        facts,
+
+    ):
 
         result = SemanticResolution()
 
-        # =====================================================
-        # Collect entities from interpretations
-        # =====================================================
+        ###############################################################
+        # Collect Parser Entities
+        ###############################################################
 
         entities = []
 
@@ -79,44 +94,71 @@ class SemanticResolver:
 
             interpretation = fact.interpretation
 
-            entities.extend(interpretation.entities)
+            entities.extend(
 
-        # =====================================================
-        # Convert KnowledgeEntity -> SemanticEntity
-        # =====================================================
+                interpretation.entities
 
-        entities = self._convert_entities(entities)
+            )
+
+        ###############################################################
+        # Convert → SemanticEntity
+        ###############################################################
+
+        entities = self._convert_entities(
+
+            entities
+
+        )
 
         result.entities = entities
 
-        # =====================================================
-        # Dependencies
-        # =====================================================
+        ###############################################################
+        # Build Semantic Dependencies
+        ###############################################################
 
         dependencies = self.dependency_resolver.resolve(
+
             entities
+
         )
 
         result.dependencies = dependencies
 
-        # =====================================================
-        # Business Statements
-        # =====================================================
+        ###############################################################
+        # Build Business Statements
+        #
+        # IMPORTANT
+        #
+        # This stage creates:
+        #
+        #   • entities
+        #   • relations (StatementRelation)
+        #
+        ###############################################################
 
         business_statements = self.statement_builder.build(
-            entities,
-            dependencies,
+
+            entities=entities,
+
+            dependencies=dependencies,
+
         )
 
         result.business_statements = business_statements
 
-        # =====================================================
-        # Clusters
-        # =====================================================
+        ###############################################################
+        # Cluster Statements
+        ###############################################################
 
         clusters = self.cluster_builder.build(
+
             business_statements
+
         )
+
+        ###############################################################
+        # Classify Clusters
+        ###############################################################
 
         classified_clusters = []
 
@@ -125,36 +167,48 @@ class SemanticResolver:
             classified_clusters.append(
 
                 self.cluster_classifier.classify(
+
                     cluster
+
                 )
 
             )
 
         result.clusters = classified_clusters
 
-        # =====================================================
+        ###############################################################
         # Metadata
-        # =====================================================
+        ###############################################################
 
         result.metadata = self.metadata_builder.build(
+
             result
+
         )
 
-        # =====================================================
-        # Confidence
-        # =====================================================
+        ###############################################################
+        # Overall Confidence
+        ###############################################################
 
         result.confidence = self._calculate_confidence(
+
             result
+
         )
 
         return result
 
-    # ---------------------------------------------------------
-    # Overall confidence
-    # ---------------------------------------------------------
+    ####################################################################
+    # CONFIDENCE
+    ####################################################################
 
-    def _calculate_confidence(self, result):
+    def _calculate_confidence(
+
+        self,
+
+        result,
+
+    ):
 
         if not result.clusters:
 
@@ -176,11 +230,17 @@ class SemanticResolver:
 
         )
 
-    # ---------------------------------------------------------
-    # Convert parser entities into semantic entities
-    # ---------------------------------------------------------
+    ####################################################################
+    # Convert Parser Entity → SemanticEntity
+    ####################################################################
 
-    def _convert_entities(self, entities):
+    def _convert_entities(
+
+        self,
+
+        entities,
+
+    ):
 
         converted = []
 

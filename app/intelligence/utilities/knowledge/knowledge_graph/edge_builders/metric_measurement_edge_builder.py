@@ -1,83 +1,101 @@
 """
-Metric → Measurement Edge Builder
+Enterprise Metric → Measurement Edge Builder
 
-Production Yield
+Creates
 
-        │
+Metric --------measured_by--------> Measurement
 
- measured_by
-
-        ▼
-
-99%
-
-Enterprise V6
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
-    GraphEdge,
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_edge_builder import (
+    BaseEdgeBuilder,
 )
 
 
-class MetricMeasurementEdgeBuilder:
+class MetricMeasurementEdgeBuilder(BaseEdgeBuilder):
+
+    ####################################################################
+    # BUILD
+    ####################################################################
 
     def build(
         self,
-        graph,
-        fact,
-    ):
+        context,
+        statement,
+    ) -> None:
 
-        interpretation = getattr(
-            fact,
-            "interpretation",
-            None,
+        ################################################################
+        # Read Business Statement Collections
+        ################################################################
+
+        metrics = getattr(
+            statement,
+            "metrics",
+            [],
         )
 
-        if interpretation is None:
-            return
-
-        metric = getattr(
-            interpretation,
-            "metric",
-            None,
+        measurements = getattr(
+            statement,
+            "measurements",
+            [],
         )
 
-        measurement = getattr(
-            interpretation,
-            "measurement",
-            None,
-        )
-
-        if metric is None or measurement is None:
+        if not metrics:
             return
 
-        if not metric.found:
+        if not measurements:
             return
 
-        if not measurement.found:
-            return
+        ################################################################
+        # Create Edges
+        ################################################################
 
-        edge = GraphEdge(
+        for metric in metrics:
 
-            edge_id=f"{metric.entity_id}_{measurement.entity_id}",
+            if metric is None:
+                continue
 
-            relation="measured_by",
+            if not getattr(
+                metric,
+                "found",
+                False,
+            ):
+                continue
 
-            confidence=min(
-                metric.confidence,
-                measurement.confidence,
-            ),
+            for measurement in measurements:
 
-            source_id=metric.entity_id,
+                if measurement is None:
+                    continue
 
-            source_type="Metric",
+                if not getattr(
+                    measurement,
+                    "found",
+                    False,
+                ):
+                    continue
 
-            target_id=measurement.entity_id,
+                edge = self.create_edge(
 
-            target_type="Measurement",
+                    source=metric,
 
-            reasoning="Metric measured by numeric value",
+                    target=measurement,
 
-        )
+                    relation="measured_by",
 
-        graph.add_edge(edge)
+                    reasoning="Metric measured by numeric value",
+
+                    confidence=min(
+                        metric.confidence,
+                        measurement.confidence,
+                    ),
+
+                )
+
+                self.register_edge(
+
+                    context,
+
+                    edge,
+
+                )

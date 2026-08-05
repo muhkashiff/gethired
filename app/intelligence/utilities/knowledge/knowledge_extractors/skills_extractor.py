@@ -10,7 +10,7 @@ from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_
     GenericOntologyExtractor,
 )
 
-from app.parser.parsed_models import Skill
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.skill_models import SkillKnowledge
 
 
 class SkillsExtractor(GenericOntologyExtractor):
@@ -24,7 +24,7 @@ class SkillsExtractor(GenericOntologyExtractor):
     entity_type = "skill"
 
     # Skill uses ATS model instead of Knowledge model
-    knowledge_class = Skill
+    knowledge_class = SkillKnowledge
 
     ####################################################################
     # BACKWARD COMPATIBILITY
@@ -58,7 +58,7 @@ class SkillsExtractor(GenericOntologyExtractor):
 
             skills.append(
 
-                Skill(
+                SkillKnowledge(
 
                     name=entity.canonical,
 

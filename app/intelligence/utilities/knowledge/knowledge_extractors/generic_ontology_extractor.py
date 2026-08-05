@@ -6,7 +6,7 @@ All ontology extractors inherit from this class.
 Supported ontologies
 
 - actions
-- objects
+- targets
 - metrics
 - standards
 - methodologies

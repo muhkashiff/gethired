@@ -1,180 +1,175 @@
+"""
+Stage 1 Knowledge Parser Test
+
+Pipeline
+
+KnowledgeParser
+        ↓
+DocumentParser
+        ↓
+ClauseSegmenter
+        ↓
+SentenceParser
+        ↓
+KnowledgeDocument
+
+STOP HERE
+
+No Semantic Resolver
+No Business Statements
+No Knowledge Graph
+No Scoring
+"""
+
 import sys
 from pathlib import Path
 from pprint import pprint
 
-# ==========================================================
-# Project Root
-# ==========================================================
-
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
-"""
-Enterprise Pipeline Integration Test
-
-KnowledgePipeline
-        ↓
-KnowledgeDocument
-        ↓
-SemanticResult
-        ↓
-GraphDocument
-        ↓
-KnowledgeProfile
-        ↓
-GraphQuery
-"""
-
-# ==========================================================
-# Pipeline
-# ==========================================================
-
-from app.intelligence.utilities.knowledge.knowledge_pipeline import (
-    KnowledgePipeline,
-)
-
-# ==========================================================
-# Graph Query
-# ==========================================================
-
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_query import (
-    GraphQuery,
-)
-
-# ==========================================================
-# TEST SENTENCE
-# ==========================================================
-
-TEST_SENTENCE = (
-    "Implemented FSSC 22000 requirements "
-    "and increased Yield from 70% to 99% "
-    "using Root Cause Analysis."
+from app.intelligence.utilities.knowledge.knowledge_parser.knowledge_parser import (
+    KnowledgeParser,
 )
 
 
-# ==========================================================
-# MAIN
-# ==========================================================
+# ============================================================
+# Pretty Print Fact
+# ============================================================
+
+def print_fact(fact):
+
+    print("\nFACT")
+    print("-" * 60)
+
+    print("Text:")
+    print(fact.text)
+
+    interp = fact.interpretation
+
+    print("\nInterpretation")
+
+    print(f"Action       : {getattr(interp.action,'canonical','')}")
+    print(f"Target       : {getattr(interp.object,'canonical','')}")
+    print(f"Domain       : {getattr(interp.domain,'domain','')}")
+    print(f"Metric       : {getattr(interp.metric,'canonical','')}")
+    print(f"Measurement  : {getattr(interp.measurement,'value','')}")
+    print(f"Practice     : {getattr(interp.practice,'canonical','')}")
+
+    print(f"\nAchievement  : {interp.achievement}")
+    print(f"Quantified   : {interp.quantified}")
+    print(f"Confidence   : {interp.confidence:.2f}")
+
+    print("\nEntities")
+
+    if interp.entities:
+
+        for entity in interp.entities:
+
+            print(
+                f"{entity.entity_type:18}"
+                f"{entity.canonical:35}"
+                f"{entity.confidence:.2f}"
+            )
+
+    else:
+
+        print("No ontology entities detected.")
+
+    print("\nDependencies")
+
+    if getattr(interp, "dependencies", None):
+
+        for dep in interp.dependencies:
+
+            print(
+                f"{dep.source_entity} --{dep.relation}--> {dep.target_entity}"
+            )
+
+    else:
+
+        print("No dependencies")
+
+
+# ============================================================
+# Main
+# ============================================================
 
 def main():
 
     print("=" * 80)
-    print("GETHIRED ENTERPRISE PIPELINE TEST")
+    print("STAGE 1 KNOWLEDGE PARSER TEST")
     print("=" * 80)
 
-    # ------------------------------------------------------
-    # Pipeline
-    # ------------------------------------------------------
+    text = (
+        "Implemented FSSC22000 requirements and increased "
+        "Production Yield to 99% using Root Cause Analysis."
+    )
 
-    pipeline = KnowledgePipeline()
+    parser = KnowledgeParser()
 
-    result = pipeline.process(TEST_SENTENCE)
+    document = parser.parse(text)
 
-    print("\nPIPELINE EXECUTED")
+    print("\nDOCUMENT")
+    print("-" * 80)
 
-    # ------------------------------------------------------
-    # Pipeline Result
-    # ------------------------------------------------------
+    print("Raw Text\n")
+    print(document.raw_text)
 
-    print("\nKnowledge Document")
-    pprint(result.knowledge_document)
+    print("\nStatistics")
+    pprint(document.statistics)
 
-    print("\nSemantic Result")
-    pprint(result.semantic_result)
+    print(f"\nConfidence : {document.confidence:.2f}")
 
-    print("\nKnowledge Profile")
-    pprint(result.knowledge_profile)
+    print(f"Sentences  : {len(document.sentences)}")
+    print(f"Facts      : {len(document.facts)}")
 
-    # ------------------------------------------------------
-    # Graph
-    # ------------------------------------------------------
+    print("\n" + "=" * 80)
 
+    for i, sentence in enumerate(document.sentences, start=1):
 
+        print(f"\nSENTENCE {i}")
+        print("-" * 80)
 
-    # ------------------------------------------------------
-    # IMPORTANT
-    # ------------------------------------------------------
-    # Change this if your GraphDocument attribute
-    # is named differently.
-    # ------------------------------------------------------
+        print(sentence.original_text)
 
-    graph = result.graph_document
+        print(f"\nFacts : {len(sentence.facts)}")
 
-    print("\nKnowledge Graph Created")
+        for fact in sentence.facts:
 
-    print(f"Nodes : {graph.statistics.node_count}")
-    print(f"Edges : {graph.statistics.edge_count}")
+            print_fact(fact)
 
-    # ------------------------------------------------------
-    # Query Engine
-    # ------------------------------------------------------
+    print("\n" + "=" * 80)
+    print("DOCUMENT SUMMARY")
+    print("=" * 80)
 
-    query = GraphQuery(graph)
+    total_entities = 0
+    total_dependencies = 0
 
-    # ------------------------------------------------------
-    # Nodes
-    # ------------------------------------------------------
+    for fact in document.facts:
 
-    print("\n---------------------------")
-    print("ALL NODES")
-    print("---------------------------")
-
-    for node in graph.get_nodes():
-
-        print(
-            f"{node.entity_type:<18}"
-            f"{node.canonical}"
+        total_entities += len(
+            fact.interpretation.entities
         )
 
-    # ------------------------------------------------------
-    # Edges
-    # ------------------------------------------------------
+        total_dependencies += len(
+            getattr(
+                fact.interpretation,
+                "dependencies",
+                [],
+            )
+        )
 
-    print("\n---------------------------")
-    print("ALL RELATIONS")
-    print("---------------------------")
+    print(f"Total Sentences     : {len(document.sentences)}")
+    print(f"Total Facts         : {len(document.facts)}")
+    print(f"Total Entities      : {total_entities}")
+    print(f"Total Dependencies  : {total_dependencies}")
 
-    for edge in graph.get_edges():
-
-        print(edge.reasoning)
-
-    # ------------------------------------------------------
-    # Query Example
-    # ------------------------------------------------------
-
-    print("\n---------------------------")
-    print("QUERY : Standards")
-    print("---------------------------")
-
-    standards = query.find_nodes(
-        entity_type="standard"
-    )
-
-    for standard in standards:
-
-        print(standard.canonical)
-
-    # ------------------------------------------------------
-
-    print("\n---------------------------")
-    print("QUERY : acts_on")
-    print("---------------------------")
-
-    relations = query.find_by_relation(
-        relation="acts_on"
-    )
-
-    for relation in relations:
-
-        print(relation["reasoning"])
-
-    # ------------------------------------------------------
-
-    print("\nPIPELINE TEST COMPLETED")
+    print("\nSUCCESS")
+    print("=" * 80)
 
 
-# ==========================================================
+# ============================================================
 
 if __name__ == "__main__":
-
     main()

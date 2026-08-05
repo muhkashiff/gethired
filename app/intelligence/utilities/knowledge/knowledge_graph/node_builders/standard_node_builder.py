@@ -1,39 +1,69 @@
 """
-Standard Node Builder
+Enterprise Standard Node Builder
+
+Creates Standard Nodes from Business Statements.
+
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.node_builders.base_node_builder import (
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_node_builder import (
     BaseNodeBuilder,
 )
 
 
 class StandardNodeBuilder(BaseNodeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(fact, "interpretation", None)
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
 
-        if interpretation is None:
-            return
+        ################################################################
+        # Business Statement may contain multiple Standards
+        ################################################################
 
-        standard = getattr(
-            interpretation,
-            "standard",
-            None,
+        standards = getattr(
+            statement,
+            "standards",
+            [],
         )
 
-        if standard is None:
+        if not standards:
             return
 
-        if not standard.found:
-            return
+        ################################################################
+        # Create Standard Nodes
+        ################################################################
 
-        node = self.create_node(
+        for standard in standards:
 
-            entity=standard,
+            if standard is None:
+                continue
 
-            entity_type="Standard",
+            if not getattr(
+                standard,
+                "found",
+                False,
+            ):
+                continue
 
-        )
+            node = self.create_node(
 
-        self.register_node(graph, node)
+                entity=standard,
+
+                entity_type="Standard",
+
+            )
+
+            self.register_node(
+
+                context,
+
+                node,
+
+            )

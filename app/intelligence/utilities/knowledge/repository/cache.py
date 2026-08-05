@@ -24,7 +24,7 @@ class RepositoryCache:
 
     actions: dict = field(default_factory=dict)
 
-    objects: dict = field(default_factory=dict)
+    targets: dict = field(default_factory=dict)
 
     metrics: dict = field(default_factory=dict)
 
@@ -82,7 +82,7 @@ class RepositoryCache:
     #
     # canonical_indexes
     #
-    # canonical_indexes["objects"]
+    # canonical_indexes["targets"]
     #
     canonical_indexes: dict = field(default_factory=dict)
 

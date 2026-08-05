@@ -1,11 +1,30 @@
 """
 Enterprise Knowledge Graph
 
-Stores all nodes and edges.
+Enterprise V10
 
-Provides an Enterprise Graph API.
+Central graph object.
 
-Enterprise V6
+Stores:
+
+    Nodes
+    Edges
+
+Provides:
+
+    Entity API
+    Relation API
+    Traversal API
+
+BusinessStatement
+        ↓
+Node Builders
+        ↓
+Edge Builders
+        ↓
+Semantic Builders
+        ↓
+KnowledgeGraph
 """
 
 from collections import defaultdict
@@ -25,9 +44,25 @@ class KnowledgeGraph:
 
     def __init__(self):
 
-        self.nodes = {}
+        ###############################################################
+        # Graph Storage
+        ###############################################################
 
-        self.edges = []
+        self.nodes: dict[str, GraphNode] = {}
+
+        self.edges: list[GraphEdge] = []
+
+        ###############################################################
+        # Fast Lookup Indexes
+        ###############################################################
+
+        self.nodes_by_type = defaultdict(dict)
+
+        self.edges_by_relation = defaultdict(list)
+
+        ###############################################################
+        # Statistics
+        ###############################################################
 
         self.statistics = GraphStatistics()
 
@@ -35,22 +70,56 @@ class KnowledgeGraph:
     # ADD NODE
     ####################################################################
 
-    def add_node(self, node: GraphNode):
+    def add_node(
+        self,
+        node: GraphNode,
+    ) -> GraphNode:
 
-        if node.node_id in self.nodes:
+        ###############################################################
+        # Already Exists
+        ###############################################################
 
-            return self.nodes[node.node_id]
+        existing = self.nodes.get(
+            node.node_id,
+        )
+
+        if existing is not None:
+            return existing
+
+        ###############################################################
+        # Store
+        ###############################################################
 
         self.nodes[node.node_id] = node
 
+        ###############################################################
+        # Type Index
+        ###############################################################
+
+        entity_type = node.entity_type.lower()
+
+        self.nodes_by_type[
+            entity_type
+        ][
+            node.node_id
+        ] = node
+
+        ###############################################################
+        # Statistics
+        ###############################################################
+
         self.statistics.node_count += 1
 
-        self.statistics.entity_counts[node.entity_type] = (
+        self.statistics.entity_counts[
+            node.entity_type
+        ] = (
 
             self.statistics.entity_counts.get(
                 node.entity_type,
                 0,
-            ) + 1
+            )
+
+            + 1
 
         )
 
@@ -60,104 +129,250 @@ class KnowledgeGraph:
     # ADD EDGE
     ####################################################################
 
-    def add_edge(self, edge: GraphEdge):
+    def add_edge(
+        self,
+        edge: GraphEdge,
+    ) -> GraphEdge:
+
+        ###############################################################
+        # Prevent Duplicate
+        ###############################################################
+
+        for existing in self.edges:
+
+            if (
+
+                existing.source_id == edge.source_id
+
+                and
+
+                existing.target_id == edge.target_id
+
+                and
+
+                existing.relation == edge.relation
+
+            ):
+
+                return existing
+
+        ###############################################################
+        # Store
+        ###############################################################
 
         self.edges.append(edge)
 
+        ###############################################################
+        # Relation Index
+        ###############################################################
+
+        self.edges_by_relation[
+            edge.relation.lower()
+        ].append(edge)
+
+        ###############################################################
+        # Connect Nodes
+        ###############################################################
+
+        source = self.nodes.get(
+            edge.source_id,
+        )
+
+        if source is not None:
+
+            source.outgoing_edges.append(
+                edge
+            )
+
+        target = self.nodes.get(
+            edge.target_id,
+        )
+
+        if target is not None:
+
+            target.incoming_edges.append(
+                edge
+            )
+
+        ###############################################################
+        # Statistics
+        ###############################################################
+
         self.statistics.edge_count += 1
 
-        self.statistics.relation_counts[edge.relation] = (
+        self.statistics.relation_counts[
+            edge.relation
+        ] = (
 
             self.statistics.relation_counts.get(
                 edge.relation,
                 0,
-            ) + 1
+            )
+
+            + 1
 
         )
 
-        if edge.source_id in self.nodes:
-
-            self.nodes[edge.source_id].outgoing_edges.append(edge)
-
-        if edge.target_id in self.nodes:
-
-            self.nodes[edge.target_id].incoming_edges.append(edge)
-
-    ####################################################################
+        return edge
+        ####################################################################
     # BASIC API
     ####################################################################
 
-    def get_node(self, node_id):
+    def get_node(
+        self,
+        node_id: str,
+    ) -> GraphNode | None:
 
-        return self.nodes.get(node_id)
+        return self.nodes.get(
+            node_id,
+        )
 
-    def get_nodes(self):
+    ####################################################################
 
-        return list(self.nodes.values())
+    def get_nodes(self) -> list[GraphNode]:
 
-    def get_edges(self):
+        return list(
+            self.nodes.values()
+        )
+
+    ####################################################################
+
+    def get_edges(self) -> list[GraphEdge]:
 
         return self.edges
 
     ####################################################################
-    # TYPE FILTERS
+    # ENTITY TYPE LOOKUP
     ####################################################################
 
-    def find_by_type(self, entity_type):
+    def find_by_type(
+        self,
+        entity_type: str,
+    ) -> list[GraphNode]:
 
-        entity_type = entity_type.lower()
+        return list(
 
-        return [
+            self.nodes_by_type[
+                entity_type.lower()
+            ].values()
 
-            node
-
-            for node in self.nodes.values()
-
-            if node.entity_type.lower() == entity_type
-
-        ]
+        )
 
     ####################################################################
-    # SHORTCUTS
+    # RELATION LOOKUP
+    ####################################################################
+
+    def find_by_relation(
+        self,
+        relation: str,
+    ) -> list[GraphEdge]:
+
+        return list(
+
+            self.edges_by_relation[
+                relation.lower()
+            ]
+
+        )
+
+    ####################################################################
+    # ENTITY COLLECTIONS
     ####################################################################
 
     def actions(self):
 
-        return self.find_by_type("action")
+        return self.find_by_type(
+            "Action"
+        )
+
+    ####################################################################
 
     def objects(self):
 
-        return self.find_by_type("object")
+        return self.find_by_type(
+            "Object"
+        )
+
+    ####################################################################
 
     def domains(self):
 
-        return self.find_by_type("domain")
+        return self.find_by_type(
+            "Domain"
+        )
 
-    def standards(self):
-
-        return self.find_by_type("standard")
+    ####################################################################
 
     def skills(self):
 
-        return self.find_by_type("skill")
+        return self.find_by_type(
+            "Skill"
+        )
 
-    def metrics(self):
+    ####################################################################
 
-        return self.find_by_type("metric")
+    def standards(self):
 
-    def measurements(self):
+        return self.find_by_type(
+            "Standard"
+        )
 
-        return self.find_by_type("measurement")
+    ####################################################################
 
     def methodologies(self):
 
-        return self.find_by_type("methodology")
+        return self.find_by_type(
+            "Methodology"
+        )
 
     ####################################################################
-    # CATEGORY FILTER
+
+    def metrics(self):
+
+        return self.find_by_type(
+            "Metric"
+        )
+
     ####################################################################
 
-    def category(self, category):
+    def measurements(self):
+
+        return self.find_by_type(
+            "Measurement"
+        )
+
+    ####################################################################
+
+    def kpis(self):
+
+        return self.find_by_type(
+            "KPI"
+        )
+
+    ####################################################################
+
+    def achievements(self):
+
+        return self.find_by_type(
+            "Achievement"
+        )
+
+    ####################################################################
+
+    def leadership(self):
+
+        return self.find_by_type(
+            "Leadership"
+        )
+
+    ####################################################################
+    # GENERIC FILTERS
+    ####################################################################
+
+    def category(
+        self,
+        category: str,
+    ):
 
         category = category.lower()
 
@@ -167,15 +382,20 @@ class KnowledgeGraph:
 
             for node in self.nodes.values()
 
-            if node.category.lower() == category
+            if getattr(
+                node,
+                "category",
+                "",
+            ).lower() == category
 
         ]
 
     ####################################################################
-    # BUSINESS AREA FILTER
-    ####################################################################
 
-    def business_area(self, area):
+    def business_area(
+        self,
+        area: str,
+    ):
 
         area = area.lower()
 
@@ -185,97 +405,225 @@ class KnowledgeGraph:
 
             for node in self.nodes.values()
 
-            if node.business_area.lower() == area
+            if getattr(
+                node,
+                "business_area",
+                "",
+            ).lower() == area
 
         ]
-
     ####################################################################
-    # RELATION FILTER
-    ####################################################################
-
-    def relations(self, relation):
-
-        relation = relation.lower()
-
-        return [
-
-            edge
-
-            for edge in self.edges
-
-            if edge.relation.lower() == relation
-
-        ]
-
-    ####################################################################
-    # GRAPH TRAVERSAL
+    # BASIC API
     ####################################################################
 
-    def successors(self, node_id):
+    def get_node(
+        self,
+        node_id: str,
+    ) -> GraphNode | None:
 
-        node = self.get_node(node_id)
-
-        if node is None:
-
-            return []
-
-        output = []
-
-        for edge in node.outgoing_edges:
-
-            target = self.get_node(edge.target_id)
-
-            if target:
-
-                output.append(target)
-
-        return output
+        return self.nodes.get(
+            node_id,
+        )
 
     ####################################################################
 
-    def predecessors(self, node_id):
+    def get_nodes(self) -> list[GraphNode]:
 
-        node = self.get_node(node_id)
-
-        if node is None:
-
-            return []
-
-        output = []
-
-        for edge in node.incoming_edges:
-
-            source = self.get_node(edge.source_id)
-
-            if source:
-
-                output.append(source)
-
-        return output
+        return list(
+            self.nodes.values()
+        )
 
     ####################################################################
 
-    def neighbors(self, node_id):
+    def get_edges(self) -> list[GraphEdge]:
 
-        return (
+        return self.edges
 
-            self.successors(node_id)
+    ####################################################################
+    # ENTITY TYPE LOOKUP
+    ####################################################################
 
-            +
+    def find_by_type(
+        self,
+        entity_type: str,
+    ) -> list[GraphNode]:
 
-            self.predecessors(node_id)
+        return list(
+
+            self.nodes_by_type[
+                entity_type.lower()
+            ].values()
 
         )
 
     ####################################################################
+    # RELATION LOOKUP
+    ####################################################################
+
+    def find_by_relation(
+        self,
+        relation: str,
+    ) -> list[GraphEdge]:
+
+        return list(
+
+            self.edges_by_relation[
+                relation.lower()
+            ]
+
+        )
+
+    ####################################################################
+    # ENTITY COLLECTIONS
+    ####################################################################
+
+    def actions(self):
+
+        return self.find_by_type(
+            "Action"
+        )
+
+    ####################################################################
+
+    def objects(self):
+
+        return self.find_by_type(
+            "Object"
+        )
+
+    ####################################################################
+
+    def domains(self):
+
+        return self.find_by_type(
+            "Domain"
+        )
+
+    ####################################################################
+
+    def skills(self):
+
+        return self.find_by_type(
+            "Skill"
+        )
+
+    ####################################################################
+
+    def standards(self):
+
+        return self.find_by_type(
+            "Standard"
+        )
+
+    ####################################################################
+
+    def methodologies(self):
+
+        return self.find_by_type(
+            "Methodology"
+        )
+
+    ####################################################################
+
+    def metrics(self):
+
+        return self.find_by_type(
+            "Metric"
+        )
+
+    ####################################################################
+
+    def measurements(self):
+
+        return self.find_by_type(
+            "Measurement"
+        )
+
+    ####################################################################
+
+    def kpis(self):
+
+        return self.find_by_type(
+            "KPI"
+        )
+
+    ####################################################################
+
+    def achievements(self):
+
+        return self.find_by_type(
+            "Achievement"
+        )
+
+    ####################################################################
+
+    def leadership(self):
+
+        return self.find_by_type(
+            "Leadership"
+        )
+
+    ####################################################################
+    # GENERIC FILTERS
+    ####################################################################
+
+    def category(
+        self,
+        category: str,
+    ):
+
+        category = category.lower()
+
+        return [
+
+            node
+
+            for node in self.nodes.values()
+
+            if getattr(
+                node,
+                "category",
+                "",
+            ).lower() == category
+
+        ]
+
+    ####################################################################
+
+    def business_area(
+        self,
+        area: str,
+    ):
+
+        area = area.lower()
+
+        return [
+
+            node
+
+            for node in self.nodes.values()
+
+            if getattr(
+                node,
+                "business_area",
+                "",
+            ).lower() == area
+
+        ]
+    ####################################################################
     # COUNTS
     ####################################################################
 
-    def count(self, entity_type):
+    def count(
+        self,
+        entity_type: str,
+    ):
 
         return len(
 
-            self.find_by_type(entity_type)
+            self.find_by_type(
+                entity_type,
+            )
 
         )
 
@@ -302,3 +650,83 @@ class KnowledgeGraph:
     def get_statistics(self):
 
         return self.statistics
+
+    ####################################################################
+    # EXPORT
+    ####################################################################
+
+    def to_dict(self):
+
+        return {
+
+            "nodes": [
+
+                node.to_dict()
+
+                if hasattr(node, "to_dict")
+
+                else vars(node)
+
+                for node in self.nodes.values()
+
+            ],
+
+            "edges": [
+
+                edge.to_dict()
+
+                if hasattr(edge, "to_dict")
+
+                else vars(edge)
+
+                for edge in self.edges
+
+            ],
+
+            "statistics": {
+
+                "node_count": self.statistics.node_count,
+
+                "edge_count": self.statistics.edge_count,
+
+                "entity_counts": dict(
+
+                    self.statistics.entity_counts
+
+                ),
+
+                "relation_counts": dict(
+
+                    self.statistics.relation_counts
+
+                ),
+
+            },
+
+        }
+
+    ####################################################################
+    # MAGIC METHODS
+    ####################################################################
+
+    def __len__(self):
+
+        return len(
+
+            self.nodes
+
+        )
+
+    ####################################################################
+
+    def __repr__(self):
+
+        return (
+
+            f"<KnowledgeGraph "
+
+            f"nodes={len(self.nodes)} "
+
+            f"edges={len(self.edges)}>"
+
+        )

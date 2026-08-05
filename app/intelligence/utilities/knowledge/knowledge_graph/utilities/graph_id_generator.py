@@ -1,77 +1,232 @@
 """
 Enterprise Graph ID Generator
 
-Generates deterministic IDs for Graph Nodes and Graph Edges.
+Generates deterministic IDs for every graph object.
 
-Enterprise V5
+Purpose
+-------
+Guarantees:
 
-Examples
+• Stable IDs
+• No duplicates
+• Reproducible graph builds
 
-ACT_IMPLEMENT
-    ↓
-NODE_ACT_IMPLEMENT
-
-EDGE_NODE_ACT_IMPLEMENT_NODE_STD_FSSC22000
-
+Enterprise V7
 """
 
 import hashlib
 
 
 class GraphIDGenerator:
-    """
-    Centralized ID generator.
 
-    Every node and edge inside the Knowledge Graph
-    should be created through this class.
+    """
+    Enterprise deterministic ID generator.
     """
 
-    # ---------------------------------------------------------
+    ####################################################################
+    # NODE ID
+    ####################################################################
 
-    @staticmethod
-    def node_id(entity_type: str, entity_id: str) -> str:
+    def node_id(
+
+        self,
+
+        entity_type: str,
+
+        entity_id: str,
+
+    ) -> str:
+
         """
-        Create deterministic node id.
+        Generates deterministic node ID.
 
         Example
 
-        Action + ACT_IMPLEMENT
-
-        →
-
-        NODE_ACTION_ACT_IMPLEMENT
+            action::implement_haccp
         """
 
-        entity_type = (entity_type or "UNKNOWN").upper()
-        entity_id = (entity_id or "UNKNOWN").upper()
+        entity_type = str(
 
-        return f"NODE_{entity_type}_{entity_id}"
+            entity_type,
 
-    # ---------------------------------------------------------
+        ).strip().lower()
 
-    @staticmethod
-    def edge_id(source_id: str,
-                relation: str,
-                target_id: str) -> str:
+        entity_id = str(
+
+            entity_id,
+
+        ).strip().lower()
+
+        return f"{entity_type}::{entity_id}"
+
+    ####################################################################
+    # EDGE ID
+    ####################################################################
+
+    def edge_id(
+
+        self,
+
+        source_id: str,
+
+        relation: str,
+
+        target_id: str,
+
+    ) -> str:
+
         """
-        Create deterministic edge id.
+        Deterministic edge identifier.
 
         Example
 
-        NODE_ACTION_ACT_IMPLEMENT
-                +
-            COMPLIES_WITH
-                +
-        NODE_STANDARD_STD_FSSC22000
-
-        →
-        EDGE_91A37D83B6
+            edge::ab92f0......
         """
 
-        raw = f"{source_id}|{relation}|{target_id}"
+        key = (
 
-        digest = hashlib.sha1(
-            raw.encode("utf-8")
-        ).hexdigest()[:10].upper()
+            f"{source_id}|"
 
-        return f"EDGE_{digest}"
+            f"{relation.upper()}|"
+
+            f"{target_id}"
+
+        )
+
+        return (
+
+            "edge::"
+
+            +
+
+            hashlib.sha1(
+
+                key.encode(
+
+                    "utf-8",
+
+                )
+
+            ).hexdigest()
+
+        )
+
+    ####################################################################
+    # SUBGRAPH ID
+    ####################################################################
+
+    def subgraph_id(
+
+        self,
+
+        name: str,
+
+    ) -> str:
+
+        """
+        Generates subgraph ID.
+
+        Example
+
+            cluster::quality_management
+        """
+
+        name = (
+
+            str(name)
+
+            .strip()
+
+            .lower()
+
+            .replace(
+
+                " ",
+
+                "_",
+
+            )
+
+        )
+
+        return f"cluster::{name}"
+
+    ####################################################################
+    # REASONING ID
+    ####################################################################
+
+    def reasoning_id(
+
+        self,
+
+        stage: str,
+
+        entity_id: str,
+
+    ) -> str:
+
+        """
+        Used by reasoning pipeline.
+
+        Example
+
+            reasoning::skill_reasoner::skill::python
+        """
+
+        stage = (
+
+            str(stage)
+
+            .strip()
+
+            .lower()
+
+        )
+
+        entity_id = (
+
+            str(entity_id)
+
+            .strip()
+
+            .lower()
+
+        )
+
+        return (
+
+            f"reasoning::"
+
+            f"{stage}::"
+
+            f"{entity_id}"
+
+        )
+
+    ####################################################################
+    # HASH
+    ####################################################################
+
+    def hash(
+
+        self,
+
+        value: str,
+
+    ) -> str:
+
+        """
+        Generic SHA1 hash.
+        """
+
+        return hashlib.sha1(
+
+            str(value)
+
+            .encode(
+
+                "utf-8",
+
+            )
+
+        ).hexdigest()

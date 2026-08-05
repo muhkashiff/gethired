@@ -1,56 +1,81 @@
+
 """
-Action Node Builder
+Enterprise Action Node Builder
 
-Creates Action Nodes.
+Creates Action Nodes from Business Statements.
 
-Enterprise V6
+Architecture
+------------
+BusinessStatement
+        ↓
+ActionNodeBuilder
+        ↓
+KnowledgeGraph
+
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.node_builders.base_node_builder import (
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_node_builder import (
     BaseNodeBuilder,
 )
 
 
 class ActionNodeBuilder(BaseNodeBuilder):
 
+    ####################################################################
+    # BUILD
+    ####################################################################
+
     def build(
         self,
-        graph,
-        fact,
-    ):
+        context,
+        statement,
+    ) -> None:
 
-        interpretation = getattr(
-            fact,
-            "interpretation",
-            None,
+        ################################################################
+        # Business Statement may contain multiple Actions
+        ################################################################
+
+        actions = getattr(
+            statement,
+            "actions",
+            [],
         )
 
-        if interpretation is None:
+        if not actions:
             return
 
-        action = getattr(
-            interpretation,
-            "action",
-            None,
-        )
+        ################################################################
+        # Create Action Nodes
+        ################################################################
 
-        if action is None:
-            return
+        for action in actions:
 
-        if not action.found:
-            return
+            if action is None:
+                continue
 
-        node = self.create_node(
+            if not getattr(
+                action,
+                "found",
+                False,
+            ):
+                continue
 
-            entity=action,
+            ################################################################
+            # Create Node
+            ################################################################
 
-            entity_type="Action",
+            node = self.create_node(
+                entity=action,
+                entity_type="Action",
+            )
 
-        )
+            ################################################################
+            # Register Node
+            ################################################################
 
-        self.register_node(
+            self.register_node(
+                context,
+                node,
+            )
 
-            graph,
-            node,
-
-        )

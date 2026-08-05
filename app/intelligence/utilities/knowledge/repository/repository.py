@@ -6,7 +6,7 @@ Single source of truth for every ontology.
 Responsibilities
 ----------------
 ✓ Load every ontology once
-✓ Create EntityRecord objects
+✓ Create EntityRecord targets
 ✓ Build alias indexes
 ✓ Generic entity lookup
 ✓ Backward compatibility
@@ -203,9 +203,9 @@ class Repository:
 
         )
 
-        self.cache.objects = self._read(
+        self.cache.targets = self._read(
 
-            self.paths.objects
+            self.paths.targets
 
         )
 
@@ -434,9 +434,9 @@ class Repository:
 
         self._build_alias_index(
 
-            "objects",
+            "targets",
 
-            self.cache.objects,
+            self.cache.targets,
 
         )
 
@@ -747,11 +747,11 @@ class Repository:
 
     # ---------------------------------------------------------
 
-    def get_object(self, phrase):
+    def get_target(self, phrase):
 
         return self.find_entity(
 
-            "objects",
+            "targets",
 
             phrase
 
@@ -948,7 +948,7 @@ class Repository:
 
             "actions": len(self.cache.actions),
 
-            "objects": len(self.cache.objects),
+            "targets": len(self.cache.targets),
 
             "metrics": len(self.cache.metrics),
 

@@ -1,43 +1,69 @@
 """
-Measurement Node Builder
+Enterprise Measurement Node Builder
 
-Creates Measurement Nodes.
+Creates Measurement Nodes from Business Statements.
 
-Enterprise V6
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.node_builders.base_node_builder import (
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_node_builder import (
     BaseNodeBuilder,
 )
 
 
 class MeasurementNodeBuilder(BaseNodeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(fact, "interpretation", None)
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
 
-        if interpretation is None:
-            return
+        ################################################################
+        # Business Statement may contain multiple Measurements
+        ################################################################
 
-        measurement = getattr(
-            interpretation,
-            "measurement",
-            None,
+        measurements = getattr(
+            statement,
+            "measurements",
+            [],
         )
 
-        if measurement is None:
+        if not measurements:
             return
 
-        if not measurement.found:
-            return
+        ################################################################
+        # Create Measurement Nodes
+        ################################################################
 
-        node = self.create_node(
+        for measurement in measurements:
 
-            entity=measurement,
+            if measurement is None:
+                continue
 
-            entity_type="Measurement",
+            if not getattr(
+                measurement,
+                "found",
+                False,
+            ):
+                continue
 
-        )
+            node = self.create_node(
 
-        self.register_node(graph, node)
+                entity=measurement,
+
+                entity_type="Measurement",
+
+            )
+
+            self.register_node(
+
+                context,
+
+                node,
+
+            )

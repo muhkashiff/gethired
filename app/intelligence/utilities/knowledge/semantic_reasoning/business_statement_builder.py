@@ -1,167 +1,108 @@
 """
-Business Statement Builder V2
+Business Statement Builder
 
-Creates fully interpreted business statements.
+Enterprise V12
+
+Converts semantic entities + semantic dependencies into
+BusinessStatement objects.
 
 Pipeline
 
-Entities
+Semantic Entities
         ↓
-Dependencies
+Group by Statement
         ↓
 BusinessStatement
         ↓
-Intent Resolution
+Infer Semantic Relations
         ↓
-Business Intelligence
-        ↓
-Semantic Cluster
+Knowledge Graph
 """
 
-import uuid
+from collections import defaultdict
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
     BusinessStatement,
-)
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.intent.intent_resolver import (
-    IntentResolver,
+    SemanticEntity,
+    SemanticDependency,
+    StatementRelation,
 )
 
 
 class BusinessStatementBuilder:
 
-    # ==========================================================
-    # Constructor
-    # ==========================================================
-
     def __init__(self):
 
-        self.intent_resolver = IntentResolver()
+        pass
 
     # ==========================================================
-    # Main Builder
+    # BUILD
     # ==========================================================
 
-    def build(self, entities, dependencies):
+    def build(
+
+        self,
+
+        entities: list[SemanticEntity],
+
+        dependencies: list[SemanticDependency],
+
+    ) -> list[BusinessStatement]:
+
+        """
+        Main Builder
+
+        1. Group entities by statement
+        2. Group dependencies by statement
+        3. Build BusinessStatement
+        4. Infer semantic relations
+        """
+
+        grouped_entities = self._group_entities(
+
+            entities
+
+        )
+
+        grouped_dependencies = self._group_dependencies(
+
+            dependencies,
+
+            entities,
+
+        )
 
         statements = []
 
-        actions = [
-
-            entity
-
-            for entity in entities
-
-            if entity.entity_type == "action"
-
-        ]
-
-        # ------------------------------------------------------
-        # One Business Statement per Action
-        # ------------------------------------------------------
-
-        for action in actions:
+        for statement_id in grouped_entities:
 
             statement = BusinessStatement()
 
-            statement.statement_id = (
+            statement.statement_id = statement_id
 
-                "STATEMENT_"
+            statement.entities.extend(
 
-                + uuid.uuid4().hex[:8].upper()
-
-            )
-
-            statement.action = action
-
-            # --------------------------------------------------
-            # Collect every connected semantic entity
-            # --------------------------------------------------
-
-            self._collect_entities(
-
-                statement,
-
-                entities,
-
-                dependencies,
+                grouped_entities[statement_id]
 
             )
 
-            # --------------------------------------------------
-            # Resolve Business Intent
-            # --------------------------------------------------
-
-            statement.intent = (
-
-                self.intent_resolver.resolve(
-
-                    statement
-
-                )
-
-            )
-
-            # --------------------------------------------------
-            # Copy Intent Information
-            # --------------------------------------------------
-
-            if statement.intent:
-
-                statement.semantic_type = (
-
-                    statement.intent.intent
-
-                )
-
-                statement.primary_domain = (
-
-                    statement.intent.primary_domain
-
-                )
-
-                statement.primary_business_area = (
-
-                    statement.intent.business_area
-
-                )
-
-            # --------------------------------------------------
-            # Build Human Label
-            # --------------------------------------------------
-
-            statement.label = (
-
-                self._build_label(
-
-                    statement
-
-                )
-
-            )
-
-            # --------------------------------------------------
-            # Apply Intelligence Flags
-            # --------------------------------------------------
-
-            self._apply_flags(
+            self._populate_metadata(
 
                 statement
 
             )
 
-            # --------------------------------------------------
-            # Confidence
-            # --------------------------------------------------
+            self._infer_relations(
 
-            statement.confidence = (
+                statement,
 
-                self._confidence(
+                grouped_dependencies.get(
 
-                    statement
+                    statement_id,
 
-                )
+                    [],
+
+                ),
 
             )
 
@@ -172,430 +113,617 @@ class BusinessStatementBuilder:
             )
 
         return statements
-
+        # ==========================================================
+    # GROUP ENTITIES
     # ==========================================================
-    # Collect Every Related Entity
-    # ==========================================================
 
-    def _collect_entities(
+    def _group_entities(
 
         self,
 
-        statement,
+        entities: list[SemanticEntity],
 
-        entities,
+    ) -> dict[str, list[SemanticEntity]]:
 
-        dependencies,
+        """
+        Groups entities by statement_id.
 
-    ):
+        If statement_id is missing,
+        place everything into DEFAULT.
+        """
 
-        # -----------------------------------------
-        # Action
-        # -----------------------------------------
+        grouped = defaultdict(list)
 
-        statement.entities.append(
+        for entity in entities:
 
-            statement.action
+            statement_id = getattr(
 
-        )
+                entity,
 
-        # -----------------------------------------
-        # Related Dependencies
-        # -----------------------------------------
+                "statement_id",
 
-        related = [
-
-            dependency
-
-            for dependency in dependencies
-
-            if dependency.source_entity
-
-            == statement.action.entity_id
-
-        ]
-
-        statement.dependencies = related
-
-        # -----------------------------------------
-        # Resolve Target Entities
-        # -----------------------------------------
-
-        for dependency in related:
-
-            entity = next(
-
-                (
-
-                    item
-
-                    for item in entities
-
-                    if item.entity_id
-
-                    == dependency.target_entity
-
-                ),
-
-                None,
+                "",
 
             )
 
-            if entity is None:
+            if not statement_id:
 
-                continue
+                statement_id = "STATEMENT_1"
 
-            statement.entities.append(
+            grouped[statement_id].append(
 
                 entity
 
             )
 
-            # -------------------------------------
-
-            if entity.entity_type == "object":
-
-                statement.targets.append(
-
-                    entity
-
-                )
-
-                continue
-
-            # -------------------------------------
-
-            if entity.entity_type == "standard":
-
-                statement.standards.append(
-
-                    entity
-
-                )
-
-                continue
-
-            # -------------------------------------
-
-            if entity.entity_type == "methodology":
-
-                statement.methods.append(
-
-                    entity
-
-                )
-
-                continue
-
-            # -------------------------------------
-
-            if entity.entity_type in (
-
-                "metric",
-
-                "kpi",
-
-            ):
-
-                statement.metrics.append(
-
-                    entity
-
-                )
-
-                continue
-
-            # -------------------------------------
-
-            if entity.entity_type == "skill":
-
-                statement.skills.append(
-
-                    entity
-
-                )
-
-                continue
-
-            # -------------------------------------
-
-            if entity.entity_type == "domain":
-
-                statement.domains.append(
-
-                    entity
-
-                )
-
-                continue
+        return grouped
 
 
-# ==========================================================
-# Build Human Readable Label
-# ==========================================================
+    # ==========================================================
+    # GROUP DEPENDENCIES
+    # ==========================================================
 
-    def _build_label(
+    def _group_dependencies(
 
         self,
 
-        statement,
+        dependencies: list[SemanticDependency],
 
-    ):
+        entities: list[SemanticEntity],
 
-        pieces = []
+    ) -> dict[str, list[SemanticDependency]]:
 
-        # -------------------------------------
-        # Action
-        # -------------------------------------
+        """
+        Groups dependency edges by statement.
 
-        if statement.action:
+        Dependency belongs to the statement
+        containing its source entity.
+        """
 
-            action = (
+        entity_lookup = {
 
-                statement.action.matched_text
+            entity.entity_id: entity
 
-                or statement.action.original
+            for entity in entities
 
-                or statement.action.canonical
+        }
 
-            )
+        grouped = defaultdict(list)
 
-            pieces.append(
+        for dependency in dependencies:
 
-                action.capitalize()
+            source = entity_lookup.get(
 
-            )
-
-        # -------------------------------------
-        # Target
-        # -------------------------------------
-
-        if statement.targets:
-
-            target = statement.targets[0]
-
-            pieces.append(
-
-                target.matched_text
-
-                or target.original
-
-                or target.canonical
+                dependency.source_entity
 
             )
 
-        # -------------------------------------
-        # Standard
-        # -------------------------------------
+            if source is None:
 
-        if statement.standards:
+                continue
 
-            names = [
+            statement_id = getattr(
 
-                standard.matched_text
+                source,
 
-                or standard.original
+                "statement_id",
 
-                or standard.canonical
-
-                for standard in statement.standards
-
-            ]
-
-            pieces.append(
-
-                "("
-
-                + ", ".join(names)
-
-                + ")"
+                "",
 
             )
 
-        # -------------------------------------
-        # Methodology
-        # -------------------------------------
+            if not statement_id:
 
-        if statement.methods:
+                statement_id = "STATEMENT_1"
 
-            method = statement.methods[0]
+            grouped[statement_id].append(
 
-            pieces.append(
-
-                "using"
+                dependency
 
             )
 
-            pieces.append(
+        return grouped
 
-                method.matched_text
 
-                or method.original
-
-                or method.canonical
-
-            )
-
-        # -------------------------------------
-        # Metric
-        # -------------------------------------
-
-        elif statement.metrics:
-
-            metric = statement.metrics[0]
-
-            pieces.append(
-
-                metric.matched_text
-
-                or metric.original
-
-                or metric.canonical
-
-            )
-
-        return " ".join(pieces).strip()
     # ==========================================================
-    # Apply Intelligence Flags
+    # POPULATE METADATA
     # ==========================================================
 
-    def _apply_flags(
+    def _populate_metadata(
 
         self,
 
-        statement,
+        statement: BusinessStatement,
 
     ):
 
-        if statement.intent is None:
+        """
+        Determines
 
-            return
+        • label
+        • semantic_type
+        • primary_domain
+        • business_area
+        • achievement
+        """
 
-        intent = (
+        actions = statement.actions
 
-            statement.intent.intent
+        targets = statement.targets
 
-            or ""
+        metrics = statement.metrics
 
-        ).lower()
+        measurements = statement.measurements
+
+        domains = statement.domains
+
+        standards = statement.standards
+
+        methodologies = statement.methodologies
+
+        skills = statement.skills
+
+
+        # ---------------------------------------------
+        # Label
+        # ---------------------------------------------
+
+        label_parts = []
+
+        if actions:
+
+            label_parts.append(
+
+                actions[0].canonical
+
+            )
+
+        if targets:
+
+            label_parts.append(
+
+                targets[0].canonical
+
+            )
+
+        statement.label = " ".join(
+
+            label_parts
+
+        ).strip()
+
+
+        # ---------------------------------------------
+        # Domain
+        # ---------------------------------------------
+
+        if domains:
+
+            statement.primary_domain = (
+
+                domains[0].canonical
+
+            )
+
+
+        # ---------------------------------------------
+        # Business Area
+        # ---------------------------------------------
+
+        if domains:
+
+            statement.business_area = (
+
+                domains[0].business_area
+
+            )
+
+
+        # ---------------------------------------------
+        # Semantic Type
+        # ---------------------------------------------
+
+        if metrics:
+
+            statement.semantic_type = "Measured Action"
+
+        elif standards:
+
+            statement.semantic_type = "Compliance Action"
+
+        elif methodologies:
+
+            statement.semantic_type = "Method Action"
+
+        elif skills:
+
+            statement.semantic_type = "Skill Action"
+
+        else:
+
+            statement.semantic_type = "Business Action"
+
+
+        # ---------------------------------------------
+        # Achievement
+        # ---------------------------------------------
 
         statement.achievement = (
 
-            statement.intent.achievement
+            len(measurements) > 0
 
         )
+        # ==========================================================
+    # RELATION INFERENCE
+    # ==========================================================
 
-        if intent == "leadership":
-
-            statement.leadership = True
-
-        elif intent == "certification":
-
-            statement.certification = True
-
-        elif intent == "continuous_improvement":
-
-            statement.continuous_improvement = True
-
-        elif intent == "technical_skill":
-
-            statement.technical_skill = True
-
-        elif intent == "responsibility":
-
-            statement.responsibility = True
-
-        # ---------------------------------------------
-        # Quantified Statement
-        # ---------------------------------------------
-
-        statement.quantified = (
-
-            len(statement.metrics) > 0
-
-        )
-
-
-# ==========================================================
-# Semantic Completeness Confidence
-# ==========================================================
-
-    def _confidence(
+    def _infer_relations(
 
         self,
 
-        statement,
+        statement: BusinessStatement,
+
+        dependencies: list[SemanticDependency],
 
     ):
 
-        score = 0.50
+        """
+        Infer semantic relationships.
 
-        # ---------------------------------------------
+        Enterprise Rule Engine
 
-        if statement.action:
+        Action
+            ↓
+        Target
 
-            score += 0.10
+        Action
+            ↓
+        Metric
+            ↓
+        Measurement
 
-        if statement.targets:
+        Action
+            ↓
+        Skill
 
-            score += 0.10
+        Action
+            ↓
+        Methodology
 
-        if statement.methods:
+        Action
+            ↓
+        Standard
 
-            score += 0.08
+        Action
+            ↓
+        Domain
 
-        if statement.standards:
+        Action
+            ↓
+        Achievement (Metric)
+        """
 
-            score += 0.08
+        actions = statement.actions
 
-        if statement.metrics:
+        targets = statement.targets
 
-            score += 0.06
+        metrics = statement.metrics
 
-        if statement.skills:
+        measurements = statement.measurements
 
-            score += 0.05
+        skills = statement.skills
 
-        if statement.domains:
+        methodologies = statement.methodologies
 
-            score += 0.04
+        standards = statement.standards
 
-        # ---------------------------------------------
-        # Intent confidence
-        # ---------------------------------------------
+        domains = statement.domains
 
-        if statement.intent:
 
-            score += 0.05
+        # -------------------------------------------------
+        # ACTION → TARGET
+        # -------------------------------------------------
 
-            if getattr(statement.intent, "primary_domain", ""):
+        for action in actions:
 
-                score += 0.02
+            for target in targets:
 
-            if getattr(statement.intent, "business_area", ""):
+                self._create_relation(
 
-                score += 0.02
+                    statement,
 
-        # ---------------------------------------------
-        # Achievement bonus
-        # ---------------------------------------------
+                    action,
 
-        if statement.achievement:
+                    target,
 
-            score += 0.03
+                    "ACTS_ON",
 
-        # ---------------------------------------------
-        # Quantified statement
-        # ---------------------------------------------
+                )
 
-        if statement.quantified:
 
-            score += 0.02
+        # -------------------------------------------------
+        # ACTION → METRIC
+        # -------------------------------------------------
 
-        return round(
+        for action in actions:
 
-            min(score, 0.99),
+            for metric in metrics:
 
-            2,
+                self._create_relation(
+
+                    statement,
+
+                    action,
+
+                    metric,
+
+                    "AFFECTS",
+
+                )
+
+
+        # -------------------------------------------------
+        # METRIC → MEASUREMENT
+        # -------------------------------------------------
+
+        for metric in metrics:
+
+            for measurement in measurements:
+
+                self._create_relation(
+
+                    statement,
+
+                    metric,
+
+                    measurement,
+
+                    "MEASURED_BY",
+
+                )
+
+
+        # -------------------------------------------------
+        # ACTION → SKILL
+        # -------------------------------------------------
+
+        for action in actions:
+
+            for skill in skills:
+
+                self._create_relation(
+
+                    statement,
+
+                    action,
+
+                    skill,
+
+                    "REQUIRES",
+
+                )
+
+
+        # -------------------------------------------------
+        # ACTION → STANDARD
+        # -------------------------------------------------
+
+        for action in actions:
+
+            for standard in standards:
+
+                self._create_relation(
+
+                    statement,
+
+                    action,
+
+                    standard,
+
+                    "COMPLIES_WITH",
+
+                )
+
+
+        # -------------------------------------------------
+        # ACTION → METHODOLOGY
+        # -------------------------------------------------
+
+        for action in actions:
+
+            for methodology in methodologies:
+
+                self._create_relation(
+
+                    statement,
+
+                    action,
+
+                    methodology,
+
+                    "USES",
+
+                )
+
+
+        # -------------------------------------------------
+        # ACTION → DOMAIN
+        # -------------------------------------------------
+
+        for action in actions:
+
+            for domain in domains:
+
+                self._create_relation(
+
+                    statement,
+
+                    action,
+
+                    domain,
+
+                    "BELONGS_TO",
+
+                )
+
+
+        # -------------------------------------------------
+        # ACTION → ACHIEVEMENT
+        # (Action achieving a metric)
+        # -------------------------------------------------
+
+        if measurements:
+
+            for action in actions:
+
+                for metric in metrics:
+
+                    self._create_relation(
+
+                        statement,
+
+                        action,
+
+                        metric,
+
+                        "ACHIEVED",
+
+                    )
+        # ==========================================================
+    # CREATE RELATION
+    # ==========================================================
+
+    def _create_relation(
+
+        self,
+
+        statement: BusinessStatement,
+
+        source: SemanticEntity,
+
+        target: SemanticEntity,
+
+        relation: str,
+
+    ):
+
+        """
+        Creates one semantic relation.
+
+        Duplicate relations are ignored.
+        """
+
+        if source is None:
+
+            return
+
+        if target is None:
+
+            return
+
+        # ------------------------------------------
+        # Duplicate Protection
+        # ------------------------------------------
+
+        for existing in statement.relations:
+
+            if (
+                existing.source_id == source.entity_id
+                and existing.target_id == target.entity_id
+                and existing.relation_type == relation
+            ):
+                return
+
+        # ------------------------------------------
+        # Confidence
+        # ------------------------------------------
+
+        confidence = min(
+
+            source.confidence,
+
+            target.confidence,
 
         )
+
+        # ------------------------------------------
+        # Reasoning
+        # ------------------------------------------
+
+        reasoning = (
+
+            f"{source.canonical} "
+
+            f"{relation.replace('_',' ').lower()} "
+
+            f"{target.canonical}"
+
+        )
+
+        # ------------------------------------------
+        # Create Relation
+        # ------------------------------------------
+
+        statement.relations.append(
+
+            StatementRelation(
+                source_id=source.entity_id,
+                target_id=target.entity_id,
+                relation_type=relation,
+                confidence=confidence,
+                reasoning=reasoning,
+                metadata={
+                    "source_type": source.entity_type,
+                    "target_type": target.entity_type,
+                },
+            )
+
+        )
+
+    # ==========================================================
+    # DEBUG
+    # ==========================================================
+
+    def _debug_statement(
+
+        self,
+
+        statement: BusinessStatement,
+
+    ):
+
+        print("\n----------------------------------------")
+
+        print(statement.label)
+
+        print("----------------------------------------")
+
+        print("Entities")
+
+        for entity in statement.entities:
+
+            print(
+
+                entity.entity_type,
+
+                entity.canonical,
+
+            )
+
+        print()
+
+        print("Relations")
+
+        for relation in statement.relations:
+
+            print(
+
+                relation.relation,
+
+                relation.source_id,
+
+                "->",
+
+                relation.target_id,
+
+            )

@@ -1,14 +1,12 @@
 """
-Advanced Cluster Builder V4
+Enterprise Cluster Builder
 
-Builds semantic clusters directly from Business Statements.
-
-Business Statement
+BusinessStatement
         ↓
-Semantic Cluster
-"""
+SemanticCluster
 
-import uuid
+Enterprise V10
+"""
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
     SemanticCluster,
@@ -18,57 +16,51 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models imp
 
 class ClusterBuilder:
 
-    def build(self, business_statements):
+    ####################################################################
+    # BUILD
+    ####################################################################
+
+    def build(
+        self,
+        business_statements,
+    ):
 
         clusters = []
 
         for statement in business_statements:
 
-            cluster = SemanticCluster()
+            cluster = SemanticCluster(
 
-            # -----------------------------------
-            # Identity
-            # -----------------------------------
+                cluster_id=statement.statement_id.replace(
+                    "STATEMENT",
+                    "CLUSTER",
+                ),
 
-            cluster.cluster_id = statement.statement_id.replace(
-                "STATEMENT",
-                "CLUSTER",
-            )
-            cluster.label = statement.label
-
-            cluster.semantic_type = statement.semantic_type
-
-            cluster.confidence = statement.confidence
-
-            # -----------------------------------
-            # Entities
-            # -----------------------------------
-
-            cluster.entities = list(statement.entities)
-
-            # -----------------------------------
-            # Dependencies
-            # -----------------------------------
-
-            cluster.dependencies = list(
-
-                statement.dependencies
-
-            )
-
-            # -----------------------------------
-            # Metadata
-            # -----------------------------------
-
-            cluster.metadata = SemanticMetadata(
-
-                primary_domain=statement.primary_domain,
-
-                primary_business_area=statement.primary_business_area,
+                label=statement.label,
 
                 semantic_type=statement.semantic_type,
 
-                achievement=statement.achievement,
+                primary_domain=statement.primary_domain,
+
+                business_area=statement.business_area,
+
+                confidence=statement.confidence,
+
+                entities=list(statement.entities),
+
+                #dependencies=list(statement.dependencies),
+
+                metadata=SemanticMetadata(
+
+                    primary_domain=statement.primary_domain,
+
+                    primary_business_area=statement.business_area,
+
+                    semantic_type=statement.semantic_type,
+
+                    achievement=statement.achievement,
+
+                ),
 
             )
 

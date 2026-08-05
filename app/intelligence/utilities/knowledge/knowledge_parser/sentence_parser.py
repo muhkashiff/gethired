@@ -18,8 +18,6 @@ Practice Recognizer
     ↓
 Entity Matcher
     ↓
-Dependency Parser
-    ↓
 Knowledge Interpretation
     ↓
 Knowledge Fact
@@ -52,7 +50,7 @@ from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor 
     ActionExtractor,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.object_extractor import (
+from app.intelligence.utilities.knowledge.knowledge_extractors.target_extractor import (
     ObjectExtractor,
 )
 
@@ -96,15 +94,7 @@ from app.intelligence.utilities.knowledge.entity_matching.entity_matcher import 
     EntityMatcher,
 )
 
-# ------------------------------------------------------------
-# Dependency Parser
-# ------------------------------------------------------------
-
-from app.intelligence.utilities.knowledge.knowledge_dependency.dependency_parser import (
-    DependencyParser,
-)
-
-# ------------------------------------------------------------
+#------------------------------------------------------------
 # Parser
 # ------------------------------------------------------------
 
@@ -160,8 +150,6 @@ class SentenceParser:
         # ----------------------------------------------------
 
         self.entity_matcher = EntityMatcher()
-
-        self.dependency_parser = DependencyParser()
 
         # ----------------------------------------------------
         # Utilities
@@ -228,30 +216,8 @@ class SentenceParser:
 
         return self.entity_matcher.match(text)
 
-    # --------------------------------------------------------
 
-    def _build_dependencies(
-        self,
-        entities,
-        sentence,
-    ):
-
-        """
-        Build dependency graph.
-
-        Returns
-
-            list[DependencyEdge]
-        """
-
-        return self.dependency_parser.build(
-
-            entities,
-
-            sentence,
-
-        )
-        # ========================================================
+    # ========================================================
     # Main Parser
     # ========================================================
 
@@ -319,18 +285,6 @@ class SentenceParser:
         entities = self._match_entities(text)
 
         # --------------------------------------------------
-        # Dependency Graph
-        # --------------------------------------------------
-
-        dependencies = self._build_dependencies(
-
-            entities,
-
-            text,
-
-        )
-
-        # --------------------------------------------------
         # Confidence
         # --------------------------------------------------
 
@@ -371,8 +325,6 @@ class SentenceParser:
             practice=practice,
 
             entities=entities,
-
-            dependencies=dependencies,
 
             achievement=self.utils.is_achievement(
 

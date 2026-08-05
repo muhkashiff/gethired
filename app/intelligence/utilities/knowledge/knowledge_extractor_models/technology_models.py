@@ -23,7 +23,7 @@ from .base_models import KnowledgeEntity
 
 
 @dataclass
-class TechnologyKnowledge(KnowledgeEntity):
+class Technology(KnowledgeEntity):
 
     ####################################################################
     # Entity

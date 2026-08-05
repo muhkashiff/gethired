@@ -43,7 +43,25 @@ from app.intelligence.utilities.knowledge.knowledge_graph.edge_builders.action_o
 from app.intelligence.utilities.knowledge.knowledge_graph.edge_builders.domain_entity_edge_builder import (
     DomainEntityEdgeBuilder,
 )
+from app.intelligence.utilities.knowledge.knowledge_graph.semantic_builders.relationship_builder import (
+    RelationshipBuilder,
+)
 
+from app.intelligence.utilities.knowledge.knowledge_graph.semantic_builders.measurement_builder import (
+    MeasurementBuilder,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_graph.semantic_builders.achievement_builder import (
+    AchievementBuilder,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_graph.semantic_builders.dependency_builder import (
+    DependencyBuilder,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_graph.semantic_builders.leadership_builder import (
+    LeadershipBuilder,
+)
 
 class BuilderRegistry:
 
@@ -68,5 +86,19 @@ class BuilderRegistry:
             MetricMeasurementEdgeBuilder(),
             ActionObjectEdgeBuilder(),
             DomainEntityEdgeBuilder(),
+
+        ]
+
+        self.semantic_builders = [
+
+            RelationshipBuilder(),
+
+            MeasurementBuilder(),
+
+            AchievementBuilder(),
+
+            DependencyBuilder(),
+
+            LeadershipBuilder(),
 
         ]

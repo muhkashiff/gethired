@@ -1,73 +1,101 @@
 """
-Action → Metric Edge Builder
+Enterprise Action → Metric Edge Builder
 
 Creates
 
-Implement --------affects--------> Production Yield
+Action --------affects--------> Metric
 
-Enterprise V6
+Enterprise V10
 """
 
-from app.intelligence.utilities.knowledge.knowledge_graph.graph_models import (
-    GraphEdge,
+from app.intelligence.utilities.knowledge.knowledge_graph.builders.base_edge_builder import (
+    BaseEdgeBuilder,
 )
 
 
-class ActionMetricEdgeBuilder:
+class ActionMetricEdgeBuilder(BaseEdgeBuilder):
 
-    def build(self, graph, fact):
+    ####################################################################
+    # BUILD
+    ####################################################################
 
-        interpretation = getattr(
-            fact,
-            "interpretation",
-            None,
+    def build(
+        self,
+        context,
+        statement,
+    ) -> None:
+
+        ################################################################
+        # Read Business Statement Collections
+        ################################################################
+
+        actions = getattr(
+            statement,
+            "actions",
+            [],
         )
 
-        if interpretation is None:
-            return
-
-        action = getattr(
-            interpretation,
-            "action",
-            None,
+        metrics = getattr(
+            statement,
+            "metrics",
+            [],
         )
 
-        metric = getattr(
-            interpretation,
-            "metric",
-            None,
-        )
-
-        if action is None or metric is None:
+        if not actions:
             return
 
-        if not action.found:
+        if not metrics:
             return
 
-        if not metric.found:
-            return
+        ################################################################
+        # Create Edges
+        ################################################################
 
-        edge = GraphEdge(
+        for action in actions:
 
-            edge_id=f"{action.entity_id}_{metric.entity_id}",
+            if action is None:
+                continue
 
-            relation="affects",
+            if not getattr(
+                action,
+                "found",
+                False,
+            ):
+                continue
 
-            confidence=min(
-                action.confidence,
-                metric.confidence,
-            ),
+            for metric in metrics:
 
-            source_id=action.entity_id,
+                if metric is None:
+                    continue
 
-            source_type="Action",
+                if not getattr(
+                    metric,
+                    "found",
+                    False,
+                ):
+                    continue
 
-            target_id=metric.entity_id,
+                edge = self.create_edge(
 
-            target_type="Metric",
+                    source=action,
 
-            reasoning="Action affects KPI",
+                    target=metric,
 
-        )
+                    relation="affects",
 
-        graph.add_edge(edge)
+                    reasoning="Action affects KPI",
+
+                    confidence=min(
+                        action.confidence,
+                        metric.confidence,
+                    ),
+
+                )
+
+                self.register_edge(
+
+                    context,
+
+                    edge,
+
+                )

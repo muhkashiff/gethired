@@ -12,9 +12,6 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretat
     KnowledgeInterpretation,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_dependency.dependency_models import (
-    DependencyEdge,
-)
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.practice_models import (
     PracticeKnowledge,
 )
@@ -37,12 +34,7 @@ class KnowledgeFact:
         default_factory=KnowledgeInterpretation
     )
 
-    # -----------------------------
-    # NEW
-    # -----------------------------
-
-    dependency_edges: List[DependencyEdge] = field(default_factory=list)
-
+    
     # -----------------------------
     # Existing
     # -----------------------------

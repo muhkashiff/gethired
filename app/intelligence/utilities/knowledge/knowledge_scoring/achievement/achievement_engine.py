@@ -53,7 +53,7 @@ class AchievementEngine:
 
         outgoing = defaultdict(list)
 
-        for edge in graph.edges.values():
+        for edge in graph.edges:
 
             outgoing[edge.source_id].append(edge)
 
