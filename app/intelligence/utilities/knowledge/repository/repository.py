@@ -23,6 +23,9 @@ import re
 from app.intelligence.utilities.knowledge.repository.paths import RepositoryPaths
 from app.intelligence.utilities.knowledge.repository.cache import RepositoryCache
 from app.intelligence.utilities.knowledge.repository.entity_record import EntityRecord
+from app.intelligence.utilities.knowledge.tokenizer.tokenizer import Normalizer
+from app.intelligence.utilities.knowledge.tokenizer.tokenizer import Tokenizer 
+
 
 
 class Repository:
@@ -36,6 +39,10 @@ class Repository:
         self.paths = RepositoryPaths()
 
         self.cache = RepositoryCache()
+
+        self.normalizer = Normalizer()
+
+        self.tokenizer = Tokenizer()
 
         self._load()
 
@@ -83,108 +90,83 @@ class Repository:
 
         return text.strip()
 
-    ####################################################################
-    # ENTITY BUILDER
-    ####################################################################
-
     def _entity(
-
         self,
-
         data,
-
         ontology,
-
         source="ontology",
-
     ):
 
         if not data:
-
             return None
 
-        return EntityRecord(
+        entity = EntityRecord(
 
-            entity_id=data.get(
-
-                "entity_id",
-
-                ""
-
-            ),
+            entity_id=data.get("entity_id", ""),
 
             canonical=data.get(
-
                 "canonical",
+                data.get("base", "")
+            ),
 
+            normalized=self.normalize(
                 data.get(
-
-                    "base",
-
-                    ""
-
+                    "canonical",
+                    data.get("base", "")
                 )
-
             ),
 
-            aliases=data.get(
+            aliases=data.get("aliases", []),
 
-                "aliases",
+            # ---------- linguistic ----------
 
-                []
+            base=data.get("base", ""),
 
-            ),
+            past=data.get("past", ""),
 
-            category=data.get(
+            gerund=data.get("gerund", ""),
 
-                "category",
+            plural=data.get("plural", ""),
 
-                ""
+            singular=data.get("singular", ""),
 
-            ),
+            abbreviation=data.get("abbreviation", ""),
 
-            business_area=data.get(
+            short_name=data.get("short_name", ""),
 
-                "business_area",
+            # ----------
 
-                ""
+            category=data.get("category", ""),
 
-            ),
+            entity_type=ontology,
 
-            preferred_direction=data.get(
+            ontology_name=ontology,
 
-                "preferred_direction",
+            domain=data.get("domain", ""),
 
-                ""
+            business_area=data.get("business_area", ""),
 
-            ),
+            description=data.get("description", ""),
 
-            impact_weight=float(
+            impact_weight=float(data.get("impact_weight", 1.0)),
 
-                data.get(
+            business_meaning=data.get("business_meaning", ""),
 
-                    "impact_weight",
+            preferred_direction=data.get("preferred_direction", ""),
 
-                    1.0
+            preferred_unit=data.get("preferred_unit", ""),
 
-                )
+            higher_is_better=data.get("higher_is_better", True),
 
-            ),
+            searchable=data.get("searchable", True),
 
-            business_meaning=data.get(
-
-                "business_meaning",
-
-                ""
-
-            ),
+            active=data.get("active", True),
 
             source=source,
 
             metadata=data,
-
         )
-
+        return entity
     ####################################################################
     # LOAD EVERYTHING
     ####################################################################
@@ -313,48 +295,25 @@ class Repository:
     ####################################################################
     # BUILD ONE ALIAS INDEX
     ####################################################################
-
-    def _build_alias_index(
-
-        self,
-
-        ontology_name,
-
-        ontology,
-
-    ):
+    def _build_alias_index(self, ontology_name, ontology):
 
         alias_index = {}
-
         canonical_index = {}
-
         entity_index = {}
-
         normalized_index = {}
 
         for _, data in ontology.items():
 
-            entity = self._entity(
-
-                data,
-
-                ontology_name,
-
-            )
+            entity = self._entity(data, ontology_name)
 
             if entity is None:
-
                 continue
 
             ########################################################
             # Entity ID
             ########################################################
 
-            entity_index[
-
-                entity.entity_id
-
-            ] = entity
+            entity_index[entity.entity_id] = entity
 
             ########################################################
             # Canonical
@@ -362,61 +321,57 @@ class Repository:
 
             canonical = entity.canonical
 
-            canonical_index[
-
-                canonical.lower()
-
-            ] = entity
-
-            normalized_index[
-
-                self.normalize(canonical)
-
-            ] = entity
+            canonical_index[canonical.lower()] = entity
+            normalized_index[self.normalize(canonical)] = entity
 
             ########################################################
-            # Aliases
+            # Linguistic Forms
             ########################################################
+
+            search_forms = set()
+
+            if entity.canonical:
+                search_forms.add(entity.canonical)
 
             for alias in entity.aliases:
+                if alias:
+                    search_forms.add(alias)
 
-                alias_index[
+            for field in (
+                "base",
+                "past",
+                "gerund",
+                "plural",
+                "singular",
+                "abbreviation",
+                "short_name",
+            ):
 
-                    alias.lower()
+                value = getattr(entity, field, "")
 
-                ] = entity
+                if value:
+                    search_forms.add(value)
 
-                normalized_index[
+            ########################################################
+            # Build alias index
+            ########################################################
 
-                    self.normalize(alias)
+            for form in search_forms:
 
-                ] = entity
+                form = form.strip()
+
+                if not form:
+                    continue
+
+                alias_index[form.lower()] = entity
+                normalized_index[self.normalize(form)] = entity
 
         ############################################################
 
-        self.cache.alias_indexes[
-
-            ontology_name
-
-        ] = alias_index
-
-        self.cache.canonical_indexes[
-
-            ontology_name
-
-        ] = canonical_index
-
-        self.cache.entity_indexes[
-
-            ontology_name
-
-        ] = entity_index
-
-        self.cache.normalized_indexes[
-
-            ontology_name
-
-        ] = normalized_index
+        self.cache.alias_indexes[ontology_name] = alias_index
+        self.cache.canonical_indexes[ontology_name] = canonical_index
+        self.cache.entity_indexes[ontology_name] = entity_index
+        self.cache.normalized_indexes[ontology_name] = normalized_index
 
     ####################################################################
     # BUILD ALL INDEXES
@@ -503,7 +458,7 @@ class Repository:
             self.cache.standards,
 
         )
-
+        
     ####################################################################
     # LOAD RELATIONS
     ####################################################################
@@ -595,9 +550,7 @@ class Repository:
         ##########################################################
 
         entity = normalized_index.get(
-
-            self.normalize(phrase)
-
+            self.tokenizer.normalize(phrase)
         )
 
         if entity:
@@ -967,3 +920,5 @@ class Repository:
             "business_kpis": len(self.cache.business_kpis),
 
         }
+
+    

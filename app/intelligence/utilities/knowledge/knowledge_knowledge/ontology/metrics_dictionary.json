@@ -1,13 +1,50 @@
 {
 "production yield": {
+
     "entity_id": "KPI_PRODUCTION_YIELD",
+
     "canonical": "Production Yield",
-    "aliases": ["yield","product yield","yield improvement"],
+
+    "aliases": [
+        "yield",
+        "product yield",
+        "yield improvement"
+    ],
+
     "category": "operations",
+
     "business_area": "manufacturing",
+
     "description": "Percentage of finished product meeting specification.",
+
+    "metric_family": "Production",
+
+    "metric_group": "Yield",
+
     "unit": "%",
+
     "higher_is_better": true,
+
+    "lower_is_better": false,
+
+    "percentage_metric": true,
+
+    "financial_metric": false,
+
+    "quality_metric": false,
+
+    "productivity_metric": true,
+
+    "operational_metric": true,
+
+    "kpi": true,
+
+    "benchmark_available": true,
+
+    "target_value": 99,
+
+    "measurement_expected": true,
+
     "impact_weight": 0.99
 },
 

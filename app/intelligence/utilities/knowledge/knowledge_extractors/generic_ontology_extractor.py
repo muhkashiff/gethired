@@ -80,7 +80,7 @@ class GenericOntologyExtractor(
 
         return self.knowledge_class()
 
-        ####################################################################
+    ####################################################################
     # MAIN
     ####################################################################
 
@@ -99,6 +99,16 @@ class GenericOntologyExtractor(
             sentence=sentence,
 
         )
+
+        print("\n===== CANDIDATES RECEIVED =====")
+
+        print(len(candidates))
+
+        for c in candidates:
+            print(
+                c["entity"].entity_id,
+                c["phrase"]
+            )
 
         results = []
 
@@ -134,6 +144,7 @@ class GenericOntologyExtractor(
 
             results.append(obj)
 
+        
         return results
 
     ####################################################################
@@ -148,7 +159,7 @@ class GenericOntologyExtractor(
 
         metadata,
 
-    ):
+        ):
 
         """
         Child extractors override this.

@@ -13,8 +13,8 @@ Responsibilities
 ✓ N-Gram caching
 
 Version : Enterprise V4
-"""
 
+"""
 from __future__ import annotations
 
 import re
@@ -27,6 +27,12 @@ from app.intelligence.utilities.knowledge.knowledge_extractors.confidence_calcul
     ConfidenceCalculator,
 )
 
+from app.intelligence.utilities.knowledge.tokenizer.tokenizer import Tokenizer
+from app.intelligence.utilities.knowledge.tokenizer.matcher import Matcher
+from app.intelligence.utilities.knowledge.tokenizer.phrase_matcher import PhraseMatcher
+from app.intelligence.utilities.knowledge.tokenizer.fuzzy import FuzzyMatcher
+from app.intelligence.utilities.knowledge.tokenizer.overlap import OverlapResolver
+from app.intelligence.utilities.knowledge.tokenizer.ranker import CandidateRanker
 
 class BaseExtractor:
 
@@ -43,29 +49,40 @@ class BaseExtractor:
         confidence=None,
 
     ):
+        ###########################################################
+        # Configuration
+        ###########################################################
+
+        self.enable_phrase_matching = True
+        self.enable_fuzzy = True
+        self.enable_overlap = True
+        self.enable_ranking = True
 
         self.repository = repository or Repository()
 
-        self.confidence = (
+        self.tokenizer = self.repository.tokenizer
 
-            confidence
+        self.phrase_matcher = PhraseMatcher(
+            repository=self.repository,
+            tokenizer=self.tokenizer,
+        )
+        self.fuzzy_matcher = FuzzyMatcher(
+                    repository=self.repository,
+                    tokenizer=self.tokenizer,
+                )
 
-            or ConfidenceCalculator(
-
-                self.repository
-
-            )
-
+        self.matcher = Matcher(
+            repository=self.repository,
+            tokenizer=self.tokenizer,
         )
 
-        # Maximum phrase length searched
-        self.max_ngram = 5
+        self.overlap_resolver = OverlapResolver()
 
-        # NGram cache
-        self._cached_sentence = None
+        self.ranker = CandidateRanker()
 
-        self._cached_ngrams = None
+        self.confidence = ConfidenceCalculator()
 
+        
     ####################################################################
     # CLEAN
     ####################################################################
@@ -148,7 +165,7 @@ class BaseExtractor:
 
             re.finditer(
 
-                r"[A-Za-z0-9:+./&_-]+",
+                r"[A-Za-z0-9]+(?:[+#:/&._-][A-Za-z0-9]+)*",
 
                 sentence,
 
@@ -200,7 +217,7 @@ class BaseExtractor:
 
             return self._cached_ngrams
 
-        words, _ = self.tokenize(sentence)
+        words, _ = self.tokenizer.tokenize(sentence)
 
         results = []
 
@@ -383,25 +400,26 @@ class BaseExtractor:
     ####################################################################
 
     def lookup_entity(
-
         self,
-
         ontology,
-
         phrase,
-
     ):
+        """
+        Enterprise lookup
 
+        Every ontology lookup is case-insensitive.
+
+        Canonical matching should never depend on text casing.
         """
-        Generic repository lookup.
-        """
+
+        if phrase is None:
+            return None
+
+        phrase = self.clean(phrase).lower()
 
         return self.repository.find_entity(
-
             ontology,
-
             phrase,
-
         )
 
     ####################################################################
@@ -488,7 +506,7 @@ class BaseExtractor:
 
             token_count,
 
-        ) in self.generate_ngrams(sentence):
+        ) in self.tokenizer.generate_ngrams(sentence):
 
             entity = self.lookup_entity(
 
@@ -512,13 +530,7 @@ class BaseExtractor:
 
                 continue
 
-            start_char, end_char, _ = self.get_position(
-
-                sentence,
-
-                phrase,
-
-            )
+            start_char, end_char, _ = self.tokenizer.get_position(sentence, phrase)
 
             parser_context = self.build_parser_context()
 
@@ -726,7 +738,9 @@ class BaseExtractor:
 
         model.matched_phrase = candidate["phrase"]
 
-        model.matched_alias = candidate["matched_alias"]
+        model.matched_alias = candidate.get("matched_alias", "")
+
+        model.is_alias = candidate.get("is_alias", False)
 
         model.metadata = entity.metadata
 
@@ -741,58 +755,79 @@ class BaseExtractor:
         model.sentence_index = 0
 
         return model
-
+        
     ####################################################################
     # COMPLETE EXTRACTION PIPELINE
     ####################################################################
 
     def extract_candidates(
 
-        self,
+    self,
 
-        ontology,
+    ontology,
 
-        sentence,
+    sentence,
 
-    ):
+        ):
 
-        """
-        Complete enterprise pipeline.
+        
+        ############################################################
+        # Exact phrase matching
+        ############################################################
+        candidates = self.phrase_matcher.find_candidates(ontology,sentence,)
+        
+        for candidate in candidates:
 
-        sentence
+            parser_context = self.build_parser_context()
 
-             ↓
+            candidate["confidence"] = self.confidence.calculate(
+                phrase=candidate["phrase"],
+                entity=candidate["entity"],
+                sentence=sentence,
+                parser_context=parser_context,
+            )
 
-        lookup_all()
+        ############################################################
+        # Fuzzy matching (optional)
+        ############################################################
 
-             ↓
+        if self.enable_fuzzy:
 
-        remove_overlaps()
+            fuzzy_candidates = self.fuzzy_matcher.find_candidates(
 
-             ↓
+                ontology,
 
-        rank_candidates()
+                sentence,
 
-        """
+            )
 
-        candidates = self.lookup_all(
+            candidates.extend(
 
-            ontology,
+                fuzzy_candidates
 
-            sentence,
+            )
+
+        ############################################################
+        # Remove overlaps and duplicates
+        ############################################################
+
+        candidates = self.overlap_resolver.clean(
+
+            candidates
 
         )
 
-        candidates = self.remove_overlaps(
+        ############################################################
+        # Rank candidates
+        ############################################################
 
-            candidates,
+        candidates = self.ranker.rank(
 
-        )
-
-        candidates = self.rank_candidates(
-
-            candidates,
+            candidates
 
         )
+
+        ############################################################
 
         return candidates
+ 

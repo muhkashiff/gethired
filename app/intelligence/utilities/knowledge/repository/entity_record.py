@@ -22,6 +22,28 @@ class EntityRecord:
 
     aliases: list = field(default_factory=list)
 
+    ####################################################################
+    # Linguistic Forms
+    ####################################################################
+
+    base: str = ""
+
+    past: str = ""
+
+    gerund: str = ""
+
+    plural: str = ""
+
+    singular: str = ""
+
+    abbreviation: str = ""
+
+    short_name: str = ""
+
+    ####################################################################
+    # Classification
+    ####################################################################
+
     category: str = ""
 
     entity_type: str = ""

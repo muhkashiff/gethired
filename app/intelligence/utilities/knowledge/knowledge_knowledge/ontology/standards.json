@@ -140,7 +140,9 @@
     "aliases": [
       "BRC",
       "BRC Global Standard",
-      "BRCGS Food Safety"
+      "BRCGS Food Safety",
+      "BRCGS",
+      "brcgs"
     ],
     "category": "food_safety",
     "business_area": "food_safety"

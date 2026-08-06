@@ -21,11 +21,11 @@ class ObjectExtractor(GenericOntologyExtractor):
     # CONFIGURATION
     ####################################################################
 
-    ontology_name = "objects"
+    ontology_name = "targets"
 
     knowledge_class = ObjectKnowledge
 
-    entity_type = "object"
+    entity_type = "target"
 
     ####################################################################
     # OBJECT SPECIFIC FIELDS

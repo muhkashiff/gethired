@@ -32,87 +32,98 @@ class MetricExtractor(GenericOntologyExtractor):
     ####################################################################
 
     def extra_fields(
-
         self,
-
         entity,
-
         metadata,
-
     ):
 
         return {
 
-            "preferred_direction": metadata.get(
+            ########################################################
+            # Metric Definition
+            ########################################################
 
-                "preferred_direction",
-
-                ""
-
+            "metric_family": metadata.get(
+                "metric_family",
+                "",
             ),
 
-            "positive_effect": metadata.get(
-
-                "positive_effect",
-
-                ""
-
-            ),
-
-            "business_meaning": metadata.get(
-
-                "business_meaning",
-
-                ""
-
-            ),
-
-            "measurement_type": metadata.get(
-
-                "measurement_type",
-
-                ""
-
+            "metric_group": metadata.get(
+                "metric_group",
+                "",
             ),
 
             "unit": metadata.get(
-
                 "unit",
-
-                ""
-
+                "",
             ),
 
-            "polarity": metadata.get(
+            ########################################################
+            # Behaviour
+            ########################################################
 
-                "polarity",
-
-                ""
-
+            "higher_is_better": metadata.get(
+                "higher_is_better",
+                True,
             ),
 
-            "impact": metadata.get(
-
-                "impact",
-
-                0.0,
-
-            ),
-
-            "financial_driver": metadata.get(
-
-                "financial_driver",
-
+            "lower_is_better": metadata.get(
+                "lower_is_better",
                 False,
-
             ),
 
-            "operational_driver": metadata.get(
-
-                "operational_driver",
-
+            "percentage_metric": metadata.get(
+                "percentage_metric",
                 False,
-
             ),
 
+            "financial_metric": metadata.get(
+                "financial_metric",
+                False,
+            ),
+
+            "quality_metric": metadata.get(
+                "quality_metric",
+                False,
+            ),
+
+            "productivity_metric": metadata.get(
+                "productivity_metric",
+                False,
+            ),
+
+            "operational_metric": metadata.get(
+                "operational_metric",
+                False,
+            ),
+
+            ########################################################
+            # Business
+            ########################################################
+
+            "kpi": metadata.get(
+                "kpi",
+                False,
+            ),
+
+            "benchmark_available": metadata.get(
+                "benchmark_available",
+                False,
+            ),
+
+            "target_value": float(
+                metadata.get(
+                    "target_value",
+                    0.0,
+                )
+            ),
+
+            ########################################################
+            # Parsing
+            ########################################################
+
+            "measurement_expected": metadata.get(
+                "measurement_expected",
+                True,
+            ),
         }
