@@ -20,27 +20,17 @@ ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
 """
-Enterprise Confidence Test
+Enterprise Ranker Test
 
-Stage 4
-
-Pipeline
-
-Sentence
-    ↓
-Tokenizer
-    ↓
-Repository
-    ↓
-Matcher
-    ↓
-Confidence Calculator
+Stage 6
 """
 
 from app.intelligence.utilities.knowledge.repository_v5 import repository
 from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.tokenizer.tokenizer import Tokenizer
 from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.matcher import Matcher
 from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.confidence.confidence_calculator import ConfidenceCalculator
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.overlap.overlap_resolver import OverlapResolver
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.ranker.ranker import Ranker
 
 
 sentence = (
@@ -52,53 +42,37 @@ tokenizer = Tokenizer()
 
 matcher = Matcher(
 
-    repository=repository,
+    repository,
 
-    tokenizer=tokenizer,
+    tokenizer,
+
+)
+
+confidence = ConfidenceCalculator(
+
+    repository,
 
 )
 
-calculator = ConfidenceCalculator(
+resolver = OverlapResolver()
 
-    repository=repository,
-
-)
+ranker = Ranker()
 
 ############################################################
 
 matches = matcher.match(
 
-    ontology="standards",
+    "standards",
 
-    sentence=sentence,
+    sentence,
 
 )
 
-print()
+matches = confidence.score_all(matches)
 
-print("=" * 80)
+matches = resolver.resolve(matches)
 
-print("MATCHES BEFORE CONFIDENCE")
-
-print("=" * 80)
-
-print()
-
-for m in matches:
-
-    print(
-
-        f"{m.entity.entity_id:20}"
-
-        f"{m.phrase:15}"
-
-        f"{m.confidence:.3f}"
-
-    )
-
-############################################################
-
-matches = calculator.score_all(matches)
+matches = ranker.rank(matches)
 
 ############################################################
 
@@ -106,52 +80,42 @@ print()
 
 print("=" * 80)
 
-print("MATCHES AFTER CONFIDENCE")
+print("RANKED RESULTS")
 
 print("=" * 80)
 
 print()
 
-for m in matches:
+for index, match in enumerate(matches, start=1):
 
-    print("-" * 60)
+    print(f"#{index}")
+
+    print("Entity       :", match.entity.entity_id)
+
+    print("Canonical    :", match.entity.canonical)
+
+    print("Phrase       :", match.phrase)
+
+    print("Confidence   :", match.confidence)
+
+    print("Tokens       :", match.token_count)
 
     print()
 
-    print("Entity ID      :", m.entity.entity_id)
-
-    print("Canonical      :", m.entity.canonical)
-
-    print("Phrase         :", m.phrase)
-
-    print("Confidence     :", m.confidence)
-
-    print("Business Area  :", m.entity.business_area)
-
-    print("Category       :", m.entity.category)
-
-    print("Impact Weight  :", m.entity.impact_weight)
-
-    print("Characters     :", m.start_char, "-", m.end_char)
-
 ############################################################
 
-print()
+best = ranker.best(matches)
 
 print("=" * 80)
 
-print("OBJECT CHECK")
+print("BEST MATCH")
 
 print("=" * 80)
 
 print()
 
-print(type(matches[0]))
+print(best)
 
 print()
 
-print(matches[0])
-
-print()
-
-print("Confidence PASS")
+print("Ranker PASS")
