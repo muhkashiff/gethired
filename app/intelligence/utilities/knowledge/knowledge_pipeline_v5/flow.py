@@ -32,4 +32,30 @@ knowledge_pipeline_v5/
     ├── test_ranker.py
     └── test_standard_extractor.py
 
+    Sentence
+      │
+      ▼
+Tokenizer
+      │
+      ▼
+Repository
+      │
+      ▼
+Matcher
+      │
+      ▼
+Confidence
+      │
+      ▼
+Overlap Resolver
+      │
+      ▼
+Ranker
+      │
+      ▼
+KnowledgeV5Pipeline
+      │
+      ▼
+List[MatchResult]
+
 """

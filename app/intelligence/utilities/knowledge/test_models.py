@@ -20,102 +20,126 @@ ROOT = Path(__file__).resolve().parents[4]
 sys.path.append(str(ROOT))
 
 """
-Enterprise Ranker Test
+Enterprise Knowledge Pipeline Test
+Enterprise V5
 
-Stage 6
+Tests complete pipeline:
+
+Sentence
+    ↓
+Tokenizer
+    ↓
+Repository
+    ↓
+Matcher
+    ↓
+Confidence
+    ↓
+Overlap
+    ↓
+Ranker
 """
 
-from app.intelligence.utilities.knowledge.repository_v5 import repository
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.tokenizer.tokenizer import Tokenizer
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.matcher import Matcher
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.confidence.confidence_calculator import ConfidenceCalculator
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.overlap.overlap_resolver import OverlapResolver
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.ranker.ranker import Ranker
+import os
+import sys
 
+ROOT = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__),
+        "../../../../../../..",
+    )
+)
+
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
+    KnowledgeV5Pipeline,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.match_result import (
+    MatchResult,
+)
+
+
+pipeline = KnowledgeV5Pipeline()
 
 sentence = (
-    "Implemented ISO 9001 and FSSC22000 requirements "
-    "using HACCP GMP and BRCGS standards."
+    "Implemented ISO 9001 and "
+    "FSSC22000 requirements using "
+    "HACCP GMP and BRCGS standards."
 )
 
-tokenizer = Tokenizer()
+print("=" * 80)
+print("PIPELINE TEST")
+print("=" * 80)
 
-matcher = Matcher(
+matches = pipeline.run(
 
-    repository,
+    ontology="standards",
 
-    tokenizer,
-
-)
-
-confidence = ConfidenceCalculator(
-
-    repository,
+    sentence=sentence,
 
 )
-
-resolver = OverlapResolver()
-
-ranker = Ranker()
-
-############################################################
-
-matches = matcher.match(
-
-    "standards",
-
-    sentence,
-
-)
-
-matches = confidence.score_all(matches)
-
-matches = resolver.resolve(matches)
-
-matches = ranker.rank(matches)
-
-############################################################
 
 print()
 
-print("=" * 80)
-
-print("RANKED RESULTS")
-
-print("=" * 80)
+print(f"Matches Found : {len(matches)}")
 
 print()
 
-for index, match in enumerate(matches, start=1):
+assert isinstance(matches, list)
 
-    print(f"#{index}")
+assert len(matches) >= 5
 
-    print("Entity       :", match.entity.entity_id)
+for i, match in enumerate(matches, start=1):
 
-    print("Canonical    :", match.entity.canonical)
+    print("-" * 60)
 
-    print("Phrase       :", match.phrase)
-
-    print("Confidence   :", match.confidence)
-
-    print("Tokens       :", match.token_count)
+    print(f"Match #{i}")
 
     print()
 
-############################################################
+    print("Entity ID      :", match.entity.entity_id)
 
-best = ranker.best(matches)
+    print("Canonical      :", match.entity.canonical)
+
+    print("Phrase         :", match.phrase)
+
+    print("Confidence     :", round(match.confidence, 3))
+
+    print("Token Index    :", match.token_index)
+
+    print("Token Count    :", match.token_count)
+
+    print("Characters     :", match.start_char, "-", match.end_char)
+
+    print("Alias Match    :", match.is_alias)
+
+    print()
+
+    assert isinstance(match, MatchResult)
 
 print("=" * 80)
-
 print("BEST MATCH")
-
 print("=" * 80)
+
+best = pipeline.best(
+
+    ontology="standards",
+
+    sentence=sentence,
+
+)
 
 print()
 
 print(best)
 
+assert isinstance(best, MatchResult)
+
+assert best.entity.entity_id == "STD_ISO_9001"
+
 print()
 
-print("Ranker PASS")
+print("KnowledgeV5Pipeline PASS")

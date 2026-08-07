@@ -1,46 +1,21 @@
 """
-Enterprise Generic Ontology Extractor
+Enterprise Base Extractor
+Enterprise V5
 
-All ontology extractors inherit from this class.
+Only responsibility:
 
-Supported ontologies
+MatchResult  ---> Knowledge Object
 
-- actions
-- targets
-- metrics
-- standards
-- methodologies
-- technologies
-- certifications
-- skills
-
-Enterprise V4
+Pipeline is completely independent.
 """
 
 from abc import ABC
+from abc import abstractmethod
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.base_extractor import (
-    BaseExtractor,
-)
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.match_result import MatchResult
 
 
-class GenericOntologyExtractor(
-
-    BaseExtractor,
-
-    ABC,
-
-):
-
-    ####################################################################
-    # MUST BE OVERRIDDEN
-    ####################################################################
-
-    ontology_name = ""
-
-    knowledge_class = None
-
-    entity_type = ""
+class BaseExtractor(ABC):
 
     ####################################################################
     # INITIALIZATION
@@ -50,16 +25,117 @@ class GenericOntologyExtractor(
 
         self,
 
-        repository=None,
+        pipeline,
 
     ):
 
-        super().__init__(repository)
+        self.pipeline = pipeline
 
     ####################################################################
-    # BACKWARD COMPATIBLE
+    # PARSER CONTEXT
     ####################################################################
 
+    def build_parser_context(
+
+        self,
+
+        verb=False,
+
+        obj=False,
+
+        metric=False,
+
+        modifier=False,
+
+        numeric=False,
+
+        domain=False,
+
+    ):
+
+        return {
+
+            "verb_found": verb,
+
+            "object_found": obj,
+
+            "metric_found": metric,
+
+            "modifier_found": modifier,
+
+            "numeric_value": numeric,
+
+            "domain_found": domain,
+
+        }
+
+    ####################################################################
+    # POPULATE SHARED FIELDS
+    ####################################################################
+
+    def populate_entity(
+
+        self,
+
+        model,
+
+        match: MatchResult,
+
+    ):
+
+        entity = match.entity
+
+        model.found = True
+
+        model.confidence = match.confidence
+
+        model.original = match.phrase
+
+        model.matched_phrase = match.phrase
+
+        model.canonical = entity.canonical
+
+        model.normalized = entity.normalized
+
+        model.entity_id = entity.entity_id
+
+        model.entity_type = entity.entity_type
+
+        model.category = entity.category
+
+        model.business_area = entity.business_area
+
+        model.domain = entity.domain
+
+        model.description = entity.description
+
+        model.impact_weight = entity.impact_weight
+
+        model.source = entity.source
+
+        model.metadata = entity.metadata
+
+        model.matched_alias = match.matched_alias
+
+        model.is_alias = match.is_alias
+
+        model.start_char = match.start_char
+
+        model.end_char = match.end_char
+
+        model.token_index = match.token_index
+
+        model.token_count = match.token_count
+
+        model.sentence_index = 0
+
+        return model
+
+    ####################################################################
+    # ABSTRACT
+    ####################################################################
+
+    @abstractmethod
     def extract(
 
         self,
@@ -68,121 +144,4 @@ class GenericOntologyExtractor(
 
     ):
 
-        entities = self.extract_all(
-
-            sentence
-
-        )
-
-        if entities:
-
-            return entities[0]
-
-        return self.knowledge_class()
-
-    ####################################################################
-    # MAIN
-    ####################################################################
-
-    def extract_all(
-
-        self,
-
-        sentence,
-
-    ):
-
-        candidates = self.extract_candidates(
-
-            ontology=self.ontology_name,
-
-            sentence=sentence,
-
-        )
-
-        print("\n===== CANDIDATES RECEIVED =====")
-
-        print(len(candidates))
-
-        for c in candidates:
-            print(
-                c["entity"].entity_id,
-                c["phrase"]
-            )
-
-        results = []
-
-        for candidate in candidates:
-
-            entity = candidate["entity"]
-
-            metadata = entity.metadata
-
-            obj = self.knowledge_class()
-
-            # Populate all common ontology fields
-            obj = self.populate_entity(
-
-                obj,
-
-                candidate,
-
-            )
-
-            # Populate ontology-specific fields
-            extras = self.extra_fields(
-
-                entity,
-
-                metadata,
-
-            )
-
-            for key, value in extras.items():
-
-                setattr(obj, key, value)
-
-            results.append(obj)
-
-        
-        return results
-
-    ####################################################################
-    # TO BE OVERRIDDEN
-    ####################################################################
-
-    def extra_fields(
-
-        self,
-
-        entity,
-
-        metadata,
-
-        ):
-
-        """
-        Child extractors override this.
-
-        Return only ontology-specific fields.
-
-        Example
-
-        Action
-
-            base
-            gerund
-
-        Standard
-
-            publisher
-            version
-
-        Metric
-
-            preferred_direction
-            business_meaning
-
-        """
-
-        return {}
+        pass

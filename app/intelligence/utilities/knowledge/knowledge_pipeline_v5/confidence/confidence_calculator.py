@@ -35,9 +35,9 @@ class ConfidenceCalculator:
 
         repository,
 
-    ):
+        ):
 
-        self.repository = repository
+        self.repository = repository 
 
     ####################################################################
     # SCORE SINGLE MATCH

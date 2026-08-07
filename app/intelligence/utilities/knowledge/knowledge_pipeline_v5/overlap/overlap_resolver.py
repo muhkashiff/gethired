@@ -1,5 +1,6 @@
 """
 Enterprise Overlap Resolver
+Enterprise V5
 
 Stage 5
 
@@ -20,11 +21,14 @@ Output
 list[MatchResult]
 """
 
+
 class OverlapResolver:
 
     ############################################################
+    # CLEAN OVERLAPS
+    ############################################################
 
-    def resolve(
+    def clean(
 
         self,
 
@@ -42,15 +46,13 @@ class OverlapResolver:
 
             matches,
 
-            key=lambda m:
+            key=lambda m: (
 
-            (
-
-                -(m.token_count),
+                -m.token_count,
 
                 -m.confidence,
 
-            )
+            ),
 
         )
 
@@ -72,9 +74,7 @@ class OverlapResolver:
 
                 match.token_index,
 
-                match.token_index +
-
-                match.token_count,
+                match.token_index + match.token_count,
 
             ):
 
@@ -92,11 +92,7 @@ class OverlapResolver:
 
             ####################################################
 
-            accepted.append(
-
-                match
-
-            )
+            accepted.append(match)
 
             ####################################################
 
@@ -104,25 +100,17 @@ class OverlapResolver:
 
                 match.token_index,
 
-                match.token_index +
-
-                match.token_count,
+                match.token_index + match.token_count,
 
             ):
 
-                occupied.add(
-
-                    token
-
-                )
+                occupied.add(token)
 
         ########################################################
 
         accepted.sort(
 
-            key=lambda m:
-
-            m.token_index
+            key=lambda m: m.token_index
 
         )
 
