@@ -1,6 +1,6 @@
 {
   "lean manufacturing": {
-    "entity_id": "METH_LEAN",
+    "entity_id": "METH_LEAN_MANUFACTURING",
     "canonical": "Lean Manufacturing",
     "aliases": [
       "Lean",
@@ -54,6 +54,36 @@
     ],
     "impact_weight": 0.99
   },
+  "fmea": {
+  "entity_id": "METH_FMEA",
+  "canonical": "FMEA",
+  "aliases": [
+    "Failure Mode and Effects Analysis",
+    "Failure Modes and Effects Analysis",
+    "Failure Mode Effects Analysis"
+  ],
+  "category": "risk_management",
+  "business_area": "quality",
+  "description": "Systematic risk analysis methodology for identifying potential failure modes, evaluating their effects and causes, and prioritizing actions to reduce process or product risks.",
+  "related_domains": [
+    "quality",
+    "risk_management",
+    "continuous_improvement"
+  ],
+  "related_standards": [
+    "ISO 9001",
+    "IATF 16949"
+  ],
+  "related_kpis": [
+    "Risk Priority Number",
+    "RPN",
+    "Severity",
+    "Occurrence",
+    "Detection",
+    "Action Priority"
+  ],
+  "impact_weight": 0.98
+},
 
   "dmaic": {
     "entity_id": "METH_DMAIC",
@@ -107,10 +137,11 @@
 
   "pdca": {
     "entity_id": "METH_PDCA",
-    "canonical": "Plan Do Check Act",
+    "canonical": "PDCA",
     "aliases": [
       "Deming Cycle",
-      "PDCA Cycle"
+      "PDCA Cycle",
+      "Plan Do Check Act"
     ],
     "category": "continuous_improvement",
     "business_area": "management",
@@ -132,31 +163,39 @@
   },
 
   "5s": {
-    "entity_id": "METH_5S",
-    "canonical": "5S Workplace Organization",
-    "aliases": [
-      "5S",
-      "Five S"
-    ],
-    "category": "workplace_organization",
-    "business_area": "operations",
-    "description": "Methodology for workplace organization and visual management.",
-    "related_domains": [
-      "operations",
-      "manufacturing"
-    ],
-    "related_standards": [
-      "ISO 9001",
-      "GMP"
-    ],
-    "related_kpis": [
-      "Productivity",
-      "Safety",
-      "Audit Score"
-    ],
-    "impact_weight": 0.93
-  },
-
+  "entity_id": "METH_5S",
+  "canonical": "5S",
+  "aliases": [
+    "5 S",
+    "5S Methodology",
+    "5S System",
+    "Five S",
+    "5S Workplace Organization"
+  ],
+  "category": "continuous_improvement",
+  "business_area": "quality",
+  "description": "A workplace organization and continuous improvement methodology based on Sort, Set in Order, Shine, Standardize, and Sustain.",
+  "related_domains": [
+    "quality",
+    "continuous_improvement",
+    "lean",
+    "workplace_organization"
+  ],
+  "related_standards": [
+    "ISO 9001",
+    "ISO 14001",
+    "ISO 45001"
+  ],
+  "related_kpis": [
+    "Workplace Organization Score",
+    "5S Audit Score",
+    "Housekeeping Compliance",
+    "Waste Reduction",
+    "Productivity",
+    "Safety Incidents"
+  ],
+  "impact_weight": 0.90
+},
   "gemba": {
     "entity_id": "METH_GEMBA",
     "canonical": "Gemba Walk",
@@ -225,6 +264,38 @@
     "preferred_direction": "improvement",
     "impact_weight": 0.95
   },
+  "root cause analysis": {
+  "entity_id": "METH_ROOT_CAUSE_ANALYSIS",
+  "canonical": "Root Cause Analysis",
+  "aliases": [
+    "RCA",
+    "Root-Cause Analysis",
+    "Root Cause",
+    "Cause Analysis"
+  ],
+  "category": "problem_solving",
+  "business_area": "quality",
+  "description": "A systematic problem-solving methodology used to identify and eliminate the underlying causes of problems, defects, failures, and nonconformities.",
+  "related_domains": [
+    "quality",
+    "problem_solving",
+    "continuous_improvement",
+    "risk_management"
+  ],
+  "related_standards": [
+    "ISO 9001",
+    "ISO 22000",
+    "BRCGS"
+  ],
+  "related_kpis": [
+    "Corrective Action Effectiveness",
+    "Repeat Nonconformities",
+    "Defect Rate",
+    "Customer Complaints",
+    "CAPA Closure Rate"
+  ],
+  "impact_weight": 0.95
+},
 
   "control plan": {
     "entity_id": "METH_CONTROL_PLAN",
@@ -252,6 +323,16 @@
     "entity_id": "METH_HAZARD_ANALYSIS",
     "canonical": "Hazard Analysis",
     "aliases": [],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Systematic identification of food safety hazards.",
+    "preferred_direction": "improvement",
+    "impact_weight": 0.97
+  },
+  "haccp": {
+    "entity_id": "METH_HACCP",
+    "canonical": "HACCP",
+    "aliases": ["HACCP","hazard analysis and critical control point"],
     "category": "food_safety",
     "business_area": "food_safety",
     "description": "Systematic identification of food safety hazards.",
@@ -596,6 +677,40 @@
       "operations"
     ]
   },
+  "statistical process control": {
+  "entity_id": "METH_SPC",
+  "canonical": "Statistical Process Control",
+  "aliases": [
+    "SPC",
+    "Statistical Process Control (SPC)",
+    "Statistical Quality Control",
+    "SQC"
+  ],
+  "category": "statistical",
+  "business_area": "quality",
+  "description": "Statistical methodology for monitoring, controlling, and improving process performance through the analysis of process variation and control charts.",
+  "related_domains": [
+    "quality",
+    "statistical_analysis",
+    "process_control",
+    "continuous_improvement"
+  ],
+  "related_standards": [
+    "ISO 9001",
+    "IATF 16949"
+  ],
+  "related_kpis": [
+    "Cp",
+    "Cpk",
+    "Pp",
+    "Ppk",
+    "Defect Rate",
+    "Process Capability",
+    "Process Variation",
+    "Out-of-Control Rate"
+  ],
+  "impact_weight": 0.98
+},
 
   "measurement system analysis": {
     "entity_id": "METH_MSA",

@@ -1,41 +1,35 @@
 """
-Enterprise Reusable Knowledge Extractor Test
+Enterprise Methodology Extractor Test
 Enterprise V5
 
 Purpose
 -------
-Generic test harness for ontology extractors.
+Validate the complete methodology extraction flow:
 
-Flow:
-
-Repository
-    ↓
-KnowledgeV5Pipeline
-    ↓
-Extractor
+Sentence
     ↓
 ExtractionRequest
     ↓
+MethodologyExtractor
+    ↓
+KnowledgeV5Pipeline
+    ↓
 ExtractionResult
     ↓
-Knowledge Objects
+MethodologyKnowledge objects
 
-This test is intentionally reusable.
+Important
+---------
+This test does NOT call pipeline.match().
 
-To test another extractor, change:
-
-    EXTRACTOR_CLASS
-    ENTITY_CLASS
-    ONTOLOGY
-    ENTITY_TYPE
-    TEST_CASES
+KnowledgeV5Pipeline does not expose a public match()
+method. The extractor is the public extraction interface.
 """
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any
 
 
 # ============================================================================
@@ -60,30 +54,17 @@ from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipe
     KnowledgeV5Pipeline,
 )
 
+from app.intelligence.utilities.knowledge.knowledge_extractors.methodology_extractor import (
+    MethodologyExtractor,
+)
+
 from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
     ExtractionRequest,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.technology_extractor import (
-    TechnologyExtractor,
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.methodology_models import (
+    MethodologyKnowledge,
 )
-
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.technology_models import (
-    Technology,
-)
-
-
-# ============================================================================
-# CONFIGURATION
-# ============================================================================
-
-ONTOLOGY = "technologies"
-
-ENTITY_TYPE = "technologie"
-
-EXTRACTOR_CLASS = TechnologyExtractor
-
-ENTITY_CLASS = Technology
 
 
 # ============================================================================
@@ -93,451 +74,352 @@ ENTITY_CLASS = Technology
 TEST_CASES = [
 
     # ------------------------------------------------------------------------
-    # CANONICAL TECHNOLOGIES
+    # CANONICAL
     # ------------------------------------------------------------------------
 
-    {
-        "sentence": "Demonstrated strong experience in Python.",
-        "expected": {
-            "TECH_PYTHON",
-        },
-    },
+    (
+        "Demonstrated experience with HACCP.",
+        "HACCP",
+        "METH_HACCP",
+    ),
 
-    {
-        "sentence": "Demonstrated strong experience in SQL.",
-        "expected": {
-            "TECH_SQL",
-        },
-    },
+    (
+        "Experienced in DMAIC methodology.",
+        "DMAIC",
+        "METH_DMAIC",
+    ),
 
-    {
-        "sentence": "Demonstrated strong experience in PostgreSQL.",
-        "expected": {
-            "TECH_POSTGRESQL",
-        },
-    },
+    (
+        "Applied PDCA for continuous improvement.",
+        "PDCA",
+        "METH_PDCA",
+    ),
 
-    {
-        "sentence": "Demonstrated strong experience in Tableau.",
-        "expected": {
-            "TECH_TABLEAU",
-        },
-    },
+    (
+        "Experienced with Six Sigma.",
+        "Six Sigma",
+        "METH_SIX_SIGMA",
+    ),
 
-    {
-        "sentence": "Demonstrated strong experience in Docker.",
-        "expected": {
-            "TECH_DOCKER",
-        },
-    },
+    (
+        "Implemented Lean Manufacturing.",
+        "Lean Manufacturing",
+        "METH_LEAN_MANUFACTURING",
+    ),
 
-    {
-        "sentence": "Demonstrated strong experience in Power BI.",
-        "expected": {
-            "TECH_POWER_BI",
-        },
-    },
+    (
+        "Applied 5S methodology.",
+        "5S",
+        "METH_5S",
+    ),
 
-    {
-        "sentence": "Demonstrated strong experience in Excel.",
-        "expected": {
-            "TECH_EXCEL",
-        },
-    },
+    (
+        "Experienced in Root Cause Analysis.",
+        "Root Cause Analysis",
+        "METH_ROOT_CAUSE_ANALYSIS",
+    ),
 
-    {
-        "sentence": "Demonstrated strong experience in Azure.",
-        "expected": {
-            "TECH_AZURE",
-        },
-    },
+    (
+        "Applied Kaizen principles.",
+        "Kaizen",
+        "METH_KAIZEN",
+    ),
 
+    (
+        "Experienced in FMEA.",
+        "FMEA",
+        "METH_FMEA",
+    ),
 
-    # ------------------------------------------------------------------------
-    # ALIASES
-    # ------------------------------------------------------------------------
-
-    {
-        "sentence": "Experienced in python programming.",
-        "expected": {
-            "TECH_PYTHON",
-        },
-    },
-
-    {
-        "sentence": "Created dashboards using powerbi.",
-        "expected": {
-            "TECH_POWER_BI",
-        },
-    },
-
-    {
-        "sentence": "Advanced knowledge of ms excel.",
-        "expected": {
-            "TECH_EXCEL",
-        },
-    },
-
-    {
-        "sentence": "Experienced with postgres databases.",
-        "expected": {
-            "TECH_POSTGRESQL",
-        },
-    },
-
-    {
-        "sentence": "Experienced with sql server.",
-        "expected": {
-            "TECH_SQLSERVER",
-        },
-    },
-
-    {
-        "sentence": "Experienced with mssql.",
-        "expected": {
-            "TECH_SQLSERVER",
-        },
-    },
-
+    (
+        "Used Statistical Process Control.",
+        "Statistical Process Control",
+        "METH_SPC",
+    ),
 
     # ------------------------------------------------------------------------
-    # OTHER TECHNOLOGIES
+    # MULTIPLE
     # ------------------------------------------------------------------------
 
-    {
-        "sentence": "Developed APIs using FastAPI.",
-        "expected": {
-            "TECH_FASTAPI",
-        },
-    },
-
-    {
-        "sentence": "Built web applications using Flask.",
-        "expected": {
-            "TECH_FLASK",
-        },
-    },
-
-    {
-        "sentence": "Performed data analysis using Pandas.",
-        "expected": {
-            "TECH_PANDAS",
-        },
-    },
-
-    {
-        "sentence": "Performed numerical analysis using NumPy.",
-        "expected": {
-            "TECH_NUMPY",
-        },
-    },
-
-    {
-        "sentence": "Maintained projects on GitHub.",
-        "expected": {
-            "TECH_GITHUB",
-        },
-    },
-
-    {
-        "sentence": "Used Jupyter Notebook for data analysis.",
-        "expected": {
-            "TECH_JUPYTER",
-        },
-    },
-
-
-    # ------------------------------------------------------------------------
-    # MULTIPLE ENTITIES
-    # ------------------------------------------------------------------------
-
-    {
-        "sentence": (
-            "Experienced with Python, PostgreSQL, "
-            "Docker and Power BI."
-        ),
-        "expected": {
-            "TECH_PYTHON",
-            "TECH_POSTGRESQL",
-            "TECH_DOCKER",
-            "TECH_POWER_BI",
-        },
-    },
+    (
+        "Experienced with HACCP, FMEA, Six Sigma and Kaizen.",
+        None,
+        None,
+    ),
 ]
-
-
-# ============================================================================
-# DISPLAY HELPERS
-# ============================================================================
-
-def print_header(title: str) -> None:
-
-    print()
-    print("=" * 80)
-    print(title)
-    print("=" * 80)
-
-
-def print_entity(entity: Any) -> None:
-
-    print(
-        f"  - "
-        f"{getattr(entity, 'canonical', '')} "
-        f"[{getattr(entity, 'entity_id', '')}] "
-        f"phrase={getattr(entity, 'matched_phrase', '')!r} "
-        f"confidence={getattr(entity, 'confidence', None)} "
-        f"alias={getattr(entity, 'is_alias', None)}"
-    )
 
 
 # ============================================================================
 # RESULT NORMALIZATION
 # ============================================================================
 
-def get_entities(result: Any) -> list[Any]:
-    """
-    Normalize ExtractionResult into a list of knowledge entities.
-
-    Expected Enterprise V5 structure:
-
-        ExtractionResult.entities
-
-    This helper also supports lists for defensive compatibility.
-    """
+def get_methodology_objects(result):
 
     if result is None:
         return []
 
-    # Enterprise ExtractionResult
     if hasattr(result, "entities"):
+        return list(result.entities)
 
-        entities = result.entities
-
-        if entities is None:
-            return []
-
-        return list(entities)
-
-    # Plain list
     if isinstance(result, list):
         return result
 
-    # Tuple
-    if isinstance(result, tuple):
-        return list(result)
+    if hasattr(result, "results"):
+        return list(result.results)
 
-    # Single entity fallback
-    if isinstance(result, ENTITY_CLASS):
-        return [result]
-
-    return []
+    return [result]
 
 
 # ============================================================================
-# VALIDATE KNOWLEDGE OBJECT
+# PRINT OBJECT
 # ============================================================================
 
-def validate_entity(entity: Any) -> list[str]:
-    """
-    Validate the common extractor contract.
+def print_methodology(item: MethodologyKnowledge):
 
-    Returns a list of errors.
-    """
-
-    errors: list[str] = []
-
-    if not isinstance(entity, ENTITY_CLASS):
-
-        errors.append(
-            f"wrong object type: {type(entity)}"
-        )
-
-        return errors
-
-    if not getattr(entity, "found", False):
-
-        errors.append(
-            "found != True"
-        )
-
-    if not getattr(entity, "entity_id", None):
-
-        errors.append(
-            "entity_id is empty"
-        )
-
-    if not getattr(entity, "canonical", None):
-
-        errors.append(
-            "canonical is empty"
-        )
-
-    if not getattr(entity, "matched_phrase", None):
-
-        errors.append(
-            "matched_phrase is empty"
-        )
-
-    confidence = getattr(
-        entity,
+    fields = [
+        "found",
         "confidence",
-        None,
-    )
+        "original",
+        "matched_phrase",
+        "canonical",
+        "normalized",
+        "entity_id",
+        "entity_type",
+        "ontology_name",
+        "category",
+        "business_area",
+        "domain",
+        "description",
+        "impact_weight",
+        "source",
+        "matched_alias",
+        "is_alias",
+        "methodology_family",
+        "methodology_group",
+        "version",
+        "continuous_improvement",
+        "quality_management",
+        "food_safety",
+        "risk_management",
+        "analytical",
+        "problem_solving",
+        "statistical",
+        "certification_related",
+        "implementation_required",
+        "maturity_level",
+        "graph_node",
+        "ats_weight",
+    ]
 
-    if confidence is None:
+    print()
+    print("METHODOLOGY OBJECT")
+    print("-" * 80)
 
-        errors.append(
-            "confidence is None"
+    for field_name in fields:
+
+        value = getattr(
+            item,
+            field_name,
+            None,
         )
 
-    elif not 0.0 <= confidence <= 1.0:
-
-        errors.append(
-            f"invalid confidence: {confidence}"
+        print(
+            f"{field_name:<30} = {value!r}"
         )
-
-    return errors
 
 
 # ============================================================================
-# DIRECT PIPELINE TEST
+# MAIN
 # ============================================================================
 
-def test_pipeline(
-    pipeline: KnowledgeV5Pipeline,
-) -> bool:
+def main():
 
-    print_header(
-        "DIRECT PIPELINE TEST"
+    print()
+    print("=" * 80)
+    print("ENTERPRISE METHODOLOGY EXTRACTOR TEST")
+    print("=" * 80)
+
+    print()
+    print("Starting test_models.py...")
+
+    # ========================================================================
+    # 1. REPOSITORY
+    # ========================================================================
+
+    print()
+    print("1. Loading repository...")
+
+    repository = Repository()
+
+    print(
+        "   ✅ Repository loaded"
     )
 
-    sentence = (
-        "Demonstrated strong experience in Python."
+    entities = repository.cache.entity_indexes.get(
+        "methodologies",
+        {},
+    )
+
+    print()
+    print("Ontology:")
+    print("methodologies")
+
+    print()
+    print("Total entities:")
+    print(len(entities))
+
+    # ========================================================================
+    # 2. ENTITY TYPE
+    # ========================================================================
+
+    print()
+    print("2. Checking repository entity type...")
+
+    entity_types = sorted(
+        {
+            getattr(
+                entity,
+                "entity_type",
+                None,
+            )
+            for entity in entities.values()
+            if getattr(
+                entity,
+                "entity_type",
+                None,
+            )
+        }
+    )
+
+    print(
+        f"   Loaded entity types: {entity_types}"
+    )
+
+    if entity_types:
+
+        print(
+            f"   ✅ Repository entity type detected: "
+            f"{entity_types}"
+        )
+
+    else:
+
+        print(
+            "   ❌ No repository entity type found."
+        )
+
+    # ========================================================================
+    # 3. PIPELINE
+    # ========================================================================
+
+    print()
+    print("3. Creating KnowledgeV5Pipeline...")
+
+    pipeline = KnowledgeV5Pipeline(
+        repository_instance=repository,
+    )
+
+    print(
+        "   ✅ Pipeline created"
+    )
+
+    # ========================================================================
+    # 4. EXTRACTOR
+    # ========================================================================
+
+    print()
+    print("4. Creating MethodologyExtractor...")
+
+    extractor = MethodologyExtractor(
+        pipeline=pipeline,
+    )
+
+    print(
+        "   ✅ Extractor created"
     )
 
     print()
     print(
-        f"Sentence: {sentence}"
+        f"Extractor ontology    = "
+        f"{extractor.ontology_name}"
     )
-
-    try:
-
-        matches = pipeline.run(
-            ONTOLOGY,
-            sentence,
-        )
-
-    except Exception as error:
-
-        print()
-        print("❌ PIPELINE ERROR")
-
-        print(
-            f"{type(error).__name__}: {error}"
-        )
-
-        return False
 
     print(
-        f"Pipeline matches: {len(matches)}"
+        f"Extractor entity type = "
+        f"{extractor.entity_type}"
     )
 
-    if not matches:
+    # ========================================================================
+    # 5. ENTITY TYPE CHECK
+    # ========================================================================
+
+    if (
+        entity_types
+        and extractor.entity_type not in entity_types
+    ):
 
         print()
         print(
-            "❌ PIPELINE FAILED: "
-            "No matches produced."
+            "⚠️ WARNING"
         )
 
-        return False
+        print(
+            "Extractor entity type is not present "
+            "in repository entity types."
+        )
 
-    for match in matches:
+        print(
+            f"Extractor: "
+            f"{extractor.entity_type}"
+        )
+
+        print(
+            f"Repository: "
+            f"{entity_types}"
+        )
+
+    else:
 
         print()
         print(
-            f"phrase        = "
-            f"{match.phrase!r}"
+            "✅ Extractor entity type matches repository."
         )
 
-        print(
-            f"canonical     = "
-            f"{match.entity.canonical}"
-        )
-
-        print(
-            f"entity_id     = "
-            f"{match.entity.entity_id}"
-        )
-
-        print(
-            f"entity_type   = "
-            f"{match.entity.entity_type}"
-        )
-
-        print(
-            f"confidence    = "
-            f"{match.confidence}"
-        )
-
-        print(
-            f"matched_alias = "
-            f"{match.matched_alias!r}"
-        )
-
-        print(
-            f"is_alias      = "
-            f"{match.is_alias}"
-        )
+    # ========================================================================
+    # 6. TESTS
+    # ========================================================================
 
     print()
-    print(
-        "✅ PIPELINE WORKS"
-    )
+    print("5. METHODOLOGY EXTRACTION TESTS")
 
-    return True
-
-
-# ============================================================================
-# EXTRACTOR TEST
-# ============================================================================
-
-def test_extractor(
-    extractor: Any,
-) -> tuple[int, int]:
-
-    print_header(
-        "EXTRACTOR TESTS"
-    )
+    print()
+    print("=" * 80)
 
     passed = 0
     failed = 0
 
-    for index, test_case in enumerate(
-        TEST_CASES,
-        start=1,
-    ):
-
-        sentence = test_case["sentence"]
-
-        expected_ids = set(
-            test_case["expected"]
-        )
+    for test_number, (
+        sentence,
+        expected_canonical,
+        expected_entity_id,
+    ) in enumerate(TEST_CASES, start=1):
 
         print()
         print(
-            f"TEST #{index}"
+            f"TEST #{test_number}"
         )
 
         print(
             f"SENTENCE: {sentence}"
         )
 
+        print()
+
         try:
 
-            # --------------------------------------------------------------
+            # ----------------------------------------------------------------
             # REQUEST
-            # --------------------------------------------------------------
+            # ----------------------------------------------------------------
 
             request = ExtractionRequest(
                 sentence=sentence,
@@ -546,154 +428,332 @@ def test_extractor(
                 },
             )
 
-            # --------------------------------------------------------------
-            # EXTRACTION
-            # --------------------------------------------------------------
+            # ----------------------------------------------------------------
+            # EXTRACT
+            # ----------------------------------------------------------------
 
             result = extractor.extract(
                 request
             )
 
-            print()
             print(
-                f"Raw result: {result!r}"
+                f"Raw result: {result}"
             )
 
             print(
-                f"Result type: {type(result)}"
+                f"Result type: "
+                f"{type(result)}"
             )
 
-            # --------------------------------------------------------------
-            # NORMALIZE
-            # --------------------------------------------------------------
+            # ----------------------------------------------------------------
+            # GET ENTITIES
+            # ----------------------------------------------------------------
 
-            entities = get_entities(
+            methodologies = get_methodology_objects(
                 result
             )
 
             print(
-                f"Knowledge objects: "
-                f"{len(entities)}"
+                f"Methodology objects: "
+                f"{len(methodologies)}"
             )
 
-            # --------------------------------------------------------------
-            # ACTUAL IDs
-            # --------------------------------------------------------------
+            # ----------------------------------------------------------------
+            # MULTIPLE TEST
+            # ----------------------------------------------------------------
 
-            actual_ids = {
-                getattr(
-                    entity,
-                    "entity_id",
-                    None,
-                )
-                for entity in entities
-            }
+            if expected_entity_id is None:
 
-            actual_ids.discard(None)
+                expected_ids = {
+                    "METH_HACCP",
+                    "METH_FMEA",
+                    "METH_SIX_SIGMA",
+                    "METH_KAIZEN",
+                }
 
-            # --------------------------------------------------------------
-            # MISSING
-            # --------------------------------------------------------------
+                actual_ids = {
+                    getattr(
+                        item,
+                        "entity_id",
+                        None,
+                    )
+                    for item in methodologies
+                }
 
-            missing = (
-                expected_ids - actual_ids
-            )
-
-            # --------------------------------------------------------------
-            # UNEXPECTED
-            # --------------------------------------------------------------
-
-            unexpected = (
-                actual_ids - expected_ids
-            )
-
-            # --------------------------------------------------------------
-            # VALIDATE
-            # --------------------------------------------------------------
-
-            validation_errors = []
-
-            for entity in entities:
-
-                validation_errors.extend(
-                    validate_entity(entity)
+                missing = (
+                    expected_ids
+                    - actual_ids
                 )
 
-            # --------------------------------------------------------------
-            # RESULT
-            # --------------------------------------------------------------
+                if not missing:
 
-            if (
-                not missing
-                and not validation_errors
-            ):
-
-                print()
-                print(
-                    "RESULT: ✅ PASS"
-                )
-
-                for entity in entities:
-
-                    print_entity(
-                        entity
+                    print()
+                    print(
+                        "RESULT: ✅ PASS"
                     )
 
-                passed += 1
+                    for item in methodologies:
 
-            else:
+                        print(
+                            f"- "
+                            f"{getattr(item, 'canonical', '')}"
+                            f" "
+                            f"[{getattr(item, 'entity_id', '')}]"
+                            f" "
+                            f"phrase="
+                            f"{getattr(item, 'matched_phrase', '')!r}"
+                            f" "
+                            f"confidence="
+                            f"{getattr(item, 'confidence', None)}"
+                        )
 
-                print()
-                print(
-                    "RESULT: ❌ FAIL"
-                )
+                    passed += 1
 
-                if missing:
+                else:
+
+                    print()
+                    print(
+                        "RESULT: ❌ FAIL"
+                    )
 
                     print(
                         f"Missing: "
                         f"{sorted(missing)}"
                     )
 
-                if unexpected:
-
+                    print()
                     print(
-                        f"Unexpected: "
-                        f"{sorted(unexpected)}"
+                        "Actual entities:"
                     )
 
-                if validation_errors:
-
-                    print(
-                        "Validation errors:"
-                    )
-
-                    for error in validation_errors:
+                    for item in methodologies:
 
                         print(
-                            f"  - {error}"
+                            f"- "
+                            f"{getattr(item, 'canonical', '')}"
+                            f" "
+                            f"[{getattr(item, 'entity_id', '')}]"
                         )
+
+                    failed += 1
+
+                continue
+
+            # ----------------------------------------------------------------
+            # NO RESULT
+            # ----------------------------------------------------------------
+
+            if not methodologies:
+
+                print()
+                print(
+                    "RESULT: ❌ FAIL"
+                )
+
+                print(
+                    f"Expected canonical: "
+                    f"{expected_canonical}"
+                )
+
+                print(
+                    f"Expected entity_id: "
+                    f"{expected_entity_id}"
+                )
 
                 print()
                 print(
                     "ACTUAL RESULTS:"
                 )
 
-                if entities:
+                print(
+                    "- []"
+                )
 
-                    for entity in entities:
+                failed += 1
 
-                        print_entity(
-                            entity
-                        )
+                continue
 
-                else:
+            # ----------------------------------------------------------------
+            # FIND EXPECTED
+            # ----------------------------------------------------------------
+
+            matched = None
+
+            for item in methodologies:
+
+                if (
+                    getattr(
+                        item,
+                        "entity_id",
+                        None,
+                    )
+                    == expected_entity_id
+                ):
+
+                    matched = item
+
+                    break
+
+            # ----------------------------------------------------------------
+            # NOT FOUND
+            # ----------------------------------------------------------------
+
+            if matched is None:
+
+                print()
+                print(
+                    "RESULT: ❌ FAIL"
+                )
+
+                print(
+                    f"Expected canonical: "
+                    f"{expected_canonical}"
+                )
+
+                print(
+                    f"Expected entity_id: "
+                    f"{expected_entity_id}"
+                )
+
+                print()
+                print(
+                    "ACTUAL RESULTS:"
+                )
+
+                for item in methodologies:
 
                     print(
-                        "  - []"
+                        f"- "
+                        f"{getattr(item, 'canonical', '')}"
+                        f" "
+                        f"[{getattr(item, 'entity_id', '')}]"
                     )
 
                 failed += 1
+
+                continue
+
+            # ----------------------------------------------------------------
+            # VALIDATION
+            # ----------------------------------------------------------------
+
+            errors = []
+
+            if (
+                getattr(
+                    matched,
+                    "canonical",
+                    None,
+                )
+                != expected_canonical
+            ):
+
+                errors.append(
+                    "canonical mismatch"
+                )
+
+            if (
+                getattr(
+                    matched,
+                    "entity_id",
+                    None,
+                )
+                != expected_entity_id
+            ):
+
+                errors.append(
+                    "entity_id mismatch"
+                )
+
+            if not getattr(
+                matched,
+                "found",
+                False,
+            ):
+
+                errors.append(
+                    "found is not True"
+                )
+
+            if not getattr(
+                matched,
+                "matched_phrase",
+                None,
+            ):
+
+                errors.append(
+                    "matched_phrase is empty"
+                )
+
+            if (
+                getattr(
+                    matched,
+                    "ontology_name",
+                    None,
+                )
+                != "methodologies"
+            ):
+
+                errors.append(
+                    "ontology_name mismatch"
+                )
+
+            # ----------------------------------------------------------------
+            # FAILURE
+            # ----------------------------------------------------------------
+
+            if errors:
+
+                print()
+                print(
+                    "RESULT: ❌ FAIL"
+                )
+
+                for error in errors:
+
+                    print(
+                        f"  - {error}"
+                    )
+
+                print_methodology(
+                    matched
+                )
+
+                failed += 1
+
+                continue
+
+            # ----------------------------------------------------------------
+            # SUCCESS
+            # ----------------------------------------------------------------
+
+            print()
+            print(
+                "RESULT: ✅ PASS"
+            )
+
+            print()
+            print(
+                f"- "
+                f"{matched.canonical}"
+                f" "
+                f"[{matched.entity_id}]"
+                f" "
+                f"phrase="
+                f"{matched.matched_phrase!r}"
+                f" "
+                f"confidence="
+                f"{matched.confidence}"
+                f" "
+                f"alias="
+                f"{matched.is_alias}"
+            )
+
+            passed += 1
+
+        # ====================================================================
+        # ERROR
+        # ====================================================================
 
         except Exception as error:
 
@@ -709,229 +769,20 @@ def test_extractor(
 
             failed += 1
 
-    return passed, failed
-
-
-# ============================================================================
-# MAIN
-# ============================================================================
-
-def main() -> None:
-
-    print()
-    print(
-        "ENTERPRISE REUSABLE "
-        "KNOWLEDGE EXTRACTOR TEST"
-    )
-
-    print()
-    print(
-        "Starting test_models.py..."
-    )
-
-    # ========================================================================
-    # REPOSITORY
-    # ========================================================================
-
-    print()
-    print(
-        "1. Loading repository..."
-    )
-
-    try:
-
-        repository = Repository()
-
-    except Exception as error:
-
-        print()
-        print(
-            "❌ REPOSITORY LOAD FAILED"
-        )
-
-        print(
-            f"{type(error).__name__}: "
-            f"{error}"
-        )
-
-        return
-
-    print(
-        "   ✅ Repository loaded"
-    )
-
-    # ========================================================================
-    # REPOSITORY CHECK
-    # ========================================================================
-
-    entities = repository.cache.entity_indexes.get(
-        ONTOLOGY,
-        {},
-    )
-
-    print()
-    print(
-        f"Ontology: {ONTOLOGY}"
-    )
-
-    print(
-        f"Total entities: {len(entities)}"
-    )
-
-    entity_types = sorted(
-        {
-            entity.entity_type
-            for entity in entities.values()
-            if getattr(
-                entity,
-                "entity_type",
-                None,
-            )
-        }
-    )
-
-    print()
-    print(
-        f"Loaded entity types: "
-        f"{entity_types}"
-    )
-
-    if ENTITY_TYPE not in entity_types:
-
-        print()
-        print(
-            f"❌ Expected entity type "
-            f"'{ENTITY_TYPE}' not found."
-        )
-
-        return
-
-    print(
-        f"   ✅ Entity type "
-        f"'{ENTITY_TYPE}' confirmed"
-    )
-
-    # ========================================================================
-    # PIPELINE
-    # ========================================================================
-
-    print()
-    print(
-        "2. Creating KnowledgeV5Pipeline..."
-    )
-
-    try:
-
-        pipeline = KnowledgeV5Pipeline(
-            repository_instance=repository,
-        )
-
-    except Exception as error:
-
-        print()
-        print(
-            "❌ PIPELINE CREATION FAILED"
-        )
-
-        print(
-            f"{type(error).__name__}: "
-            f"{error}"
-        )
-
-        return
-
-    print(
-        "   ✅ Pipeline created"
-    )
-
-    # ========================================================================
-    # DIRECT PIPELINE
-    # ========================================================================
-
-    print()
-    print(
-        "3. Testing pipeline..."
-    )
-
-    pipeline_ok = test_pipeline(
-        pipeline
-    )
-
-    if not pipeline_ok:
-
-        print()
-        print(
-            "❌ Pipeline test failed."
-        )
-
-        print(
-            "Extractor tests will still run "
-            "to isolate the failure."
-        )
-
-    # ========================================================================
-    # EXTRACTOR
-    # ========================================================================
-
-    print()
-    print(
-        "4. Creating extractor..."
-    )
-
-    try:
-
-        extractor = EXTRACTOR_CLASS(
-            pipeline=pipeline,
-        )
-
-    except Exception as error:
-
-        print()
-        print(
-            "❌ EXTRACTOR CREATION FAILED"
-        )
-
-        print(
-            f"{type(error).__name__}: "
-            f"{error}"
-        )
-
-        return
-
-    print(
-        "   ✅ Extractor created"
-    )
-
-    print()
-    print(
-        f"Extractor ontology    = "
-        f"{extractor.ontology}"
-    )
-
-    print(
-        f"Extractor entity type = "
-        f"{extractor.entity_type}"
-    )
-
-    # ========================================================================
-    # EXTRACTOR TESTS
-    # ========================================================================
-
-    passed, failed = test_extractor(
-        extractor
-    )
-
     # ========================================================================
     # SUMMARY
     # ========================================================================
 
     total = passed + failed
 
-    print_header(
-        "FINAL SUMMARY"
-    )
+    print()
+    print()
+    print("=" * 80)
+    print("METHODOLOGY EXTRACTOR TEST SUMMARY")
+    print("=" * 80)
 
     print()
+
     print(
         f"Total tests : {total}"
     )
@@ -949,33 +800,25 @@ def main() -> None:
     if failed == 0:
 
         print(
-            "✅ ALL REUSABLE EXTRACTOR TESTS PASSED"
+            "✅ ALL METHODOLOGY EXTRACTOR TESTS PASSED"
         )
 
     else:
 
         print(
-            "❌ REUSABLE EXTRACTOR TESTS FAILED"
+            "❌ METHODOLOGY EXTRACTOR TESTS FAILED"
         )
 
     print()
-    print(
-        "=" * 80
-    )
-
-    print(
-        "TEST COMPLETE"
-    )
-
-    print(
-        "=" * 80
-    )
+    print("=" * 80)
+    print("DIAGNOSTIC COMPLETE")
+    print("=" * 80)
+    print()
 
 
 # ============================================================================
-# CRITICAL ENTRY POINT
+# ENTRY POINT
 # ============================================================================
 
 if __name__ == "__main__":
-
     main()
