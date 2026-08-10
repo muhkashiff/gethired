@@ -3,44 +3,13 @@ Enterprise Repository Cache
 Enterprise V5
 
 Stores every in-memory index used by Repository.
-
-Repository Cache Responsibilities
-----------------------------------
-• Store entity indexes
-• Store canonical indexes
-• Store normalized indexes
-• Store alias indexes
-• Store linguistic-form indexes
-• Store configuration indexes
-• Store semantic indexes
-
-The cache contains indexes only.
-
-It does not perform matching logic.
 """
-
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 
 
 @dataclass
 class RepositoryCache:
-    """
-    Enterprise in-memory repository cache.
-
-    The Repository owns the matching behaviour.
-    RepositoryCache only stores the indexes required
-    by the Repository.
-
-    Index hierarchy:
-
-        ontology
-            ↓
-        lookup value
-            ↓
-        RepositoryEntity
-    """
 
     ####################################################################
     # ENTITY INDEXES
@@ -67,27 +36,42 @@ class RepositoryCache:
     )
 
     ####################################################################
-    # LINGUISTIC INDEXES
+    # SURFACE FORMS
+    ####################################################################
+
+    # ontology -> surface form -> RepositoryEntity
+    #
+    # Examples:
+    #
+    # "Azure"       -> Microsoft Azure
+    # "Power BI"    -> Microsoft Power BI
+    # "Excel"       -> Microsoft Excel
+    #
+    # This is important because the text appearing in a resume
+    # does not always equal the canonical repository name.
+    ####################################################################
+
+    surface_indexes: dict = field(
+        default_factory=dict
+    )
+
+    ####################################################################
+    # LINGUISTIC INDEX
     ####################################################################
 
     # ontology -> linguistic form -> RepositoryEntity
     #
-    # Includes:
+    # Used for:
     #
-    #   base
-    #   past
-    #   gerund
-    #   plural
-    #   singular
-    #   abbreviation
-    #   short_name
-    #
-    # Example:
-    #
-    # "analyze"    -> Analyze
-    # "analyzed"   -> Analyze
-    # "analyzing"  -> Analyze
-    #
+    # base
+    # past
+    # gerund
+    # plural
+    # singular
+    # abbreviation
+    # short_name
+    ####################################################################
+
     linguistic_indexes: dict = field(
         default_factory=dict
     )
@@ -95,11 +79,6 @@ class RepositoryCache:
     ####################################################################
     # INDIVIDUAL LINGUISTIC INDEXES
     ####################################################################
-
-    # These are intentionally kept separate.
-    #
-    # This allows the Repository to determine exactly
-    # which linguistic form produced a match.
 
     base_indexes: dict = field(
         default_factory=dict
@@ -130,12 +109,8 @@ class RepositoryCache:
     )
 
     ####################################################################
-    # CONFIGURATION
+    # CONFIG FILES
     ####################################################################
-
-    # confidence_rules.json
-    # modifier_dictionary.json
-    # measurement_patterns.json
 
     config_indexes: dict = field(
         default_factory=dict
@@ -162,9 +137,6 @@ class RepositoryCache:
     ####################################################################
 
     def clear(self) -> None:
-        """
-        Clear every repository cache index.
-        """
 
         self.entity_indexes.clear()
 
@@ -173,6 +145,8 @@ class RepositoryCache:
         self.normalized_indexes.clear()
 
         self.alias_indexes.clear()
+
+        self.surface_indexes.clear()
 
         self.linguistic_indexes.clear()
 

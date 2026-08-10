@@ -1,7 +1,9 @@
 """
 Enterprise Technology Knowledge Model
 
-Represents Technologies extracted from text.
+Enterprise V5
+
+Represents technologies extracted from professional text.
 
 Examples
 

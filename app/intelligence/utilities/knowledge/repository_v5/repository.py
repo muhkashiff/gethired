@@ -3,7 +3,7 @@ Enterprise Repository
 Enterprise V5
 
 Responsibilities
-----------------
+
 • Load ontology entities
 • Build indexes
 • Resolve entities
@@ -11,10 +11,7 @@ Responsibilities
 • Support canonical forms
 • Support normalized forms
 • Support linguistic forms
-
-The Repository performs lookup.
-
-The RepositoryCache stores indexes.
+• Support technology surface forms
 """
 
 from __future__ import annotations
@@ -91,6 +88,8 @@ class Repository:
 
         linguistic_index = {}
 
+        surface_index = {}
+
         base_index = {}
 
         past_index = {}
@@ -128,6 +127,7 @@ class Repository:
             )
 
             if canonical:
+
                 canonical_index[
                     canonical
                 ] = entity
@@ -141,6 +141,7 @@ class Repository:
             )
 
             if normalized:
+
                 normalized_index[
                     normalized
                 ] = entity
@@ -160,6 +161,18 @@ class Repository:
 
                 alias_index[
                     value
+                ] = entity
+
+            ############################################################
+            # SURFACE FORMS
+            ############################################################
+
+            for surface in self._build_surface_forms(
+                entity
+            ):
+
+                surface_index[
+                    surface
                 ] = entity
 
             ############################################################
@@ -272,6 +285,10 @@ class Repository:
             ontology_name
         ] = alias_index
 
+        self.cache.surface_indexes[
+            ontology_name
+        ] = surface_index
+
         self.cache.linguistic_indexes[
             ontology_name
         ] = linguistic_index
@@ -326,9 +343,9 @@ class Repository:
         if not phrase:
             return None
 
-        ################################################################
+        ############################################################
         # 1. ALIAS
-        ################################################################
+        ############################################################
 
         alias_index = self.cache.alias_indexes.get(
             ontology,
@@ -342,9 +359,9 @@ class Repository:
         if entity is not None:
             return entity
 
-        ################################################################
+        ############################################################
         # 2. CANONICAL
-        ################################################################
+        ############################################################
 
         canonical_index = self.cache.canonical_indexes.get(
             ontology,
@@ -358,9 +375,9 @@ class Repository:
         if entity is not None:
             return entity
 
-        ################################################################
+        ############################################################
         # 3. NORMALIZED
-        ################################################################
+        ############################################################
 
         normalized_index = self.cache.normalized_indexes.get(
             ontology,
@@ -374,9 +391,9 @@ class Repository:
         if entity is not None:
             return entity
 
-        ################################################################
+        ############################################################
         # 4. LINGUISTIC FORM
-        ################################################################
+        ############################################################
 
         linguistic_index = self.cache.linguistic_indexes.get(
             ontology,
@@ -390,11 +407,111 @@ class Repository:
         if entity is not None:
             return entity
 
-        ################################################################
+        ############################################################
+        # 5. SURFACE FORM
+        ############################################################
+
+        surface_index = self.cache.surface_indexes.get(
+            ontology,
+            {},
+        )
+
+        entity = surface_index.get(
+            phrase
+        )
+
+        if entity is not None:
+            return entity
+
+        ############################################################
         # NO MATCH
-        ################################################################
+        ############################################################
 
         return None
+
+    ####################################################################
+    # BUILD SURFACE FORMS
+    ####################################################################
+
+    @classmethod
+    def _build_surface_forms(
+        cls,
+        entity,
+    ) -> set[str]:
+
+        forms: set[str] = set()
+
+        ############################################################
+        # CANONICAL
+        ############################################################
+
+        canonical = cls._normalize_lookup(
+            entity.canonical
+        )
+
+        if canonical:
+
+            forms.add(
+                canonical
+            )
+
+        ############################################################
+        # ALIASES
+        ############################################################
+
+        for alias in entity.aliases:
+
+            normalized_alias = cls._normalize_lookup(
+                alias
+            )
+
+            if normalized_alias:
+
+                forms.add(
+                    normalized_alias
+                )
+
+        ############################################################
+        # VENDOR-PREFIXED TECHNOLOGY NAMES
+        ############################################################
+
+        #
+        # Examples:
+        #
+        # Microsoft Azure
+        #       -> azure
+        #
+        # Microsoft Excel
+        #       -> excel
+        #
+        # Microsoft Power BI
+        #       -> power bi
+        #
+        # This is deliberately limited to "Microsoft"
+        # rather than arbitrary substring matching.
+        #
+
+        words = canonical.split()
+
+        if len(words) >= 2:
+
+            vendor_prefixes = {
+                "microsoft",
+            }
+
+            if words[0] in vendor_prefixes:
+
+                shortened = " ".join(
+                    words[1:]
+                )
+
+                if shortened:
+
+                    forms.add(
+                        shortened
+                    )
+
+        return forms
 
     ####################################################################
     # FIND ENTITY EXACT
@@ -501,7 +618,9 @@ class Repository:
         if not value:
             return
 
-        index[value] = entity
+        index[
+            value
+        ] = entity
 
     ####################################################################
     # PRIVATE NORMALIZATION
