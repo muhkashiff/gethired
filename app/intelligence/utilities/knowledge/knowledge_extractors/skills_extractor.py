@@ -1,19 +1,43 @@
 """
 Enterprise Skills Extractor
+Enterprise V5
 
-Generic Ontology Version
+Responsibility
+--------------
+Convert skill MatchResult objects into SkillKnowledge objects.
 
-Enterprise V4
+Pipeline:
+
+ExtractionRequest
+        ↓
+KnowledgeV5Pipeline
+        ↓
+MatchResult
+        ↓
+SkillsExtractor
+        ↓
+SkillKnowledge
+        ↓
+ExtractionResult[SkillKnowledge]
 """
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_extractor import (
-    GenericOntologyExtractor,
+from __future__ import annotations
+
+from typing import Any, Mapping
+
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.skill_models import (
+    SkillKnowledge,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.skill_models import SkillKnowledge
+from .generic_ontology_extractor import GenericOntologyExtractor
 
 
-class SkillsExtractor(GenericOntologyExtractor):
+class SkillsExtractor(
+    GenericOntologyExtractor[SkillKnowledge]
+):
+    """
+    Extracts professional skills from the skills ontology.
+    """
 
     ####################################################################
     # CONFIGURATION
@@ -21,75 +45,117 @@ class SkillsExtractor(GenericOntologyExtractor):
 
     ontology_name = "skills"
 
-    entity_type = "skill"
-
-    # Skill uses ATS model instead of Knowledge model
     knowledge_class = SkillKnowledge
 
-    ####################################################################
-    # BACKWARD COMPATIBILITY
-    ####################################################################
-
-    def extract(self, sentence):
-
-        return self.extract_all(sentence)
+    entity_type = "skill"
 
     ####################################################################
-    # SKILL IMPLEMENTATION
+    # SKILL-SPECIFIC FIELDS
     ####################################################################
 
-    def extract_all(self, sentence):
+    def extra_fields(
+        self,
+        entity: Any,
+        metadata: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        """
+        Populate fields specific to SkillKnowledge.
 
-        matches = self.lookup_sentence(
+        Repository metadata is used as the source of enterprise
+        skill classification.
+        """
 
-            self.ontology_name,
-
-            sentence,
-
-        )
-
-        skills = []
-
-        for match in matches:
-
-            entity = match["entity"]
-
-            metadata = entity.metadata
-
-            skills.append(
-
-                SkillKnowledge(
-
-                    name=entity.canonical,
-
-                    category=entity.category,
-
-                    level=metadata.get(
-
-                        "level",
-
-                        ""
-
-                    ),
-
-                    years=None,
-
-                    confidence=match["confidence"],
-
-                    matched=False,
-
-                    score=0.0,
-
-                    raw_text=match["phrase"],
-
-                    normalized_name=self.normalize(
-
-                        entity.canonical
-
-                    )
-
-                )
-
+        skill_type = str(
+            metadata.get(
+                "skill_type",
+                "",
             )
+        ).casefold()
 
-        return skills
+        category = str(
+            entity.category or ""
+        ).casefold()
+
+        return {
+            "skill_family": metadata.get(
+                "skill_family",
+                "",
+            ),
+
+            "skill_group": metadata.get(
+                "skill_group",
+                "",
+            ),
+
+            "level": metadata.get(
+                "level",
+                "",
+            ),
+
+            "technical": metadata.get(
+                "technical",
+                skill_type == "technical",
+            ),
+
+            "managerial": metadata.get(
+                "managerial",
+                category in {
+                    "management",
+                    "leadership",
+                },
+            ),
+
+            "analytical": metadata.get(
+                "analytical",
+                category == "analytical",
+            ),
+
+            "operational": metadata.get(
+                "operational",
+                category == "operations",
+            ),
+
+            "compliance": metadata.get(
+                "compliance",
+                category in {
+                    "quality",
+                    "food_safety",
+                    "compliance",
+                },
+            ),
+
+            "leadership": metadata.get(
+                "leadership",
+                category == "leadership",
+            ),
+
+            "communication": metadata.get(
+                "communication",
+                category == "communication",
+            ),
+
+            "transferable": metadata.get(
+                "transferable",
+                True,
+            ),
+
+            "certification_required": metadata.get(
+                "certification_required",
+                False,
+            ),
+
+            "years_required": metadata.get(
+                "years_required",
+                0.0,
+            ),
+
+            "ats_weight": metadata.get(
+                "ats_weight",
+                entity.impact_weight,
+            ),
+
+            "graph_node": metadata.get(
+                "graph_node",
+                True,
+            ),
+        }

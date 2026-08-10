@@ -340,7 +340,7 @@
     "related_actions":["ACT_IMPLEMENT"],
     "related_objects":["OBJ_CIP_SYSTEM"],
     "related_metrics":["KPI_HYGIENE"],
-    "related_standards":["STD_FSSC22000"],
+    "related_standards":["STD_FSSC_22000"],
     "impact_weight":0.95
   },
   
@@ -369,8 +369,8 @@
       "KPI_CUSTOMER_COMPLAINTS"
     ],
     "related_standards": [
-      "STD_ISO9001",
-      "STD_FSSC22000"
+      "STD_ISO_9001",
+      "STD_FSSC_22000"
     ],
     "impact_weight": 1.0
   },
@@ -397,7 +397,7 @@
       "KPI_DEFECT_RATE"
     ],
     "related_standards": [
-      "STD_ISO9001"
+      "STD_ISO_9001"
     ],
     "impact_weight": 1.0
   },
@@ -424,7 +424,7 @@
       "KPI_FOOD_SAFETY"
     ],
     "related_standards": [
-      "STD_FSSC22000",
+      "STD_FSSC_22000",
       "STD_HACCP"
     ],
     "impact_weight": 1.0
@@ -453,7 +453,7 @@
     ],
     "related_standards": [
       "STD_HACCP",
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
     "impact_weight": 1.0
   },
@@ -479,7 +479,7 @@
       "KPI_AUDIT_SCORE"
     ],
     "related_standards": [
-      "STD_ISO9001",
+      "STD_ISO_9001",
       "STD_BRCGS"
     ],
     "impact_weight": 0.95
@@ -557,7 +557,7 @@
       "KPI_HYGIENE"
     ],
     "related_standards": [
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
     "impact_weight": 0.9
   },
@@ -583,7 +583,7 @@
       "KPI_MICROBIOLOGY"
     ],
     "related_standards": [
-      "STD_ISO17025"
+      "STD_ISO_17025"
     ],
     "impact_weight": 0.9
   },
@@ -609,7 +609,7 @@
       "KPI_MICROBIOLOGY"
     ],
     "related_standards": [
-      "STD_ISO17025"
+      "STD_ISO_17025"
     ],
     "impact_weight": 0.9
   },
@@ -652,6 +652,19 @@
     "related_metrics": ["KPI_CP", "KPI_CPK"],
     "impact_weight": 1.0
   },
+  "statistical_analysis": {
+    "entity_id": "SKILL_SA",
+    "canonical": "Statistical Analysis",
+    "aliases": ["SA", "control charts"],
+    "category": "statistics",
+    "business_area": "quality",
+    "domain": "quality_control",
+    "skill_type": "technical",
+    "related_actions": ["ACT_MONITOR"],
+    "related_metrics": ["KPI_CP", "KPI_CPK"],
+    "impact_weight": 1.0
+  },
+
 
   "measurement_system_analysis": {
     "entity_id": "SKILL_MSA",
@@ -1239,6 +1252,17 @@
     "skill_type": "management",
     "impact_weight": 0.90
   },
+  "project_management": {
+    "entity_id": "SKILL_project_management",
+    "canonical": "Project Management",
+    "aliases": ["PM"],
+    "category": "project_management",
+    "business_area": "management",
+    "domain": "project_management",
+    "skill_type": "management",
+    "impact_weight": 0.90
+  },
+
 
   "scrum": {
     "entity_id": "SKILL_SCRUM",

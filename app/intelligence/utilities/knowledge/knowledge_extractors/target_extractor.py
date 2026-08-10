@@ -10,7 +10,7 @@ from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_
     GenericOntologyExtractor,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.object_models import (
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.target_models import (
     ObjectKnowledge,
 )
 

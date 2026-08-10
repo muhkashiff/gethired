@@ -1,17 +1,8 @@
 """
 Enterprise Skill Knowledge Model
+Enterprise V5
 
-Represents professional skills extracted from text.
-
-Examples
-
-Leadership
-Root Cause Analysis
-Food Safety Management
-Lean Manufacturing
-Problem Solving
-Project Management
-Business Analytics
+Represents a professional skill extracted from text.
 """
 
 from dataclasses import dataclass

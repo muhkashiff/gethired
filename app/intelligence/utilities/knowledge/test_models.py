@@ -1,145 +1,229 @@
 """
-Stage 1
-Enterprise Tokenizer Test
-
-Pipeline
-
-Sentence
-    ↓
-Tokenizer
-    ↓
-Token Objects
-    ↓
-NGram Objects
-"""
-
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[4]
-sys.path.append(str(ROOT))
-
-"""
-Enterprise Knowledge Pipeline Test
+Enterprise Skills Extractor Integration Test
 Enterprise V5
 
-Tests complete pipeline:
-
-Sentence
-    ↓
-Tokenizer
-    ↓
-Repository
-    ↓
-Matcher
-    ↓
-Confidence
-    ↓
-Overlap
-    ↓
-Ranker
+Uses the real KnowledgeV5Pipeline and skills repository.
 """
 
-import os
-import sys
+from __future__ import annotations
 
-ROOT = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        "../../../../../../..",
-    )
+import sys
+import unittest
+from pathlib import Path
+
+
+# ============================================================
+# PROJECT ROOT
+# ============================================================
+
+ROOT = Path(__file__).resolve().parents[4]
+
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+
+# ============================================================
+# IMPORTS
+# ============================================================
+
+from app.intelligence.utilities.knowledge.knowledge_extractors.skills_extractor import (
+    SkillsExtractor,
 )
 
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
+from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
+    ExtractionRequest,
+)
 
 from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
     KnowledgeV5Pipeline,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.match_result import (
-    MatchResult,
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.skill_models import (
+    SkillKnowledge,
 )
 
 
-pipeline = KnowledgeV5Pipeline()
+# ============================================================
+# TEST
+# ============================================================
 
-sentence = (
-    "Implemented ISO 9001 and "
-    "FSSC22000 requirements using "
-    "HACCP GMP and BRCGS standards."
-)
+class TestSkillsExtractor(unittest.TestCase):
 
-print("=" * 80)
-print("PIPELINE TEST")
-print("=" * 80)
+    @classmethod
+    def setUpClass(cls):
 
-matches = pipeline.run(
+        pipeline = KnowledgeV5Pipeline()
 
-    ontology="standards",
+        cls.extractor = SkillsExtractor(
+            pipeline=pipeline,
+        )
 
-    sentence=sentence,
+    # ========================================================
+    # SINGLE SENTENCE CHECK
+    # ========================================================
 
-)
+    def _check_skill(
+        self,
+        sentence: str,
+        expected: str,
+    ) -> None:
 
-print()
+        request = ExtractionRequest(
+            sentence=sentence,
+        )
 
-print(f"Matches Found : {len(matches)}")
+        result = self.extractor.extract(
+            request
+        )
 
-print()
+        detected = [
+            skill.canonical
+            for skill in result
+        ]
 
-assert isinstance(matches, list)
+        print()
+        print("=" * 70)
+        print("Sentence:")
+        print(sentence)
 
-assert len(matches) >= 5
+        print()
+        print("Expected:")
+        print(expected)
 
-for i, match in enumerate(matches, start=1):
+        print()
+        print("Detected:")
+        print(detected)
 
-    print("-" * 60)
+        self.assertTrue(
+            result.found,
+            f"No skill detected.\nSentence: {sentence}",
+        )
 
-    print(f"Match #{i}")
+        self.assertTrue(
+            any(
+                expected.casefold()
+                in skill.casefold()
+                for skill in detected
+            ),
+            (
+                f"Expected skill '{expected}' "
+                f"was not detected.\n"
+                f"Sentence: {sentence}\n"
+                f"Detected: {detected}"
+            ),
+        )
 
-    print()
+        # Verify that the extractor actually produced
+        # SkillKnowledge objects.
 
-    print("Entity ID      :", match.entity.entity_id)
+        for skill in result:
 
-    print("Canonical      :", match.entity.canonical)
+            self.assertIsInstance(
+                skill,
+                SkillKnowledge,
+            )
 
-    print("Phrase         :", match.phrase)
+    # ========================================================
+    # SKILL TESTS
+    # ========================================================
 
-    print("Confidence     :", round(match.confidence, 3))
+    def test_food_safety_management(self):
 
-    print("Token Index    :", match.token_index)
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Food Safety Management."
+            ),
+            expected="Food Safety Management",
+        )
 
-    print("Token Count    :", match.token_count)
+    def test_root_cause_analysis(self):
 
-    print("Characters     :", match.start_char, "-", match.end_char)
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Root Cause Analysis."
+            ),
+            expected="Root Cause Analysis",
+        )
 
-    print("Alias Match    :", match.is_alias)
+    def test_quality_management(self):
 
-    print()
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Quality Management."
+            ),
+            expected="Quality Assurance",
+        )
 
-    assert isinstance(match, MatchResult)
+    def test_problem_solving(self):
 
-print("=" * 80)
-print("BEST MATCH")
-print("=" * 80)
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Problem Solving."
+            ),
+            expected="Problem Solving",
+        )
 
-best = pipeline.best(
+    def test_data_analysis(self):
 
-    ontology="standards",
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Data Analysis."
+            ),
+            expected="Data Analysis",
+        )
 
-    sentence=sentence,
+    def test_statistical_analysis(self):
 
-)
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Statistical Analysis."
+            ),
+            expected="Statistical Analysis",
+        )
 
-print()
+    def test_project_management(self):
 
-print(best)
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Project Management."
+            ),
+            expected="Project Management",
+        )
 
-assert isinstance(best, MatchResult)
+    def test_leadership(self):
 
-assert best.entity.entity_id == "STD_ISO_9001"
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Leadership."
+            ),
+            expected="Leadership",
+        )
 
-print()
+    def test_team_building(self):
 
-print("KnowledgeV5Pipeline PASS")
+        self._check_skill(
+            sentence=(
+                "Demonstrated strong experience in "
+                "Team Building."
+            ),
+            expected="Team Building",
+        )
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+if __name__ == "__main__":
+
+    unittest.main(
+        verbosity=2
+    )

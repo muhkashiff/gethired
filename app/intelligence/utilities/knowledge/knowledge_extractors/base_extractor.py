@@ -2,146 +2,170 @@
 Enterprise Base Extractor
 Enterprise V5
 
-Only responsibility:
-
-MatchResult  ---> Knowledge Object
-
-Pipeline is completely independent.
+Pipeline
+--------
+ExtractionRequest
+    ↓
+KnowledgeV5Pipeline
+    ↓
+List[MatchResult]
+    ↓
+BaseExtractor
+    ↓
+ExtractionResult[T]
 """
 
-from abc import ABC
-from abc import abstractmethod
+from __future__ import annotations
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.match_result import MatchResult
+from abc import ABC, abstractmethod
+from typing import Generic, Protocol, TypeVar
+
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.match_result import (
+    MatchResult,
+)
+
+from .extraction_request import ExtractionRequest
+from .extraction_result import ExtractionResult
+
+T = TypeVar("T")
 
 
-class BaseExtractor(ABC):
+class KnowledgePipelineProtocol(Protocol):
+    """
+    Contract required from the knowledge pipeline.
 
-    ####################################################################
-    # INITIALIZATION
-    ####################################################################
+    KnowledgeV5Pipeline already satisfies this contract because it has:
+        run(ontology, sentence) -> list[MatchResult]
+    """
+
+    def run(
+        self,
+        ontology: str,
+        sentence: str,
+    ) -> list[MatchResult]:
+        ...
+
+
+class BaseExtractor(ABC, Generic[T]):
+    """
+    Abstract base for all resume extractors.
+
+    Input:
+        ExtractionRequest
+
+    Output:
+        ExtractionResult[T]
+
+    A child extractor provides:
+        1. Its ontology name.
+        2. Its conversion from MatchResult to a domain object.
+    """
 
     def __init__(
-
         self,
+        ontology: str,
+        pipeline: KnowledgePipelineProtocol,
+    ) -> None:
+        if not ontology or not ontology.strip():
+            raise ValueError("Extractor ontology must not be empty.")
 
-        pipeline,
+        if pipeline is None:
+            raise ValueError("Extractor pipeline must not be None.")
 
-    ):
+        self._ontology = ontology
+        self._pipeline = pipeline
 
-        self.pipeline = pipeline
+    @property
+    def ontology(self) -> str:
+        return self._ontology
 
-    ####################################################################
-    # PARSER CONTEXT
-    ####################################################################
-
-    def build_parser_context(
-
+    def extract(
         self,
+        request: ExtractionRequest,
+    ) -> ExtractionResult[T]:
+        """
+        Extract domain entities from one request object.
+        """
+        if not isinstance(request, ExtractionRequest):
+            raise TypeError(
+                "request must be an ExtractionRequest object."
+            )
 
-        verb=False,
+        result = ExtractionResult[T](ontology=self.ontology)
 
-        obj=False,
+        sentence = request.sentence.strip()
 
-        metric=False,
+        if not sentence:
+            return result
 
-        modifier=False,
+        matches = self._pipeline.run(
+            ontology=self.ontology,
+            sentence=sentence,
+        )
 
-        numeric=False,
+        for match in matches:
+            if not self.should_include(
+                match=match,
+                request=request,
+            ):
+                continue
 
-        domain=False,
+            entity = self.build_entity(
+                match=match,
+                request=request,
+            )
 
-    ):
+            if entity is not None:
+                result.add(
+                    match=match,
+                    entity=entity,
+                )
 
-        return {
+        return result
 
-            "verb_found": verb,
-
-            "object_found": obj,
-
-            "metric_found": metric,
-
-            "modifier_found": modifier,
-
-            "numeric_value": numeric,
-
-            "domain_found": domain,
-
-        }
-
-    ####################################################################
-    # POPULATE SHARED FIELDS
-    ####################################################################
-
-    def populate_entity(
-
+    def __call__(
         self,
+        request: ExtractionRequest,
+    ) -> ExtractionResult[T]:
+        """
+        Allows an extractor object to be called like a function.
+        """
+        return self.extract(request)
 
-        model,
+    def extract_first(
+        self,
+        request: ExtractionRequest,
+    ) -> T | None:
+        return self.extract(request).first
 
+    def has_match(
+        self,
+        request: ExtractionRequest,
+    ) -> bool:
+        return self.extract(request).found
+
+    def should_include(
+        self,
         match: MatchResult,
+        request: ExtractionRequest,
+    ) -> bool:
+        """
+        Optional child-class filtering hook.
 
-    ):
-
-        entity = match.entity
-
-        model.found = True
-
-        model.confidence = match.confidence
-
-        model.original = match.phrase
-
-        model.matched_phrase = match.phrase
-
-        model.canonical = entity.canonical
-
-        model.normalized = entity.normalized
-
-        model.entity_id = entity.entity_id
-
-        model.entity_type = entity.entity_type
-
-        model.category = entity.category
-
-        model.business_area = entity.business_area
-
-        model.domain = entity.domain
-
-        model.description = entity.description
-
-        model.impact_weight = entity.impact_weight
-
-        model.source = entity.source
-
-        model.metadata = entity.metadata
-
-        model.matched_alias = match.matched_alias
-
-        model.is_alias = match.is_alias
-
-        model.start_char = match.start_char
-
-        model.end_char = match.end_char
-
-        model.token_index = match.token_index
-
-        model.token_count = match.token_count
-
-        model.sentence_index = 0
-
-        return model
-
-    ####################################################################
-    # ABSTRACT
-    ####################################################################
+        Override this when an extractor needs rules such as a minimum
+        confidence, permitted category, or permitted business area.
+        """
+        return True
 
     @abstractmethod
-    def extract(
-
+    def build_entity(
         self,
+        match: MatchResult,
+        request: ExtractionRequest,
+    ) -> T | None:
+        """
+        Convert a successful knowledge match into one domain object.
 
-        sentence,
-
-    ):
-
-        pass
+        Return None when the match must not produce an output entity.
+        """
+        raise NotImplementedError

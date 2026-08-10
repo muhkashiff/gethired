@@ -1,20 +1,23 @@
 """
 Enterprise Standard Extractor
+Enterprise V5
 """
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_extractor import (
-    GenericOntologyExtractor,
-)
+from __future__ import annotations
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.standard_models import (
     StandardKnowledge,
 )
 
-class StandardExtractor(GenericOntologyExtractor):
+from .generic_ontology_extractor import GenericOntologyExtractor
 
-    ####################################################################
-    # CONFIGURATION
-    ####################################################################
+
+class StandardExtractor(
+    GenericOntologyExtractor[StandardKnowledge]
+):
+    """
+    Extracts recognized standards from text.
+    """
 
     ontology_name = "standards"
 
@@ -22,26 +25,14 @@ class StandardExtractor(GenericOntologyExtractor):
 
     entity_type = "standard"
 
-    ####################################################################
-    # STANDARD SPECIFIC FIELDS
-    ####################################################################
-
     def extra_fields(
         self,
         entity,
         metadata,
-    ):
-
+    ) -> dict:
         return {
-
-            "category": metadata.get(
-                "category",
-                "",
+            "graph_node": metadata.get(
+                "graph_node",
+                True,
             ),
-
-            "business_area": metadata.get(
-                "business_area",
-                "",
-            ),
-
         }

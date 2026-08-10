@@ -1,8 +1,10 @@
 """
-Universal Ontology Entity
+Enterprise Universal Ontology Entity
 
-Every ontology lookup returns this object.
+Enterprise V5
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 
@@ -20,7 +22,9 @@ class RepositoryEntity:
 
     normalized: str = ""
 
-    aliases: list = field(default_factory=list)
+    aliases: list[str] = field(
+        default_factory=list
+    )
 
     ####################################################################
     # Linguistic Forms
@@ -88,4 +92,82 @@ class RepositoryEntity:
 
     source: str = "ontology"
 
-    metadata: dict = field(default_factory=dict)
+    metadata: dict = field(
+        default_factory=dict
+    )
+
+    ####################################################################
+    # MATCHING
+    ####################################################################
+
+    def matches_text(
+        self,
+        value: str,
+    ) -> bool:
+        """
+        Determine whether the supplied text represents this entity.
+
+        Matching is performed against every valid linguistic
+        representation stored by the ontology.
+
+        This keeps linguistic knowledge inside the repository entity
+        rather than inside the Matcher.
+        """
+
+        candidate = self._normalize(
+            value
+        )
+
+        if not candidate:
+            return False
+
+        for form in self.text_forms():
+
+            if self._normalize(form) == candidate:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def text_forms(self) -> tuple[str, ...]:
+        """
+        Return all valid textual representations of this entity.
+        """
+
+        forms = [
+            self.canonical,
+            self.normalized,
+            self.base,
+            self.past,
+            self.gerund,
+            self.plural,
+            self.singular,
+            self.abbreviation,
+            self.short_name,
+        ]
+
+        forms.extend(
+            self.aliases
+        )
+
+        return tuple(
+            form
+            for form in forms
+            if isinstance(form, str)
+            and form.strip()
+        )
+
+    ####################################################################
+
+    @staticmethod
+    def _normalize(
+        value: str,
+    ) -> str:
+        """
+        Normalize text for repository matching.
+        """
+
+        return " ".join(
+            value.casefold().split()
+        )

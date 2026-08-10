@@ -1,35 +1,10 @@
-from .action_extractor import ActionExtractor
-from .target_extractor import ObjectExtractor
-from .metric_extractor import MetricExtractor
-from .measurement_extractor import MeasurementExtractor
-from .technology_extractor import TechnologyExtractor
-from .standard_extractor import StandardExtractor
-from .methodology_extractor import MethodologyExtractor
-from .skills_extractor import SkillsExtractor
-from .modifier_extractor import ModifierExtractor
-from .certification_extractor import CertificationExtractor
+"""
+Enterprise Knowledge Extractors
+Enterprise V5
 
+Concrete extractors are intentionally not imported here.
 
-EXTRACTORS = [
-
-    ActionExtractor(),
-
-    ObjectExtractor(),
-
-    MetricExtractor(),
-
-    MeasurementExtractor(),
-
-    TechnologyExtractor(),
-
-    StandardExtractor(),
-
-    MethodologyExtractor(),
-
-    SkillsExtractor(),
-
-    ModifierExtractor(),
-
-    CertificationExtractor(),
-
-]
+Keeping package initialization lightweight prevents circular imports and
+allows foundational components, such as BaseExtractor, to be tested
+independently.
+"""

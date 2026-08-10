@@ -3,7 +3,7 @@
     "entity_id": "ACT_LEAD",
     "canonical": "Lead",
     "base": "lead",
-    "past": "leaded",
+    "past": "led",
     "gerund": "leading",
     "aliases": [
       "lead",
@@ -92,6 +92,20 @@
     "aliases": [
       "guide",
       "guideed"
+    ],
+    "category": "Leadership",
+    "business_area": "Leadership",
+    "impact_weight": 1.0
+  },
+  "identify": {
+    "entity_id": "ACT_IDENTIFY",
+    "canonical": "Identify",
+    "base": "identify",
+    "past": "identified",
+    "gerund": "identifying",
+    "aliases": [
+      "identifi",
+      "identif"
     ],
     "category": "Leadership",
     "business_area": "Leadership",
@@ -377,6 +391,24 @@
     "business_area": "Leadership",
     "impact_weight": 1.0
   },
+  "utilize": {
+  "entity_id": "ACT_UTILIZE",
+  "canonical": "Utilize",
+  "base": "utilize",
+  "past": "utilized",
+  "gerund": "utilizing",
+  "aliases": [
+    "utilize",
+    "utilizes",
+    "utilized",
+    "utilizing",
+    "utiilized",
+    "utilizzing"
+  ],
+  "category": "Leadership",
+  "business_area": "Leadership",
+  "impact_weight": 1.0
+},
   "design": {
     "entity_id": "ACT_DESIGN",
     "canonical": "Design",
