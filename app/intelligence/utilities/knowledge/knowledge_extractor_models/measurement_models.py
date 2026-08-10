@@ -3,7 +3,7 @@ Enterprise Measurement Knowledge Model
 
 Represents quantitative measurements extracted from text.
 
-Examples
+Examples:
 
 99%
 70 → 99%
@@ -49,6 +49,8 @@ class MeasurementKnowledge(KnowledgeEntity):
 
     measurement_type: str = ""
 
+    # Supported examples:
+    #
     # absolute
     # percentage
     # currency
@@ -82,7 +84,6 @@ class MeasurementKnowledge(KnowledgeEntity):
     # unchanged
 
     improvement: bool = False
-    
 
     ####################################################################
     # Business Meaning

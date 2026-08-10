@@ -11,6 +11,22 @@
     "description": "",
     "impact_weight": 1.0
   },
+  
+  "quality": {
+    "entity_id": "DOMAIN_QUALITY",
+    "canonical": "Quality",
+    "aliases": [
+      "quality",
+      "quality management",
+      "quality management system",
+      "qms"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Quality management and quality assurance activities.",
+    "impact_weight": 1.0
+  },
+  
   "manufacturing": {
     "entity_id": "DOMAIN_MANUFACTURING",
     "canonical": "Manufacturing",
@@ -96,19 +112,7 @@
     "impact_weight": 1.0
   },
   
-  "quality": {
-    "entity_id": "DOMAIN_QUALITY",
-    "canonical": "Quality",
-    "aliases": [
-      "quality",
-      "quality"
-    ],
-    "category": "quality",
-    "business_area": "quality",
-    "description": "",
-    "impact_weight": 1.0
-  },
-  "food_safety": {
+    "food_safety": {
     "entity_id": "DOMAIN_FOOD_SAFETY",
     "canonical": "Food Safety",
     "aliases": [

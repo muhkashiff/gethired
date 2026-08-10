@@ -4,15 +4,14 @@ from .base_models import KnowledgeEntity
 
 
 @dataclass
-class ObjectKnowledge(KnowledgeEntity):
+class TargetKnowledge(KnowledgeEntity):
 
     ####################################################################
     # Entity
     ####################################################################
 
-    entity_type: str = "object"
-
-    ontology_name: str = "objects"
+    entity_type: str = "target"
+    ontology_name: str = "targets"
 
     ####################################################################
     # Business Object

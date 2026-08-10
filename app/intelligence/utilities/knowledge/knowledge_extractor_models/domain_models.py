@@ -1,21 +1,4 @@
-"""
-Enterprise Domain Knowledge Model
-
-Represents business domains extracted from text.
-
-Examples
-
-Food Safety
-Quality Management
-Operations
-Supply Chain
-Manufacturing
-Retail
-Continuous Improvement
-Business Analytics
-"""
-
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .base_models import KnowledgeEntity
 
@@ -68,3 +51,49 @@ class DomainKnowledge(KnowledgeEntity):
     ####################################################################
 
     graph_node: bool = True
+
+    ####################################################################
+    # Domain Object
+    ####################################################################
+
+    domain_object: object | None = None
+
+    ####################################################################
+    # Domain Reasoning
+    ####################################################################
+
+    reasoning_id: str = ""
+
+    reasoning_object: object | None = None
+
+    reasoning_confidence: float = 0.0
+
+    ####################################################################
+    # Reasoning Relationships
+    ####################################################################
+
+    primary_domain: str = ""
+
+    secondary_domains: list[str] = field(
+        default_factory=list
+    )
+
+    trigger_actions: list[str] = field(
+        default_factory=list
+    )
+
+    trigger_objects: list[str] = field(
+        default_factory=list
+    )
+
+    trigger_skills: list[str] = field(
+        default_factory=list
+    )
+
+    trigger_metrics: list[str] = field(
+        default_factory=list
+    )
+
+    trigger_certifications: list[str] = field(
+        default_factory=list
+    )

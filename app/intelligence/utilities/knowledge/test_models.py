@@ -1,40 +1,8 @@
-"""
-Enterprise Methodology Extractor Test
-Enterprise V5
-
-Purpose
--------
-Validate the complete methodology extraction flow:
-
-Sentence
-    ↓
-ExtractionRequest
-    ↓
-MethodologyExtractor
-    ↓
-KnowledgeV5Pipeline
-    ↓
-ExtractionResult
-    ↓
-MethodologyKnowledge objects
-
-Important
----------
-This test does NOT call pipeline.match().
-
-KnowledgeV5Pipeline does not expose a public match()
-method. The extractor is the public extraction interface.
-"""
-
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
-
-# ============================================================================
-# PROJECT ROOT
-# ============================================================================
 
 ROOT = Path(__file__).resolve().parents[4]
 
@@ -42,783 +10,1126 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-# ============================================================================
-# IMPORTS
-# ============================================================================
-
 from app.intelligence.utilities.knowledge.repository_v5.repository import (
     Repository,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
-    KnowledgeV5Pipeline,
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_models import (
+    DomainKnowledge,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.methodology_extractor import (
-    MethodologyExtractor,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
-    ExtractionRequest,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.methodology_models import (
-    MethodologyKnowledge,
+from app.intelligence.utilities.knowledge.knowledge_extractors.domain_extractor import (
+    DomainExtractor,
 )
 
 
-# ============================================================================
-# TEST CASES
-# ============================================================================
+####################################################################
+# ASSERTION HELPERS
+####################################################################
 
-TEST_CASES = [
+def check(
+    condition,
+    description,
+):
+    """
+    Print PASS/FAIL for an individual assertion.
+    """
 
-    # ------------------------------------------------------------------------
-    # CANONICAL
-    # ------------------------------------------------------------------------
+    if condition:
 
-    (
-        "Demonstrated experience with HACCP.",
-        "HACCP",
-        "METH_HACCP",
-    ),
+        print(
+            f"   PASS: {description}"
+        )
 
-    (
-        "Experienced in DMAIC methodology.",
-        "DMAIC",
-        "METH_DMAIC",
-    ),
+        return True
 
-    (
-        "Applied PDCA for continuous improvement.",
-        "PDCA",
-        "METH_PDCA",
-    ),
+    print(
+        f"   FAIL: {description}"
+    )
 
-    (
-        "Experienced with Six Sigma.",
-        "Six Sigma",
-        "METH_SIX_SIGMA",
-    ),
-
-    (
-        "Implemented Lean Manufacturing.",
-        "Lean Manufacturing",
-        "METH_LEAN_MANUFACTURING",
-    ),
-
-    (
-        "Applied 5S methodology.",
-        "5S",
-        "METH_5S",
-    ),
-
-    (
-        "Experienced in Root Cause Analysis.",
-        "Root Cause Analysis",
-        "METH_ROOT_CAUSE_ANALYSIS",
-    ),
-
-    (
-        "Applied Kaizen principles.",
-        "Kaizen",
-        "METH_KAIZEN",
-    ),
-
-    (
-        "Experienced in FMEA.",
-        "FMEA",
-        "METH_FMEA",
-    ),
-
-    (
-        "Used Statistical Process Control.",
-        "Statistical Process Control",
-        "METH_SPC",
-    ),
-
-    # ------------------------------------------------------------------------
-    # MULTIPLE
-    # ------------------------------------------------------------------------
-
-    (
-        "Experienced with HACCP, FMEA, Six Sigma and Kaizen.",
-        None,
-        None,
-    ),
-]
+    return False
 
 
-# ============================================================================
-# RESULT NORMALIZATION
-# ============================================================================
+####################################################################
+# RESULT DISPLAY
+####################################################################
 
-def get_methodology_objects(result):
+def print_result(
+    test_number,
+    sentence,
+    result,
+):
 
-    if result is None:
-        return []
+    print(
+        "\n"
+        + "=" * 80
+    )
 
-    if hasattr(result, "entities"):
-        return list(result.entities)
+    print(
+        f"TEST #{test_number}"
+    )
 
-    if isinstance(result, list):
-        return result
+    print(
+        f"SENTENCE: {sentence}"
+    )
 
-    if hasattr(result, "results"):
-        return list(result.results)
+    print(
+        "\nResult object:"
+    )
 
-    return [result]
+    print(
+        result
+    )
+
+    print(
+        "\nDomain:"
+    )
+
+    print(
+        f"Found:              {result.found}"
+    )
+
+    print(
+        f"Canonical:           {result.canonical}"
+    )
+
+    print(
+        f"Entity ID:           {result.entity_id}"
+    )
+
+    print(
+        f"Entity Type:         {result.entity_type}"
+    )
+
+    print(
+        f"Ontology:            {result.ontology_name}"
+    )
+
+    print(
+        f"Category:            {result.category}"
+    )
+
+    print(
+        f"Business Area:       {result.business_area}"
+    )
+
+    print(
+        f"Domain Family:       {result.domain_family}"
+    )
+
+    print(
+        f"Parent Domain:       {result.parent_domain}"
+    )
+
+    print(
+        f"Business Function:   {result.business_function}"
+    )
+
+    print(
+        "\nClassification:"
+    )
+
+    print(
+        f"Strategic:           {result.strategic}"
+    )
+
+    print(
+        f"Operational:         {result.operational}"
+    )
+
+    print(
+        f"Technical:           {result.technical}"
+    )
+
+    print(
+        f"Compliance:          {result.compliance}"
+    )
+
+    print(
+        f"Management:          {result.management}"
+    )
+
+    print(
+        "\nEnterprise:"
+    )
+
+    print(
+        f"Enterprise Level:    {result.enterprise_level}"
+    )
+
+    print(
+        f"Criticality:         {result.criticality}"
+    )
+
+    print(
+        "\nReasoning:"
+    )
+
+    print(
+        f"Reasoning ID:        {result.reasoning_id}"
+    )
+
+    print(
+        f"Reasoning Confidence:{result.reasoning_confidence}"
+    )
+
+    print(
+        f"Primary Domain:      {result.primary_domain}"
+    )
+
+    print(
+        f"Secondary Domains:   {result.secondary_domains}"
+    )
+
+    print(
+        f"Trigger Actions:     {result.trigger_actions}"
+    )
+
+    print(
+        f"Trigger Objects:     {result.trigger_objects}"
+    )
+
+    print(
+        f"Trigger Skills:      {result.trigger_skills}"
+    )
+
+    print(
+        f"Trigger Metrics:     {result.trigger_metrics}"
+    )
+
+    print(
+        f"Trigger Certifications: {result.trigger_certifications}"
+    )
+
+    print(
+        "\nResult:",
+        "PASS" if result.found else "FAIL",
+    )
 
 
-# ============================================================================
-# PRINT OBJECT
-# ============================================================================
+####################################################################
+# DOMAIN RESOLUTION TESTS
+####################################################################
 
-def print_methodology(item: MethodologyKnowledge):
+def test_domain_resolution(
+    repository,
+):
 
-    fields = [
-        "found",
-        "confidence",
-        "original",
-        "matched_phrase",
-        "canonical",
-        "normalized",
-        "entity_id",
-        "entity_type",
-        "ontology_name",
-        "category",
-        "business_area",
-        "domain",
-        "description",
-        "impact_weight",
-        "source",
-        "matched_alias",
-        "is_alias",
-        "methodology_family",
-        "methodology_group",
-        "version",
-        "continuous_improvement",
-        "quality_management",
-        "food_safety",
-        "risk_management",
-        "analytical",
-        "problem_solving",
-        "statistical",
-        "certification_related",
-        "implementation_required",
-        "maturity_level",
-        "graph_node",
-        "ats_weight",
+    print(
+        "\n"
+        + "=" * 80
+    )
+
+    print(
+        "DOMAIN REPOSITORY RESOLUTION TESTS"
+    )
+
+    print(
+        "=" * 80
+    )
+
+    tests = [
+
+        (
+            "Operations",
+            "Operations",
+            "DOMAIN_OPERATIONS",
+        ),
+
+        (
+            "operations",
+            "Operations",
+            "DOMAIN_OPERATIONS",
+        ),
+
+        (
+            "Manufacturing",
+            "Manufacturing",
+            "DOMAIN_MANUFACTURING",
+        ),
+
+        (
+            "Food Safety",
+            "Food Safety",
+            "DOMAIN_FOOD_SAFETY",
+        ),
+
+        (
+            "Quality Management",
+            "Quality",
+            "DOMAIN_QUALITY",
+        ),
+
+        (
+            "Supply Chain",
+            "Supply Chain",
+            "DOMAIN_SUPPLY_CHAIN",
+        ),
+
+        (
+            "Leadership",
+            "Leadership",
+            "DOMAIN_LEADERSHIP",
+        ),
+
     ]
 
-    print()
-    print("METHODOLOGY OBJECT")
-    print("-" * 80)
-
-    for field_name in fields:
-
-        value = getattr(
-            item,
-            field_name,
-            None,
-        )
-
-        print(
-            f"{field_name:<30} = {value!r}"
-        )
-
-
-# ============================================================================
-# MAIN
-# ============================================================================
-
-def main():
-
-    print()
-    print("=" * 80)
-    print("ENTERPRISE METHODOLOGY EXTRACTOR TEST")
-    print("=" * 80)
-
-    print()
-    print("Starting test_models.py...")
-
-    # ========================================================================
-    # 1. REPOSITORY
-    # ========================================================================
-
-    print()
-    print("1. Loading repository...")
-
-    repository = Repository()
-
-    print(
-        "   ✅ Repository loaded"
-    )
-
-    entities = repository.cache.entity_indexes.get(
-        "methodologies",
-        {},
-    )
-
-    print()
-    print("Ontology:")
-    print("methodologies")
-
-    print()
-    print("Total entities:")
-    print(len(entities))
-
-    # ========================================================================
-    # 2. ENTITY TYPE
-    # ========================================================================
-
-    print()
-    print("2. Checking repository entity type...")
-
-    entity_types = sorted(
-        {
-            getattr(
-                entity,
-                "entity_type",
-                None,
-            )
-            for entity in entities.values()
-            if getattr(
-                entity,
-                "entity_type",
-                None,
-            )
-        }
-    )
-
-    print(
-        f"   Loaded entity types: {entity_types}"
-    )
-
-    if entity_types:
-
-        print(
-            f"   ✅ Repository entity type detected: "
-            f"{entity_types}"
-        )
-
-    else:
-
-        print(
-            "   ❌ No repository entity type found."
-        )
-
-    # ========================================================================
-    # 3. PIPELINE
-    # ========================================================================
-
-    print()
-    print("3. Creating KnowledgeV5Pipeline...")
-
-    pipeline = KnowledgeV5Pipeline(
-        repository_instance=repository,
-    )
-
-    print(
-        "   ✅ Pipeline created"
-    )
-
-    # ========================================================================
-    # 4. EXTRACTOR
-    # ========================================================================
-
-    print()
-    print("4. Creating MethodologyExtractor...")
-
-    extractor = MethodologyExtractor(
-        pipeline=pipeline,
-    )
-
-    print(
-        "   ✅ Extractor created"
-    )
-
-    print()
-    print(
-        f"Extractor ontology    = "
-        f"{extractor.ontology_name}"
-    )
-
-    print(
-        f"Extractor entity type = "
-        f"{extractor.entity_type}"
-    )
-
-    # ========================================================================
-    # 5. ENTITY TYPE CHECK
-    # ========================================================================
-
-    if (
-        entity_types
-        and extractor.entity_type not in entity_types
-    ):
-
-        print()
-        print(
-            "⚠️ WARNING"
-        )
-
-        print(
-            "Extractor entity type is not present "
-            "in repository entity types."
-        )
-
-        print(
-            f"Extractor: "
-            f"{extractor.entity_type}"
-        )
-
-        print(
-            f"Repository: "
-            f"{entity_types}"
-        )
-
-    else:
-
-        print()
-        print(
-            "✅ Extractor entity type matches repository."
-        )
-
-    # ========================================================================
-    # 6. TESTS
-    # ========================================================================
-
-    print()
-    print("5. METHODOLOGY EXTRACTION TESTS")
-
-    print()
-    print("=" * 80)
-
     passed = 0
+
     failed = 0
 
-    for test_number, (
-        sentence,
-        expected_canonical,
-        expected_entity_id,
-    ) in enumerate(TEST_CASES, start=1):
+    for phrase, expected_canonical, expected_id in tests:
 
-        print()
-        print(
-            f"TEST #{test_number}"
+        entity = repository.find_entity(
+            "domains",
+            phrase,
         )
 
-        print(
-            f"SENTENCE: {sentence}"
-        )
-
-        print()
-
-        try:
-
-            # ----------------------------------------------------------------
-            # REQUEST
-            # ----------------------------------------------------------------
-
-            request = ExtractionRequest(
-                sentence=sentence,
-                context={
-                    "sentence_index": 0,
-                },
-            )
-
-            # ----------------------------------------------------------------
-            # EXTRACT
-            # ----------------------------------------------------------------
-
-            result = extractor.extract(
-                request
-            )
+        if entity is None:
 
             print(
-                f"Raw result: {result}"
-            )
-
-            print(
-                f"Result type: "
-                f"{type(result)}"
-            )
-
-            # ----------------------------------------------------------------
-            # GET ENTITIES
-            # ----------------------------------------------------------------
-
-            methodologies = get_methodology_objects(
-                result
-            )
-
-            print(
-                f"Methodology objects: "
-                f"{len(methodologies)}"
-            )
-
-            # ----------------------------------------------------------------
-            # MULTIPLE TEST
-            # ----------------------------------------------------------------
-
-            if expected_entity_id is None:
-
-                expected_ids = {
-                    "METH_HACCP",
-                    "METH_FMEA",
-                    "METH_SIX_SIGMA",
-                    "METH_KAIZEN",
-                }
-
-                actual_ids = {
-                    getattr(
-                        item,
-                        "entity_id",
-                        None,
-                    )
-                    for item in methodologies
-                }
-
-                missing = (
-                    expected_ids
-                    - actual_ids
-                )
-
-                if not missing:
-
-                    print()
-                    print(
-                        "RESULT: ✅ PASS"
-                    )
-
-                    for item in methodologies:
-
-                        print(
-                            f"- "
-                            f"{getattr(item, 'canonical', '')}"
-                            f" "
-                            f"[{getattr(item, 'entity_id', '')}]"
-                            f" "
-                            f"phrase="
-                            f"{getattr(item, 'matched_phrase', '')!r}"
-                            f" "
-                            f"confidence="
-                            f"{getattr(item, 'confidence', None)}"
-                        )
-
-                    passed += 1
-
-                else:
-
-                    print()
-                    print(
-                        "RESULT: ❌ FAIL"
-                    )
-
-                    print(
-                        f"Missing: "
-                        f"{sorted(missing)}"
-                    )
-
-                    print()
-                    print(
-                        "Actual entities:"
-                    )
-
-                    for item in methodologies:
-
-                        print(
-                            f"- "
-                            f"{getattr(item, 'canonical', '')}"
-                            f" "
-                            f"[{getattr(item, 'entity_id', '')}]"
-                        )
-
-                    failed += 1
-
-                continue
-
-            # ----------------------------------------------------------------
-            # NO RESULT
-            # ----------------------------------------------------------------
-
-            if not methodologies:
-
-                print()
-                print(
-                    "RESULT: ❌ FAIL"
-                )
-
-                print(
-                    f"Expected canonical: "
-                    f"{expected_canonical}"
-                )
-
-                print(
-                    f"Expected entity_id: "
-                    f"{expected_entity_id}"
-                )
-
-                print()
-                print(
-                    "ACTUAL RESULTS:"
-                )
-
-                print(
-                    "- []"
-                )
-
-                failed += 1
-
-                continue
-
-            # ----------------------------------------------------------------
-            # FIND EXPECTED
-            # ----------------------------------------------------------------
-
-            matched = None
-
-            for item in methodologies:
-
-                if (
-                    getattr(
-                        item,
-                        "entity_id",
-                        None,
-                    )
-                    == expected_entity_id
-                ):
-
-                    matched = item
-
-                    break
-
-            # ----------------------------------------------------------------
-            # NOT FOUND
-            # ----------------------------------------------------------------
-
-            if matched is None:
-
-                print()
-                print(
-                    "RESULT: ❌ FAIL"
-                )
-
-                print(
-                    f"Expected canonical: "
-                    f"{expected_canonical}"
-                )
-
-                print(
-                    f"Expected entity_id: "
-                    f"{expected_entity_id}"
-                )
-
-                print()
-                print(
-                    "ACTUAL RESULTS:"
-                )
-
-                for item in methodologies:
-
-                    print(
-                        f"- "
-                        f"{getattr(item, 'canonical', '')}"
-                        f" "
-                        f"[{getattr(item, 'entity_id', '')}]"
-                    )
-
-                failed += 1
-
-                continue
-
-            # ----------------------------------------------------------------
-            # VALIDATION
-            # ----------------------------------------------------------------
-
-            errors = []
-
-            if (
-                getattr(
-                    matched,
-                    "canonical",
-                    None,
-                )
-                != expected_canonical
-            ):
-
-                errors.append(
-                    "canonical mismatch"
-                )
-
-            if (
-                getattr(
-                    matched,
-                    "entity_id",
-                    None,
-                )
-                != expected_entity_id
-            ):
-
-                errors.append(
-                    "entity_id mismatch"
-                )
-
-            if not getattr(
-                matched,
-                "found",
-                False,
-            ):
-
-                errors.append(
-                    "found is not True"
-                )
-
-            if not getattr(
-                matched,
-                "matched_phrase",
-                None,
-            ):
-
-                errors.append(
-                    "matched_phrase is empty"
-                )
-
-            if (
-                getattr(
-                    matched,
-                    "ontology_name",
-                    None,
-                )
-                != "methodologies"
-            ):
-
-                errors.append(
-                    "ontology_name mismatch"
-                )
-
-            # ----------------------------------------------------------------
-            # FAILURE
-            # ----------------------------------------------------------------
-
-            if errors:
-
-                print()
-                print(
-                    "RESULT: ❌ FAIL"
-                )
-
-                for error in errors:
-
-                    print(
-                        f"  - {error}"
-                    )
-
-                print_methodology(
-                    matched
-                )
-
-                failed += 1
-
-                continue
-
-            # ----------------------------------------------------------------
-            # SUCCESS
-            # ----------------------------------------------------------------
-
-            print()
-            print(
-                "RESULT: ✅ PASS"
-            )
-
-            print()
-            print(
-                f"- "
-                f"{matched.canonical}"
-                f" "
-                f"[{matched.entity_id}]"
-                f" "
-                f"phrase="
-                f"{matched.matched_phrase!r}"
-                f" "
-                f"confidence="
-                f"{matched.confidence}"
-                f" "
-                f"alias="
-                f"{matched.is_alias}"
-            )
-
-            passed += 1
-
-        # ====================================================================
-        # ERROR
-        # ====================================================================
-
-        except Exception as error:
-
-            print()
-            print(
-                "RESULT: ❌ ERROR"
-            )
-
-            print(
-                f"{type(error).__name__}: "
-                f"{error}"
+                f"   FAIL: {phrase} -> NOT FOUND"
             )
 
             failed += 1
 
-    # ========================================================================
-    # SUMMARY
-    # ========================================================================
+            continue
 
-    total = passed + failed
+        canonical_ok = (
+            entity.canonical
+            == expected_canonical
+        )
 
-    print()
-    print()
-    print("=" * 80)
-    print("METHODOLOGY EXTRACTOR TEST SUMMARY")
-    print("=" * 80)
+        id_ok = (
+            entity.entity_id
+            == expected_id
+        )
 
-    print()
+        if canonical_ok and id_ok:
+
+            print(
+                f"   PASS: {phrase} "
+                f"-> {entity.canonical} "
+                f"({entity.entity_id})"
+            )
+
+            passed += 1
+
+        else:
+
+            print(
+                f"   FAIL: {phrase} "
+                f"-> {entity.canonical} "
+                f"({entity.entity_id})"
+            )
+
+            failed += 1
 
     print(
-        f"Total tests : {total}"
+        "\nDomain repository tests:"
     )
 
     print(
-        f"Passed      : {passed}"
+        f"   Passed: {passed}"
     )
 
     print(
-        f"Failed      : {failed}"
+        f"   Failed: {failed}"
     )
 
-    print()
+    return passed, failed
 
-    if failed == 0:
+
+####################################################################
+# DOMAIN EXTRACTION TESTS
+####################################################################
+
+def test_domain_extraction(
+    extractor,
+):
+
+    print(
+        "\n"
+        + "=" * 80
+    )
+
+    print(
+        "DOMAIN EXTRACTION TESTS"
+    )
+
+    print(
+        "=" * 80
+    )
+
+    tests = [
+
+        (
+            1,
+            "Operations",
+        ),
+
+        (
+            2,
+            "Manufacturing",
+        ),
+
+        (
+            3,
+            "Food Safety",
+        ),
+
+        (
+            4,
+            "Quality Management",
+        ),
+
+        (
+            5,
+            "Supply Chain",
+        ),
+
+        (
+            6,
+            "Leadership",
+        ),
+
+    ]
+
+    passed = 0
+
+    failed = 0
+
+    for test_number, sentence in tests:
+
+        result = extractor.extract(
+            sentence
+        )
+
+        print_result(
+            test_number,
+            sentence,
+            result,
+        )
+
+        if result.found:
+
+            passed += 1
+
+        else:
+
+            failed += 1
+
+    print(
+        "\nDomain extraction tests:"
+    )
+
+    print(
+        f"   Passed: {passed}"
+    )
+
+    print(
+        f"   Failed: {failed}"
+    )
+
+    return passed, failed
+
+
+####################################################################
+# ALIAS TESTS
+####################################################################
+
+def test_domain_aliases(
+    repository,
+    extractor,
+):
+
+    print(
+        "\n"
+        + "=" * 80
+    )
+
+    print(
+        "DOMAIN ALIAS TESTS"
+    )
+
+    print(
+        "=" * 80
+    )
+
+    tests = [
+
+        (
+            "quality management",
+            "DOMAIN_QUALITY",
+        ),
+
+        (
+            "quality management system",
+            "DOMAIN_QUALITY",
+        ),
+
+        (
+            "qms",
+            "DOMAIN_QUALITY",
+        ),
+
+        (
+            "food-safety",
+            "DOMAIN_FOOD_SAFETY",
+        ),
+
+        (
+            "supply-chain",
+            "DOMAIN_SUPPLY_CHAIN",
+        ),
+
+    ]
+
+    passed = 0
+
+    failed = 0
+
+    for phrase, expected_id in tests:
+
+        entity = repository.find_entity(
+            "domains",
+            phrase,
+        )
+
+        if entity is not None:
+
+            if entity.entity_id == expected_id:
+
+                print(
+                    f"   PASS: {phrase} "
+                    f"-> {entity.canonical} "
+                    f"({entity.entity_id})"
+                )
+
+                passed += 1
+
+            else:
+
+                print(
+                    f"   FAIL: {phrase} "
+                    f"-> WRONG ENTITY "
+                    f"({entity.entity_id})"
+                )
+
+                failed += 1
+
+        else:
+
+            print(
+                f"   FAIL: {phrase} "
+                f"-> NOT FOUND"
+            )
+
+            failed += 1
+
+    print(
+        "\nDomain alias tests:"
+    )
+
+    print(
+        f"   Passed: {passed}"
+    )
+
+    print(
+        f"   Failed: {failed}"
+    )
+
+    return passed, failed
+
+
+####################################################################
+# NEGATIVE TESTS
+####################################################################
+
+def test_negative_cases(
+    repository,
+    extractor,
+):
+
+    print(
+        "\n"
+        + "=" * 80
+    )
+
+    print(
+        "NEGATIVE DOMAIN TESTS"
+    )
+
+    print(
+        "=" * 80
+    )
+
+    tests = [
+
+        None,
+
+        "",
+
+        "This domain does not exist",
+
+        "Random XYZ domain",
+
+    ]
+
+    passed = 0
+
+    failed = 0
+
+    for phrase in tests:
+
+        result = extractor.extract(
+            phrase
+        )
+
+        if not result.found:
+
+            print(
+                f"   PASS: {phrase!r} "
+                "-> correctly not found"
+            )
+
+            passed += 1
+
+        else:
+
+            print(
+                f"   FAIL: {phrase!r} "
+                "-> unexpected domain found"
+            )
+
+            failed += 1
+
+    print(
+        "\nNegative tests:"
+    )
+
+    print(
+        f"   Passed: {passed}"
+    )
+
+    print(
+        f"   Failed: {failed}"
+    )
+
+    return passed, failed
+
+
+####################################################################
+# DOMAIN REASONING TEST
+####################################################################
+
+def test_leadership_reasoning(
+    extractor,
+):
+
+    print(
+        "\n"
+        + "=" * 80
+    )
+
+    print(
+        "DOMAIN REASONING TEST"
+    )
+
+    print(
+        "=" * 80
+    )
+
+    result = extractor.extract(
+        "Leadership"
+    )
+
+    passed = 0
+
+    failed = 0
+
+    ################################################################
+    # BASIC DOMAIN
+    ################################################################
+
+    print(
+        "\n1. Basic Domain"
+    )
+
+    checks = [
+
+        (
+            result.found,
+            "Leadership domain found",
+        ),
+
+        (
+            result.canonical == "Leadership",
+            "Canonical = Leadership",
+        ),
+
+        (
+            result.entity_id
+            == "DOMAIN_LEADERSHIP",
+            "Entity ID = DOMAIN_LEADERSHIP",
+        ),
+
+        (
+            result.entity_type == "domain",
+            "Entity type = domain",
+        ),
+
+        (
+            result.ontology_name == "domains",
+            "Ontology = domains",
+        ),
+
+    ]
+
+    for condition, description in checks:
+
+        if check(
+            condition,
+            description,
+        ):
+
+            passed += 1
+
+        else:
+
+            failed += 1
+
+    ################################################################
+    # REASONING ID
+    ################################################################
+
+    print(
+        "\n2. Reasoning Identity"
+    )
+
+    checks = [
+
+        (
+            result.reasoning_id
+            == "REASON_LEADERSHIP",
+            "Reasoning ID = REASON_LEADERSHIP",
+        ),
+
+        (
+            result.reasoning_confidence
+            == 0.99,
+            "Reasoning confidence = 0.99",
+        ),
+
+        (
+            result.reasoning_object
+            is not None,
+            "Reasoning object exists",
+        ),
+
+    ]
+
+    for condition, description in checks:
+
+        if check(
+            condition,
+            description,
+        ):
+
+            passed += 1
+
+        else:
+
+            failed += 1
+
+    ################################################################
+    # PRIMARY / SECONDARY DOMAINS
+    ################################################################
+
+    print(
+        "\n3. Domain Relationships"
+    )
+
+    checks = [
+
+        (
+            result.primary_domain
+            == "leadership",
+            "Primary domain = leadership",
+        ),
+
+        (
+            result.secondary_domains
+            == [
+                "people_management",
+                "operations_management",
+                "strategic_management",
+            ],
+            "Secondary domains are correct",
+        ),
+
+    ]
+
+    for condition, description in checks:
+
+        if check(
+            condition,
+            description,
+        ):
+
+            passed += 1
+
+        else:
+
+            failed += 1
+
+    ################################################################
+    # TRIGGER ACTIONS
+    ################################################################
+
+    print(
+        "\n4. Trigger Actions"
+    )
+
+    expected_actions = [
+
+        "ACT_LEAD",
+        "ACT_DIRECT",
+        "ACT_MANAGE",
+        "ACT_SUPERVISE",
+        "ACT_GUIDE",
+        "ACT_MENTOR",
+        "ACT_COACH",
+        "ACT_DELEGATE",
+
+    ]
+
+    if check(
+        result.trigger_actions
+        == expected_actions,
+        "All leadership trigger actions are correct",
+    ):
+
+        passed += 1
+
+    else:
+
+        failed += 1
+
+    ################################################################
+    # TRIGGER OBJECTS
+    ################################################################
+
+    print(
+        "\n5. Trigger Objects"
+    )
+
+    expected_objects = [
+
+        "OBJ_TEAM",
+        "OBJ_EMPLOYEES",
+        "OBJ_ENGINEERS",
+        "OBJ_OPERATORS",
+        "OBJ_DEPARTMENT",
+
+    ]
+
+    if check(
+        result.trigger_objects
+        == expected_objects,
+        "All leadership trigger objects are correct",
+    ):
+
+        passed += 1
+
+    else:
+
+        failed += 1
+
+    ################################################################
+    # TRIGGER SKILLS
+    ################################################################
+
+    print(
+        "\n6. Trigger Skills"
+    )
+
+    expected_skills = [
+
+        "SKILL_LEADERSHIP",
+        "SKILL_TEAM_BUILDING",
+        "SKILL_COACHING",
+        "SKILL_MENTORING",
+        "SKILL_STAKEHOLDER_MANAGEMENT",
+
+    ]
+
+    if check(
+        result.trigger_skills
+        == expected_skills,
+        "All leadership trigger skills are correct",
+    ):
+
+        passed += 1
+
+    else:
+
+        failed += 1
+
+    ################################################################
+    # TRIGGER METRICS
+    ################################################################
+
+    print(
+        "\n7. Trigger Metrics"
+    )
+
+    expected_metrics = [
+
+        "KPI_EMPLOYEE_ENGAGEMENT",
+        "KPI_PRODUCTIVITY",
+        "KPI_TRAINING",
+        "KPI_RETENTION",
+
+    ]
+
+    if check(
+        result.trigger_metrics
+        == expected_metrics,
+        "All leadership trigger metrics are correct",
+    ):
+
+        passed += 1
+
+    else:
+
+        failed += 1
+
+    ################################################################
+    # TRIGGER CERTIFICATIONS
+    ################################################################
+
+    print(
+        "\n8. Trigger Certifications"
+    )
+
+    if check(
+        result.trigger_certifications == [],
+        "Leadership certifications list is empty",
+    ):
+
+        passed += 1
+
+    else:
+
+        failed += 1
+
+    ################################################################
+    # REASONING SUMMARY
+    ################################################################
+
+    print(
+        "\nReasoning test:"
+    )
+
+    print(
+        f"   Passed: {passed}"
+    )
+
+    print(
+        f"   Failed: {failed}"
+    )
+
+    return passed, failed
+
+
+####################################################################
+# MAIN
+####################################################################
+
+def main():
+
+    print(
+        "\nStarting test_domain.py..."
+    )
+
+    ################################################################
+    # 1. LOAD REPOSITORY
+    ################################################################
+
+    print(
+        "\n1. Loading repository..."
+    )
+
+    repository = Repository()
+
+    print(
+        "   Repository initialized successfully"
+    )
+
+    ################################################################
+    # 2. CREATE EXTRACTOR
+    ################################################################
+
+    print(
+        "\n2. Creating DomainExtractor..."
+    )
+
+    extractor = DomainExtractor(
+        repository=repository
+    )
+
+    print(
+        "   DomainExtractor created"
+    )
+
+    ################################################################
+    # 3. DOMAIN RESOLUTION
+    ################################################################
+
+    repository_passed, repository_failed = (
+        test_domain_resolution(
+            repository
+        )
+    )
+
+    ################################################################
+    # 4. DOMAIN EXTRACTION
+    ################################################################
+
+    extraction_passed, extraction_failed = (
+        test_domain_extraction(
+            extractor
+        )
+    )
+
+    ################################################################
+    # 5. ALIAS TESTS
+    ################################################################
+
+    alias_passed, alias_failed = (
+        test_domain_aliases(
+            repository,
+            extractor,
+        )
+    )
+
+    ################################################################
+    # 6. NEGATIVE TESTS
+    ################################################################
+
+    negative_passed, negative_failed = (
+        test_negative_cases(
+            repository,
+            extractor,
+        )
+    )
+
+    ################################################################
+    # 7. REASONING TEST
+    ################################################################
+
+    reasoning_passed, reasoning_failed = (
+        test_leadership_reasoning(
+            extractor
+        )
+    )
+
+    ################################################################
+    # 8. FINAL SUMMARY
+    ################################################################
+
+    total_passed = (
+        repository_passed
+        + extraction_passed
+        + alias_passed
+        + negative_passed
+        + reasoning_passed
+    )
+
+    total_failed = (
+        repository_failed
+        + extraction_failed
+        + alias_failed
+        + negative_failed
+        + reasoning_failed
+    )
+
+    total_tests = (
+        total_passed
+        + total_failed
+    )
+
+    print(
+        "\n"
+        + "=" * 80
+    )
+
+    print(
+        "FINAL DOMAIN TEST SUMMARY"
+    )
+
+    print(
+        "=" * 80
+    )
+
+    print(
+        f"Total assertions:   {total_tests}"
+    )
+
+    print(
+        f"Passed:             {total_passed}"
+    )
+
+    print(
+        f"Failed:             {total_failed}"
+    )
+
+    print(
+        "=" * 80
+    )
+
+    if total_failed == 0:
 
         print(
-            "✅ ALL METHODOLOGY EXTRACTOR TESTS PASSED"
+            "\nALL DOMAIN TESTS PASSED"
+        )
+
+        print(
+            "Domain resolution:       PASS"
+        )
+
+        print(
+            "Domain extraction:       PASS"
+        )
+
+        print(
+            "Domain aliases:          PASS"
+        )
+
+        print(
+            "Negative handling:       PASS"
+        )
+
+        print(
+            "Domain reasoning:        PASS"
         )
 
     else:
 
         print(
-            "❌ METHODOLOGY EXTRACTOR TESTS FAILED"
+            "\nSOME DOMAIN TESTS FAILED"
         )
 
-    print()
-    print("=" * 80)
-    print("DIAGNOSTIC COMPLETE")
-    print("=" * 80)
-    print()
+        print(
+            "\nReview the FAIL lines above."
+        )
 
 
-# ============================================================================
+####################################################################
 # ENTRY POINT
-# ============================================================================
+####################################################################
 
 if __name__ == "__main__":
+
     main()

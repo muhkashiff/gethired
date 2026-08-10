@@ -1,9 +1,9 @@
 """
-Enterprise Object Extractor
+Enterprise Target Extractor
 
 Generic Ontology Version
 
-Enterprise V4
+Enterprise V5
 """
 
 from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_extractor import (
@@ -11,11 +11,11 @@ from app.intelligence.utilities.knowledge.knowledge_extractors.generic_ontology_
 )
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.target_models import (
-    ObjectKnowledge,
+    TargetKnowledge,
 )
 
 
-class ObjectExtractor(GenericOntologyExtractor):
+class TargetExtractor(GenericOntologyExtractor):
 
     ####################################################################
     # CONFIGURATION
@@ -23,22 +23,18 @@ class ObjectExtractor(GenericOntologyExtractor):
 
     ontology_name = "targets"
 
-    knowledge_class = ObjectKnowledge
+    knowledge_class = TargetKnowledge
 
     entity_type = "target"
 
     ####################################################################
-    # OBJECT SPECIFIC FIELDS
+    # TARGET SPECIFIC FIELDS
     ####################################################################
 
     def extra_fields(
-
         self,
-
         entity,
-
         metadata,
-
     ):
 
         return {}
