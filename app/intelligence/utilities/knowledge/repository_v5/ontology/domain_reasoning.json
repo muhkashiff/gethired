@@ -133,8 +133,8 @@
     ],
 
     "trigger_standards": [
-      "STD_ISO9001",
-      "STD_FSSC22000",
+      "STD_ISO_9001",
+      "STD_FSSC_22000",
       "STD_HACCP",
       "STD_BRCGS"
     ],
@@ -279,10 +279,10 @@
     ],
 
     "trigger_standards": [
-      "STD_ISO9001",
-      "STD_ISO17025",
+      "STD_ISO_9001",
+      "STD_ISO_17025",
       "STD_BRCGS",
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
 
     "trigger_methodologies": [
@@ -436,8 +436,8 @@
     ],
 
     "trigger_standards": [
-      "STD_ISO9001",
-      "STD_FSSC22000",
+      "STD_ISO_9001",
+      "STD_FSSC_22000",
       "STD_BRCGS",
       "STD_HACCP"
     ],
@@ -480,8 +480,8 @@
     ],
 
     "trigger_standards": [
-      "STD_ISO9001",
-      "STD_FSSC22000",
+      "STD_ISO_9001",
+      "STD_FSSC_22000",
       "STD_BRCGS",
       "STD_HACCP",
       "STD_GMP"
@@ -530,7 +530,7 @@
     ],
 
     "trigger_standards": [
-      "STD_FSSC22000",
+      "STD_FSSC_22000",
       "STD_BRCGS",
       "STD_HACCP",
       "STD_GMP"
@@ -588,7 +588,7 @@
 
     "trigger_standards": [
       "STD_HACCP",
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
 
     "trigger_metrics": [
@@ -660,7 +660,7 @@
 
     "trigger_standards": [
       "STD_BRCGS",
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
 
     "trigger_metrics": [
@@ -696,7 +696,7 @@
 
     "trigger_standards": [
       "STD_BRCGS",
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
 
     "trigger_metrics": [
@@ -730,7 +730,7 @@
     ],
 
     "trigger_standards": [
-      "STD_FSSC22000",
+      "STD_FSSC_22000",
       "STD_BRCGS"
     ],
 
@@ -766,7 +766,7 @@
     ],
 
     "trigger_standards": [
-      "STD_FSSC22000",
+      "STD_FSSC_22000",
       "STD_BRCGS"
     ],
 
@@ -844,9 +844,9 @@
     ],
 
     "trigger_standards": [
-      "STD_ISO9001",
+      "STD_ISO_9001",
       "STD_BRCGS",
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
 
     "trigger_methodologies": [
@@ -931,9 +931,9 @@
     ],
 
     "trigger_standards": [
-      "STD_ISO9001",
+      "STD_ISO_9001",
       "STD_BRCGS",
-      "STD_FSSC22000"
+      "STD_FSSC_22000"
     ],
 
     "trigger_metrics": [

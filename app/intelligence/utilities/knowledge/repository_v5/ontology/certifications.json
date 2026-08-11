@@ -1,6 +1,6 @@
 {
   "ISO 9001": {
-    "entity_id": "CERT_ISO9001",
+    "entity_id": "CERT_ISO_9001",
     "canonical": "ISO 9001 Certification",
     "aliases": [
       "ISO9001",
@@ -32,7 +32,7 @@
   },
 
   "FSSC 22000": {
-    "entity_id": "CERT_FSSC22000",
+    "entity_id": "CERT_FSSC_22000",
     "canonical": "FSSC 22000 Certification",
     "aliases": [
       "FSSC22000",
@@ -42,6 +42,18 @@
     "category": "food_safety",
     "business_area": "food_safety",
     "description": "Food safety management system certification scheme."
+  },
+  "FSSC 22000 Lead Auditor": {
+    "entity_id": "CERT_FSSC_22000_LEAD_AUDITOR",
+    "canonical": "FSSC 22000 Lead AuditorCertification",
+    "aliases": [
+      "FSSC22000 Lead auditor",
+      "Food Safety System Certification 22000 Lead Auditor",
+      "FSSC 22000 Certification Lead Auditor"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Lead Auditor of Food safety management system certification scheme."
   },
 
   "BRCGS": {
@@ -54,6 +66,17 @@
     "category": "food_safety",
     "business_area": "food_safety",
     "description": "BRCGS certification for food safety and related product standards."
+  },
+  "BRCGS Lead Auditor": {
+    "entity_id": "CERT_BRCGS_LEAD_AUDITOR",
+    "canonical": "BRCGS Lead Auditor Certification",
+    "aliases": [
+      "BRC lead auditor",
+      "BRCGS lead auditor Certification"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "BRCGS certification for lead auditor food safety and related product standards."
   },
 
   "BRCGS Food Safety": {
@@ -96,7 +119,7 @@
   },
 
   "ISO 22000": {
-    "entity_id": "CERT_ISO22000",
+    "entity_id": "CERT_ISO_22000",
     "canonical": "ISO 22000 Certification",
     "aliases": [
       "ISO22000",
@@ -108,7 +131,7 @@
   },
 
   "ISO 14001": {
-    "entity_id": "CERT_ISO14001",
+    "entity_id": "CERT_ISO_14001",
     "canonical": "ISO 14001 Certification",
     "aliases": [
       "ISO14001",
@@ -121,7 +144,7 @@
   },
 
   "ISO 45001": {
-    "entity_id": "CERT_ISO45001",
+    "entity_id": "CERT_ISO_45001",
     "canonical": "ISO 45001 Certification",
     "aliases": [
       "ISO45001",
@@ -134,7 +157,7 @@
   },
 
   "ISO 50001": {
-    "entity_id": "CERT_ISO50001",
+    "entity_id": "CERT_ISO_50001",
     "canonical": "ISO 50001 Certification",
     "aliases": [
       "ISO50001",
@@ -146,7 +169,7 @@
   },
 
   "ISO 26000": {
-    "entity_id": "CERT_ISO26000",
+    "entity_id": "CERT_ISO_26000",
     "canonical": "ISO 26000",
     "aliases": [
       "ISO26000"
@@ -156,7 +179,7 @@
   },
 
   "ISO 37001": {
-    "entity_id": "CERT_ISO37001",
+    "entity_id": "CERT_ISO_37001",
     "canonical": "ISO 37001",
     "aliases": [
       "ISO37001"
@@ -166,7 +189,7 @@
   },
 
   "ISO 45003": {
-    "entity_id": "CERT_ISO45003",
+    "entity_id": "CERT_ISO_45003",
     "canonical": "ISO 45003",
     "aliases": [
       "ISO45003"
@@ -451,7 +474,7 @@
   },
 
   "Six Sigma Green Belt": {
-    "entity_id": "CERT_SSGB",
+    "entity_id": "CERT_SIX_SIGMA_GREEN_BELT",
     "canonical": "Six Sigma Green Belt",
     "aliases": [
       "Green Belt",
@@ -463,7 +486,7 @@
   },
 
   "Six Sigma Black Belt": {
-    "entity_id": "CERT_SSBB",
+    "entity_id": "CERT_SIX_SIGMA_BLACK_BELT",
     "canonical": "Six Sigma Black Belt",
     "aliases": [
       "Black Belt",
@@ -480,6 +503,17 @@
     "aliases": [
       "LSS",
       "Lean Six Sigma Certification"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations",
+    "professional": true
+  },
+"Lean Management": {
+    "entity_id": "CERT_LEAN_MANAGEMENT",
+    "canonical": "Lean Management",
+    "aliases": [
+      "Lean management",
+      "Lean management Certification"
     ],
     "category": "continuous_improvement",
     "business_area": "operations",
@@ -502,7 +536,7 @@
   },
 
   "Agile Scrum Master": {
-    "entity_id": "CERT_SCRUM_MASTER",
+    "entity_id": "CERT_AGILE_SCRUM_MASTER",
     "canonical": "Agile Scrum Master",
     "aliases": [
       "Scrum Master",

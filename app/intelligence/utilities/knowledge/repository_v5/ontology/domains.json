@@ -26,6 +26,20 @@
     "description": "Quality management and quality assurance activities.",
     "impact_weight": 1.0
   },
+  "quality management": {
+    "entity_id": "DOMAIN_QUALITY_MANAGEMENT",
+    "canonical": "Quality Management",
+    "aliases": [
+      "quality",
+      "quality management",
+      "quality management system",
+      "qms"
+    ],
+    "category": "quality",
+    "business_area": "quality",
+    "description": "Quality management and quality assurance activities.",
+    "impact_weight": 1.0
+  },
   
   "manufacturing": {
     "entity_id": "DOMAIN_MANUFACTURING",
@@ -354,6 +368,18 @@
     "description": "",
     "impact_weight": 1.0
   },
+  "Business analytics": {
+    "entity_id": "DOMAIN_BUSINESS_ANALYTICS",
+    "canonical": "Business Analytics",
+    "aliases": [
+      "business analytics",
+      "Business analytics"
+    ],
+    "category": "analytics",
+    "business_area": "analytics",
+    "description": "",
+    "impact_weight": 1.0
+  },
   "digital_transformation": {
     "entity_id": "DOMAIN_DIGITAL_TRANSFORMATION",
     "canonical": "Digital Transformation",
@@ -437,5 +463,80 @@
     "business_area": "sustainability",
     "description": "",
     "impact_weight": 1.0
-  }
+  },
+
+"business intelligence": {
+  "entity_id": "DOMAIN_BUSINESS_INTELLIGENCE",
+  "canonical": "Business Intelligence",
+  "aliases": [
+    "business intelligence",
+    "BI",
+    "business intelligence analytics",
+    "BI analytics"
+  ],
+  "category": "business_analytics",
+  "business_area": "business_analytics",
+  "description": "Use of data, reporting, dashboards, and analytical tools to support business decision-making.",
+  "impact_weight": 0.95
+},
+
+"customer experience": {
+  "entity_id": "DOMAIN_CUSTOMER_EXPERIENCE",
+  "canonical": "Customer Experience",
+  "aliases": [
+    "customer experience",
+    "CX",
+    "customer satisfaction",
+    "customer service experience"
+  ],
+  "category": "customer",
+  "business_area": "customer_experience",
+  "description": "Activities focused on improving customer satisfaction, service quality, and overall customer experience.",
+  "impact_weight": 0.95
+},
+
+"data analytics": {
+  "entity_id": "DOMAIN_DATA_ANALYTICS",
+  "canonical": "Data Analytics",
+  "aliases": [
+    "data analytics",
+    "data analysis",
+    "analytics",
+    "data analysis and analytics"
+  ],
+  "category": "analytics",
+  "business_area": "data_analytics",
+  "description": "Analysis, interpretation, and visualization of data to identify insights and support informed decision-making.",
+  "impact_weight": 1.0
+},
+
+"operational excellence": {
+  "entity_id": "DOMAIN_OPERATIONAL_EXCELLENCE",
+  "canonical": "Operational Excellence",
+  "aliases": [
+    "operational excellence",
+    "operations excellence",
+    "OpEx",
+    "operational improvement"
+  ],
+  "category": "operations",
+  "business_area": "operations",
+  "description": "Continuous improvement of operational processes, efficiency, quality, productivity, and business performance.",
+  "impact_weight": 1.0
+},
+
+"quality control": {
+  "entity_id": "DOMAIN_QUALITY_CONTROL",
+  "canonical": "Quality Control",
+  "aliases": [
+    "quality control",
+    "QC",
+    "quality inspection",
+    "quality testing"
+  ],
+  "category": "quality",
+  "business_area": "quality",
+  "description": "Inspection, testing, monitoring, and verification activities used to control product and process quality.",
+  "impact_weight": 1.0
+}
 }

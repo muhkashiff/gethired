@@ -52,4 +52,53 @@ repository_v5/
           └───────────┬───────────┘
                       ▼
                  ATS Analysis
+
+
+                                          repository_v5
+                              │
+          ┌───────────────────┼───────────────────┐
+          │                   │                   │
+       ontology            ontology            ontology
+          │                   │                   │
+   business_kpis.json     actions.json       relations.json
+          │                   │                   │
+          └──────────────┬────┴───────────────────┘
+                         │
+                 RepositoryLoader
+                         │
+                         ▼
+                RepositoryEntity
+                         │
+                         ▼
+                    Repository
+                         │
+              ┌──────────┴──────────┐
+              │                     │
+        Entity indexes        Relation indexes
+              │                     │
+              │              ┌──────┼───────┐
+              │              │      │       │
+              │           source  target   type
+              │              │      │       │
+              └──────────────┴──────┴───────┘
+                             │
+                             ▼
+                    Entity Extractors
+                             │
+                 ┌───────────┴───────────┐
+                 │                       │
+          ActionExtractor          TargetExtractor
+                 │                       │
+                 └───────────┬───────────┘
+                             │
+                     RepositoryEntity
+                             │
+                             ▼
+                     RelationExtractor
+                             │
+                             ▼
+                    RelationKnowledge
+                             │
+                             ▼
+                       Semantic Graph
     """

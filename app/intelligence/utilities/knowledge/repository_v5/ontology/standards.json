@@ -158,7 +158,19 @@
     "category": "food_safety",
     "business_area": "food_safety"
   },
-
+"food safety": {
+  "entity_id": "STD_FOOD_SAFETY",
+  "canonical": "Food Safety",
+  "aliases": [
+    "food safety",
+    "food safety standard",
+    "food safety management",
+    "food safety system",
+    "FSMS"
+  ],
+  "category": "food_safety",
+  "business_area": "food_safety"
+},
   "ifs food": {
     "entity_id": "STD_IFS",
     "canonical": "IFS Food",

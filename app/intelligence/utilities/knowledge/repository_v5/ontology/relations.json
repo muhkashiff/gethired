@@ -1,8 +1,9 @@
+
 {
   "REL_000001": {
     "relation_type": "acts_on",
     "source": "ACT_IMPLEMENT",
-    "target": "OBJ_QMS",
+    "target": "TGT_QMS",
     "weight": 1.0,
     "description": "Implementation action targets the Quality Management System."
   },
@@ -10,28 +11,28 @@
   "REL_000002": {
     "relation_type": "acts_on",
     "source": "ACT_IMPLEMENT",
-    "target": "OBJ_FSMS",
+    "target": "TGT_FSMS",
     "weight": 1.0
   },
 
   "REL_000003": {
     "relation_type": "acts_on",
     "source": "ACT_MONITOR",
-    "target": "OBJ_PROCESS",
+    "target": "TGT_PROCESS",
     "weight": 0.95
   },
 
   "REL_000004": {
     "relation_type": "acts_on",
     "source": "ACT_VALIDATE",
-    "target": "OBJ_PROCESS",
+    "target": "TGT_PROCESS",
     "weight": 0.95
   },
 
   "REL_000005": {
     "relation_type": "acts_on",
     "source": "ACT_VERIFY",
-    "target": "OBJ_PROCESS",
+    "target": "TGT_PROCESS",
     "weight": 0.95
   },
 
@@ -86,36 +87,36 @@
 
   "REL_000013": {
     "relation_type": "governs",
-    "source": "STD_ISO9001",
-    "target": "OBJ_QMS",
+    "source": "STD_ISO_9001",
+    "target": "TGT_QMS",
     "weight": 1.00
   },
 
   "REL_000014": {
     "relation_type": "governs",
-    "source": "STD_FSSC22000",
-    "target": "OBJ_FSMS",
+    "source": "STD_FSSC_22000",
+    "target": "TGT_FSMS",
     "weight": 1.00
   },
 
   "REL_000015": {
     "relation_type": "governs",
     "source": "STD_HACCP",
-    "target": "OBJ_HACCP_PLAN",
+    "target": "TGT_HACCP_PLAN",
     "weight": 1.00
   },
 
   "REL_000016": {
     "relation_type": "governs",
     "source": "STD_BRCGS",
-    "target": "OBJ_MANUFACTURING_FACILITY",
+    "target": "TGT_MANUFACTURING_FACILITY",
     "weight": 0.95
   },
 
   "REL_000017": {
     "relation_type": "improves",
     "source": "METH_LEAN",
-    "target": "KPI_PRODUCTIVITY",
+    "target": "BKPI_PRODUCTIVITY",
     "weight": 0.95
   },
 
@@ -139,7 +140,7 @@
     "target": "KPI_OEE",
     "weight": 1.00
   },
-  
+
   "REL_000021": {
     "relation_type": "belongs_to_domain",
     "source": "SKILL_LEADERSHIP",
@@ -227,14 +228,14 @@
   "REL_000033": {
     "relation_type": "validated_by",
     "source": "DOMAIN_QUALITY_MANAGEMENT",
-    "target": "STD_ISO9001",
+    "target": "STD_ISO_9001",
     "weight": 1.00
   },
 
   "REL_000034": {
     "relation_type": "validated_by",
     "source": "DOMAIN_FOOD_SAFETY",
-    "target": "STD_FSSC22000",
+    "target": "STD_FSSC_22000",
     "weight": 1.00
   },
 
@@ -254,14 +255,14 @@
 
   "REL_000037": {
     "relation_type": "requires_skill",
-    "source": "STD_ISO9001",
+    "source": "STD_ISO_9001",
     "target": "SKILL_INTERNAL_AUDITING",
     "weight": 0.95
   },
 
   "REL_000038": {
     "relation_type": "requires_skill",
-    "source": "STD_FSSC22000",
+    "source": "STD_FSSC_22000",
     "target": "SKILL_HACCP",
     "weight": 1.00
   },
@@ -279,7 +280,7 @@
     "target": "SKILL_RISK_ASSESSMENT",
     "weight": 1.00
   },
-  
+
   "REL_000041": {
     "relation_type": "enables",
     "source": "TECH_PYTHON",
@@ -374,63 +375,63 @@
   "REL_000054": {
     "relation_type": "improves",
     "source": "TECH_POWER_BI",
-    "target": "KPI_DECISION_SPEED",
+    "target": "BKPI_DECISION_SPEED",
     "weight": 0.90
   },
 
   "REL_000055": {
     "relation_type": "improves",
     "source": "TECH_TABLEAU",
-    "target": "KPI_REPORTING_ACCURACY",
+    "target": "BKPI_REPORTING_ACCURACY",
     "weight": 0.90
   },
 
   "REL_000056": {
     "relation_type": "improves",
     "source": "TECH_SQL",
-    "target": "KPI_DATA_ACCURACY",
+    "target": "BKPI_DATA_ACCURACY",
     "weight": 0.90
   },
 
   "REL_000057": {
     "relation_type": "improves",
     "source": "TECH_PYTHON",
-    "target": "KPI_FORECAST_ACCURACY",
+    "target": "BKPI_FORECAST_ACCURACY",
     "weight": 0.95
   },
 
   "REL_000058": {
     "relation_type": "used_for",
     "source": "TECH_POWER_BI",
-    "target": "OBJ_DASHBOARD",
+    "target": "TGT_DASHBOARD",
     "weight": 1.00
   },
 
   "REL_000059": {
     "relation_type": "used_for",
     "source": "TECH_TABLEAU",
-    "target": "OBJ_DASHBOARD",
+    "target": "TGT_DASHBOARD",
     "weight": 1.00
   },
 
   "REL_000060": {
     "relation_type": "used_for",
     "source": "TECH_SQL",
-    "target": "OBJ_DATABASE",
+    "target": "TGT_DATABASE",
     "weight": 1.00
   },
-  
+
   "REL_000061": {
     "relation_type": "validates",
-    "source": "CERT_ISO9001_LEAD_AUDITOR",
-    "target": "STD_ISO9001",
+    "source": "CERT_ISO_9001_LEAD_AUDITOR",
+    "target": "STD_ISO_9001",
     "weight": 1.00
   },
 
   "REL_000062": {
     "relation_type": "validates",
-    "source": "CERT_FSSC22000_LEAD_AUDITOR",
-    "target": "STD_FSSC22000",
+    "source": "CERT_FSSC_22000_LEAD_AUDITOR",
+    "target": "STD_FSSC_22000",
     "weight": 1.00
   },
 
@@ -450,14 +451,14 @@
 
   "REL_000065": {
     "relation_type": "belongs_to_domain",
-    "source": "CERT_ISO9001_LEAD_AUDITOR",
+    "source": "CERT_ISO_9001_LEAD_AUDITOR",
     "target": "DOMAIN_QUALITY_MANAGEMENT",
     "weight": 1.00
   },
 
   "REL_000066": {
     "relation_type": "belongs_to_domain",
-    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "source": "CERT_FSSC_22000_LEAD_AUDITOR",
     "target": "DOMAIN_FOOD_SAFETY",
     "weight": 1.00
   },
@@ -485,21 +486,21 @@
 
   "REL_000070": {
     "relation_type": "requires_skill",
-    "source": "CERT_ISO9001_LEAD_AUDITOR",
+    "source": "CERT_ISO_9001_LEAD_AUDITOR",
     "target": "SKILL_INTERNAL_AUDITING",
     "weight": 1.00
   },
 
   "REL_000071": {
     "relation_type": "requires_skill",
-    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "source": "CERT_FSSC_22000_LEAD_AUDITOR",
     "target": "SKILL_HACCP",
     "weight": 1.00
   },
 
   "REL_000072": {
     "relation_type": "requires_skill",
-    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "source": "CERT_FSSC_22000_LEAD_AUDITOR",
     "target": "SKILL_RISK_ASSESSMENT",
     "weight": 0.95
   },
@@ -556,77 +557,77 @@
   "REL_000080": {
     "relation_type": "improves",
     "source": "CERT_LEAN_MANAGEMENT",
-    "target": "KPI_PRODUCTIVITY",
+    "target": "BKPI_PRODUCTIVITY",
     "weight": 0.90
   },
-  
+
   "REL_000101": {
     "relation_type": "experience_implies_skill",
-    "source": "OBJ_PRODUCTION_MANAGER",
+    "source": "TGT_PRODUCTION_MANAGER",
     "target": "SKILL_LEADERSHIP",
     "weight": 0.98
   },
 
   "REL_000102": {
     "relation_type": "experience_implies_skill",
-    "source": "OBJ_QA_MANAGER",
+    "source": "TGT_QA_MANAGER",
     "target": "SKILL_QUALITY_ASSURANCE",
     "weight": 1.00
   },
 
   "REL_000103": {
     "relation_type": "experience_implies_skill",
-    "source": "OBJ_FOOD_SAFETY_MANAGER",
+    "source": "TGT_FOOD_SAFETY_MANAGER",
     "target": "SKILL_HACCP",
     "weight": 1.00
   },
 
   "REL_000104": {
     "relation_type": "experience_implies_domain",
-    "source": "OBJ_QA_MANAGER",
+    "source": "TGT_QA_MANAGER",
     "target": "DOMAIN_QUALITY_MANAGEMENT",
     "weight": 1.00
   },
 
   "REL_000105": {
     "relation_type": "experience_implies_domain",
-    "source": "OBJ_PRODUCTION_MANAGER",
+    "source": "TGT_PRODUCTION_MANAGER",
     "target": "DOMAIN_MANUFACTURING",
     "weight": 0.97
   },
 
   "REL_000106": {
     "relation_type": "experience_implies_domain",
-    "source": "OBJ_SUPPLY_CHAIN_MANAGER",
+    "source": "TGT_SUPPLY_CHAIN_MANAGER",
     "target": "DOMAIN_SUPPLY_CHAIN",
     "weight": 1.00
   },
 
   "REL_000107": {
     "relation_type": "career_progression",
-    "source": "OBJ_QA_OFFICER",
-    "target": "OBJ_QA_SUPERVISOR",
+    "source": "TGT_QA_OFFICER",
+    "target": "TGT_QA_SUPERVISOR",
     "weight": 0.90
   },
 
   "REL_000108": {
     "relation_type": "career_progression",
-    "source": "OBJ_QA_SUPERVISOR",
-    "target": "OBJ_QA_MANAGER",
+    "source": "TGT_QA_SUPERVISOR",
+    "target": "TGT_QA_MANAGER",
     "weight": 0.95
   },
 
   "REL_000109": {
     "relation_type": "career_progression",
-    "source": "OBJ_QA_MANAGER",
-    "target": "OBJ_QA_DIRECTOR",
+    "source": "TGT_QA_MANAGER",
+    "target": "TGT_QA_DIRECTOR",
     "weight": 0.90
   },
 
   "REL_000110": {
     "relation_type": "career_progression",
-    "source": "OBJ_PRODUCTION_ENGINEER",
-    "target": "OBJ_PRODUCTION_MANAGER",
+    "source": "TGT_PRODUCTION_ENGINEER",
+    "target": "TGT_PRODUCTION_MANAGER",
     "weight": 0.95
   },
 
@@ -660,7 +661,7 @@
 
   "REL_000115": {
     "relation_type": "semantic_similarity",
-    "source": "CERT_FSSC22000_LEAD_AUDITOR",
+    "source": "CERT_FSSC_22000_LEAD_AUDITOR",
     "target": "CERT_BRCGS_LEAD_AUDITOR",
     "weight": 0.88
   },
@@ -696,56 +697,56 @@
   "REL_000120": {
     "relation_type": "supports_resume_scoring",
     "source": "DOMAIN_QUALITY_MANAGEMENT",
-    "target": "OBJ_RESUME",
+    "target": "TGT_RESUME",
     "weight": 1.00
   },
 
   "REL_000121": {
     "relation_type": "supports_resume_scoring",
     "source": "DOMAIN_BUSINESS_ANALYTICS",
-    "target": "OBJ_RESUME",
+    "target": "TGT_RESUME",
     "weight": 1.00
   },
 
   "REL_000122": {
     "relation_type": "supports_resume_scoring",
     "source": "DOMAIN_FOOD_SAFETY",
-    "target": "OBJ_RESUME",
+    "target": "TGT_RESUME",
     "weight": 1.00
   },
 
   "REL_000123": {
     "relation_type": "supports_job_matching",
     "source": "SKILL_HACCP",
-    "target": "OBJ_JOB_DESCRIPTION",
+    "target": "TGT_JOB_DESCRIPTION",
     "weight": 1.00
   },
 
   "REL_000124": {
     "relation_type": "supports_job_matching",
     "source": "CERT_PCQI",
-    "target": "OBJ_JOB_DESCRIPTION",
+    "target": "TGT_JOB_DESCRIPTION",
     "weight": 0.98
   },
 
   "REL_000125": {
     "relation_type": "supports_job_matching",
-    "source": "CERT_FSSC22000_LEAD_AUDITOR",
-    "target": "OBJ_JOB_DESCRIPTION",
+    "source": "CERT_FSSC_22000_LEAD_AUDITOR",
+    "target": "TGT_JOB_DESCRIPTION",
     "weight": 0.97
   },
 
   "REL_000126": {
     "relation_type": "supports_job_matching",
     "source": "SKILL_POWER_BI",
-    "target": "OBJ_JOB_DESCRIPTION",
+    "target": "TGT_JOB_DESCRIPTION",
     "weight": 0.95
   },
 
   "REL_000127": {
     "relation_type": "supports_job_matching",
     "source": "SKILL_MACHINE_LEARNING",
-    "target": "OBJ_JOB_DESCRIPTION",
+    "target": "TGT_JOB_DESCRIPTION",
     "weight": 0.94
   },
 
@@ -770,3 +771,4 @@
     "weight": 0.95
   }
 }
+

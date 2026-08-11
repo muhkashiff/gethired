@@ -118,6 +118,7 @@
     "higher_is_better": true,
     "impact_weight": 0.97
   },
+  
 
   "waste reduction": {
     "entity_id": "BKPI_WASTE_REDUCTION",
@@ -360,7 +361,7 @@
   },
   
   "first_pass_yield": {
-    "entity_id": "KPI_FIRST_PASS_YIELD",
+    "entity_id": "BKPI_FIRST_PASS_YIELD",
     "canonical": "First Pass Yield",
     "aliases": ["FPY"],
     "category": "quality",
@@ -372,7 +373,7 @@
   },
 
   "right_first_time": {
-    "entity_id": "KPI_RIGHT_FIRST_TIME",
+    "entity_id": "BKPI_RIGHT_FIRST_TIME",
     "canonical": "Right First Time",
     "aliases": ["RFT"],
     "category": "quality",
@@ -384,7 +385,7 @@
   },
 
   "customer_complaints": {
-    "entity_id": "KPI_CUSTOMER_COMPLAINTS",
+    "entity_id": "BKPI_CUSTOMER_COMPLAINTS",
     "canonical": "Customer Complaints",
     "aliases": [
       "complaints",
@@ -399,7 +400,7 @@
   },
 
   "consumer_complaints": {
-    "entity_id": "KPI_CUSTOMER_COMPLAINTS",
+    "entity_id": "BKPI_CUSTOMER_COMPLAINTS",
     "canonical": "Customer Complaints",
     "aliases": [],
     "category": "quality",
@@ -411,7 +412,7 @@
   },
 
   "customer_satisfaction": {
-    "entity_id": "KPI_CUSTOMER_SATISFACTION",
+    "entity_id": "BKPI_CUSTOMER_SATISFACTION",
     "canonical": "Customer Satisfaction",
     "aliases": [
       "csat"
@@ -425,7 +426,7 @@
   },
 
   "customer_rejection_rate": {
-    "entity_id": "KPI_CUSTOMER_REJECTION_RATE",
+    "entity_id": "BKPI_CUSTOMER_REJECTION_RATE",
     "canonical": "Customer Rejection Rate",
     "aliases": [],
     "category": "quality",
@@ -437,7 +438,7 @@
   },
 
   "supplier_quality_rating": {
-    "entity_id": "KPI_SUPPLIER_QUALITY_RATING",
+    "entity_id": "BKPI_SUPPLIER_QUALITY_RATING",
     "canonical": "Supplier Quality Rating",
     "aliases": [],
     "category": "supplier",
@@ -449,7 +450,7 @@
   },
 
   "incoming_rejection_rate": {
-    "entity_id": "KPI_INCOMING_REJECTION_RATE",
+    "entity_id": "BKPI_INCOMING_REJECTION_RATE",
     "canonical": "Incoming Material Rejection Rate",
     "aliases": [
       "incoming rejection"
@@ -463,7 +464,7 @@
   },
 
   "audit_score": {
-    "entity_id": "KPI_AUDIT_SCORE",
+    "entity_id": "BKPI_AUDIT_SCORE",
     "canonical": "Audit Score",
     "aliases": [
       "audit result"
@@ -477,7 +478,7 @@
   },
 
   "audit_findings": {
-    "entity_id": "KPI_AUDIT_FINDINGS",
+    "entity_id": "BKPI_AUDIT_FINDINGS",
     "canonical": "Audit Findings",
     "aliases": [
       "audit observations"
@@ -491,7 +492,7 @@
   },
 
   "major_nonconformities": {
-    "entity_id": "KPI_MAJOR_NONCONFORMITIES",
+    "entity_id": "BKPI_MAJOR_NONCONFORMITIES",
     "canonical": "Major Nonconformities",
     "aliases": [
       "major ncs"
@@ -505,7 +506,7 @@
   },
 
   "minor_nonconformities": {
-    "entity_id": "KPI_MINOR_NONCONFORMITIES",
+    "entity_id": "BKPI_MINOR_NONCONFORMITIES",
     "canonical": "Minor Nonconformities",
     "aliases": [
       "minor ncs"
@@ -519,7 +520,7 @@
   },
 
   "corrective_action_closure_rate": {
-    "entity_id": "KPI_CAPA_CLOSURE",
+    "entity_id": "BKPI_CAPA_CLOSURE",
     "canonical": "Corrective Action Closure Rate",
     "aliases": [
       "capa closure"
@@ -533,7 +534,7 @@
   },
 
   "food_safety_incidents": {
-    "entity_id": "KPI_FOOD_SAFETY_INCIDENTS",
+    "entity_id": "BKPI_FOOD_SAFETY_INCIDENTS",
     "canonical": "Food Safety Incidents",
     "aliases": [],
     "category": "food_safety",
@@ -545,7 +546,7 @@
   },
 
   "product_recall": {
-    "entity_id": "KPI_PRODUCT_RECALL",
+    "entity_id": "BKPI_PRODUCT_RECALL",
     "canonical": "Product Recall",
     "aliases": [
       "recall"
@@ -559,7 +560,7 @@
   },
 
   "traceability_time": {
-    "entity_id": "KPI_TRACEABILITY_TIME",
+    "entity_id": "BKPI_TRACEABILITY_TIME",
     "canonical": "Traceability Time",
     "aliases": [],
     "category": "food_safety",
@@ -571,7 +572,7 @@
   },
 
   "haccp_compliance": {
-    "entity_id": "KPI_HACCP_COMPLIANCE",
+    "entity_id": "BKPI_HACCP_COMPLIANCE",
     "canonical": "HACCP Compliance",
     "aliases": [],
     "category": "food_safety",
@@ -583,7 +584,7 @@
   },
 
   "gmp_compliance": {
-    "entity_id": "KPI_GMP_COMPLIANCE",
+    "entity_id": "BKPI_GMP_COMPLIANCE",
     "canonical": "GMP Compliance",
     "aliases": [],
     "category": "food_safety",
@@ -595,7 +596,7 @@
   },
 
   "sanitation_compliance": {
-    "entity_id": "KPI_SANITATION_COMPLIANCE",
+    "entity_id": "BKPI_SANITATION_COMPLIANCE",
     "canonical": "Sanitation Compliance",
     "aliases": [],
     "category": "food_safety",
@@ -607,7 +608,7 @@
   },
 
   "microbiological_compliance": {
-    "entity_id": "KPI_MICROBIOLOGICAL_COMPLIANCE",
+    "entity_id": "BKPI_MICROBIOLOGICAL_COMPLIANCE",
     "canonical": "Microbiological Compliance",
     "aliases": [],
     "category": "food_safety",
@@ -619,7 +620,7 @@
   },
   
   "net_promoter_score": {
-    "entity_id": "KPI_NPS",
+    "entity_id": "BKPI_NPS",
     "canonical": "Net Promoter Score",
     "aliases": [
       "NPS"
@@ -633,7 +634,7 @@
   },
 
   "customer_retention": {
-    "entity_id": "KPI_CUSTOMER_RETENTION",
+    "entity_id": "BKPI_CUSTOMER_RETENTION",
     "canonical": "Customer Retention",
     "aliases": [],
     "category": "customer",
@@ -645,7 +646,7 @@
   },
 
   "customer_acquisition": {
-    "entity_id": "KPI_CUSTOMER_ACQUISITION",
+    "entity_id": "BKPI_CUSTOMER_ACQUISITION",
     "canonical": "Customer Acquisition",
     "aliases": [],
     "category": "customer",
@@ -657,7 +658,7 @@
   },
 
   "employee_turnover": {
-    "entity_id": "KPI_EMPLOYEE_TURNOVER",
+    "entity_id": "BKPI_EMPLOYEE_TURNOVER",
     "canonical": "Employee Turnover",
     "aliases": [
       "Turnover Rate"
@@ -671,7 +672,7 @@
   },
 
   "absenteeism": {
-    "entity_id": "KPI_ABSENTEEISM",
+    "entity_id": "BKPI_ABSENTEEISM",
     "canonical": "Absenteeism",
     "aliases": [],
     "category": "people",
@@ -683,7 +684,7 @@
   },
 
   "training_completion": {
-    "entity_id": "KPI_TRAINING_COMPLETION",
+    "entity_id": "BKPI_TRAINING_COMPLETION",
     "canonical": "Training Completion",
     "aliases": [],
     "category": "people",
@@ -695,7 +696,7 @@
   },
 
   "competency_score": {
-    "entity_id": "KPI_COMPETENCY",
+    "entity_id": "BKPI_COMPETENCY",
     "canonical": "Competency Score",
     "aliases": [],
     "category": "people",
@@ -707,7 +708,7 @@
   },
 
   "safety_incidents": {
-    "entity_id": "KPI_SAFETY_INCIDENTS",
+    "entity_id": "BKPI_SAFETY_INCIDENTS",
     "canonical": "Safety Incidents",
     "aliases": [
       "Incidents"
@@ -721,7 +722,7 @@
   },
 
   "lost_time_injury_frequency": {
-    "entity_id": "KPI_LTIFR",
+    "entity_id": "BKPI_LTIFR",
     "canonical": "Lost Time Injury Frequency Rate",
     "aliases": [
       "LTIFR",
@@ -736,7 +737,7 @@
   },
 
   "near_miss_reporting": {
-    "entity_id": "KPI_NEAR_MISS",
+    "entity_id": "BKPI_NEAR_MISS",
     "canonical": "Near Miss Reporting",
     "aliases": [],
     "category": "safety",
@@ -748,7 +749,7 @@
   },
 
   "energy_consumption": {
-    "entity_id": "KPI_ENERGY",
+    "entity_id": "BKPI_ENERGY",
     "canonical": "Energy Consumption",
     "aliases": [],
     "category": "sustainability",
@@ -760,7 +761,7 @@
   },
 
   "water_consumption": {
-    "entity_id": "KPI_WATER",
+    "entity_id": "BKPI_WATER",
     "canonical": "Water Consumption",
     "aliases": [],
     "category": "sustainability",
@@ -772,7 +773,7 @@
   },
   
   "gross_profit": {
-    "entity_id": "KPI_GROSS_PROFIT",
+    "entity_id": "BKPI_GROSS_PROFIT",
     "canonical": "Gross Profit",
     "aliases": [],
     "category": "finance",
@@ -784,7 +785,7 @@
   },
 
   "net_profit": {
-    "entity_id": "KPI_NET_PROFIT",
+    "entity_id": "BKPI_NET_PROFIT",
     "canonical": "Net Profit",
     "aliases": [],
     "category": "finance",
@@ -796,7 +797,7 @@
   },
 
   "operating_cost": {
-    "entity_id": "KPI_OPERATING_COST",
+    "entity_id": "BKPI_OPERATING_COST",
     "canonical": "Operating Cost",
     "aliases": [
       "Operational Cost"
@@ -810,7 +811,7 @@
   },
 
   "cost_savings": {
-    "entity_id": "KPI_COST_SAVINGS",
+    "entity_id": "BKPI_COST_SAVINGS",
     "canonical": "Cost Savings",
     "aliases": [],
     "category": "finance",
@@ -822,7 +823,7 @@
   },
 
   "return_on_investment": {
-    "entity_id": "KPI_ROI",
+    "entity_id": "BKPI_ROI",
     "canonical": "Return on Investment",
     "aliases": [
       "ROI"
@@ -836,7 +837,7 @@
   },
 
   "cash_flow": {
-    "entity_id": "KPI_CASH_FLOW",
+    "entity_id": "BKPI_CASH_FLOW",
     "canonical": "Cash Flow",
     "aliases": [],
     "category": "finance",
@@ -848,7 +849,7 @@
   },
 
   "forecast_accuracy": {
-    "entity_id": "KPI_FORECAST_ACCURACY",
+    "entity_id": "BKPI_FORECAST_ACCURACY",
     "canonical": "Forecast Accuracy",
     "aliases": [],
     "category": "supply_chain",
@@ -860,7 +861,7 @@
   },
 
   "supplier_otif": {
-    "entity_id": "KPI_SUPPLIER_OTIF",
+    "entity_id": "BKPI_SUPPLIER_OTIF",
     "canonical": "Supplier OTIF",
     "aliases": [
       "Supplier On Time In Full"
@@ -874,7 +875,7 @@
   },
 
   "inventory_turnover": {
-    "entity_id": "KPI_INVENTORY_TURNOVER",
+    "entity_id": "BKPI_INVENTORY_TURNOVER",
     "canonical": "Inventory Turnover",
     "aliases": [],
     "category": "inventory",
@@ -886,7 +887,7 @@
   },
 
   "inventory_days": {
-    "entity_id": "KPI_DAYS_INVENTORY",
+    "entity_id": "BKPI_DAYS_INVENTORY",
     "canonical": "Days Inventory Outstanding",
     "aliases": [
       "DIO"
@@ -900,7 +901,7 @@
   },
 
   "stock_accuracy": {
-    "entity_id": "KPI_STOCK_ACCURACY",
+    "entity_id": "BKPI_STOCK_ACCURACY",
     "canonical": "Stock Accuracy",
     "aliases": [],
     "category": "inventory",
@@ -912,7 +913,7 @@
   },
 
   "stockout_rate": {
-    "entity_id": "KPI_STOCKOUT_RATE",
+    "entity_id": "BKPI_STOCKOUT_RATE",
     "canonical": "Stockout Rate",
     "aliases": [],
     "category": "inventory",
@@ -924,7 +925,7 @@
   },
 
   "warehouse_utilization": {
-    "entity_id": "KPI_WAREHOUSE_UTILIZATION",
+    "entity_id": "BKPI_WAREHOUSE_UTILIZATION",
     "canonical": "Warehouse Utilization",
     "aliases": [],
     "category": "warehouse",
@@ -936,7 +937,7 @@
   },
 
   "order_accuracy": {
-    "entity_id": "KPI_ORDER_ACCURACY",
+    "entity_id": "BKPI_ORDER_ACCURACY",
     "canonical": "Order Accuracy",
     "aliases": [],
     "category": "warehouse",
@@ -948,7 +949,7 @@
   },
 
   "pick_accuracy": {
-    "entity_id": "KPI_PICK_ACCURACY",
+    "entity_id": "BKPI_PICK_ACCURACY",
     "canonical": "Picking Accuracy",
     "aliases": [],
     "category": "warehouse",
@@ -960,7 +961,7 @@
   },
 
   "transport_cost": {
-    "entity_id": "KPI_TRANSPORT_COST",
+    "entity_id": "BKPI_TRANSPORT_COST",
     "canonical": "Transportation Cost",
     "aliases": [],
     "category": "logistics",
@@ -972,7 +973,7 @@
   },
 
   "delivery_lead_time": {
-    "entity_id": "KPI_DELIVERY_LEAD_TIME",
+    "entity_id": "BKPI_DELIVERY_LEAD_TIME",
     "canonical": "Delivery Lead Time",
     "aliases": [],
     "category": "logistics",
@@ -984,7 +985,7 @@
   },
 
   "fleet_utilization": {
-    "entity_id": "KPI_FLEET_UTILIZATION",
+    "entity_id": "BKPI_FLEET_UTILIZATION",
     "canonical": "Fleet Utilization",
     "aliases": [],
     "category": "logistics",
@@ -996,7 +997,7 @@
   },
 
   "mean_time_between_failures": {
-    "entity_id": "KPI_MTBF",
+    "entity_id": "BKPI_MTBF",
     "canonical": "Mean Time Between Failures",
     "aliases": [
       "MTBF"
@@ -1010,7 +1011,7 @@
   },
 
   "mean_time_to_repair": {
-    "entity_id": "KPI_MTTR",
+    "entity_id": "BKPI_MTTR",
     "canonical": "Mean Time To Repair",
     "aliases": [
       "MTTR"
@@ -1024,7 +1025,7 @@
   },
   
   "carbon_footprint": {
-    "entity_id": "KPI_CARBON_FOOTPRINT",
+    "entity_id": "BKPI_CARBON_FOOTPRINT",
     "canonical": "Carbon Footprint",
     "aliases": ["CO2 Emissions"],
     "category": "sustainability",
@@ -1036,7 +1037,7 @@
   },
 
   "energy_efficiency": {
-    "entity_id": "KPI_ENERGY_EFFICIENCY",
+    "entity_id": "BKPI_ENERGY_EFFICIENCY",
     "canonical": "Energy Efficiency",
     "aliases": [],
     "category": "sustainability",
@@ -1048,7 +1049,7 @@
   },
 
   "water_efficiency": {
-    "entity_id": "KPI_WATER_EFFICIENCY",
+    "entity_id": "BKPI_WATER_EFFICIENCY",
     "canonical": "Water Efficiency",
     "aliases": [],
     "category": "sustainability",
@@ -1060,7 +1061,7 @@
   },
 
   "waste_recycling_rate": {
-    "entity_id": "KPI_RECYCLING_RATE",
+    "entity_id": "BKPI_RECYCLING_RATE",
     "canonical": "Waste Recycling Rate",
     "aliases": [],
     "category": "sustainability",
@@ -1072,7 +1073,7 @@
   },
 
   "environmental_compliance": {
-    "entity_id": "KPI_ENVIRONMENTAL_COMPLIANCE",
+    "entity_id": "BKPI_ENVIRONMENTAL_COMPLIANCE",
     "canonical": "Environmental Compliance",
     "aliases": [],
     "category": "compliance",
@@ -1084,7 +1085,7 @@
   },
 
   "digitalization_rate": {
-    "entity_id": "KPI_DIGITALIZATION",
+    "entity_id": "BKPI_DIGITALIZATION",
     "canonical": "Digitalization Rate",
     "aliases": [],
     "category": "digital",
@@ -1096,7 +1097,7 @@
   },
 
   "automation_rate": {
-    "entity_id": "KPI_AUTOMATION",
+    "entity_id": "BKPI_AUTOMATION",
     "canonical": "Automation Rate",
     "aliases": [],
     "category": "digital",
@@ -1108,7 +1109,7 @@
   },
 
   "dashboard_adoption": {
-    "entity_id": "KPI_DASHBOARD_ADOPTION",
+    "entity_id": "BKPI_DASHBOARD_ADOPTION",
     "canonical": "Dashboard Adoption",
     "aliases": [],
     "category": "analytics",
@@ -1120,7 +1121,7 @@
   },
 
   "project_completion": {
-    "entity_id": "KPI_PROJECT_COMPLETION",
+    "entity_id": "BKPI_PROJECT_COMPLETION",
     "canonical": "Project Completion",
     "aliases": [],
     "category": "project",
@@ -1132,7 +1133,7 @@
   },
 
   "project_schedule_variance": {
-    "entity_id": "KPI_SCHEDULE_VARIANCE",
+    "entity_id": "BKPI_SCHEDULE_VARIANCE",
     "canonical": "Schedule Variance",
     "aliases": [],
     "category": "project",
@@ -1144,7 +1145,7 @@
   },
 
   "project_cost_variance": {
-    "entity_id": "KPI_COST_VARIANCE",
+    "entity_id": "BKPI_COST_VARIANCE",
     "canonical": "Cost Variance",
     "aliases": [],
     "category": "project",
@@ -1156,7 +1157,7 @@
   },
 
   "sales_growth": {
-    "entity_id": "KPI_SALES_GROWTH",
+    "entity_id": "BKPI_SALES_GROWTH",
     "canonical": "Sales Growth",
     "aliases": [],
     "category": "sales",
@@ -1168,7 +1169,7 @@
   },
 
   "market_share": {
-    "entity_id": "KPI_MARKET_SHARE",
+    "entity_id": "BKPI_MARKET_SHARE",
     "canonical": "Market Share",
     "aliases": [],
     "category": "sales",
@@ -1180,7 +1181,7 @@
   },
 
   "store_profitability": {
-    "entity_id": "KPI_STORE_PROFITABILITY",
+    "entity_id": "BKPI_STORE_PROFITABILITY",
     "canonical": "Store Profitability",
     "aliases": [],
     "category": "retail",
@@ -1192,7 +1193,7 @@
   },
 
   "shrinkage": {
-    "entity_id": "KPI_SHRINKAGE",
+    "entity_id": "BKPI_SHRINKAGE",
     "canonical": "Inventory Shrinkage",
     "aliases": [],
     "category": "retail",
@@ -1204,7 +1205,7 @@
   },
 
   "balanced_scorecard": {
-    "entity_id": "KPI_BALANCED_SCORECARD",
+    "entity_id": "BKPI_BALANCED_SCORECARD",
     "canonical": "Balanced Scorecard",
     "aliases": [],
     "category": "strategy",
@@ -1216,7 +1217,7 @@
   },
 
   "business_performance": {
-    "entity_id": "KPI_BUSINESS_PERFORMANCE",
+    "entity_id": "BKPI_BUSINESS_PERFORMANCE",
     "canonical": "Business Performance",
     "aliases": [],
     "category": "strategy",
@@ -1228,7 +1229,7 @@
   },
 
   "business_growth": {
-    "entity_id": "KPI_BUSINESS_GROWTH",
+    "entity_id": "BKPI_BUSINESS_GROWTH",
     "canonical": "Business Growth",
     "aliases": [],
     "category": "strategy",
@@ -1240,7 +1241,7 @@
   },
 
   "strategic_objectives": {
-    "entity_id": "KPI_STRATEGIC_OBJECTIVES",
+    "entity_id": "BKPI_STRATEGIC_OBJECTIVES",
     "canonical": "Strategic Objectives Achievement",
     "aliases": [],
     "category": "strategy",
@@ -1252,7 +1253,7 @@
   },
 
   "business_continuity": {
-    "entity_id": "KPI_BUSINESS_CONTINUITY",
+    "entity_id": "BKPI_BUSINESS_CONTINUITY",
     "canonical": "Business Continuity",
     "aliases": [],
     "category": "risk",
@@ -1261,5 +1262,84 @@
     "unit": "%",
     "higher_is_better": true,
     "impact_weight": 0.95
-  }
+  },
+  
+"data accuracy": {
+  "entity_id": "BKPI_DATA_ACCURACY",
+  "canonical": "Data Accuracy",
+  "aliases": [
+    "data accuracy",
+    "data quality",
+    "accuracy of data"
+  ],
+  "category": "analytics",
+  "business_area": "data_analytics",
+  "description": "Accuracy, completeness, and reliability of data used for analysis, reporting, and decision-making.",
+  "related_metrics": [
+    "Data Accuracy",
+    "Data Quality",
+    "Error Rate"
+  ],
+  "higher_is_better": true,
+  "impact_weight": 0.95
+},
+
+"decision speed": {
+  "entity_id": "BKPI_DECISION_SPEED",
+  "canonical": "Decision Speed",
+  "aliases": [
+    "decision speed",
+    "decision-making speed",
+    "decision turnaround time"
+  ],
+  "category": "business_performance",
+  "business_area": "business_analytics",
+  "description": "Speed and efficiency with which data-supported business decisions are made.",
+  "related_metrics": [
+    "Decision Time",
+    "Decision Turnaround Time"
+  ],
+  "higher_is_better": true,
+  "impact_weight": 0.93
+},
+
+"productivity": {
+  "entity_id": "BKPI_PRODUCTIVITY",
+  "canonical": "Productivity",
+  "aliases": [
+    "productivity",
+    "labor productivity",
+    "operational productivity"
+  ],
+  "category": "operations",
+  "business_area": "operations",
+  "description": "Efficiency of converting labor, equipment, materials, and other resources into productive output.",
+  "related_metrics": [
+    "Production Output",
+    "Labor Productivity",
+    "Throughput"
+  ],
+  "higher_is_better": true,
+  "impact_weight": 0.97
+},
+
+"reporting accuracy": {
+  "entity_id": "BKPI_REPORTING_ACCURACY",
+  "canonical": "Reporting Accuracy",
+  "aliases": [
+    "reporting accuracy",
+    "report accuracy",
+    "accuracy of reporting"
+  ],
+  "category": "analytics",
+  "business_area": "business_analytics",
+  "description": "Accuracy and reliability of business reports, dashboards, and performance information.",
+  "related_metrics": [
+    "Report Accuracy",
+    "Reporting Errors",
+    "Data Accuracy"
+  ],
+  "higher_is_better": true,
+  "impact_weight": 0.95
+}
 }

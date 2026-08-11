@@ -25,6 +25,10 @@ from typing import Any
 
 from .repository_entity import RepositoryEntity
 
+from .relation_repository_record import (
+    RelationRepositoryRecord,
+)
+
 
 class RepositoryLoader:
     """
@@ -62,6 +66,9 @@ class RepositoryLoader:
             "domain",
             "business_area",
             "description",
+
+            # Business KPI relationships 
+            "related_metrics",
 
             # Scoring
             "impact_weight",
@@ -304,6 +311,8 @@ class RepositoryLoader:
                 item.get("description", "")
             ),
 
+            related_metrics=self._build_related_metrics( item.get("related_metrics", []) ),
+
             ############################################################
             # SCORING
             ############################################################
@@ -474,6 +483,57 @@ class RepositoryLoader:
         return aliases
 
     ####################################################################
+    # RELATED METRICS
+    ####################################################################
+
+    @staticmethod
+    def _build_related_metrics(
+        value: Any,
+    ) -> list[str]:
+        """
+        Normalize related metrics into a clean list of strings.
+
+        Business KPI ontology records may contain:
+
+            "related_metrics": [
+                "Production Yield",
+                "Throughput",
+                "Downtime"
+            ]
+
+        The loader preserves these values as a first-class
+        RepositoryEntity field.
+        """
+
+        if value is None:
+            return []
+
+        if not isinstance(
+            value,
+            list,
+        ):
+            raise ValueError(
+                "Ontology related_metrics must be "
+                "a JSON array."
+            )
+
+        metrics = []
+
+        for metric in value:
+
+            if metric is None:
+                continue
+
+            metric = str(metric).strip()
+
+            if not metric:
+                continue
+
+            metrics.append(metric)
+
+        return metrics
+
+    ####################################################################
     # DEFAULT ENTITY TYPE
     ####################################################################
 
@@ -581,3 +641,114 @@ class RepositoryLoader:
                 return False
 
         return bool(value)
+    ####################################################################
+    # LOAD RELATIONS
+    ####################################################################
+
+    def load_relations(
+        self,
+        path,
+    ) -> None:
+
+        relations = self.loader.load_relations(
+            path
+        )
+
+        relation_index = {}
+
+        relation_type_index = {}
+
+        relation_source_index = {}
+
+        relation_target_index = {}
+
+        ################################################################
+        # BUILD RELATION INDEXES
+        ################################################################
+
+        for relation in relations:
+
+            # ==========================================================
+            # RELATION ID
+            # ==========================================================
+
+            relation_index[
+                relation.relation_id
+            ] = relation
+
+            # ==========================================================
+            # RELATION TYPE
+            # ==========================================================
+
+            relation_type = (
+                self._normalize_lookup(
+                    relation.relation_type
+                )
+            )
+
+            if relation_type:
+
+                relation_type_index.setdefault(
+                    relation_type,
+                    []
+                ).append(
+                    relation
+                )
+
+            # ==========================================================
+            # SOURCE
+            # ==========================================================
+
+            source = (
+                self._normalize_lookup(
+                    relation.source
+                )
+            )
+
+            if source:
+
+                relation_source_index.setdefault(
+                    source,
+                    []
+                ).append(
+                    relation
+                )
+
+            # ==========================================================
+            # TARGET
+            # ==========================================================
+
+            target = (
+                self._normalize_lookup(
+                    relation.target
+                )
+            )
+
+            if target:
+
+                relation_target_index.setdefault(
+                    target,
+                    []
+                ).append(
+                    relation
+                )
+
+        ################################################################
+        # STORE
+        ################################################################
+
+        self.cache.relation_indexes = (
+            relation_index
+        )
+
+        self.cache.relation_type_indexes = (
+            relation_type_index
+        )
+
+        self.cache.relation_source_indexes = (
+            relation_source_index
+        )
+
+        self.cache.relation_target_indexes = (
+            relation_target_index
+        )

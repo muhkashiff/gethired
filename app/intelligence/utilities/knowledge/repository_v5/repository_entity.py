@@ -1,3 +1,4 @@
+
 """
 Enterprise Universal Ontology Entity
 
@@ -63,6 +64,14 @@ class RepositoryEntity:
     business_area: str = ""
 
     description: str = ""
+
+    ####################################################################
+    # Business KPI Relationships
+    ####################################################################
+
+    related_metrics: list[str] = field(
+    default_factory=list
+        )
 
     ####################################################################
     # Business Behaviour
@@ -171,3 +180,4 @@ class RepositoryEntity:
         return " ".join(
             value.casefold().split()
         )
+

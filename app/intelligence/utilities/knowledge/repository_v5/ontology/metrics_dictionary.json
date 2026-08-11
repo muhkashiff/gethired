@@ -1283,7 +1283,17 @@
     "higher_is_better": false,
     "impact_weight": 1.00
   },
-
+"yield": {
+    "entity_id": "KPI_YIELD",
+    "canonical": "Yield",
+    "aliases": [],
+    "category": "operations",
+    "business_area": "operations",
+    "description": "Optimization & increase of production yield.",
+    "related_metrics": ["Production Yield"],
+    "higher_is_better": true,
+    "impact_weight": 0.97
+  },
   "yeast and mold": {
     "entity_id": "KPI_YM",
     "canonical": "Yeast & Mold",

@@ -40,16 +40,6 @@ class RepositoryCache:
     ####################################################################
 
     # ontology -> surface form -> RepositoryEntity
-    #
-    # Examples:
-    #
-    # "Azure"       -> Microsoft Azure
-    # "Power BI"    -> Microsoft Power BI
-    # "Excel"       -> Microsoft Excel
-    #
-    # This is important because the text appearing in a resume
-    # does not always equal the canonical repository name.
-    ####################################################################
 
     surface_indexes: dict = field(
         default_factory=dict
@@ -60,17 +50,6 @@ class RepositoryCache:
     ####################################################################
 
     # ontology -> linguistic form -> RepositoryEntity
-    #
-    # Used for:
-    #
-    # base
-    # past
-    # gerund
-    # plural
-    # singular
-    # abbreviation
-    # short_name
-    ####################################################################
 
     linguistic_indexes: dict = field(
         default_factory=dict
@@ -109,6 +88,54 @@ class RepositoryCache:
     )
 
     ####################################################################
+    # RELATION INDEXES
+    ####################################################################
+
+    # relation_id -> RelationRepositoryRecord
+    #
+    # Structure:
+    #
+    # {
+    #     "REL_000001": RelationRepositoryRecord(...),
+    #     "REL_000002": RelationRepositoryRecord(...)
+    # }
+
+    relation_indexes: dict = field(
+        default_factory=dict
+    )
+
+    ####################################################################
+
+    # relation_type -> list[RelationRepositoryRecord]
+    #
+    # Example:
+    #
+    # acts_on -> [
+    #     RelationRepositoryRecord(...),
+    #     ...
+    # ]
+
+    relation_type_indexes: dict = field(
+        default_factory=dict
+    )
+
+    ####################################################################
+
+    # source_entity_id -> list[RelationRepositoryRecord]
+
+    relation_source_indexes: dict = field(
+        default_factory=dict
+    )
+
+    ####################################################################
+
+    # target_entity_id -> list[RelationRepositoryRecord]
+
+    relation_target_indexes: dict = field(
+        default_factory=dict
+    )
+
+    ####################################################################
     # CONFIG FILES
     ####################################################################
 
@@ -125,7 +152,7 @@ class RepositoryCache:
     )
 
     ####################################################################
-    # OPTIONAL FUTURE CACHE
+    # STATISTICS
     ####################################################################
 
     statistics: dict = field(
@@ -163,6 +190,22 @@ class RepositoryCache:
         self.abbreviation_indexes.clear()
 
         self.short_name_indexes.clear()
+
+        ################################################################
+        # RELATIONS
+        ################################################################
+
+        self.relation_indexes.clear()
+
+        self.relation_type_indexes.clear()
+
+        self.relation_source_indexes.clear()
+
+        self.relation_target_indexes.clear()
+
+        ################################################################
+        # CONFIG / SEMANTICS
+        ################################################################
 
         self.config_indexes.clear()
 

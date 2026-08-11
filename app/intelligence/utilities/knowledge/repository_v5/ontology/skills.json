@@ -8,7 +8,7 @@
     "domain": "leadership",
     "skill_type": "soft",
     "related_actions":["ACT_LEAD","ACT_MANAGE"],
-    "related_objects":["OBJ_TEAM","OBJ_EMPLOYEES"],
+    "related_targets":["TGT_TEAM","TGT_EMPLOYEES"],
     "related_metrics":["KPI_EMPLOYEE_ENGAGEMENT"],
     "related_standards":[],
     "impact_weight":1.0
@@ -23,7 +23,7 @@
     "domain":"leadership",
     "skill_type":"leadership",
     "related_actions":["ACT_MANAGE"],
-    "related_objects":["OBJ_TEAM"],
+    "related_targets":["TGT_TEAM"],
     "related_metrics":["KPI_TEAM_PERFORMANCE"],
     "related_standards":[],
     "impact_weight":1.0
@@ -38,7 +38,7 @@
     "domain":"leadership",
     "skill_type":"soft",
     "related_actions":["ACT_DEVELOP"],
-    "related_objects":["OBJ_TEAM"],
+    "related_targets":["TGT_TEAM"],
     "related_metrics":["KPI_EMPLOYEE_ENGAGEMENT"],
     "related_standards":[],
     "impact_weight":0.95
@@ -53,7 +53,7 @@
     "domain":"people_development",
     "skill_type":"soft",
     "related_actions":["ACT_COACH"],
-    "related_objects":["OBJ_EMPLOYEES"],
+    "related_targets":["TGT_EMPLOYEES"],
     "related_metrics":["KPI_TRAINING_EFFECTIVENESS"],
     "related_standards":[],
     "impact_weight":0.95
@@ -68,7 +68,7 @@
     "domain":"people_development",
     "skill_type":"soft",
     "related_actions":["ACT_MENTOR"],
-    "related_objects":["OBJ_EMPLOYEES"],
+    "related_targets":["TGT_EMPLOYEES"],
     "related_metrics":["KPI_TRAINING_EFFECTIVENESS"],
     "related_standards":[],
     "impact_weight":0.95
@@ -83,7 +83,7 @@
     "domain":"leadership",
     "skill_type":"soft",
     "related_actions":["ACT_COMMUNICATE"],
-    "related_objects":["OBJ_TEAM","OBJ_CUSTOMERS"],
+    "related_targets":["TGT_TEAM","TGT_CUSTOMERS"],
     "related_metrics":["KPI_CUSTOMER_SATISFACTION"],
     "related_standards":[],
     "impact_weight":1.0
@@ -98,7 +98,7 @@
     "domain":"leadership",
     "skill_type":"soft",
     "related_actions":["ACT_PRESENT"],
-    "related_objects":["OBJ_TEAM"],
+    "related_targets":["TGT_TEAM"],
     "related_metrics":[],
     "related_standards":[],
     "impact_weight":0.8
@@ -113,7 +113,7 @@
     "domain":"leadership",
     "skill_type":"soft",
     "related_actions":["ACT_DECIDE"],
-    "related_objects":["OBJ_PROCESS"],
+    "related_targets":["TGT_PROCESS"],
     "related_metrics":["KPI_PRODUCTIVITY"],
     "related_standards":[],
     "impact_weight":1.0
@@ -128,7 +128,7 @@
     "domain":"problem_solving",
     "skill_type":"soft",
     "related_actions":["ACT_SOLVE"],
-    "related_objects":["OBJ_PROCESS"],
+    "related_targets":["TGT_PROCESS"],
     "related_metrics":["KPI_DOWNTIME"],
     "related_standards":[],
     "impact_weight":1.0
@@ -143,7 +143,7 @@
     "domain":"analysis",
     "skill_type":"soft",
     "related_actions":["ACT_ANALYZE"],
-    "related_objects":["OBJ_PROCESS"],
+    "related_targets":["TGT_PROCESS"],
     "related_metrics":[],
     "related_standards":[],
     "impact_weight":0.9
@@ -158,7 +158,7 @@
     "domain": "operations_management",
     "skill_type": "technical",
     "related_actions":["ACT_MANAGE","ACT_IMPROVE"],
-    "related_objects":["OBJ_PRODUCTION"],
+    "related_targets":["TGT_PRODUCTION"],
     "related_metrics":["KPI_THROUGHPUT","KPI_YIELD"],
     "related_standards":["STD_ISO_9001"],
     "impact_weight":1.0
@@ -173,7 +173,7 @@
     "domain":"manufacturing",
     "skill_type":"technical",
     "related_actions":["ACT_MANAGE"],
-    "related_objects":["OBJ_MANUFACTURING_FACILITY"],
+    "related_targets":["TGT_MANUFACTURING_FACILITY"],
     "related_metrics":["KPI_OEE"],
     "related_standards":["STD_ISO_9001"],
     "impact_weight":1.0
@@ -188,7 +188,7 @@
     "domain":"operations",
     "skill_type":"technical",
     "related_actions":["ACT_PLAN"],
-    "related_objects":["OBJ_PRODUCTION"],
+    "related_targets":["TGT_PRODUCTION"],
     "related_metrics":["KPI_CAPACITY_UTILIZATION"],
     "related_standards":[],
     "impact_weight":0.95
@@ -203,7 +203,7 @@
     "domain":"operations",
     "skill_type":"technical",
     "related_actions":["ACT_OPTIMIZE"],
-    "related_objects":["OBJ_PROCESS"],
+    "related_targets":["TGT_PROCESS"],
     "related_metrics":["KPI_CAPACITY_UTILIZATION"],
     "related_standards":[],
     "impact_weight":0.95
@@ -218,7 +218,7 @@
     "domain":"continuous_improvement",
     "skill_type":"technical",
     "related_actions":["ACT_OPTIMIZE","ACT_IMPROVE"],
-    "related_objects":["OBJ_PROCESS"],
+    "related_targets":["TGT_PROCESS"],
     "related_metrics":["KPI_YIELD","KPI_PRODUCTIVITY"],
     "related_standards":["STD_ISO_9001"],
     "impact_weight":1.0
@@ -233,7 +233,7 @@
     "domain":"operations",
     "skill_type":"technical",
     "related_actions":["ACT_CONTROL"],
-    "related_objects":["OBJ_PROCESS"],
+    "related_targets":["TGT_PROCESS"],
     "related_metrics":["KPI_CP","KPI_CPK"],
     "related_standards":["STD_ISO_9001"],
     "impact_weight":0.95
@@ -248,7 +248,7 @@
     "domain":"continuous_improvement",
     "skill_type":"technical",
     "related_actions":["ACT_BALANCE"],
-    "related_objects":["OBJ_PRODUCTION_LINE"],
+    "related_targets":["TGT_PRODUCTION_LINE"],
     "related_metrics":["KPI_THROUGHPUT"],
     "related_standards":[],
     "impact_weight":0.90
@@ -263,7 +263,7 @@
     "domain":"maintenance",
     "skill_type":"technical",
     "related_actions":["ACT_MAINTAIN"],
-    "related_objects":["OBJ_EQUIPMENT"],
+    "related_targets":["TGT_EQUIPMENT"],
     "related_metrics":["KPI_OEE"],
     "related_standards":[],
     "impact_weight":0.95
@@ -278,7 +278,7 @@
     "domain":"maintenance",
     "skill_type":"technical",
     "related_actions":["ACT_MAINTAIN"],
-    "related_objects":["OBJ_EQUIPMENT"],
+    "related_targets":["TGT_EQUIPMENT"],
     "related_metrics":["KPI_DOWNTIME"],
     "related_standards":[],
     "impact_weight":0.95
@@ -293,7 +293,7 @@
     "domain":"maintenance",
     "skill_type":"technical",
     "related_actions":["ACT_MONITOR"],
-    "related_objects":["OBJ_EQUIPMENT"],
+    "related_targets":["TGT_EQUIPMENT"],
     "related_metrics":["KPI_DOWNTIME"],
     "related_standards":[],
     "impact_weight":0.90
@@ -308,7 +308,7 @@
     "domain":"utilities",
     "skill_type":"technical",
     "related_actions":["ACT_MANAGE"],
-    "related_objects":["OBJ_UTILITIES"],
+    "related_targets":["TGT_UTILITIES"],
     "related_metrics":["KPI_ENERGY_CONSUMPTION"],
     "related_standards":[],
     "impact_weight":0.90
@@ -323,7 +323,7 @@
     "domain":"utilities",
     "skill_type":"technical",
     "related_actions":["ACT_MONITOR"],
-    "related_objects":["OBJ_WATER_TREATMENT_PLANT"],
+    "related_targets":["TGT_WATER_TREATMENT_PLANT"],
     "related_metrics":["KPI_WATER_USAGE"],
     "related_standards":["STD_GMP"],
     "impact_weight":0.90
@@ -338,7 +338,7 @@
     "domain":"food_safety",
     "skill_type":"technical",
     "related_actions":["ACT_IMPLEMENT"],
-    "related_objects":["OBJ_CIP_SYSTEM"],
+    "related_targets":["TGT_CIP_SYSTEM"],
     "related_metrics":["KPI_HYGIENE"],
     "related_standards":["STD_FSSC_22000"],
     "impact_weight":0.95
@@ -361,8 +361,8 @@
       "ACT_MAINTAIN",
       "ACT_IMPROVE"
     ],
-    "related_objects": [
-      "OBJ_QMS"
+    "related_targets": [
+      "TGT_QMS"
     ],
     "related_metrics": [
       "KPI_FIRST_PASS_YIELD",
@@ -390,8 +390,8 @@
       "ACT_MONITOR",
       "ACT_VERIFY"
     ],
-    "related_objects": [
-      "OBJ_PRODUCT"
+    "related_targets": [
+      "TGT_PRODUCT"
     ],
     "related_metrics": [
       "KPI_DEFECT_RATE"
@@ -417,8 +417,8 @@
       "ACT_IMPLEMENT",
       "ACT_MAINTAIN"
     ],
-    "related_objects": [
-      "OBJ_FSMS"
+    "related_targets": [
+      "TGT_FSMS"
     ],
     "related_metrics": [
       "KPI_FOOD_SAFETY"
@@ -445,8 +445,8 @@
       "ACT_DEVELOP",
       "ACT_IMPLEMENT"
     ],
-    "related_objects": [
-      "OBJ_HACCP"
+    "related_targets": [
+      "TGT_HACCP"
     ],
     "related_metrics": [
       "KPI_CCP_COMPLIANCE"
@@ -458,7 +458,7 @@
     "impact_weight": 1.0
   },
 
-  "internal_auditing": {
+  "internal_audit": {
     "entity_id": "SKILL_INTERNAL_AUDIT",
     "canonical": "Internal Auditing",
     "aliases": [
@@ -472,8 +472,8 @@
     "related_actions": [
       "ACT_AUDIT"
     ],
-    "related_objects": [
-      "OBJ_AUDIT"
+    "related_targets": [
+      "TGT_AUDIT"
     ],
     "related_metrics": [
       "KPI_AUDIT_SCORE"
@@ -498,8 +498,8 @@
     "related_actions": [
       "ACT_AUDIT"
     ],
-    "related_objects": [
-      "OBJ_SUPPLIER"
+    "related_targets": [
+      "TGT_SUPPLIER"
     ],
     "related_metrics": [
       "KPI_SUPPLIER_PERFORMANCE"
@@ -524,8 +524,8 @@
     "related_actions": [
       "ACT_IMPLEMENT"
     ],
-    "related_objects": [
-      "OBJ_MANUFACTURING_FACILITY"
+    "related_targets": [
+      "TGT_MANUFACTURING_FACILITY"
     ],
     "related_metrics": [
       "KPI_GMP_COMPLIANCE"
@@ -550,8 +550,8 @@
     "related_actions": [
       "ACT_VERIFY"
     ],
-    "related_objects": [
-      "OBJ_CIP_SYSTEM"
+    "related_targets": [
+      "TGT_CIP_SYSTEM"
     ],
     "related_metrics": [
       "KPI_HYGIENE"
@@ -576,8 +576,8 @@
     "related_actions": [
       "ACT_TEST"
     ],
-    "related_objects": [
-      "OBJ_LAB"
+    "related_targets": [
+      "TGT_LAB"
     ],
     "related_metrics": [
       "KPI_MICROBIOLOGY"
@@ -602,8 +602,8 @@
     "related_actions": [
       "ACT_TEST"
     ],
-    "related_objects": [
-      "OBJ_MICROBIOLOGY_LAB"
+    "related_targets": [
+      "TGT_MICROBIOLOGY_LAB"
     ],
     "related_metrics": [
       "KPI_MICROBIOLOGY"
@@ -652,7 +652,7 @@
     "related_metrics": ["KPI_CP", "KPI_CPK"],
     "impact_weight": 1.0
   },
-  "statistical_analysis": {
+  "SA": {
     "entity_id": "SKILL_SA",
     "canonical": "Statistical Analysis",
     "aliases": ["SA", "control charts"],
@@ -1295,5 +1295,341 @@
     "domain": "leadership",
     "skill_type": "leadership",
     "impact_weight": 1.00
-  }
+  },
+
+"continuous_improvement": {
+  "entity_id": "SKILL_CONTINUOUS_IMPROVEMENT",
+  "canonical": "Continuous Improvement",
+  "aliases": [
+    "continuous improvement",
+    "CI",
+    "continual improvement"
+  ],
+  "category": "continuous_improvement",
+  "business_area": "operations",
+  "domain": "continuous_improvement",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_IMPROVE",
+    "ACT_OPTIMIZE"
+  ],
+  "related_targets": [
+    "TGT_PROCESS"
+  ],
+  "related_metrics": [
+    "KPI_PRODUCTIVITY",
+    "KPI_WASTE",
+    "KPI_YIELD"
+  ],
+  "related_standards": [
+    "STD_ISO_9001"
+  ],
+  "impact_weight": 1.0
+},
+
+"internal_auditing": {
+  "entity_id": "SKILL_INTERNAL_AUDITING",
+  "canonical": "Internal Auditing",
+  "aliases": [
+    "internal audit",
+    "internal auditing",
+    "quality auditing"
+  ],
+  "category": "quality",
+  "business_area": "quality",
+  "domain": "quality_management",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_AUDIT",
+    "ACT_VERIFY",
+    "ACT_MONITOR"
+  ],
+  "related_targets": [
+    "TGT_QMS"
+  ],
+  "related_metrics": [
+    "KPI_AUDIT_SCORE",
+    "KPI_AUDIT_FINDINGS"
+  ],
+  "related_standards": [
+    "STD_ISO_9001",
+    "STD_FSSC_22000"
+  ],
+  "impact_weight": 1.0
+},
+
+"lean_manufacturing": {
+  "entity_id": "SKILL_LEAN_MANUFACTURING",
+  "canonical": "Lean Manufacturing",
+  "aliases": [
+    "lean manufacturing",
+    "lean",
+    "lean production"
+  ],
+  "category": "continuous_improvement",
+  "business_area": "manufacturing",
+  "domain": "continuous_improvement",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_IMPROVE",
+    "ACT_OPTIMIZE"
+  ],
+  "related_targets": [
+    "TGT_MANUFACTURING_FACILITY"
+  ],
+  "related_metrics": [
+    "KPI_PRODUCTIVITY",
+    "KPI_WASTE",
+    "KPI_OEE",
+    "KPI_YIELD"
+  ],
+  "related_standards": [
+    "STD_ISO_9001"
+  ],
+  "impact_weight": 1.0
+},
+
+"operational_excellence": {
+  "entity_id": "SKILL_OPERATIONAL_EXCELLENCE",
+  "canonical": "Operational Excellence",
+  "aliases": [
+    "operational excellence",
+    "OpEx",
+    "operations excellence"
+  ],
+  "category": "operations",
+  "business_area": "operations",
+  "domain": "operational_excellence",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_IMPROVE",
+    "ACT_OPTIMIZE",
+    "ACT_MONITOR"
+  ],
+  "related_targets": [
+    "TGT_MANUFACTURING_FACILITY"
+  ],
+  "related_metrics": [
+    "KPI_OEE",
+    "KPI_PRODUCTIVITY",
+    "KPI_WASTE"
+  ],
+  "related_standards": [
+    "STD_ISO_9001"
+  ],
+  "impact_weight": 1.0
+},
+
+"power_bi": {
+  "entity_id": "SKILL_POWER_BI",
+  "canonical": "Power BI",
+  "aliases": [
+    "Microsoft Power BI",
+    "PowerBI",
+    "BI reporting"
+  ],
+  "category": "data_analytics",
+  "business_area": "business_analytics",
+  "domain": "business_intelligence",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_ANALYZE",
+    "ACT_REPORT",
+    "ACT_MONITOR"
+  ],
+  "related_targets": [
+    "TGT_DASHBOARD"
+  ],
+  "related_metrics": [
+    "KPI_DECISION_SPEED",
+    "KPI_REPORTING_ACCURACY",
+    "KPI_DATA_ACCURACY"
+  ],
+  "related_standards": [],
+  "impact_weight": 0.95
+},
+
+"preventive_controls": {
+  "entity_id": "SKILL_PREVENTIVE_CONTROLS",
+  "canonical": "Preventive Controls",
+  "aliases": [
+    "preventive controls",
+    "food preventive controls",
+    "preventive control systems"
+  ],
+  "category": "food_safety",
+  "business_area": "food_safety",
+  "domain": "food_safety_management",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_IDENTIFY",
+    "ACT_IMPLEMENT",
+    "ACT_MONITOR",
+    "ACT_VERIFY"
+  ],
+  "related_targets": [
+    "TGT_FSMS"
+  ],
+  "related_metrics": [
+    "KPI_FOOD_SAFETY"
+  ],
+  "related_standards": [
+    "STD_FSSC_22000",
+    "STD_HACCP"
+  ],
+  "impact_weight": 1.0
+},
+
+"process_improvement": {
+  "entity_id": "SKILL_PROCESS_IMPROVEMENT",
+  "canonical": "Process Improvement",
+  "aliases": [
+    "process improvement",
+    "process optimization",
+    "process enhancement"
+  ],
+  "category": "continuous_improvement",
+  "business_area": "operations",
+  "domain": "continuous_improvement",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_IMPROVE",
+    "ACT_OPTIMIZE"
+  ],
+  "related_targets": [
+    "TGT_PROCESS"
+  ],
+  "related_metrics": [
+    "KPI_PRODUCTIVITY",
+    "KPI_YIELD",
+    "KPI_WASTE"
+  ],
+  "related_standards": [
+    "STD_ISO_9001"
+  ],
+  "impact_weight": 1.0
+},
+
+"six_sigma": {
+  "entity_id": "SKILL_SIX_SIGMA",
+  "canonical": "Six Sigma",
+  "aliases": [
+    "Six Sigma methodology",
+    "DMAIC",
+    "Six Sigma improvement"
+  ],
+  "category": "continuous_improvement",
+  "business_area": "quality",
+  "domain": "continuous_improvement",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_ANALYZE",
+    "ACT_IMPROVE",
+    "ACT_OPTIMIZE"
+  ],
+  "related_targets": [
+    "TGT_PROCESS"
+  ],
+  "related_metrics": [
+    "KPI_CPK",
+    "KPI_DEFECT_RATE",
+    "KPI_YIELD"
+  ],
+  "related_standards": [
+    "STD_ISO_9001"
+  ],
+  "impact_weight": 1.0
+},
+
+"statistical_analysis": {
+  "entity_id": "SKILL_STATISTICAL_ANALYSIS",
+  "canonical": "Statistical Analysis",
+  "aliases": [
+    "statistical analysis",
+    "statistics",
+    "statistical methods"
+  ],
+  "category": "data_analysis",
+  "business_area": "quality",
+  "domain": "quality_control",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_ANALYZE",
+    "ACT_MONITOR",
+    "ACT_VERIFY"
+  ],
+  "related_targets": [
+    "TGT_PROCESS"
+  ],
+  "related_metrics": [
+    "KPI_CPK",
+    "KPI_DEFECT_RATE",
+    "KPI_YIELD"
+  ],
+  "related_standards": [
+    "STD_ISO_9001"
+  ],
+  "impact_weight": 1.0
+},
+
+"supplier_management": {
+  "entity_id": "SKILL_SUPPLIER_MANAGEMENT",
+  "canonical": "Supplier Management",
+  "aliases": [
+    "supplier management",
+    "supplier relationship management",
+    "vendor management"
+  ],
+  "category": "supply_chain",
+  "business_area": "supply_chain",
+  "domain": "supply_chain",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_MANAGE",
+    "ACT_MONITOR",
+    "ACT_VERIFY"
+  ],
+  "related_targets": [
+    "TGT_SUPPLIER"
+  ],
+  "related_metrics": [
+    "KPI_SUPPLIER_PERFORMANCE",
+    "KPI_DEFECT_RATE"
+  ],
+  "related_standards": [
+    "STD_ISO_9001",
+    "STD_FSSC_22000"
+  ],
+  "impact_weight": 1.0
+},
+
+"tpm": {
+  "entity_id": "SKILL_TPM",
+  "canonical": "Total Productive Maintenance",
+  "aliases": [
+    "TPM",
+    "total productive maintenance",
+    "productive maintenance"
+  ],
+  "category": "maintenance",
+  "business_area": "manufacturing",
+  "domain": "operational_excellence",
+  "skill_type": "technical",
+  "related_actions": [
+    "ACT_MAINTAIN",
+    "ACT_IMPROVE",
+    "ACT_MONITOR"
+  ],
+  "related_targets": [
+    "TGT_MANUFACTURING_FACILITY"
+  ],
+  "related_metrics": [
+    "KPI_OEE",
+    "KPI_MTBF",
+    "KPI_MTTR"
+  ],
+  "related_standards": [],
+  "impact_weight": 0.98
 }
+}
+

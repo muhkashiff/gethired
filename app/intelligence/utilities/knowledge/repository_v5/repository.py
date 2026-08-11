@@ -5,8 +5,11 @@ Enterprise V5
 Responsibilities
 
 • Load ontology entities
-• Build indexes
+• Load repository relations
+• Build entity indexes
+• Build relation indexes
 • Resolve entities
+• Resolve relations
 • Support aliases
 • Support canonical forms
 • Support normalized forms
@@ -16,11 +19,14 @@ Responsibilities
 
 from __future__ import annotations
 
+import json
+
 from pathlib import Path
 
 from .repository_cache import RepositoryCache
 from .repository_loader import RepositoryLoader
 from .repository_paths import RepositoryPaths
+from .relation_repository_record import RelationRepositoryRecord
 
 
 class Repository:
@@ -49,11 +55,30 @@ class Repository:
             self.paths
         ).items():
 
-            if not isinstance(path, Path):
+            if not isinstance(
+                path,
+                Path,
+            ):
                 continue
 
             if path.suffix != ".json":
                 continue
+
+            ################################################################
+            # RELATIONS
+            ################################################################
+
+            if path.name == "relations.json":
+
+                self.load_relations(
+                    path
+                )
+
+                continue
+
+            ################################################################
+            # ONTOLOGY
+            ################################################################
 
             if path.parent.name != "ontology":
                 continue
@@ -322,6 +347,283 @@ class Repository:
         ] = short_name_index
 
     ####################################################################
+    # LOAD RELATIONS
+    ####################################################################
+
+    def load_relations(
+        self,
+        path: str | Path,
+    ) -> None:
+        """
+        Load relations.json into RelationRepositoryRecord objects.
+
+        relations.json
+            ↓
+        RelationRepositoryRecord
+            ↓
+        RepositoryCache
+        """
+
+        path = Path(path)
+
+        with open(
+            path,
+            "r",
+            encoding="utf8",
+        ) as file:
+
+            raw = json.load(file)
+
+        ################################################################
+        # VALIDATE ROOT
+        ################################################################
+
+        if not isinstance(
+            raw,
+            dict,
+        ):
+
+            raise ValueError(
+                "relations.json must contain a JSON object."
+            )
+
+        ################################################################
+        # INDEXES
+        ################################################################
+
+        relation_index = {}
+
+        relation_type_index = {}
+
+        relation_source_index = {}
+
+        relation_target_index = {}
+
+        ################################################################
+        # BUILD RELATION OBJECTS
+        ################################################################
+
+        for relation_id, item in raw.items():
+
+            if not isinstance(
+                item,
+                dict,
+            ):
+
+                raise ValueError(
+                    f"Relation {relation_id!r} "
+                    "must be a JSON object."
+                )
+
+            relation = self._build_relation(
+                relation_id,
+                item,
+            )
+
+            ################################################################
+            # MASTER RELATION INDEX
+            ################################################################
+
+            relation_index[
+                relation.relation_id
+            ] = relation
+
+            ################################################################
+            # TYPE INDEX
+            ################################################################
+
+            relation_type = (
+                self._normalize_relation_key(
+                    relation.relation_type
+                )
+            )
+
+            if relation_type:
+
+                relation_type_index.setdefault(
+                    relation_type,
+                    [],
+                ).append(
+                    relation
+                )
+
+            ################################################################
+            # SOURCE INDEX
+            ################################################################
+
+            source = (
+                self._normalize_relation_key(
+                    relation.source
+                )
+            )
+
+            if source:
+
+                relation_source_index.setdefault(
+                    source,
+                    [],
+                ).append(
+                    relation
+                )
+
+            ################################################################
+            # TARGET INDEX
+            ################################################################
+
+            target = (
+                self._normalize_relation_key(
+                    relation.target
+                )
+            )
+
+            if target:
+
+                relation_target_index.setdefault(
+                    target,
+                    [],
+                ).append(
+                    relation
+                )
+
+        ################################################################
+        # STORE
+        ################################################################
+
+        self.cache.relation_indexes[
+            "relations"
+        ] = relation_index
+
+        self.cache.relation_type_indexes[
+            "relations"
+        ] = relation_type_index
+
+        self.cache.relation_source_indexes[
+            "relations"
+        ] = relation_source_index
+
+        self.cache.relation_target_indexes[
+            "relations"
+        ] = relation_target_index
+
+    ####################################################################
+    # BUILD RELATION
+    ####################################################################
+
+    @staticmethod
+    def _build_relation(
+        relation_id,
+        item,
+    ) -> RelationRepositoryRecord:
+        """
+        Convert one JSON relation into a
+        RelationRepositoryRecord object.
+        """
+
+        metadata = {}
+
+        for key, value in item.items():
+
+            if key not in {
+                "relation_type",
+                "source",
+                "target",
+                "weight",
+                "description",
+                "searchable",
+                "active",
+                "source_name",
+                "metadata",
+            }:
+
+                metadata[
+                    key
+                ] = value
+
+        explicit_metadata = item.get(
+            "metadata",
+            {},
+        )
+
+        if not isinstance(
+            explicit_metadata,
+            dict,
+        ):
+
+            raise ValueError(
+                f"Metadata for relation "
+                f"{relation_id!r} must be a JSON object."
+            )
+
+        metadata.update(
+            explicit_metadata
+        )
+
+        return RelationRepositoryRecord(
+
+            relation_id=str(
+                relation_id
+            ).strip(),
+
+            relation_type=str(
+                item.get(
+                    "relation_type",
+                    "",
+                )
+            ).strip(),
+
+            source=str(
+                item.get(
+                    "source",
+                    "",
+                )
+            ).strip(),
+
+            target=str(
+                item.get(
+                    "target",
+                    "",
+                )
+            ).strip(),
+
+            weight=Repository._float_value(
+                item.get(
+                    "weight",
+                    1.0,
+                )
+            ),
+
+            description=str(
+                item.get(
+                    "description",
+                    "",
+                )
+            ).strip(),
+
+            searchable=Repository._bool_value(
+                item.get(
+                    "searchable",
+                    True,
+                )
+            ),
+
+            active=Repository._bool_value(
+                item.get(
+                    "active",
+                    True,
+                )
+            ),
+
+            source_name=str(
+                item.get(
+                    "source_name",
+                    "relations",
+                )
+            ).strip(),
+
+            metadata=metadata,
+        )
+
+    ####################################################################
     # FIND ENTITY
     ####################################################################
 
@@ -344,174 +646,76 @@ class Repository:
             return None
 
         ############################################################
-        # 1. ALIAS
+        # ALIAS
         ############################################################
 
-        alias_index = self.cache.alias_indexes.get(
+        entity = self.cache.alias_indexes.get(
             ontology,
             {},
-        )
-
-        entity = alias_index.get(
+        ).get(
             phrase
         )
 
         if entity is not None:
             return entity
-
-        ############################################################
-        # 2. CANONICAL
-        ############################################################
-
-        canonical_index = self.cache.canonical_indexes.get(
-            ontology,
-            {},
-        )
-
-        entity = canonical_index.get(
-            phrase
-        )
-
-        if entity is not None:
-            return entity
-
-        ############################################################
-        # 3. NORMALIZED
-        ############################################################
-
-        normalized_index = self.cache.normalized_indexes.get(
-            ontology,
-            {},
-        )
-
-        entity = normalized_index.get(
-            phrase
-        )
-
-        if entity is not None:
-            return entity
-
-        ############################################################
-        # 4. LINGUISTIC FORM
-        ############################################################
-
-        linguistic_index = self.cache.linguistic_indexes.get(
-            ontology,
-            {},
-        )
-
-        entity = linguistic_index.get(
-            phrase
-        )
-
-        if entity is not None:
-            return entity
-
-        ############################################################
-        # 5. SURFACE FORM
-        ############################################################
-
-        surface_index = self.cache.surface_indexes.get(
-            ontology,
-            {},
-        )
-
-        entity = surface_index.get(
-            phrase
-        )
-
-        if entity is not None:
-            return entity
-
-        ############################################################
-        # NO MATCH
-        ############################################################
-
-        return None
-
-    ####################################################################
-    # BUILD SURFACE FORMS
-    ####################################################################
-
-    @classmethod
-    def _build_surface_forms(
-        cls,
-        entity,
-    ) -> set[str]:
-
-        forms: set[str] = set()
 
         ############################################################
         # CANONICAL
         ############################################################
 
-        canonical = cls._normalize_lookup(
-            entity.canonical
+        entity = self.cache.canonical_indexes.get(
+            ontology,
+            {},
+        ).get(
+            phrase
         )
 
-        if canonical:
-
-            forms.add(
-                canonical
-            )
+        if entity is not None:
+            return entity
 
         ############################################################
-        # ALIASES
+        # NORMALIZED
         ############################################################
 
-        for alias in entity.aliases:
+        entity = self.cache.normalized_indexes.get(
+            ontology,
+            {},
+        ).get(
+            phrase
+        )
 
-            normalized_alias = cls._normalize_lookup(
-                alias
-            )
-
-            if normalized_alias:
-
-                forms.add(
-                    normalized_alias
-                )
+        if entity is not None:
+            return entity
 
         ############################################################
-        # VENDOR-PREFIXED TECHNOLOGY NAMES
+        # LINGUISTIC
         ############################################################
 
-        #
-        # Examples:
-        #
-        # Microsoft Azure
-        #       -> azure
-        #
-        # Microsoft Excel
-        #       -> excel
-        #
-        # Microsoft Power BI
-        #       -> power bi
-        #
-        # This is deliberately limited to "Microsoft"
-        # rather than arbitrary substring matching.
-        #
+        entity = self.cache.linguistic_indexes.get(
+            ontology,
+            {},
+        ).get(
+            phrase
+        )
 
-        words = canonical.split()
+        if entity is not None:
+            return entity
 
-        if len(words) >= 2:
+        ############################################################
+        # SURFACE
+        ############################################################
 
-            vendor_prefixes = {
-                "microsoft",
-            }
+        entity = self.cache.surface_indexes.get(
+            ontology,
+            {},
+        ).get(
+            phrase
+        )
 
-            if words[0] in vendor_prefixes:
+        if entity is not None:
+            return entity
 
-                shortened = " ".join(
-                    words[1:]
-                )
-
-                if shortened:
-
-                    forms.add(
-                        shortened
-                    )
-
-        return forms
+        return None
 
     ####################################################################
     # FIND ENTITY EXACT
@@ -529,17 +733,15 @@ class Repository:
             phrase
         )
 
-        canonical_index = self.cache.canonical_indexes.get(
+        return self.cache.canonical_indexes.get(
             ontology,
             {},
-        )
-
-        return canonical_index.get(
+        ).get(
             phrase
         )
 
     ####################################################################
-    # FIND BY ID
+    # FIND ENTITY BY ID
     ####################################################################
 
     def find_entity_by_id(
@@ -550,12 +752,10 @@ class Repository:
 
         ontology = ontology.lower()
 
-        entity_index = self.cache.entity_indexes.get(
+        return self.cache.entity_indexes.get(
             ontology,
             {},
-        )
-
-        return entity_index.get(
+        ).get(
             entity_id
         )
 
@@ -597,7 +797,173 @@ class Repository:
         return results
 
     ####################################################################
-    # PRIVATE INDEX HELPER
+    # FIND RELATION BY ID
+    ####################################################################
+
+    def find_relation(
+        self,
+        relation_id,
+    ):
+
+        if relation_id is None:
+            return None
+
+        relation_id = str(
+            relation_id
+        ).strip()
+
+        if not relation_id:
+            return None
+
+        return self.cache.relation_indexes.get(
+            "relations",
+            {},
+        ).get(
+            relation_id
+        )
+
+    ####################################################################
+    # FIND RELATIONS BY TYPE
+    ####################################################################
+
+    def find_relations_by_type(
+        self,
+        relation_type,
+    ):
+
+        relation_type = (
+            self._normalize_relation_key(
+                relation_type
+            )
+        )
+
+        if not relation_type:
+            return []
+
+        return self.cache.relation_type_indexes.get(
+            "relations",
+            {},
+        ).get(
+            relation_type,
+            [],
+        )
+
+    ####################################################################
+    # FIND RELATIONS BY SOURCE
+    ####################################################################
+
+    def find_relations_by_source(
+        self,
+        source,
+    ):
+
+        source = (
+            self._normalize_relation_key(
+                source
+            )
+        )
+
+        if not source:
+            return []
+
+        return self.cache.relation_source_indexes.get(
+            "relations",
+            {},
+        ).get(
+            source,
+            [],
+        )
+
+    ####################################################################
+    # FIND RELATIONS BY TARGET
+    ####################################################################
+
+    def find_relations_by_target(
+        self,
+        target,
+    ):
+
+        target = (
+            self._normalize_relation_key(
+                target
+            )
+        )
+
+        if not target:
+            return []
+
+        return self.cache.relation_target_indexes.get(
+            "relations",
+            {},
+        ).get(
+            target,
+            [],
+        )
+
+    ####################################################################
+    # BUILD SURFACE FORMS
+    ####################################################################
+
+    @classmethod
+    def _build_surface_forms(
+        cls,
+        entity,
+    ) -> set[str]:
+
+        forms: set[str] = set()
+
+        canonical = cls._normalize_lookup(
+            entity.canonical
+        )
+
+        if canonical:
+
+            forms.add(
+                canonical
+            )
+
+        for alias in entity.aliases:
+
+            normalized_alias = (
+                cls._normalize_lookup(
+                    alias
+                )
+            )
+
+            if normalized_alias:
+
+                forms.add(
+                    normalized_alias
+                )
+
+        ################################################################
+        # MICROSOFT TECHNOLOGY SHORTENING
+        ################################################################
+
+        words = canonical.split()
+
+        if len(words) >= 2:
+
+            vendor_prefixes = {
+                "microsoft",
+            }
+
+            if words[0] in vendor_prefixes:
+
+                shortened = " ".join(
+                    words[1:]
+                )
+
+                if shortened:
+
+                    forms.add(
+                        shortened
+                    )
+
+        return forms
+
+    ####################################################################
+    # LINGUISTIC INDEX HELPER
     ####################################################################
 
     @staticmethod
@@ -611,9 +977,10 @@ class Repository:
             value,
             str,
         ):
+
             return
 
-        value = value.strip().lower()
+        value = value.strip().casefold()
 
         if not value:
             return
@@ -623,7 +990,7 @@ class Repository:
         ] = entity
 
     ####################################################################
-    # PRIVATE NORMALIZATION
+    # NORMALIZATION
     ####################################################################
 
     @staticmethod
@@ -635,8 +1002,98 @@ class Repository:
             value,
             str,
         ):
+
             return ""
 
         return " ".join(
             value.casefold().split()
         )
+
+    ####################################################################
+    # RELATION KEY NORMALIZATION
+    ####################################################################
+
+    @staticmethod
+    def _normalize_relation_key(
+        value,
+    ) -> str:
+
+        if not isinstance(
+            value,
+            str,
+        ):
+
+            return ""
+
+        return value.strip().casefold()
+
+    ####################################################################
+    # FLOAT
+    ####################################################################
+
+    @staticmethod
+    def _float_value(
+        value,
+    ) -> float:
+
+        if value is None:
+            return 0.0
+
+        try:
+
+            return float(
+                value
+            )
+
+        except (
+            TypeError,
+            ValueError,
+        ):
+
+            raise ValueError(
+                f"Invalid numeric repository "
+                f"value: {value!r}"
+            )
+
+    ####################################################################
+    # BOOLEAN
+    ####################################################################
+
+    @staticmethod
+    def _bool_value(
+        value,
+    ) -> bool:
+
+        if isinstance(
+            value,
+            bool,
+        ):
+
+            return value
+
+        if isinstance(
+            value,
+            str,
+        ):
+
+            normalized = (
+                value.casefold().strip()
+            )
+
+            if normalized in {
+                "true",
+                "yes",
+                "1",
+            }:
+
+                return True
+
+            if normalized in {
+                "false",
+                "no",
+                "0",
+            }:
+
+                return False
+
+        return bool(value)

@@ -27,7 +27,179 @@
     ],
     "impact_weight": 0.98
   },
-
+  "business intelligence": {
+  "entity_id": "METH_BUSINESS_INTELLIGENCE",
+  "canonical": "Business Intelligence",
+  "aliases": [
+    "BI",
+    "Business Intelligence Methodology",
+    "BI Methodology"
+  ],
+  "category": "data_analytics",
+  "business_area": "business_analytics",
+  "description": "Methodology focused on transforming business data into meaningful insights to support reporting, analysis, and informed decision-making.",
+  "related_domains": [
+    "business_intelligence",
+    "business_analytics",
+    "data_analytics"
+  ],
+  "related_standards": [],
+  "related_kpis": [
+    "Decision Speed",
+    "Reporting Accuracy",
+    "Data Accuracy"
+  ],
+  "impact_weight": 0.95
+},
+"coaching": {
+  "entity_id": "METH_COACHING",
+  "canonical": "Coaching",
+  "aliases": [
+    "Employee Coaching",
+    "Team Coaching",
+    "Performance Coaching"
+  ],
+  "category": "people_development",
+  "business_area": "human_resources",
+  "description": "Methodology focused on developing employee capability and performance through guidance, feedback, support, and structured development.",
+  "related_domains": [
+    "leadership",
+    "people_development",
+    "organizational_development"
+  ],
+  "related_standards": [],
+  "related_kpis": [
+    "Employee Turnover",
+    "Productivity"
+  ],
+  "impact_weight": 0.85
+},
+"etl": {
+  "entity_id": "METH_ETL",
+  "canonical": "Extract Transform Load",
+  "aliases": [
+    "ETL",
+    "Extract-Transform-Load",
+    "Data ETL"
+  ],
+  "category": "data_engineering",
+  "business_area": "data_analytics",
+  "description": "Methodology for extracting data from source systems, transforming it into a usable structure, and loading it into a target data store for analysis and reporting.",
+  "related_domains": [
+    "data_analytics",
+    "data_engineering",
+    "business_intelligence"
+  ],
+  "related_standards": [],
+  "related_kpis": [
+    "Data Accuracy",
+    "Reporting Accuracy"
+  ],
+  "impact_weight": 0.90
+},
+"machine learning": {
+  "entity_id": "METH_MACHINE_LEARNING",
+  "canonical": "Machine Learning",
+  "aliases": [
+    "ML",
+    "Machine Learning Methodology",
+    "Predictive Modeling"
+  ],
+  "category": "data_science",
+  "business_area": "data_analytics",
+  "description": "Methodology that uses statistical and computational techniques to learn patterns from data and generate predictions, classifications, or other data-driven outputs.",
+  "related_domains": [
+    "data_analytics",
+    "business_analytics",
+    "artificial_intelligence"
+  ],
+  "related_standards": [],
+  "related_kpis": [
+    "Data Accuracy",
+    "Decision Speed"
+  ],
+  "impact_weight": 0.92
+},
+"total productive maintenance": {
+  "entity_id": "METH_TPM",
+  "canonical": "Total Productive Maintenance",
+  "aliases": [
+    "TPM",
+    "Total Productive Maintenance Methodology",
+    "Productive Maintenance"
+  ],
+  "category": "maintenance",
+  "business_area": "operations",
+  "description": "Methodology focused on maximizing equipment effectiveness through proactive maintenance, operator involvement, reliability improvement, and prevention of equipment losses.",
+  "related_domains": [
+    "manufacturing",
+    "operations",
+    "maintenance",
+    "operational_excellence"
+  ],
+  "related_standards": [],
+  "related_kpis": [
+    "OEE",
+    "MTBF",
+    "MTTR",
+    "Productivity"
+  ],
+  "impact_weight": 0.95
+},
+"rca": {
+  "entity_id": "METH_RCA",
+  "canonical": "Root Cause Analysis",
+  "aliases": [
+    "RCA",
+    "Root Cause Analysis Methodology",
+    "Cause Analysis"
+  ],
+  "category": "problem_solving",
+  "business_area": "quality",
+  "description": "Methodology used to identify the underlying causes of problems, failures, deviations, or nonconformities and determine appropriate corrective actions.",
+  "related_domains": [
+    "quality_management",
+    "continuous_improvement",
+    "problem_solving"
+  ],
+  "related_standards": [
+    "ISO 9001"
+  ],
+  "related_kpis": [
+    "Customer Complaints",
+    "Audit Findings",
+    "Quality Performance"
+  ],
+  "impact_weight": 0.95
+},
+"lean": {
+    "entity_id": "METH_LEAN",
+    "canonical": "Lean",
+    "aliases": [
+      "Lean practices",
+      "Lean process",
+      "Lean System"
+    ],
+    "category": "continuous_improvement",
+    "business_area": "operations",
+    "description": "Methodology focused on eliminating waste and maximizing customer value.",
+    "related_domains": [
+      "operations",
+      "continuous_improvement",
+      "manufacturing"
+    ],
+    "related_standards": [
+      "ISO 9001"
+    ],
+    "related_kpis": [
+      "Production Yield",
+      "Waste",
+      "Throughput",
+      "Cycle Time",
+      "OEE"
+    ],
+    "impact_weight": 0.98
+  },
   "six sigma": {
     "entity_id": "METH_SIX_SIGMA",
     "canonical": "Six Sigma",

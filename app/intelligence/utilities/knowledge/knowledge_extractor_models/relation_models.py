@@ -5,32 +5,25 @@ Enterprise V5
 Represents a semantic relationship between two extracted
 knowledge entities.
 
-Example:
+This is an EXTRACTION object.
 
-Action:
-    implemented
+Repository relation:
+    RelationRepositoryRecord
 
-Standard:
-    FSSC 22000
-
-Relation:
-    implemented -> FSSC 22000
+Extraction result:
+    RelationKnowledge
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(slots=True)
 class RelationKnowledge:
-    """
-    Typed representation of a relationship between two
-    extracted knowledge entities.
-    """
 
     ####################################################################
-    # Detection
+    # DETECTION
     ####################################################################
 
     found: bool = False
@@ -38,7 +31,7 @@ class RelationKnowledge:
     confidence: float = 0.0
 
     ####################################################################
-    # Relation Identity
+    # RELATION IDENTITY
     ####################################################################
 
     relation_id: str = ""
@@ -48,7 +41,7 @@ class RelationKnowledge:
     relation_family: str = ""
 
     ####################################################################
-    # Source Entity
+    # SOURCE ENTITY
     ####################################################################
 
     source_entity_id: str = ""
@@ -60,7 +53,7 @@ class RelationKnowledge:
     source_phrase: str = ""
 
     ####################################################################
-    # Target Entity
+    # TARGET ENTITY
     ####################################################################
 
     target_entity_id: str = ""
@@ -72,7 +65,7 @@ class RelationKnowledge:
     target_phrase: str = ""
 
     ####################################################################
-    # Text Position
+    # TEXT POSITION
     ####################################################################
 
     start_char: int = -1
@@ -82,7 +75,7 @@ class RelationKnowledge:
     sentence_index: int = 0
 
     ####################################################################
-    # Semantic Information
+    # SEMANTIC INFORMATION
     ####################################################################
 
     business_area: str = ""
@@ -94,19 +87,21 @@ class RelationKnowledge:
     impact_weight: float = 1.0
 
     ####################################################################
-    # Graph
+    # GRAPH
     ####################################################################
 
     graph_edge: bool = True
 
     ####################################################################
-    # Source
+    # SOURCE
     ####################################################################
 
     source: str = "relation_extractor"
 
-    metadata: dict = None
+    ####################################################################
+    # METADATA
+    ####################################################################
 
-    def __post_init__(self) -> None:
-        if self.metadata is None:
-            self.metadata = {}
+    metadata: dict = field(
+        default_factory=dict
+    )

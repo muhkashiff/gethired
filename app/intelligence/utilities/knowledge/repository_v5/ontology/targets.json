@@ -555,7 +555,7 @@
     "impact_weight": 0.85
   },
     "inventory": {
-    "entity_id": "TARGET_INVENTORY",
+    "entity_id": "TGT_INVENTORY",
     "canonical": "Inventory",
     "aliases": [
       "inventory",
@@ -570,7 +570,7 @@
   },
 
   "warehouse": {
-    "entity_id": "TARGET_WAREHOUSE",
+    "entity_id": "TGT_WAREHOUSE",
     "canonical": "Warehouse",
     "aliases": [
       "warehouse",
@@ -584,7 +584,7 @@
   },
 
   "distribution_center": {
-    "entity_id": "TARGET_DISTRIBUTION_CENTER",
+    "entity_id": "TGT_DISTRIBUTION_CENTER",
     "canonical": "Distribution Center",
     "aliases": [
       "distribution center",
@@ -598,7 +598,7 @@
   },
 
   "supply_chain": {
-    "entity_id": "TARGET_SUPPLY_CHAIN",
+    "entity_id": "TGT_SUPPLY_CHAIN",
     "canonical": "Supply Chain",
     "aliases": [
       "supply chain",
@@ -611,7 +611,7 @@
   },
 
   "shipment": {
-    "entity_id": "TARGET_SHIPMENT",
+    "entity_id": "TGT_SHIPMENT",
     "canonical": "Shipment",
     "aliases": [
       "shipment",
@@ -625,7 +625,7 @@
   },
 
   "delivery": {
-    "entity_id": "TARGET_DELIVERY",
+    "entity_id": "TGT_DELIVERY",
     "canonical": "Delivery",
     "aliases": [
       "delivery",
@@ -638,7 +638,7 @@
   },
 
   "customer_orders": {
-    "entity_id": "TARGET_CUSTOMER_ORDERS",
+    "entity_id": "TGT_CUSTOMER_ORDERS",
     "canonical": "Customer Orders",
     "aliases": [
       "customer orders",
@@ -652,7 +652,7 @@
   },
 
   "forecast": {
-    "entity_id": "TARGET_FORECAST",
+    "entity_id": "TGT_FORECAST",
     "canonical": "Forecast",
     "aliases": [
       "forecast",
@@ -666,7 +666,7 @@
   },
 
   "planning": {
-    "entity_id": "TARGET_PLANNING",
+    "entity_id": "TGT_PLANNING",
     "canonical": "Planning",
     "aliases": [
       "planning",
@@ -680,7 +680,7 @@
   },
 
   "schedule": {
-    "entity_id": "TARGET_SCHEDULE",
+    "entity_id": "TGT_SCHEDULE",
     "canonical": "Schedule",
     "aliases": [
       "schedule",
@@ -694,7 +694,7 @@
   },
 
   "budget": {
-    "entity_id": "TARGET_BUDGET",
+    "entity_id": "TGT_BUDGET",
     "canonical": "Budget",
     "aliases": [
       "budget",
@@ -707,7 +707,7 @@
   },
 
   "cost": {
-    "entity_id": "TARGET_COST",
+    "entity_id": "TGT_COST",
     "canonical": "Cost",
     "aliases": [
       "cost",
@@ -722,7 +722,7 @@
   },
 
   "profit": {
-    "entity_id": "TARGET_PROFIT",
+    "entity_id": "TGT_PROFIT",
     "canonical": "Profit",
     "aliases": [
       "profit",
@@ -735,7 +735,7 @@
   },
 
   "revenue": {
-    "entity_id": "TARGET_REVENUE",
+    "entity_id": "TGT_REVENUE",
     "canonical": "Revenue",
     "aliases": [
       "revenue",
@@ -748,7 +748,7 @@
   },
 
   "expenses": {
-    "entity_id": "TARGET_EXPENSES",
+    "entity_id": "TGT_EXPENSES",
     "canonical": "Expenses",
     "aliases": [
       "expenses",
@@ -761,7 +761,7 @@
   },
 
   "assets": {
-    "entity_id": "TARGET_ASSETS",
+    "entity_id": "TGT_ASSETS",
     "canonical": "Assets",
     "aliases": [
       "assets",
@@ -774,7 +774,7 @@
   },
 
   "equipment": {
-    "entity_id": "TARGET_EQUIPMENT",
+    "entity_id": "TGT_EQUIPMENT",
     "canonical": "Equipment",
     "aliases": [
       "equipment",
@@ -788,7 +788,7 @@
   },
 
   "process": {
-    "entity_id": "TARGET_PROCESS",
+    "entity_id": "TGT_PROCESS",
     "canonical": "Process",
     "aliases": [
       "process",
@@ -802,7 +802,7 @@
   },
 
   "workflow": {
-    "entity_id": "TARGET_WORKFLOW",
+    "entity_id": "TGT_WORKFLOW",
     "canonical": "Workflow",
     "aliases": [
       "workflow",
@@ -815,7 +815,7 @@
   },
   
     "quality_management_system": {
-    "entity_id": "TARGET_QMS",
+    "entity_id": "TGT_QMS",
     "canonical": "Quality Management System",
     "aliases": [
       "quality management system",
@@ -828,7 +828,7 @@
   },
 
     "pasteurizer": {
-    "entity_id": "TARGET_PASTEURIZER",
+    "entity_id": "TGT_PASTEURIZER",
     "canonical": "Pasteurizer",
     "aliases": [
       "pasteurizer",
@@ -842,7 +842,7 @@
   },
 
   "water_treatment_plant": {
-    "entity_id": "TARGET_WTP",
+    "entity_id": "TGT_WTP",
     "canonical": "Water Treatment Plant",
     "aliases": [
       "water treatment plant",
@@ -856,7 +856,7 @@
   },
 
   "cip_system": {
-    "entity_id": "TARGET_CIP",
+    "entity_id": "TGT_CIP",
     "canonical": "CIP System",
     "aliases": [
       "cip",
@@ -870,7 +870,7 @@
   },
 
   "laboratory": {
-    "entity_id": "TARGET_LABORATORY",
+    "entity_id": "TGT_LABORATORY",
     "canonical": "Laboratory",
     "aliases": [
       "laboratory",
@@ -884,7 +884,7 @@
   },
 
   "microbiology_lab": {
-    "entity_id": "TARGET_MICRO_LAB",
+    "entity_id": "TGT_MICRO_LAB",
     "canonical": "Microbiology Laboratory",
     "aliases": [
       "microbiology lab",
@@ -898,7 +898,7 @@
   },
 
   "chemical_lab": {
-    "entity_id": "TARGET_CHEMICAL_LAB",
+    "entity_id": "TGT_CHEMICAL_LAB",
     "canonical": "Chemical Laboratory",
     "aliases": [
       "chemical laboratory",
@@ -911,7 +911,7 @@
   },
 
     "procedures": {
-    "entity_id": "TARGET_PROCEDURES",
+    "entity_id": "TGT_PROCEDURES",
     "canonical": "Procedures",
     "aliases": [
       "procedures",
@@ -925,7 +925,7 @@
   },
 
   "work_instructions": {
-    "entity_id": "TARGET_WORK_INSTRUCTIONS",
+    "entity_id": "TGT_WORK_INSTRUCTIONS",
     "canonical": "Work Instructions",
     "aliases": [
       "work instructions",
@@ -939,7 +939,7 @@
   },
 
   "audit_program": {
-    "entity_id": "TARGET_AUDIT_PROGRAM",
+    "entity_id": "TGT_AUDIT_PROGRAM",
     "canonical": "Audit Program",
     "aliases": [
       "audit program",
@@ -953,7 +953,7 @@
   },
 
   "nonconformance": {
-    "entity_id": "TARGET_NONCONFORMANCE",
+    "entity_id": "TGT_NONCONFORMANCE",
     "canonical": "Nonconformance",
     "aliases": [
       "nonconformance",
@@ -967,7 +967,7 @@
   },
 
     "filling_line": {
-    "entity_id": "TARGET_FILLING_LINE",
+    "entity_id": "TGT_FILLING_LINE",
     "canonical": "Filling Line",
     "aliases": [
       "filling line",
@@ -981,7 +981,7 @@
   },
 
   "packaging_line": {
-    "entity_id": "TARGET_PACKAGING_LINE",
+    "entity_id": "TGT_PACKAGING_LINE",
     "canonical": "Packaging Line",
     "aliases": [
       "packaging line",
@@ -995,7 +995,7 @@
   },
 
   "tetra_pak_line": {
-    "entity_id": "TARGET_TETRA_LINE",
+    "entity_id": "TGT_TETRA_LINE",
     "canonical": "Tetra Pak Line",
     "aliases": [
       "tetra pak line",
@@ -1009,7 +1009,7 @@
   },
 
   "pet_line": {
-    "entity_id": "TARGET_PET_LINE",
+    "entity_id": "TGT_PET_LINE",
     "canonical": "PET Line",
     "aliases": [
       "pet line",
@@ -1023,7 +1023,7 @@
   },
 
   "pet_blowing_machine": {
-    "entity_id": "TARGET_PET_BLOWING",
+    "entity_id": "TGT_PET_BLOWING",
     "canonical": "PET Blowing Machine",
     "aliases": [
       "pet blowing machine",
@@ -1038,7 +1038,7 @@
   },
 
   "syrup_room": {
-    "entity_id": "TARGET_SYRUP_ROOM",
+    "entity_id": "TGT_SYRUP_ROOM",
     "canonical": "Syrup Room",
     "aliases": [
       "syrup room",
@@ -1052,7 +1052,7 @@
   },
 
   "mixing_tank": {
-    "entity_id": "TARGET_MIXING_TANK",
+    "entity_id": "TGT_MIXING_TANK",
     "canonical": "Mixing Tank",
     "aliases": [
       "mixing tank",
@@ -1066,7 +1066,7 @@
   },
 
   "blending_system": {
-    "entity_id": "TARGET_BLENDING_SYSTEM",
+    "entity_id": "TGT_BLENDING_SYSTEM",
     "canonical": "Blending System",
     "aliases": [
       "blending system",
@@ -1080,7 +1080,7 @@
   },
 
     "finished_goods": {
-    "entity_id": "TARGET_FINISHED_GOODS",
+    "entity_id": "TGT_FINISHED_GOODS",
     "canonical": "Finished Goods",
     "aliases": [
       "finished goods",
@@ -1094,7 +1094,7 @@
   },
 
   "raw_materials": {
-    "entity_id": "TARGET_RAW_MATERIALS",
+    "entity_id": "TGT_RAW_MATERIALS",
     "canonical": "Raw Materials",
     "aliases": [
       "raw materials",
@@ -1108,7 +1108,7 @@
   },
 
     "production_plan": {
-    "entity_id": "TARGET_PRODUCTION_PLAN",
+    "entity_id": "TGT_PRODUCTION_PLAN",
     "canonical": "Production Plan",
     "aliases": [
       "production plan",
@@ -1122,7 +1122,7 @@
   },
 
    "batch_record": {
-    "entity_id": "TARGET_BATCH_RECORD",
+    "entity_id": "TGT_BATCH_RECORD",
     "canonical": "Batch Record",
     "aliases": [
       "batch record",
@@ -1136,7 +1136,7 @@
   },
 
   "batch": {
-    "entity_id": "TARGET_BATCH",
+    "entity_id": "TGT_BATCH",
     "canonical": "Batch",
     "aliases": [
       "batch",
@@ -1150,7 +1150,7 @@
   },
 
   "changeover": {
-    "entity_id": "TARGET_CHANGEOVER",
+    "entity_id": "TGT_CHANGEOVER",
     "canonical": "Changeover",
     "aliases": [
       "changeover",
@@ -1163,7 +1163,7 @@
     "impact_weight": 0.90
   },
   "retail_store": {
-    "entity_id": "TARGET_RETAIL_STORE",
+    "entity_id": "TGT_RETAIL_STORE",
     "canonical": "Retail Store",
     "aliases": [
       "retail store",
@@ -1177,7 +1177,7 @@
   },
 
   "store_operations": {
-    "entity_id": "TARGET_STORE_OPERATIONS",
+    "entity_id": "TGT_STORE_OPERATIONS",
     "canonical": "Store Operations",
     "aliases": [
       "store operations",
@@ -1191,7 +1191,7 @@
   },
 
   "customer_service": {
-    "entity_id": "TARGET_CUSTOMER_SERVICE",
+    "entity_id": "TGT_CUSTOMER_SERVICE",
     "canonical": "Customer Service",
     "aliases": [
       "customer service",
@@ -1205,7 +1205,7 @@
   },
 
   "customer_experience": {
-    "entity_id": "TARGET_CUSTOMER_EXPERIENCE",
+    "entity_id": "TGT_CUSTOMER_EXPERIENCE",
     "canonical": "Customer Experience",
     "aliases": [
       "customer experience",
@@ -1219,7 +1219,7 @@
   },
 
   "sales": {
-    "entity_id": "TARGET_SALES",
+    "entity_id": "TGT_SALES",
     "canonical": "Sales",
     "aliases": [
       "sales",
@@ -1233,7 +1233,7 @@
   },
 
   "sales_team": {
-    "entity_id": "TARGET_SALES_TEAM",
+    "entity_id": "TGT_SALES_TEAM",
     "canonical": "Sales Team",
     "aliases": [
       "sales team",
@@ -1247,7 +1247,7 @@
   },
 
   "distribution_network": {
-    "entity_id": "TARGET_DISTRIBUTION",
+    "entity_id": "TGT_DISTRIBUTION",
     "canonical": "Distribution Network",
     "aliases": [
       "distribution",
@@ -1261,7 +1261,7 @@
   },
 
   "logistics": {
-    "entity_id": "TARGET_LOGISTICS",
+    "entity_id": "TGT_LOGISTICS",
     "canonical": "Logistics",
     "aliases": [
       "logistics",
@@ -1275,7 +1275,7 @@
   },
 
     "procurement": {
-    "entity_id": "TARGET_PROCUREMENT",
+    "entity_id": "TGT_PROCUREMENT",
     "canonical": "Procurement",
     "aliases": [
       "procurement",
@@ -1289,7 +1289,7 @@
   },
 
   "vendor_management": {
-    "entity_id": "TARGET_VENDOR_MANAGEMENT",
+    "entity_id": "TGT_VENDOR_MANAGEMENT",
     "canonical": "Vendor Management",
     "aliases": [
       "vendor management",
@@ -1303,7 +1303,7 @@
   },
 
   "purchase_orders": {
-    "entity_id": "TARGET_PURCHASE_ORDER",
+    "entity_id": "TGT_PURCHASE_ORDER",
     "canonical": "Purchase Orders",
     "aliases": [
       "purchase order",
@@ -1317,7 +1317,7 @@
   },
 
   "business_operations": {
-    "entity_id": "TARGET_BUSINESS_OPERATIONS",
+    "entity_id": "TGT_BUSINESS_OPERATIONS",
     "canonical": "Business Operations",
     "aliases": [
       "business operations",
@@ -1331,7 +1331,7 @@
   },
 
   "business_processes": {
-    "entity_id": "TARGET_BUSINESS_PROCESSES",
+    "entity_id": "TGT_BUSINESS_PROCESSES",
     "canonical": "Business Processes",
     "aliases": [
       "business process",
@@ -1345,7 +1345,7 @@
   },
 
   "business_performance": {
-    "entity_id": "TARGET_BUSINESS_PERFORMANCE",
+    "entity_id": "TGT_BUSINESS_PERFORMANCE",
     "canonical": "Business Performance",
     "aliases": [
       "business performance",
@@ -1358,7 +1358,7 @@
   },
 
   "business_strategy": {
-    "entity_id": "TARGET_BUSINESS_STRATEGY",
+    "entity_id": "TGT_BUSINESS_STRATEGY",
     "canonical": "Business Strategy",
     "aliases": [
       "business strategy",
@@ -1372,7 +1372,7 @@
   },
 
   "financial_performance": {
-    "entity_id": "TARGET_FINANCIAL_PERFORMANCE",
+    "entity_id": "TGT_FINANCIAL_PERFORMANCE",
     "canonical": "Financial Performance",
     "aliases": [
       "financial performance",
@@ -1386,7 +1386,7 @@
   },
 
     "costs": {
-    "entity_id": "TARGET_COSTS",
+    "entity_id": "TGT_COSTS",
     "canonical": "Costs",
     "aliases": [
       "cost",
@@ -1400,7 +1400,7 @@
   },
 
   "business_reports": {
-    "entity_id": "TARGET_BUSINESS_REPORTS",
+    "entity_id": "TGT_BUSINESS_REPORTS",
     "canonical": "Business Reports",
     "aliases": [
       "business reports",
@@ -1414,7 +1414,7 @@
   },
 
   "dashboards": {
-    "entity_id": "TARGET_DASHBOARDS",
+    "entity_id": "TGT_DASHBOARDS",
     "canonical": "Dashboards",
     "aliases": [
       "dashboard",
@@ -1428,7 +1428,7 @@
   },
 
   "business_data": {
-    "entity_id": "TARGET_BUSINESS_DATA",
+    "entity_id": "TGT_BUSINESS_DATA",
     "canonical": "Business Data",
     "aliases": [
       "business data",
@@ -1442,7 +1442,7 @@
   },
 
   "business_decisions": {
-    "entity_id": "TARGET_BUSINESS_DECISIONS",
+    "entity_id": "TGT_BUSINESS_DECISIONS",
     "canonical": "Business Decisions",
     "aliases": [
       "business decisions",
@@ -1456,7 +1456,7 @@
   },
 
   "inventory_accuracy": {
-    "entity_id": "TARGET_INVENTORY_ACCURACY",
+    "entity_id": "TGT_INVENTORY_ACCURACY",
     "canonical": "Inventory Accuracy",
     "aliases": [
       "inventory accuracy",
@@ -1469,7 +1469,7 @@
   },
 
   "stock_reconciliation": {
-    "entity_id": "TARGET_STOCK_RECONCILIATION",
+    "entity_id": "TGT_STOCK_RECONCILIATION",
     "canonical": "Stock Reconciliation",
     "aliases": [
       "stock reconciliation",
@@ -1562,5 +1562,205 @@
   "business_area": "human_resources",
   "domain": "people_management",
   "impact_weight": 0.87
+},
+
+"dashboard": {
+  "entity_id": "TGT_DASHBOARD",
+  "canonical": "Dashboard",
+  "aliases": [
+    "dashboard",
+    "business dashboard",
+    "performance dashboard",
+    "KPI dashboard"
+  ],
+  "category": "business_intelligence",
+  "business_area": "Business Analytics",
+  "domain": "business_intelligence",
+  "impact_weight": 0.95
+},
+
+"database": {
+  "entity_id": "TGT_DATABASE",
+  "canonical": "Database",
+  "aliases": [
+    "database",
+    "data repository",
+    "data store"
+  ],
+  "category": "technology",
+  "business_area": "Data Analytics",
+  "domain": "data_analytics",
+  "impact_weight": 0.95
+},
+
+"food_safety_manager": {
+  "entity_id": "TGT_FOOD_SAFETY_MANAGER",
+  "canonical": "Food Safety Manager",
+  "aliases": [
+    "food safety manager",
+    "food safety management",
+    "FSMS manager"
+  ],
+  "category": "job_role",
+  "business_area": "Food Safety",
+  "domain": "food_safety_management",
+  "impact_weight": 1.0
+},
+
+"fsms": {
+  "entity_id": "TGT_FSMS",
+  "canonical": "Food Safety Management System",
+  "aliases": [
+    "FSMS",
+    "food safety management system",
+    "food safety system"
+  ],
+  "category": "management_system",
+  "business_area": "Food Safety",
+  "domain": "food_safety_management",
+  "impact_weight": 1.0
+},
+
+"job_description": {
+  "entity_id": "TGT_JOB_DESCRIPTION",
+  "canonical": "Job Description",
+  "aliases": [
+    "job description",
+    "job posting",
+    "job specification",
+    "JD"
+  ],
+  "category": "career_document",
+  "business_area": "Human Resources",
+  "domain": "career_management",
+  "impact_weight": 0.95
+},
+
+"manufacturing_facility": {
+  "entity_id": "TGT_MANUFACTURING_FACILITY",
+  "canonical": "Manufacturing Facility",
+  "aliases": [
+    "manufacturing facility",
+    "factory",
+    "production facility",
+    "manufacturing plant"
+  ],
+  "category": "facility",
+  "business_area": "Manufacturing",
+  "domain": "manufacturing",
+  "impact_weight": 1.0
+},
+
+"production_engineer": {
+  "entity_id": "TGT_PRODUCTION_ENGINEER",
+  "canonical": "Production Engineer",
+  "aliases": [
+    "production engineer",
+    "manufacturing engineer",
+    "production engineering"
+  ],
+  "category": "job_role",
+  "business_area": "Manufacturing",
+  "domain": "manufacturing",
+  "impact_weight": 0.98
+},
+
+"production_manager": {
+  "entity_id": "TGT_PRODUCTION_MANAGER",
+  "canonical": "Production Manager",
+  "aliases": [
+    "production manager",
+    "manufacturing manager",
+    "production management"
+  ],
+  "category": "job_role",
+  "business_area": "Manufacturing",
+  "domain": "production_management",
+  "impact_weight": 1.0
+},
+
+"qa_director": {
+  "entity_id": "TGT_QA_DIRECTOR",
+  "canonical": "QA Director",
+  "aliases": [
+    "QA director",
+    "quality director",
+    "quality assurance director"
+  ],
+  "category": "job_role",
+  "business_area": "Quality",
+  "domain": "quality_management",
+  "impact_weight": 1.0
+},
+
+"qa_manager": {
+  "entity_id": "TGT_QA_MANAGER",
+  "canonical": "QA Manager",
+  "aliases": [
+    "QA manager",
+    "quality assurance manager",
+    "quality manager"
+  ],
+  "category": "job_role",
+  "business_area": "Quality",
+  "domain": "quality_management",
+  "impact_weight": 1.0
+},
+
+"qa_officer": {
+  "entity_id": "TGT_QA_OFFICER",
+  "canonical": "QA Officer",
+  "aliases": [
+    "QA officer",
+    "quality assurance officer",
+    "quality officer"
+  ],
+  "category": "job_role",
+  "business_area": "Quality",
+  "domain": "quality_management",
+  "impact_weight": 0.95
+},
+
+"qa_supervisor": {
+  "entity_id": "TGT_QA_SUPERVISOR",
+  "canonical": "QA Supervisor",
+  "aliases": [
+    "QA supervisor",
+    "quality assurance supervisor",
+    "quality supervisor"
+  ],
+  "category": "job_role",
+  "business_area": "Quality",
+  "domain": "quality_management",
+  "impact_weight": 0.98
+},
+
+"resume": {
+  "entity_id": "TGT_RESUME",
+  "canonical": "Resume",
+  "aliases": [
+    "resume",
+    "CV",
+    "curriculum vitae",
+    "professional resume"
+  ],
+  "category": "career_document",
+  "business_area": "Career Management",
+  "domain": "career_management",
+  "impact_weight": 1.0
+},
+
+"supply_chain_manager": {
+  "entity_id": "TGT_SUPPLY_CHAIN_MANAGER",
+  "canonical": "Supply Chain Manager",
+  "aliases": [
+    "supply chain manager",
+    "supply chain management",
+    "SCM manager"
+  ],
+  "category": "job_role",
+  "business_area": "Supply Chain",
+  "domain": "supply_chain",
+  "impact_weight": 1.0
 }
 }

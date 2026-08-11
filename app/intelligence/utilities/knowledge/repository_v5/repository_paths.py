@@ -2,10 +2,11 @@
 Knowledge Paths
 
 Single source of truth
-for every ontology/config path.
+for every ontology/config/semantic path.
 """
 
 from pathlib import Path
+
 
 CURRENT = Path(__file__).resolve().parent
 
@@ -16,56 +17,95 @@ KNOWLEDGE_ROOT = CURRENT.parent
 DATA_ROOT = KNOWLEDGE_ROOT / "repository_v5"
 
 CONFIG = DATA_ROOT / "config"
+
 ONTOLOGY = DATA_ROOT / "ontology"
+
 SEMANTICS = DATA_ROOT / "semantics"
 
 
 class RepositoryPaths:
 
+    ####################################################################
+    # ONTOLOGY
+    ####################################################################
+
     def __init__(self):
 
-        # -------------------
-        # Ontology
-        # -------------------
+        self.actions = (
+            ONTOLOGY / "actions.json"
+        )
 
-        self.actions = ONTOLOGY / "actions.json"
+        self.targets = (
+            ONTOLOGY / "targets.json"
+        )
 
-        self.targets = ONTOLOGY / "targets.json"
+        self.metrics = (
+            ONTOLOGY / "metrics_dictionary.json"
+        )
 
-        self.metrics = ONTOLOGY / "metrics_dictionary.json"
+        self.business_kpis = (
+            ONTOLOGY / "business_kpis.json"
+        )
 
-        self.business_kpis = ONTOLOGY / "business_kpis.json"
+        self.domains = (
+            ONTOLOGY / "domains.json"
+        )
 
-        self.domains = ONTOLOGY / "domains.json"
+        self.domain_reasoning = (
+            ONTOLOGY / "domain_reasoning.json"
+        )
 
-        self.domain_reasoning = ONTOLOGY / "domain_reasoning.json"
+        self.certifications = (
+            ONTOLOGY / "certifications.json"
+        )
 
-        self.certifications = ONTOLOGY / "certifications.json"
+        self.technologies = (
+            ONTOLOGY / "technologies.json"
+        )
 
-        self.technologies = ONTOLOGY / "technologies.json"
+        self.impact_dictionary = (
+            ONTOLOGY / "impact_dictionary.json"
+        )
 
-        self.impact_dictionary = ONTOLOGY/ "impact_dictionary.json"
+        self.skills = (
+            ONTOLOGY / "skills.json"
+        )
 
-        self.skills = ONTOLOGY / "skills.json"
+        self.methodologies = (
+            ONTOLOGY / "methodologies.json"
+        )
 
-        self.methodologies = ONTOLOGY / "methodologies.json"
+        self.standards = (
+            ONTOLOGY / "standards.json"
+        )
 
-        self.standards = ONTOLOGY / "standards.json"
-            
-    
-        # -------------------
-        # Config
-        # -------------------
+        ################################################################
+        # RELATIONS
+        ################################################################
 
-        self.measurement_patterns = CONFIG / "measurement_patterns.json"
+        self.relations = (
+            ONTOLOGY / "relations.json"
+        )
 
-        self.modifier_dictionary = CONFIG / "modifier_dictionary.json"
+        ####################################################################
+        # CONFIG
+        ####################################################################
 
-        self.confidence_rules = CONFIG / "confidence_rules.json"
+        self.measurement_patterns = (
+            CONFIG / "measurement_patterns.json"
+        )
 
-        # -------------------
-        # Semantics
-        # -------------------
+        self.modifier_dictionary = (
+            CONFIG / "modifier_dictionary.json"
+        )
+
+        self.confidence_rules = (
+            CONFIG / "confidence_rules.json"
+        )
+
+        ####################################################################
+        # SEMANTICS
+        ####################################################################
 
         self.measurement_semantics = (
             SEMANTICS / "measurement_semantics.json"
@@ -73,6 +113,4 @@ class RepositoryPaths:
 
         self.clause_patterns = (
             SEMANTICS / "clause_patterns.json"
-                )
-
-        
+        )
