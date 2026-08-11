@@ -58,4 +58,37 @@ KnowledgeV5Pipeline
       ▼
 List[MatchResult]
 
+
+PHASE 1
+Ontology
+    ↓
+Repository
+    ↓
+Registry
+
+PHASE 2
+Knowledge V5 Pipeline
+    ↓
+Matching + confidence + overlap + ranking
+
+PHASE 3  ← WE ARE HERE
+Extraction Engine
+    ↓
+Skills / Actions / Targets / Domains / KPIs / Standards
+
+PHASE 4
+Reasoners
+    ↓
+Action → Target
+Skill → Domain
+Skill → KPI
+Skill → Standard
+Experience → Skill
+Experience → Domain
+Career progression
+Cross-domain inference
+AI reasoning
+
+PHASE 5
+Scoring / Job Matching / Resume Intelligence
 """

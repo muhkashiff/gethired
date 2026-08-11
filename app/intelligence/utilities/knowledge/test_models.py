@@ -10,231 +10,360 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-from app.intelligence.utilities.knowledge.repository_v5.repository import (
-    Repository,
+"""
+Enterprise V5
+Real Pipeline -> Extraction Engine Integration Test
+
+Flow:
+
+Sentence
+    ↓
+KnowledgeV5Pipeline
+    ↓
+Tokenizer
+    ↓
+Matcher
+    ↓
+Confidence
+    ↓
+Overlap Resolver
+    ↓
+Ranker
+    ↓
+ExtractionEngine
+    ↓
+Structured entities
+"""
+
+from app.intelligence.utilities.knowledge.repository_v5 import repository
+
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
+    KnowledgeV5Pipeline,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.relation_extractor.relation_extractor import (
-    RelationExtractor,
+from app.intelligence.utilities.knowledge.knowledge_extractors.registry import (
+    KnowledgeRegistry,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_engine import (
+    ExtractionEngine,
 )
 
 
-def main():
+####################################################################
+# INITIALIZE REGISTRY
+####################################################################
 
-    print("=" * 80)
-    print("RELATION SYSTEM TEST")
-    print("=" * 80)
+print()
+print("=" * 70)
+print("INITIALIZING KNOWLEDGE REGISTRY")
+print("=" * 70)
 
-    ################################################################
-    # 1. REPOSITORY
-    ################################################################
+registry = KnowledgeRegistry(
+    repository=repository
+)
 
-    print("\n1. Loading repository...")
+print()
+print(
+    f"Entity count : {registry.entity_count}"
+)
 
-    repository = Repository()
+print(
+    f"Alias count  : {registry.alias_count}"
+)
 
-    print("PASS: Repository initialized")
 
-    ################################################################
-    # 2. RELATION INDEXES
-    ################################################################
+####################################################################
+# INITIALIZE V5 PIPELINE
+####################################################################
 
-    print("\n2. Checking relation indexes...")
+print()
+print("=" * 70)
+print("INITIALIZING KNOWLEDGE V5 PIPELINE")
+print("=" * 70)
 
-    relation_index = (
-        repository.cache.relation_indexes.get(
-            "relations"
+pipeline = KnowledgeV5Pipeline(
+    repository_instance=repository
+)
+
+print()
+print("Pipeline initialized successfully.")
+
+
+####################################################################
+# INITIALIZE EXTRACTION ENGINE
+####################################################################
+
+print()
+print("=" * 70)
+print("INITIALIZING EXTRACTION ENGINE")
+print("=" * 70)
+
+engine = ExtractionEngine(
+    registry=registry
+)
+
+print()
+print("Extraction engine initialized successfully.")
+
+
+####################################################################
+# TEST SENTENCE
+####################################################################
+
+sentence = (
+    "Implemented FSSC 22000 and HACCP requirements, "
+    "improved quality assurance processes, "
+    "reduced waste, and increased production yield."
+)
+
+
+####################################################################
+# RUN V5 PIPELINE
+####################################################################
+
+print()
+print("=" * 70)
+print("RUNNING KNOWLEDGE V5 PIPELINE")
+print("=" * 70)
+
+print()
+print("Sentence:")
+print(sentence)
+
+print()
+
+ontology_names = [
+    "skills",
+    "actions",
+    "targets",
+    "domains",
+    "metrics",
+    "standards",
+]
+
+all_matches = []
+
+for ontology in ontology_names:
+
+    print()
+    print("=" * 70)
+    print(f"ONTOLOGY: {ontology.upper()}")
+    print("=" * 70)
+
+    matches = pipeline.run(
+        ontology,
+        sentence,
+    )
+
+    for match in matches:
+
+        print(
+            f"{match.entity_id} -> "
+            f"{match.canonical} | "
+            f"confidence={match.confidence:.3f}"
         )
-    )
 
-    relation_type_index = (
-        repository.cache.relation_type_indexes.get(
-            "relations"
+    all_matches.extend(matches)
+
+    print()
+    print("=" * 70)
+    print("TOTAL MATCHES")
+    print("=" * 70)
+
+    for match in all_matches:
+
+        print(
+            f"{match.entity_id} -> "
+            f"{match.canonical} | "
+            f"{match.confidence:.3f}"
         )
-    )
 
-    relation_source_index = (
-        repository.cache.relation_source_indexes.get(
-            "relations"
+
+####################################################################
+# DISPLAY RAW MATCHES
+####################################################################
+
+print("=" * 70)
+print("V5 PIPELINE MATCHES")
+print("=" * 70)
+
+print()
+
+if not matches:
+
+    print("NO MATCHES FOUND")
+
+else:
+
+    for index, match in enumerate(
+        matches,
+        start=1,
+    ):
+
+        print(
+            f"[{index}] {match}"
         )
-    )
 
-    relation_target_index = (
-        repository.cache.relation_target_indexes.get(
-            "relations"
-        )
-    )
 
-    assert relation_index is not None
-    assert relation_type_index is not None
-    assert relation_source_index is not None
-    assert relation_target_index is not None
+####################################################################
+# EXTRACTION ENGINE
+####################################################################
 
-    print("PASS: relation index")
-    print("PASS: relation type index")
-    print("PASS: relation source index")
-    print("PASS: relation target index")
+print()
+print("=" * 70)
+print("RUNNING EXTRACTION ENGINE")
+print("=" * 70)
 
-    ################################################################
-    # 3. RELATION OBJECT
-    ################################################################
+result = engine.extract(
+    matches
+)
 
-    print("\n3. Testing REL_000001...")
 
-    relation = repository.find_relation(
-        "REL_000001"
-    )
+####################################################################
+# DISPLAY SKILLS
+####################################################################
 
-    assert relation is not None
+print()
+print("SKILLS")
+print("-" * 70)
+
+for item in result["skills"]:
 
     print(
-        "PASS:",
-        relation,
+        f"{item['entity_id']} "
+        f"-> {item['canonical']} "
+        f"| confidence={item['confidence']}"
     )
 
-    ################################################################
-    # 4. CHECK RELATION OBJECT TYPE
-    ################################################################
 
-    from app.intelligence.utilities.knowledge.repository_v5.relation_repository_record import (
-        RelationRepositoryRecord,
-    )
+####################################################################
+# DISPLAY ACTIONS
+####################################################################
 
-    assert isinstance(
-        relation,
-        RelationRepositoryRecord,
-    )
+print()
+print("ACTIONS")
+print("-" * 70)
+
+for item in result["actions"]:
 
     print(
-        "PASS: Relation is RelationRepositoryRecord"
-    )
-    
-    ################################################################
-    # 5. SOURCE ENTITY
-    ################################################################
-
-    print("\n5. Resolving source entity...")
-
-    source_entity = (
-        repository.find_entity_by_id(
-            "actions",
-            "ACT_IMPLEMENT",
-        )
+        f"{item['entity_id']} "
+        f"-> {item['canonical']} "
+        f"| confidence={item['confidence']}"
     )
 
-    assert source_entity is not None
+
+####################################################################
+# DISPLAY TARGETS
+####################################################################
+
+print()
+print("TARGETS")
+print("-" * 70)
+
+for item in result["targets"]:
 
     print(
-        "PASS:",
-        source_entity.entity_id,
-        source_entity.canonical,
+        f"{item['entity_id']} "
+        f"-> {item['canonical']} "
+        f"| confidence={item['confidence']}"
     )
 
-    ################################################################
-    # 6. TARGET ENTITY
-    ################################################################
 
-    print("\n6. Resolving target entity...")
+####################################################################
+# DISPLAY DOMAINS
+####################################################################
 
-    target_entity = (
-        repository.find_entity_by_id(
-            "targets",
-            "TGT_QMS",
-        )
-    )
+print()
+print("DOMAINS")
+print("-" * 70)
 
-    assert target_entity is not None
+for item in result["domains"]:
 
     print(
-        "PASS:",
-        target_entity.entity_id,
-        target_entity.canonical,
+        f"{item['entity_id']} "
+        f"-> {item['canonical']} "
+        f"| confidence={item['confidence']}"
     )
 
-    ################################################################
-    # 7. RELATION EXTRACTOR
-    ################################################################
 
-    print("\n7. Creating RelationExtractor...")
+####################################################################
+# DISPLAY METRICS
+####################################################################
 
-    extractor = RelationExtractor(
-        repository
-    )
+print()
+print("METRICS")
+print("-" * 70)
+
+for item in result["metrics"]:
 
     print(
-        "PASS: RelationExtractor created"
+        f"{item['entity_id']} "
+        f"-> {item['canonical']} "
+        f"| confidence={item['confidence']}"
     )
 
-    ################################################################
-    # 8. EXTRACT RELATION
-    ################################################################
 
-    print("\n8. Extracting relation...")
+####################################################################
+# DISPLAY STANDARDS
+####################################################################
 
-    result = extractor.extract(
-        source_entity,
-        target_entity,
-        sentence_index=0,
-    )
+print()
+print("STANDARDS")
+print("-" * 70)
 
-    assert result is not None
-
-    print("\nResult:")
-    print(result)
-
-    ################################################################
-    # 9. RESULT TYPE
-    ################################################################
-
-    from app.intelligence.utilities.knowledge.knowledge_extractor_models.relation_models import (
-        RelationKnowledge,
-    )
-
-    assert isinstance(
-        result,
-        RelationKnowledge,
-    )
+for item in result["standards"]:
 
     print(
-        "PASS: Output is RelationKnowledge"
+        f"{item['entity_id']} "
+        f"-> {item['canonical']} "
+        f"| confidence={item['confidence']}"
     )
 
-    ################################################################
-    # 10. VALIDATE
-    ################################################################
 
-    assert result.found is True
+####################################################################
+# COUNTS
+####################################################################
 
-    assert result.relation_id == (
-        "REL_000001"
-    )
+print()
+print("=" * 70)
+print("EXTRACTION COUNTS")
+print("=" * 70)
 
-    assert result.relation_type == (
-        "acts_on"
-    )
+print()
 
-    assert result.source_entity_id == (
-        "ACT_IMPLEMENT"
-    )
-
-    assert result.target_entity_id == (
-        "TGT_QMS"
-    )
-
-    assert result.confidence == 1.0
+for key, value in result["counts"].items():
 
     print(
-        "PASS: Relation extraction"
+        f"{key:15} : {value}"
     )
 
-    ################################################################
-    # COMPLETE
-    ################################################################
 
-    print("\n" + "=" * 80)
-    print("ALL RELATION TESTS PASSED")
-    print("=" * 80)
+####################################################################
+# ALL ENTITIES
+####################################################################
+
+print()
+print("=" * 70)
+print("ALL EXTRACTED ENTITIES")
+print("=" * 70)
+
+print()
+
+for item in result["all_entities"]:
+
+    print(
+        f"{item['entity_id']:35} "
+        f"-> {item['canonical']}"
+    )
 
 
-if __name__ == "__main__":
-    main()
+####################################################################
+# COMPLETE
+####################################################################
+
+print()
+print("=" * 70)
+print("REAL PIPELINE EXTRACTION TEST COMPLETE")
+print("=" * 70)
