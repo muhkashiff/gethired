@@ -1,3 +1,50 @@
+"""
+Enterprise Knowledge Graph Builder Regression Test
+
+Enterprise V8
+
+Purpose
+-------
+
+Verify that KnowledgeGraphBuilder correctly converts:
+
+BusinessStatement
+        ↓
+GraphNode
+        ↓
+GraphEdge
+        ↓
+KnowledgeGraphBuildResult
+
+This test intentionally does NOT involve:
+
+- DependencyResolver
+- SemanticRelationExtractor
+- BusinessStatementBuilder
+- KnowledgeGraphReasoners
+- ProfileBuilder
+- Full Enterprise Pipeline
+
+The KnowledgeGraphBuilder must work independently.
+
+Critical compatibility checks:
+
+• SemanticEntity → GraphNode
+• StatementRelation → GraphEdge
+• KPI remains KPI
+• BKPI remains BKPI
+• metric remains metric
+• measurement remains measurement
+• confidence is preserved
+• reasoning is preserved
+• metadata is preserved
+• duplicate nodes are protected
+• duplicate relations are protected
+• statements remain separate
+• invalid relations are ignored
+• empty input is supported
+"""
+
 from pathlib import Path
 import sys
 
@@ -8,56 +55,32 @@ import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
-
 if str(PROJECT_ROOT) not in sys.path:
 
     sys.path.insert(
         0,
-        str(PROJECT_ROOT)
+        str(PROJECT_ROOT),
     )
 
-"""
-BusinessStatementBuilder Regression Test
 
-Enterprise V12
-
-Purpose
--------
-Verify that BusinessStatementBuilder remains compatible
-after the recent Enterprise pipeline upgrades.
-
-Contract under test:
-
-SemanticEntity + SemanticDependency
-                ↓
-      BusinessStatementBuilder
-                ↓
-        list[BusinessStatement]
-
-This test intentionally does NOT involve:
-- KnowledgeGraph
-- KnowledgeGraphBuilder
-- Reasoners
-- Pipeline
-- ProfileBuilder
-
-The BusinessStatementBuilder must work independently.
-"""
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.business_statement_builder import (
-    BusinessStatementBuilder,
-)
+# =====================================================================
+# IMPORTS
+# =====================================================================
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
     SemanticEntity,
-    SemanticDependency,
+    StatementRelation,
+    BusinessStatement,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_graph.knowledge_graph_builder import (
+    KnowledgeGraphBuilder,
 )
 
 
-# ==============================================================
+# =====================================================================
 # TEST HELPERS
-# ==============================================================
-
+# =====================================================================
 
 def make_entity(
     entity_id,
@@ -67,10 +90,12 @@ def make_entity(
     category="",
     business_area="",
     confidence=0.95,
+    ontology_name="",
+    metadata=None,
 ):
     """
-    Create a minimal SemanticEntity compatible with the
-    current BusinessStatementBuilder contract.
+    Create a minimal SemanticEntity compatible with
+    the current KnowledgeGraphBuilder contract.
     """
 
     return SemanticEntity(
@@ -83,42 +108,87 @@ def make_entity(
         business_area=business_area,
         confidence=confidence,
         statement_id=statement_id,
-        metadata={
-            "primary_domain": business_area,
-        },
+        ontology_name=ontology_name,
+        metadata=metadata or {},
     )
 
 
-def make_dependency(
-    source_entity,
-    target_entity,
-    dependency_type="RELATES_TO",
+def make_relation(
+    source_id,
+    target_id,
+    relation_type,
     confidence=0.90,
+    reasoning="",
+    metadata=None,
 ):
     """
-    Create a minimal SemanticDependency.
-
-    Adjust the constructor fields here only if the current
-    SemanticDependency model uses different names.
+    Create a minimal StatementRelation.
     """
 
-    return SemanticDependency(
-        source_entity=source_entity,
-        target_entity=target_entity,
-        dependency_type=dependency_type,
+    return StatementRelation(
+        source_id=source_id,
+        target_id=target_id,
+        relation_type=relation_type,
         confidence=confidence,
+        reasoning=reasoning,
+        metadata=metadata or {},
     )
 
 
-# ==============================================================
+def make_statement(
+    statement_id,
+    entities,
+    relations=None,
+):
+    """
+    Create a minimal BusinessStatement.
+    """
+
+    statement = BusinessStatement()
+
+    statement.statement_id = statement_id
+
+    statement.entities.extend(
+        entities
+    )
+
+    if relations:
+
+        statement.relations.extend(
+            relations
+        )
+
+    return statement
+
+
+class MockSemanticResolution:
+
+    """
+    Minimal SemanticResolution-compatible object.
+
+    KnowledgeGraphBuilder only needs:
+
+        business_statements
+    """
+
+    def __init__(
+        self,
+        business_statements,
+    ):
+
+        self.business_statements = (
+            business_statements
+        )
+
+
+# =====================================================================
 # TEST 1
-# BASIC BUSINESS STATEMENT CREATION
-# ==============================================================
+# BASIC GRAPH CREATION
+# =====================================================================
 
+def test_basic_graph_creation():
 
-def test_business_statement_builder_creates_statement():
-
-    builder = BusinessStatementBuilder()
+    builder = KnowledgeGraphBuilder()
 
     entities = [
 
@@ -134,6 +204,74 @@ def test_business_statement_builder_creates_statement():
             "yield",
         ),
 
+    ]
+
+    relation = make_relation(
+        "ACTION_1",
+        "METRIC_1",
+        "AFFECTS",
+        confidence=0.90,
+        reasoning="improved affects yield",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        entities,
+        [relation],
+    )
+
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    result = builder.build(
+        resolution
+    )
+
+    assert result is not None
+
+    assert result.graph is not None
+
+    assert builder.node_count == 2
+
+    assert builder.edge_count == 1
+
+
+# =====================================================================
+# TEST 2
+# BUSINESS STATEMENT → GRAPH NODES
+# =====================================================================
+
+def test_entities_become_graph_nodes():
+
+    builder = KnowledgeGraphBuilder()
+
+    entities = [
+
+        make_entity(
+            "ACTION_1",
+            "action",
+            "improved",
+        ),
+
+        make_entity(
+            "KPI_1",
+            "kpi",
+            "yield",
+        ),
+
+        make_entity(
+            "BKPI_1",
+            "bkpi",
+            "production efficiency",
+        ),
+
+        make_entity(
+            "METRIC_1",
+            "metric",
+            "production rate",
+        ),
+
         make_entity(
             "MEASUREMENT_1",
             "measurement",
@@ -142,594 +280,212 @@ def test_business_statement_builder_creates_statement():
 
     ]
 
-    dependencies = [
-
-        make_dependency(
-            "ACTION_1",
-            "METRIC_1",
-        ),
-
-        make_dependency(
-            "METRIC_1",
-            "MEASUREMENT_1",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=dependencies,
+    statement = make_statement(
+        "STATEMENT_1",
+        entities,
     )
 
-    # ----------------------------------------------------------
-    # Output contract
-    # ----------------------------------------------------------
-
-    assert isinstance(
-        statements,
-        list,
+    resolution = MockSemanticResolution(
+        [statement]
     )
 
-    assert len(statements) == 1
+    builder.build(
+        resolution
+    )
 
-    statement = statements[0]
+    nodes = builder.get_nodes()
 
-    # ----------------------------------------------------------
-    # Statement identity
-    # ----------------------------------------------------------
+    assert len(nodes) == 5
 
-    assert statement.statement_id == "STATEMENT_1"
-
-    # ----------------------------------------------------------
-    # Entities
-    # ----------------------------------------------------------
-
-    assert len(statement.entities) == 3
-
-    entity_ids = {
-        entity.entity_id
-        for entity in statement.entities
+    node_ids = {
+        node.node_id
+        for node in nodes
     }
 
-    assert entity_ids == {
+    assert node_ids == {
         "ACTION_1",
+        "KPI_1",
+        "BKPI_1",
         "METRIC_1",
         "MEASUREMENT_1",
     }
 
 
-# ==============================================================
-# TEST 2
-# ACTION → METRIC RELATION
-# ==============================================================
-
-
-def test_action_metric_relation_is_created():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "ACTION_1",
-            "action",
-            "improved",
-        ),
-
-        make_entity(
-            "METRIC_1",
-            "metric",
-            "yield",
-        ),
-
-    ]
-
-    dependencies = []
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=dependencies,
-    )
-
-    statement = statements[0]
-
-    relations = statement.relations
-
-    assert len(relations) >= 1
-
-    matching = [
-
-        relation
-
-        for relation in relations
-
-        if (
-            relation.source_id == "ACTION_1"
-            and relation.target_id == "METRIC_1"
-            and relation.relation_type == "AFFECTS"
-        )
-    ]
-
-    assert len(matching) == 1
-
-
-# ==============================================================
+# =====================================================================
 # TEST 3
-# METRIC → MEASUREMENT
-# ==============================================================
+# KPI AND BKPI MUST REMAIN DISTINCT
+# =====================================================================
 
+def test_kpi_and_bkpi_remain_distinct():
 
-def test_metric_measurement_relation_is_created():
+    builder = KnowledgeGraphBuilder()
 
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "METRIC_1",
-            "metric",
-            "yield",
-        ),
-
-        make_entity(
-            "MEASUREMENT_1",
-            "measurement",
-            "99%",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
+    kpi = make_entity(
+        "KPI_1",
+        "kpi",
+        "yield",
     )
 
-    statement = statements[0]
-
-    matching = [
-
-        relation
-
-        for relation in statement.relations
-
-        if (
-            relation.source_id == "METRIC_1"
-            and relation.target_id == "MEASUREMENT_1"
-            and relation.relation_type == "MEASURED_BY"
-        )
-    ]
-
-    assert len(matching) == 1
-
-
-# ==============================================================
-# TEST 4
-# ACTION → SKILL
-# ==============================================================
-
-
-def test_action_skill_relation_is_created():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "ACTION_1",
-            "action",
-            "implemented",
-        ),
-
-        make_entity(
-            "SKILL_1",
-            "skill",
-            "HACCP",
-            category="Food Safety",
-            business_area="Quality",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
+    bkpi = make_entity(
+        "BKPI_1",
+        "bkpi",
+        "production efficiency",
     )
 
-    statement = statements[0]
-
-    matching = [
-
-        relation
-
-        for relation in statement.relations
-
-        if (
-            relation.source_id == "ACTION_1"
-            and relation.target_id == "SKILL_1"
-            and relation.relation_type == "REQUIRES"
-        )
-    ]
-
-    assert len(matching) == 1
-
-
-# ==============================================================
-# TEST 5
-# ACTION → STANDARD
-# ==============================================================
-
-
-def test_action_standard_relation_is_created():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "ACTION_1",
-            "action",
-            "implemented",
-        ),
-
-        make_entity(
-            "STANDARD_1",
-            "standard",
-            "FSSC 22000",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
-    )
-
-    statement = statements[0]
-
-    matching = [
-
-        relation
-
-        for relation in statement.relations
-
-        if (
-            relation.source_id == "ACTION_1"
-            and relation.target_id == "STANDARD_1"
-            and relation.relation_type == "COMPLIES_WITH"
-        )
-    ]
-
-    assert len(matching) == 1
-
-
-# ==============================================================
-# TEST 6
-# ACTION → METHODOLOGY
-# ==============================================================
-
-
-def test_action_methodology_relation_is_created():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "ACTION_1",
-            "action",
-            "improved",
-        ),
-
-        make_entity(
-            "METHOD_1",
-            "methodology",
-            "Six Sigma",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
-    )
-
-    statement = statements[0]
-
-    matching = [
-
-        relation
-
-        for relation in statement.relations
-
-        if (
-            relation.source_id == "ACTION_1"
-            and relation.target_id == "METHOD_1"
-            and relation.relation_type == "USES"
-        )
-    ]
-
-    assert len(matching) == 1
-
-
-# ==============================================================
-# TEST 7
-# ACTION → DOMAIN
-# ==============================================================
-
-
-def test_action_domain_relation_is_created():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "ACTION_1",
-            "action",
-            "improved",
-        ),
-
-        make_entity(
-            "DOMAIN_1",
-            "domain",
-            "Food Manufacturing",
-            business_area="Quality Assurance",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
-    )
-
-    statement = statements[0]
-
-    matching = [
-
-        relation
-
-        for relation in statement.relations
-
-        if (
-            relation.source_id == "ACTION_1"
-            and relation.target_id == "DOMAIN_1"
-            and relation.relation_type == "BELONGS_TO"
-        )
-    ]
-
-    assert len(matching) == 1
-
-
-# ==============================================================
-# TEST 8
-# MULTIPLE STATEMENTS MUST REMAIN SEPARATE
-# ==============================================================
-
-
-def test_entities_are_grouped_by_statement():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "ACTION_1",
-            "action",
-            "improved",
-            statement_id="STATEMENT_1",
-        ),
-
-        make_entity(
-            "METRIC_1",
-            "metric",
-            "yield",
-            statement_id="STATEMENT_1",
-        ),
-
-        make_entity(
-            "ACTION_2",
-            "action",
-            "implemented",
-            statement_id="STATEMENT_2",
-        ),
-
-        make_entity(
-            "STANDARD_2",
-            "standard",
-            "FSSC 22000",
-            statement_id="STATEMENT_2",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
-    )
-
-    assert len(statements) == 2
-
-    statements_by_id = {
-
-        statement.statement_id: statement
-
-        for statement in statements
-
-    }
-
-    assert set(statements_by_id) == {
+    statement = make_statement(
         "STATEMENT_1",
-        "STATEMENT_2",
-    }
+        [
+            kpi,
+            bkpi,
+        ],
+    )
 
-    statement_1_ids = {
-        entity.entity_id
-        for entity in statements_by_id[
-            "STATEMENT_1"
-        ].entities
-    }
+    resolution = MockSemanticResolution(
+        [statement]
+    )
 
-    statement_2_ids = {
-        entity.entity_id
-        for entity in statements_by_id[
-            "STATEMENT_2"
-        ].entities
-    }
+    builder.build(
+        resolution
+    )
 
-    assert statement_1_ids == {
-        "ACTION_1",
-        "METRIC_1",
-    }
+    kpi_node = builder.get_node(
+        "KPI_1"
+    )
 
-    assert statement_2_ids == {
-        "ACTION_2",
-        "STANDARD_2",
-    }
+    bkpi_node = builder.get_node(
+        "BKPI_1"
+    )
 
+    assert kpi_node is not None
 
-# ==============================================================
-# TEST 9
-# STATEMENT METADATA
-# ==============================================================
+    assert bkpi_node is not None
+
+    assert kpi_node.entity_type == "kpi"
+
+    assert bkpi_node.entity_type == "bkpi"
+
+    assert kpi_node.entity_type != (
+        bkpi_node.entity_type
+    )
 
 
-def test_statement_metadata_is_populated():
+# =====================================================================
+# TEST 4
+# METRIC MUST REMAIN DISTINCT FROM KPI/BKPI
+# =====================================================================
 
-    builder = BusinessStatementBuilder()
+def test_metric_remains_distinct():
+
+    builder = KnowledgeGraphBuilder()
 
     entities = [
 
         make_entity(
-            "ACTION_1",
-            "action",
-            "improved",
+            "KPI_1",
+            "kpi",
+            "yield",
+        ),
+
+        make_entity(
+            "BKPI_1",
+            "bkpi",
+            "production efficiency",
         ),
 
         make_entity(
             "METRIC_1",
             "metric",
-            "yield",
-        ),
-
-        make_entity(
-            "MEASUREMENT_1",
-            "measurement",
-            "99%",
-        ),
-
-        make_entity(
-            "DOMAIN_1",
-            "domain",
-            "Food Manufacturing",
-            business_area="Quality",
+            "production rate",
         ),
 
     ]
 
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
+    statement = make_statement(
+        "STATEMENT_1",
+        entities,
     )
 
-    statement = statements[0]
-
-    # Label should contain action + target where available.
-    assert statement.label
-
-    # Metric should cause measured action classification.
-    assert statement.semantic_type == "Measured Action"
-
-    # Measurement should identify this as an achievement.
-    assert statement.achievement is True
-
-    # Domain should populate primary domain.
-    assert statement.primary_domain == "Food Manufacturing"
-
-    # Business area should be inherited from domain.
-    assert statement.business_area == "Quality"
-
-
-# ==============================================================
-# TEST 10
-# RELATION CONFIDENCE
-# ==============================================================
-
-
-def test_relation_confidence_uses_lower_entity_confidence():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "ACTION_1",
-            "action",
-            "improved",
-            confidence=0.95,
-        ),
-
-        make_entity(
-            "METRIC_1",
-            "metric",
-            "yield",
-            confidence=0.70,
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
+    resolution = MockSemanticResolution(
+        [statement]
     )
 
-    statement = statements[0]
-
-    relation = next(
-
-        relation
-
-        for relation in statement.relations
-
-        if relation.relation_type == "AFFECTS"
-
+    builder.build(
+        resolution
     )
 
-    assert relation.confidence == 0.70
-
-
-# ==============================================================
-# TEST 11
-# EMPTY INPUT
-# ==============================================================
-
-
-def test_empty_input_returns_empty_list():
-
-    builder = BusinessStatementBuilder()
-
-    statements = builder.build(
-        entities=[],
-        dependencies=[],
+    assert (
+        builder.get_node(
+            "KPI_1"
+        ).entity_type
+        == "kpi"
     )
 
-    assert isinstance(
-        statements,
-        list,
+    assert (
+        builder.get_node(
+            "BKPI_1"
+        ).entity_type
+        == "bkpi"
     )
 
-    assert statements == []
+    assert (
+        builder.get_node(
+            "METRIC_1"
+        ).entity_type
+        == "metric"
+    )
 
 
-# ==============================================================
-# TEST 12
-# DUPLICATE RELATION PROTECTION
-# ==============================================================
+# =====================================================================
+# TEST 5
+# MEASUREMENT NODE
+# =====================================================================
+
+def test_measurement_becomes_graph_node():
+
+    builder = KnowledgeGraphBuilder()
+
+    measurement = make_entity(
+        "MEASUREMENT_1",
+        "measurement",
+        "99%",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        [
+            measurement,
+        ],
+    )
+
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    builder.build(
+        resolution
+    )
+
+    node = builder.get_node(
+        "MEASUREMENT_1"
+    )
+
+    assert node is not None
+
+    assert node.entity_type == (
+        "measurement"
+    )
+
+    assert node.canonical == "99%"
 
 
-def test_duplicate_relations_are_not_created():
+# =====================================================================
+# TEST 6
+# STATEMENT RELATION → GRAPH EDGE
+# =====================================================================
 
-    builder = BusinessStatementBuilder()
+def test_statement_relation_becomes_graph_edge():
+
+    builder = KnowledgeGraphBuilder()
 
     action = make_entity(
         "ACTION_1",
@@ -743,75 +499,114 @@ def test_duplicate_relations_are_not_created():
         "yield",
     )
 
-    statement = builder.build(
-        entities=[
+    relation = make_relation(
+        "ACTION_1",
+        "METRIC_1",
+        "AFFECTS",
+        confidence=0.85,
+        reasoning="improved affects yield",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        [
             action,
             metric,
         ],
-        dependencies=[],
-    )[0]
-
-    matching = [
-
-        relation
-
-        for relation in statement.relations
-
-        if (
-            relation.source_id == "ACTION_1"
-            and relation.target_id == "METRIC_1"
-            and relation.relation_type == "AFFECTS"
-        )
-    ]
-
-    assert len(matching) == 1
-
-
-# ==============================================================
-# TEST 13
-# OBJECT → OBJECT RELATION SHOULD NOT BE INVENTED
-# ==============================================================
-
-
-def test_builder_does_not_invent_object_object_relation():
-
-    builder = BusinessStatementBuilder()
-
-    entities = [
-
-        make_entity(
-            "OBJECT_1",
-            "object",
-            "production line",
-        ),
-
-        make_entity(
-            "OBJECT_2",
-            "object",
-            "bottling line",
-        ),
-
-    ]
-
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
+        [
+            relation,
+        ],
     )
 
-    statement = statements[0]
+    resolution = MockSemanticResolution(
+        [statement]
+    )
 
-    assert statement.relations == []
+    builder.build(
+        resolution
+    )
+
+    edges = builder.get_edges()
+
+    assert len(edges) == 1
+
+    edge = edges[0]
+
+    assert edge.source_id == (
+        "ACTION_1"
+    )
+
+    assert edge.target_id == (
+        "METRIC_1"
+    )
+
+    assert edge.relation == (
+        "AFFECTS"
+    )
 
 
-# ==============================================================
-# TEST 14
-# BUSINESS STATEMENT OUTPUT CONTRACT
-# ==============================================================
+# =====================================================================
+# TEST 7
+# EDGE CONFIDENCE
+# =====================================================================
+
+def test_edge_confidence_is_preserved():
+
+    builder = KnowledgeGraphBuilder()
+
+    action = make_entity(
+        "ACTION_1",
+        "action",
+        "improved",
+        confidence=0.95,
+    )
+
+    metric = make_entity(
+        "METRIC_1",
+        "metric",
+        "yield",
+        confidence=0.70,
+    )
+
+    relation = make_relation(
+        "ACTION_1",
+        "METRIC_1",
+        "AFFECTS",
+        confidence=0.70,
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        [
+            action,
+            metric,
+        ],
+        [
+            relation,
+        ],
+    )
+
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    builder.build(
+        resolution
+    )
+
+    edge = builder.get_edges()[0]
+
+    assert edge.confidence == 0.70
 
 
-def test_output_contract():
+# =====================================================================
+# TEST 8
+# EDGE REASONING
+# =====================================================================
 
-    builder = BusinessStatementBuilder()
+def test_edge_reasoning_is_preserved():
+
+    builder = KnowledgeGraphBuilder()
 
     entities = [
 
@@ -822,133 +617,584 @@ def test_output_contract():
         ),
 
         make_entity(
-            "METRIC_1",
-            "metric",
+            "KPI_1",
+            "kpi",
             "yield",
         ),
 
     ]
 
-    statements = builder.build(
-        entities=entities,
-        dependencies=[],
+    relation = make_relation(
+        "ACTION_1",
+        "KPI_1",
+        "AFFECTS",
+        reasoning=(
+            "improved affects yield"
+        ),
     )
 
-    assert statements
-
-    statement = statements[0]
-
-    # BusinessStatement contract
-    assert hasattr(
-        statement,
-        "statement_id",
+    statement = make_statement(
+        "STATEMENT_1",
+        entities,
+        [relation],
     )
 
-    assert hasattr(
-        statement,
-        "entities",
+    resolution = MockSemanticResolution(
+        [statement]
     )
 
-    assert hasattr(
-        statement,
-        "relations",
+    builder.build(
+        resolution
     )
 
-    assert hasattr(
-        statement,
-        "label",
+    edge = builder.get_edges()[0]
+
+    assert edge.reasoning == (
+        "improved affects yield"
     )
 
-    assert hasattr(
-        statement,
-        "semantic_type",
+
+# =====================================================================
+# TEST 9
+# NODE METADATA
+# =====================================================================
+
+def test_node_metadata_is_preserved():
+
+    builder = KnowledgeGraphBuilder()
+
+    entity = make_entity(
+        "KPI_1",
+        "kpi",
+        "yield",
+        metadata={
+            "primary_domain": "Manufacturing",
+            "test_marker": "KPI_METADATA",
+        },
     )
 
-    assert hasattr(
-        statement,
-        "primary_domain",
+    statement = make_statement(
+        "STATEMENT_1",
+        [
+            entity,
+        ],
     )
 
-    assert hasattr(
-        statement,
-        "business_area",
+    resolution = MockSemanticResolution(
+        [statement]
     )
 
-    assert hasattr(
-        statement,
-        "achievement",
+    builder.build(
+        resolution
     )
 
-    # Relation contract
-    if statement.relations:
+    node = builder.get_node(
+        "KPI_1"
+    )
 
-        relation = statement.relations[0]
+    assert node is not None
 
-        assert hasattr(
+    assert node.metadata[
+        "test_marker"
+    ] == "KPI_METADATA"
+
+    assert node.domain == (
+        "Manufacturing"
+    )
+
+
+# =====================================================================
+# TEST 10
+# EDGE METADATA
+# =====================================================================
+
+def test_edge_metadata_is_preserved():
+
+    builder = KnowledgeGraphBuilder()
+
+    entities = [
+
+        make_entity(
+            "ACTION_1",
+            "action",
+            "improved",
+        ),
+
+        make_entity(
+            "KPI_1",
+            "kpi",
+            "yield",
+        ),
+
+    ]
+
+    relation = make_relation(
+        "ACTION_1",
+        "KPI_1",
+        "AFFECTS",
+        metadata={
+            "origin": "semantic_relation_extractor",
+        },
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        entities,
+        [
             relation,
-            "source_id",
-        )
+        ],
+    )
 
-        assert hasattr(
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    builder.build(
+        resolution
+    )
+
+    edge = builder.get_edges()[0]
+
+    assert edge.metadata[
+        "origin"
+    ] == "semantic_relation_extractor"
+
+
+# =====================================================================
+# TEST 11
+# MULTIPLE STATEMENTS
+# =====================================================================
+
+def test_multiple_statements_are_built():
+
+    builder = KnowledgeGraphBuilder()
+
+    statement_1 = make_statement(
+
+        "STATEMENT_1",
+
+        [
+            make_entity(
+                "ACTION_1",
+                "action",
+                "improved",
+                statement_id="STATEMENT_1",
+            ),
+
+            make_entity(
+                "KPI_1",
+                "kpi",
+                "yield",
+                statement_id="STATEMENT_1",
+            ),
+        ],
+
+        [
+            make_relation(
+                "ACTION_1",
+                "KPI_1",
+                "AFFECTS",
+            ),
+        ],
+    )
+
+    statement_2 = make_statement(
+
+        "STATEMENT_2",
+
+        [
+            make_entity(
+                "ACTION_2",
+                "action",
+                "implemented",
+                statement_id="STATEMENT_2",
+            ),
+
+            make_entity(
+                "BKPI_2",
+                "bkpi",
+                "customer satisfaction",
+                statement_id="STATEMENT_2",
+            ),
+        ],
+
+        [
+            make_relation(
+                "ACTION_2",
+                "BKPI_2",
+                "AFFECTS",
+            ),
+        ],
+    )
+
+    resolution = MockSemanticResolution(
+        [
+            statement_1,
+            statement_2,
+        ]
+    )
+
+    builder.build(
+        resolution
+    )
+
+    assert builder.node_count == 4
+
+    assert builder.edge_count == 2
+
+
+# =====================================================================
+# TEST 12
+# INVALID RELATION IS IGNORED
+# =====================================================================
+
+def test_invalid_relation_is_ignored():
+
+    builder = KnowledgeGraphBuilder()
+
+    action = make_entity(
+        "ACTION_1",
+        "action",
+        "improved",
+    )
+
+    relation = make_relation(
+        "ACTION_1",
+        "DOES_NOT_EXIST",
+        "AFFECTS",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        [
+            action,
+        ],
+        [
             relation,
-            "target_id",
-        )
+        ],
+    )
 
-        assert hasattr(
-            relation,
-            "relation_type",
-        )
+    resolution = MockSemanticResolution(
+        [statement]
+    )
 
-        assert hasattr(
-            relation,
-            "confidence",
-        )
+    builder.build(
+        resolution
+    )
 
-        assert hasattr(
-            relation,
-            "reasoning",
-        )
+    assert builder.node_count == 1
 
-        assert hasattr(
-            relation,
-            "metadata",
-        )
+    assert builder.edge_count == 0
 
 
-# ==============================================================
+# =====================================================================
+# TEST 13
+# DUPLICATE NODE PROTECTION
+# =====================================================================
+
+def test_duplicate_nodes_are_not_created():
+
+    builder = KnowledgeGraphBuilder()
+
+    entity_1 = make_entity(
+        "KPI_1",
+        "kpi",
+        "yield",
+    )
+
+    entity_2 = make_entity(
+        "KPI_1",
+        "kpi",
+        "yield",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        [
+            entity_1,
+            entity_2,
+        ],
+    )
+
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    builder.build(
+        resolution
+    )
+
+    assert builder.node_count == 1
+
+
+# =====================================================================
+# TEST 14
+# DUPLICATE RELATION PROTECTION
+# =====================================================================
+
+def test_duplicate_edges_are_not_created():
+
+    builder = KnowledgeGraphBuilder()
+
+    entities = [
+
+        make_entity(
+            "ACTION_1",
+            "action",
+            "improved",
+        ),
+
+        make_entity(
+            "KPI_1",
+            "kpi",
+            "yield",
+        ),
+
+    ]
+
+    relation_1 = make_relation(
+        "ACTION_1",
+        "KPI_1",
+        "AFFECTS",
+    )
+
+    relation_2 = make_relation(
+        "ACTION_1",
+        "KPI_1",
+        "AFFECTS",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        entities,
+        [
+            relation_1,
+            relation_2,
+        ],
+    )
+
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    builder.build(
+        resolution
+    )
+
+    assert builder.edge_count == 1
+
+
+# =====================================================================
+# TEST 15
+# EMPTY INPUT
+# =====================================================================
+
+def test_empty_input():
+
+    builder = KnowledgeGraphBuilder()
+
+    resolution = MockSemanticResolution(
+        []
+    )
+
+    result = builder.build(
+        resolution
+    )
+
+    assert result is not None
+
+    assert result.graph is not None
+
+    assert builder.node_count == 0
+
+    assert builder.edge_count == 0
+
+
+# =====================================================================
+# TEST 16
+# NONE INPUT
+# =====================================================================
+
+def test_none_input():
+
+    builder = KnowledgeGraphBuilder()
+
+    result = builder.build(
+        None
+    )
+
+    assert result is not None
+
+    assert result.graph is not None
+
+    assert builder.node_count == 0
+
+    assert builder.edge_count == 0
+
+
+# =====================================================================
+# TEST 17
+# RESET
+# =====================================================================
+
+def test_reset():
+
+    builder = KnowledgeGraphBuilder()
+
+    entity = make_entity(
+        "KPI_1",
+        "kpi",
+        "yield",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        [
+            entity,
+        ],
+    )
+
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    builder.build(
+        resolution
+    )
+
+    assert builder.node_count == 1
+
+    builder.reset()
+
+    assert builder.node_count == 0
+
+    assert builder.edge_count == 0
+
+    assert builder.graph is None
+
+
+# =====================================================================
+# TEST 18
+# OUTPUT CONTRACT
+# =====================================================================
+
+def test_output_contract():
+
+    builder = KnowledgeGraphBuilder()
+
+    entity = make_entity(
+        "KPI_1",
+        "kpi",
+        "yield",
+    )
+
+    statement = make_statement(
+        "STATEMENT_1",
+        [
+            entity,
+        ],
+    )
+
+    resolution = MockSemanticResolution(
+        [statement]
+    )
+
+    result = builder.build(
+        resolution
+    )
+
+    # ---------------------------------------------------------------
+    # Build result
+    # ---------------------------------------------------------------
+
+    assert hasattr(
+        result,
+        "graph",
+    )
+
+    assert result.graph is not None
+
+    # ---------------------------------------------------------------
+    # Builder API
+    # ---------------------------------------------------------------
+
+    assert hasattr(
+        builder,
+        "node_count",
+    )
+
+    assert hasattr(
+        builder,
+        "edge_count",
+    )
+
+    assert hasattr(
+        builder,
+        "summary",
+    )
+
+    assert hasattr(
+        builder,
+        "get_node",
+    )
+
+    assert hasattr(
+        builder,
+        "get_nodes",
+    )
+
+    assert hasattr(
+        builder,
+        "get_edges",
+    )
+
+    assert hasattr(
+        builder,
+        "reset",
+    )
+
+
+# =====================================================================
 # MANUAL RUNNER
-# ==============================================================
-
+# =====================================================================
 
 if __name__ == "__main__":
 
     tests = [
 
-        test_business_statement_builder_creates_statement,
+        test_basic_graph_creation,
 
-        test_action_metric_relation_is_created,
+        test_entities_become_graph_nodes,
 
-        test_metric_measurement_relation_is_created,
+        test_kpi_and_bkpi_remain_distinct,
 
-        test_action_skill_relation_is_created,
+        test_metric_remains_distinct,
 
-        test_action_standard_relation_is_created,
+        test_measurement_becomes_graph_node,
 
-        test_action_methodology_relation_is_created,
+        test_statement_relation_becomes_graph_edge,
 
-        test_action_domain_relation_is_created,
+        test_edge_confidence_is_preserved,
 
-        test_entities_are_grouped_by_statement,
+        test_edge_reasoning_is_preserved,
 
-        test_statement_metadata_is_populated,
+        test_node_metadata_is_preserved,
 
-        test_relation_confidence_uses_lower_entity_confidence,
+        test_edge_metadata_is_preserved,
 
-        test_empty_input_returns_empty_list,
+        test_multiple_statements_are_built,
 
-        test_duplicate_relations_are_not_created,
+        test_invalid_relation_is_ignored,
 
-        test_builder_does_not_invent_object_object_relation,
+        test_duplicate_nodes_are_not_created,
+
+        test_duplicate_edges_are_not_created,
+
+        test_empty_input,
+
+        test_none_input,
+
+        test_reset,
 
         test_output_contract,
 
@@ -959,8 +1205,13 @@ if __name__ == "__main__":
     failed = 0
 
     print()
+
     print("=" * 70)
-    print("BUSINESS STATEMENT BUILDER REGRESSION TEST")
+
+    print(
+        "KNOWLEDGE GRAPH BUILDER REGRESSION TEST"
+    )
+
     print("=" * 70)
 
     for test in tests:
@@ -988,16 +1239,19 @@ if __name__ == "__main__":
             failed += 1
 
     print()
+
     print("=" * 70)
+
     print(
         f"PASSED : {passed}"
     )
+
     print(
         f"FAILED : {failed}"
     )
+
     print("=" * 70)
 
     if failed:
 
         raise SystemExit(1)
-

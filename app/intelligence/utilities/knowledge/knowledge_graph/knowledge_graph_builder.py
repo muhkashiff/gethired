@@ -1,6 +1,8 @@
 """
 Enterprise Knowledge Graph Builder
 
+Enterprise V12
+
 Builds the Enterprise Knowledge Graph directly from
 Business Statements.
 
@@ -12,12 +14,35 @@ Business Statements
         ↓
 Entities
         ↓
-Relations
+Statement Relations
         ↓
 Knowledge Graph
 
-Enterprise V7
+Responsibilities
+----------------
+• Convert SemanticEntity → GraphNode
+• Convert StatementRelation → GraphEdge
+• Preserve KPI / BKPI distinction
+• Preserve entity metadata
+• Preserve relation confidence
+• Preserve relation reasoning
+• Prevent invalid graph references
+• Keep graph construction independent from semantic resolution
+
+Architecture
+
+DependencyResolver
+        ↓
+SemanticRelationExtractor
+        ↓
+BusinessStatementBuilder
+        ↓
+KnowledgeGraphBuilder
+        ↓
+KnowledgeGraph
 """
+
+from __future__ import annotations
 
 import uuid
 
@@ -36,175 +61,326 @@ from app.intelligence.utilities.knowledge.knowledge_graph.knowledge_graph_build_
 
 
 class KnowledgeGraphBuilder:
+    """
+    Builds a KnowledgeGraph from BusinessStatement objects.
 
-    ####################################################################
-    # Initialization
-    ####################################################################
+    The builder does NOT resolve semantic dependencies.
 
-    def __init__(self):
+    Its only responsibility is:
 
-        self.graph = None
+        BusinessStatement
+                ↓
+        GraphNode + GraphEdge
+                ↓
+        KnowledgeGraph
+    """
 
-    ####################################################################
-    # Public Build API
-    ####################################################################
+    # ==========================================================
+    # INITIALIZATION
+    # ==========================================================
 
-    def build(self, semantic_resolution):
+    def __init__(self) -> None:
 
+        self.graph: KnowledgeGraph | None = None
+
+    # ==========================================================
+    # PUBLIC BUILD API
+    # ==========================================================
+
+    def build(self, semantic_resolution) -> KnowledgeGraphBuildResult:
         """
-        Build complete enterprise graph.
+        Build the complete enterprise knowledge graph.
 
-        Input
-        -----
-        SemanticResolution
+        Parameters
+        ----------
+        semantic_resolution:
+            Object containing BusinessStatement objects.
 
-        Output
-        ------
+        Returns
+        -------
         KnowledgeGraphBuildResult
         """
 
         self.graph = KnowledgeGraph()
 
-        # ----------------------------------------------------------
-        # Build every Business Statement
-        # ----------------------------------------------------------
+        if semantic_resolution is None:
 
-        for statement in semantic_resolution.business_statements:
+            return KnowledgeGraphBuildResult(
+                graph=self.graph,
+            )
 
-            self._add_statement(statement)
-
-        # ----------------------------------------------------------
-        # Return wrapper
-        # ----------------------------------------------------------
-
-        result = KnowledgeGraphBuildResult(
-
-            graph=self.graph,
-
+        business_statements = getattr(
+            semantic_resolution,
+            "business_statements",
+            [],
         )
 
-        return result
+        if business_statements is None:
 
-    ####################################################################
-    # Add One Business Statement
-    ####################################################################
+            business_statements = []
 
-    def _add_statement(self, statement):
+        # ------------------------------------------------------
+        # Build every BusinessStatement
+        # ------------------------------------------------------
 
+        for statement in business_statements:
+
+            if statement is None:
+                continue
+
+            self._add_statement(
+                statement
+            )
+
+        # ------------------------------------------------------
+        # Return wrapper
+        # ------------------------------------------------------
+
+        return KnowledgeGraphBuildResult(
+            graph=self.graph,
+        )
+
+    # ==========================================================
+    # ADD STATEMENT
+    # ==========================================================
+
+    def _add_statement(
+        self,
+        statement,
+    ) -> None:
         """
-        Adds every entity and every semantic relation
-        belonging to a Business Statement.
+        Add one BusinessStatement to the graph.
         """
 
-        self._add_entities(statement)
+        if self.graph is None:
+            return
 
-        self._add_relations(statement)
+        self._add_entities(
+            statement
+        )
 
-        ####################################################################
-    # Add Entities
-    ####################################################################
+        self._add_relations(
+            statement
+        )
 
-    def _add_entities(self, statement):
+    # ==========================================================
+    # ADD ENTITIES
+    # ==========================================================
 
+    def _add_entities(
+        self,
+        statement,
+    ) -> None:
         """
-        Every SemanticEntity becomes exactly ONE GraphNode.
-
-        The KnowledgeGraph itself prevents duplicates.
+        Convert every SemanticEntity into one GraphNode.
         """
 
-        for entity in statement.entities:
+        if self.graph is None:
+            return
 
-            node = self._entity_to_node(entity)
+        entities = getattr(
+            statement,
+            "entities",
+            [],
+        )
 
-            self.graph.add_node(node)
+        if entities is None:
+            return
 
-    ####################################################################
-    # SemanticEntity -> GraphNode
-    ####################################################################
+        for entity in entities:
 
-    def _entity_to_node(self, entity):
+            if entity is None:
+                continue
 
+            if not getattr(
+                entity,
+                "entity_id",
+                "",
+            ):
+                continue
+
+            node = self._entity_to_node(
+                entity
+            )
+
+            self.graph.add_node(
+                node
+            )
+
+    # ==========================================================
+    # SEMANTIC ENTITY → GRAPH NODE
+    # ==========================================================
+
+    @staticmethod
+    def _entity_to_node(
+        entity,
+    ) -> GraphNode:
         """
-        Converts SemanticEntity into GraphNode.
+        Convert SemanticEntity into GraphNode.
 
-        GraphNode contains only graph information.
-
-        Semantic information remains inside SemanticEntity.
+        Important:
+        KPI and BKPI remain separate because
+        entity_type is preserved exactly.
         """
 
         metadata = {}
 
-        if entity.metadata:
+        entity_metadata = getattr(
+            entity,
+            "metadata",
+            None,
+        )
 
-            metadata = entity.metadata.copy()
+        if entity_metadata:
+
+            metadata = entity_metadata.copy()
+
+        entity_type = (
+            getattr(
+                entity,
+                "entity_type",
+                "",
+            )
+            or ""
+        )
 
         return GraphNode(
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Identity
-            # -------------------------------------------------
+            # --------------------------------------------------
 
             node_id=entity.entity_id,
 
             entity_id=entity.entity_id,
 
-            entity_type=entity.entity_type,
+            entity_type=entity_type,
 
-            ontology_name=entity.entity_type,
+            ontology_name=(
+                getattr(
+                    entity,
+                    "ontology_name",
+                    "",
+                )
+                or entity_type
+            ),
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Display
-            # -------------------------------------------------
+            # --------------------------------------------------
 
-            label=entity.canonical,
+            label=(
+                getattr(
+                    entity,
+                    "canonical",
+                    "",
+                )
+                or ""
+            ),
 
-            canonical=entity.canonical,
+            canonical=(
+                getattr(
+                    entity,
+                    "canonical",
+                    "",
+                )
+                or ""
+            ),
 
-            category=entity.category,
+            category=(
+                getattr(
+                    entity,
+                    "category",
+                    "",
+                )
+                or ""
+            ),
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Business
-            # -------------------------------------------------
+            # --------------------------------------------------
 
             domain=metadata.get(
                 "primary_domain",
                 "",
             ),
 
-            business_area=entity.business_area,
+            business_area=(
+                getattr(
+                    entity,
+                    "business_area",
+                    "",
+                )
+                or ""
+            ),
 
-            impact_weight=1.0,
+            impact_weight=(
+                getattr(
+                    entity,
+                    "impact_weight",
+                    1.0,
+                )
+                or 1.0
+            ),
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Metadata
-            # -------------------------------------------------
+            # --------------------------------------------------
 
             metadata=metadata,
 
         )
 
-    ####################################################################
-    # Add Relations
-    ####################################################################
+    # ==========================================================
+    # ADD RELATIONS
+    # ==========================================================
 
-    def _add_relations(self, statement):
-
+    def _add_relations(
+        self,
+        statement,
+    ) -> None:
         """
-        Every StatementRelation becomes exactly ONE GraphEdge.
-
-        Relations are now the SINGLE SOURCE OF TRUTH.
-
-        We no longer build edges from DependencyResolver.
+        Convert every StatementRelation into one GraphEdge.
         """
 
-        for relation in statement.relations:
+        if self.graph is None:
+            return
+
+        relations = getattr(
+            statement,
+            "relations",
+            [],
+        )
+
+        if relations is None:
+            return
+
+        for relation in relations:
+
+            if relation is None:
+                continue
+
+            source_id = getattr(
+                relation,
+                "source_id",
+                "",
+            )
+
+            target_id = getattr(
+                relation,
+                "target_id",
+                "",
+            )
+
+            if not source_id or not target_id:
+                continue
 
             source = statement.entity(
-                relation.source_id
+                source_id
             )
 
             target = statement.entity(
-                relation.target_id
+                target_id
             )
 
             if source is None:
@@ -214,140 +390,217 @@ class KnowledgeGraphBuilder:
                 continue
 
             edge = self._relation_to_edge(
-
                 relation,
-
                 source,
-
                 target,
-
             )
 
-            self.graph.add_edge(edge)
+            self.graph.add_edge(
+                edge
+            )
 
-        ####################################################################
-    # StatementRelation -> GraphEdge
-    ####################################################################
+    # ==========================================================
+    # STATEMENT RELATION → GRAPH EDGE
+    # ==========================================================
 
+    @staticmethod
     def _relation_to_edge(
-
-        self,
-
         relation,
-
         source,
-
         target,
-
-    ):
-
+    ) -> GraphEdge:
         """
-        Converts a StatementRelation into a GraphEdge.
+        Convert StatementRelation into GraphEdge.
         """
 
         metadata = {}
 
-        if relation.metadata:
+        relation_metadata = getattr(
+            relation,
+            "metadata",
+            None,
+        )
 
-            metadata = relation.metadata.copy()
+        if relation_metadata:
+
+            metadata = relation_metadata.copy()
 
         return GraphEdge(
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Identity
-            # -------------------------------------------------
+            # --------------------------------------------------
 
             edge_id=uuid.uuid4().hex,
 
-            relation=relation.relation_type,
+            relation=(
+                getattr(
+                    relation,
+                    "relation_type",
+                    "",
+                )
+                or ""
+            ),
 
-            confidence=relation.confidence,
+            confidence=(
+                getattr(
+                    relation,
+                    "confidence",
+                    0.0,
+                )
+                or 0.0
+            ),
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Source
-            # -------------------------------------------------
+            # --------------------------------------------------
 
-            source_id=relation.source_id,
+            source_id=(
+                getattr(
+                    relation,
+                    "source_id",
+                    "",
+                )
+                or ""
+            ),
 
-            source_type=source.entity_type,
+            source_type=(
+                getattr(
+                    source,
+                    "entity_type",
+                    "",
+                )
+                or ""
+            ),
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Target
-            # -------------------------------------------------
+            # --------------------------------------------------
 
-            target_id=relation.target_id,
+            target_id=(
+                getattr(
+                    relation,
+                    "target_id",
+                    "",
+                )
+                or ""
+            ),
 
-            target_type=target.entity_type,
+            target_type=(
+                getattr(
+                    target,
+                    "entity_type",
+                    "",
+                )
+                or ""
+            ),
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Explainability
-            # -------------------------------------------------
+            # --------------------------------------------------
 
-            reasoning=relation.reasoning,
+            reasoning=(
+                getattr(
+                    relation,
+                    "reasoning",
+                    "",
+                )
+                or ""
+            ),
 
-            # -------------------------------------------------
+            # --------------------------------------------------
             # Metadata
-            # -------------------------------------------------
+            # --------------------------------------------------
 
             metadata=metadata,
 
         )
 
-    ####################################################################
-    # Convenience API
-    ####################################################################
+    # ==========================================================
+    # GRAPH ACCESS
+    # ==========================================================
 
     @property
-    def node_count(self):
+    def node_count(self) -> int:
+        """
+        Number of graph nodes.
+        """
 
         if self.graph is None:
-
             return 0
 
-        return len(self.graph.nodes)
+        return len(
+            self.graph.nodes
+        )
 
-    ####################################################################
+    # ==========================================================
 
     @property
-    def edge_count(self):
+    def edge_count(self) -> int:
+        """
+        Number of graph edges.
+        """
 
         if self.graph is None:
-
             return 0
 
-        return len(self.graph.edges)
+        return len(
+            self.graph.edges
+        )
 
-    ####################################################################
+    # ==========================================================
 
-    def summary(self):
+    def summary(self) -> dict:
+        """
+        Return graph summary.
+        """
 
         if self.graph is None:
-
             return {}
 
         return self.graph.summary()
 
-    ####################################################################
+    # ==========================================================
 
-    def reset(self):
-
+    def reset(self) -> None:
         """
-        Clears internal graph.
+        Clear the current graph.
         """
 
         self.graph = None
 
+    # ==========================================================
+    # NODE API
+    # ==========================================================
 
-    def get_node(self, node_id):
+    def get_node(
+        self,
+        node_id: str,
+    ):
 
-        return self.nodes.get(node_id)
+        if self.graph is None:
+            return None
 
+        return self.graph.get_node(
+            node_id
+        )
+
+    # ==========================================================
 
     def get_nodes(self):
 
-        return list(self.nodes.values())
+        if self.graph is None:
+            return []
 
+        return self.graph.get_nodes()
+
+    # ==========================================================
+    # EDGE API
+    # ==========================================================
 
     def get_edges(self):
 
-        return list(self.edges.values())
+        if self.graph is None:
+            return []
+
+        return self.graph.get_edges()
