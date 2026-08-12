@@ -1,29 +1,33 @@
 """
-Semantic Models
+Enterprise Semantic Models
+Enterprise V12
 
-Enterprise V11
-
-Master semantic data models used throughout the
-GetHired Intelligence Engine.
+Canonical semantic contracts used by the GETHIRED
+Intelligence Engine.
 
 Pipeline
 
-SentenceParser
+Knowledge Extractors
         ↓
-DependencyBuilder
+SemanticEntity
         ↓
-ClusterBuilder
+DependencyResolver
         ↓
-SemanticResolver
+SemanticDependency
+        ↓
+BusinessStatementBuilder
         ↓
 BusinessStatement
         ↓
-KnowledgeGraph
+KnowledgeGraphBuilder
         ↓
-KnowledgeProfile
+KnowledgeGraph
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
+from typing import Optional
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.base_models import (
     KnowledgeEntity,
@@ -31,17 +35,21 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.base_models
 
 
 # ============================================================
-# Semantic Entity
+# SEMANTIC ENTITY
 # ============================================================
 
 @dataclass
 class SemanticEntity(KnowledgeEntity):
     """
-    Enterprise Semantic Entity
+    Enterprise semantic entity.
 
-    Extends KnowledgeEntity with semantic reasoning
-    information.
+    Extends KnowledgeEntity with information required
+    during semantic reasoning and statement construction.
     """
+
+    # --------------------------------------------------------
+    # Semantic information
+    # --------------------------------------------------------
 
     matched_text: str = ""
 
@@ -51,29 +59,63 @@ class SemanticEntity(KnowledgeEntity):
 
     reasoning: str = ""
 
-    # ---------------------------------------------------------
+    # --------------------------------------------------------
+    # Statement membership
+    # --------------------------------------------------------
+
+    statement_id: str = ""
+
+    # --------------------------------------------------------
+    # Convenience properties
+    # --------------------------------------------------------
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.canonical
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self.original
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self.entity_id
 
 
 # ============================================================
-# Semantic Dependency
+# SEMANTIC DEPENDENCY
 # ============================================================
 
-@dataclass
+@dataclass(init=False)
 class SemanticDependency:
     """
-    Dependency between semantic entities.
+    Semantic relationship between two entities.
+
+    Canonical field:
+        relation
+
+    Backward-compatible field:
+        dependency_type
+
+    Both are accepted by the constructor.
+
+    Example:
+
+        SemanticDependency(
+            source_entity="ACTION_1",
+            target_entity="KPI_1",
+            relation="improved",
+            confidence=0.98,
+        )
+
+    Legacy-compatible:
+
+        SemanticDependency(
+            source_entity="ACTION_1",
+            target_entity="KPI_1",
+            dependency_type="improved",
+            confidence=0.98,
+        )
     """
 
     source_entity: str = ""
@@ -84,17 +126,75 @@ class SemanticDependency:
 
     confidence: float = 1.0
 
-    metadata: dict = field(default_factory=dict)
+    metadata: dict = field(
+        default_factory=dict
+    )
+
+    def __init__(
+        self,
+        source_entity: str = "",
+        target_entity: str = "",
+        relation: str = "",
+        confidence: float = 1.0,
+        metadata: Optional[dict] = None,
+        dependency_type: Optional[str] = None,
+    ) -> None:
+
+        self.source_entity = source_entity
+
+        self.target_entity = target_entity
+
+        # ----------------------------------------------------
+        # Canonical relation wins.
+        # Otherwise use legacy dependency_type.
+        # ----------------------------------------------------
+
+        if relation:
+            self.relation = relation
+
+        elif dependency_type:
+            self.relation = dependency_type
+
+        else:
+            self.relation = ""
+
+        self.confidence = confidence
+
+        self.metadata = (
+            metadata
+            if metadata is not None
+            else {}
+        )
+
+    # --------------------------------------------------------
+    # Backward compatibility
+    # --------------------------------------------------------
+
+    @property
+    def dependency_type(self) -> str:
+        """
+        Legacy alias for relation.
+        """
+
+        return self.relation
+
+    @dependency_type.setter
+    def dependency_type(
+        self,
+        value: str,
+    ) -> None:
+
+        self.relation = value
 
 
 # ============================================================
-# Semantic Cluster
+# SEMANTIC CLUSTER
 # ============================================================
 
 @dataclass
 class SemanticCluster:
     """
-    Groups semantically-related entities.
+    Groups semantically related entities.
     """
 
     cluster_id: str = ""
@@ -109,19 +209,28 @@ class SemanticCluster:
 
     confidence: float = 1.0
 
-    entities: list[SemanticEntity] = field(default_factory=list)
+    entities: list[SemanticEntity] = field(
+        default_factory=list
+    )
 
-    dependencies: list[SemanticDependency] = field(default_factory=list)
+    dependencies: list[SemanticDependency] = field(
+        default_factory=list
+    )
 
-    metadata: dict = field(default_factory=dict)
+    metadata: dict = field(
+        default_factory=dict
+    )
 
 
 # ============================================================
-# Statistics
+# SEMANTIC STATISTICS
 # ============================================================
 
 @dataclass
 class SemanticStatistics:
+    """
+    Statistics generated during semantic resolution.
+    """
 
     entities: int = 0
 
@@ -151,11 +260,14 @@ class SemanticStatistics:
 
 
 # ============================================================
-# Metadata
+# SEMANTIC METADATA
 # ============================================================
 
 @dataclass
 class SemanticMetadata:
+    """
+    Metadata describing resolved semantic content.
+    """
 
     primary_domain: str = ""
 
@@ -171,202 +283,20 @@ class SemanticMetadata:
 
 
 # ============================================================
-# Semantic Resolution
-# ============================================================
-
-@dataclass
-class SemanticResolution:
-    """
-    Final output produced by Semantic Resolver.
-    """
-
-    entities: list[SemanticEntity] = field(default_factory=list)
-
-    dependencies: list[SemanticDependency] = field(default_factory=list)
-
-    clusters: list[SemanticCluster] = field(default_factory=list)
-
-    confidence: float = 0.0
-
-    metadata: SemanticMetadata = field(
-        default_factory=SemanticMetadata
-    )
-
-    warnings: list[str] = field(default_factory=list)
-
-    business_statements: list["BusinessStatement"] = field(
-        default_factory=list
-    )
-
-    # ---------------------------------------------------------
-    # Entity Lookup
-    # ---------------------------------------------------------
-
-    def entity(
-        self,
-        entity_id: str,
-    ):
-
-        for entity in self.entities:
-
-            if entity.entity_id == entity_id:
-
-                return entity
-
-        return None
-
-    # ---------------------------------------------------------
-
-    def entities_of_type(
-        self,
-        entity_type: str,
-    ):
-
-        return [
-
-            entity
-
-            for entity in self.entities
-
-            if entity.entity_type.lower()
-            == entity_type.lower()
-
-        ]
-
-    # ---------------------------------------------------------
-    # Convenience Properties
-    # ---------------------------------------------------------
-
-    @property
-    def actions(self):
-
-        return self.entities_of_type("action")
-
-    @property
-    def targets(self):
-
-        return self.entities_of_type("target")
-
-    @property
-    def objects(self):
-
-        return self.entities_of_type("object")
-
-    @property
-    def domains(self):
-
-        return self.entities_of_type("domain")
-
-    @property
-    def standards(self):
-
-        return self.entities_of_type("standard")
-
-    @property
-    def methodologies(self):
-
-        return self.entities_of_type("methodology")
-
-    @property
-    def skills(self):
-
-        return self.entities_of_type("skill")
-
-    @property
-    def metrics(self):
-
-        return self.entities_of_type("metric")
-
-    @property
-    def measurements(self):
-
-        return self.entities_of_type("measurement")
-
-    @property
-    def kpis(self):
-
-        return self.entities_of_type("kpi")
-
-    # ---------------------------------------------------------
-
-    @property
-    def primary_cluster(self):
-
-        if not self.clusters:
-
-            return None
-
-        return max(
-
-            self.clusters,
-
-            key=lambda cluster: cluster.confidence,
-
-        )
-
-    # ---------------------------------------------------------
-
-    @property
-    def semantic_summary(self):
-
-        cluster = self.primary_cluster
-
-        if cluster is None:
-
-            return ""
-
-        return cluster.semantic_type
-
-    # ---------------------------------------------------------
-
-    @property
-    def is_achievement(self):
-
-        return self.metadata.achievement
-
-    # ---------------------------------------------------------
-
-    def __len__(self):
-
-        return len(self.entities)
-
-    # ---------------------------------------------------------
-
-    def __repr__(self):
-
-        return (
-
-            f"<SemanticResolution "
-
-            f"entities={len(self.entities)} "
-
-            f"dependencies={len(self.dependencies)} "
-
-            f"clusters={len(self.clusters)} "
-
-            f"confidence={self.confidence}>"
-
-        )
-
-
-# ============================================================
-# Backward Compatibility
-# ============================================================
-
-KnowledgeEntity = SemanticEntity
-
-DependencyEdge = SemanticDependency
-
-SemanticResult = SemanticResolution
-
-
-# ============================================================
-# Statement Relation
+# STATEMENT RELATION
 # ============================================================
 
 @dataclass
 class StatementRelation:
-    
+    """
+    Relationship inside a BusinessStatement.
+
+    This is the canonical semantic relationship that
+    later becomes a graph edge.
+
+    BusinessStatement owns these relations.
+    KnowledgeGraphBuilder consumes them.
+    """
 
     source_id: str = ""
 
@@ -378,18 +308,48 @@ class StatementRelation:
 
     reasoning: str = ""
 
-    metadata: dict = field(default_factory=dict)
+    metadata: dict = field(
+        default_factory=dict
+    )
+
+    # --------------------------------------------------------
+    # Backward compatibility
+    # --------------------------------------------------------
+
+    @property
+    def relation(self) -> str:
+        return self.relation_type
+
+    @relation.setter
+    def relation(
+        self,
+        value: str,
+    ) -> None:
+
+        self.relation_type = value
+
 
 # ============================================================
-# Business Statement V11
+# BUSINESS STATEMENT
 # ============================================================
 
 @dataclass
 class BusinessStatement:
+    """
+    Enterprise Business Statement.
 
-    # -------------------------------------------------
+    Single source of truth for:
+
+        entities
+        relations
+        statement metadata
+
+    KnowledgeGraphBuilder consumes BusinessStatement.
+    """
+
+    # --------------------------------------------------------
     # Identity
-    # -------------------------------------------------
+    # --------------------------------------------------------
 
     statement_id: str = ""
 
@@ -405,278 +365,281 @@ class BusinessStatement:
 
     achievement: bool = False
 
-    metadata: dict = field(default_factory=dict)
+    metadata: dict = field(
+        default_factory=dict
+    )
 
-    intent = None
+    # --------------------------------------------------------
+    # Legacy compatibility
+    # --------------------------------------------------------
 
-    # ---------------------------
-    # NEW
-    # ---------------------------
+    intent: Optional[object] = None
 
-    action = None
+    action: Optional[object] = None
 
-    objects: list = field(default_factory=list)
+    technologies: list = field(
+        default_factory=list
+    )
 
-    metrics: list = field(default_factory=list)
+    # --------------------------------------------------------
+    # SINGLE SOURCE OF TRUTH
+    # --------------------------------------------------------
 
-    measurements: list = field(default_factory=list)
+    entities: list[SemanticEntity] = field(
+        default_factory=list
+    )
 
-    technologies: list = field(default_factory=list)
+    relations: list[StatementRelation] = field(
+        default_factory=list
+    )
 
-    standards: list = field(default_factory=list)
+    # ========================================================
+    # ENTITY LOOKUP
+    # ========================================================
 
-    methodologies: list = field(default_factory=list)
-
-    # -------------------------------------------------
-    # Single Source of Truth
-    # -------------------------------------------------
-
-    entities: list[SemanticEntity] = field(default_factory=list)
-
-    relations: list[StatementRelation] = field(default_factory=list)
-
-    # -------------------------------------------------
-    # Entity Lookup
-    # -------------------------------------------------
-
-    def entity(self, entity_id: str):
+    def entity(
+        self,
+        entity_id: str,
+    ) -> Optional[SemanticEntity]:
 
         for entity in self.entities:
 
             if entity.entity_id == entity_id:
-
                 return entity
 
         return None
 
-    # -------------------------------------------------
-    # Generic Entity Filter
-    # -------------------------------------------------
+    # ========================================================
+    # ENTITY FILTER
+    # ========================================================
 
-    def entities_of_type(self, entity_type: str):
+    def entities_of_type(
+        self,
+        entity_type: str,
+    ) -> list[SemanticEntity]:
+
+        entity_type = entity_type.lower()
 
         return [
-
             entity
-
             for entity in self.entities
-
-            if entity.entity_type.lower() == entity_type.lower()
-
+            if entity.entity_type.lower()
+            == entity_type
         ]
 
-    # -------------------------------------------------
-    # Entity Properties
-    # -------------------------------------------------
+    # ========================================================
+    # ENTITY PROPERTIES
+    # ========================================================
 
     @property
     def actions(self):
+
         return self.entities_of_type("action")
 
     @property
     def targets(self):
+
         return self.entities_of_type("target")
 
     @property
     def objects(self):
-        """
-        Backward compatibility.
 
-        Targets replace Objects.
-        """
         return self.targets
 
     @property
     def domains(self):
+
         return self.entities_of_type("domain")
 
     @property
     def skills(self):
+
         return self.entities_of_type("skill")
 
     @property
     def standards(self):
+
         return self.entities_of_type("standard")
 
     @property
     def methodologies(self):
+
         return self.entities_of_type("methodology")
 
     @property
     def metrics(self):
+
         return self.entities_of_type("metric")
 
     @property
     def measurements(self):
+
         return self.entities_of_type("measurement")
 
     @property
     def kpis(self):
+
         return self.entities_of_type("kpi")
 
-    # -------------------------------------------------
-    # Generic Relation Filter
-    # -------------------------------------------------
+    # ========================================================
+    # RELATION FILTER
+    # ========================================================
 
-    def relations_of_type(self, relation_name: str):
+    def relations_of_type(
+        self,
+        relation_name: str,
+    ) -> list[StatementRelation]:
+
+        relation_name = relation_name.upper()
 
         return [
-
             relation
-
             for relation in self.relations
-
-            if relation.relation.upper() == relation_name.upper()
-
+            if relation.relation_type.upper()
+            == relation_name
         ]
 
-    # -------------------------------------------------
-    # ACTION -> TARGET
-    # -------------------------------------------------
+    # ========================================================
+    # ACTION → TARGET
+    # ========================================================
 
     def action_targets(self):
 
-        for relation in self.relations_of_type("ACTS_ON"):
+        for relation in self.relations_of_type(
+            "ACTS_ON"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # ACTION -> METRIC
-    # -------------------------------------------------
+    # ========================================================
+    # ACTION → METRIC
+    # ========================================================
 
     def action_metrics(self):
 
-        for relation in self.relations_of_type("AFFECTS"):
+        for relation in self.relations_of_type(
+            "AFFECTS"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # METRIC -> MEASUREMENT
-    # -------------------------------------------------
+    # ========================================================
+    # METRIC → MEASUREMENT
+    # ========================================================
 
     def metric_measurements(self):
 
-        for relation in self.relations_of_type("MEASURED_BY"):
+        for relation in self.relations_of_type(
+            "MEASURED_BY"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # ACTION -> SKILL
-    # -------------------------------------------------
+    # ========================================================
+    # ACTION → SKILL
+    # ========================================================
 
     def action_skills(self):
 
-        for relation in self.relations_of_type("REQUIRES"):
+        for relation in self.relations_of_type(
+            "REQUIRES"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # ACTION -> STANDARD
-    # -------------------------------------------------
+    # ========================================================
+    # ACTION → STANDARD
+    # ========================================================
 
     def action_standards(self):
 
-        for relation in self.relations_of_type("COMPLIES_WITH"):
+        for relation in self.relations_of_type(
+            "COMPLIES_WITH"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # ACTION -> METHODOLOGY
-    # -------------------------------------------------
+    # ========================================================
+    # ACTION → METHODOLOGY
+    # ========================================================
 
     def action_methodologies(self):
 
-        for relation in self.relations_of_type("USES"):
+        for relation in self.relations_of_type(
+            "USES"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # ACTION -> DOMAIN
-    # -------------------------------------------------
+    # ========================================================
+    # ACTION → DOMAIN
+    # ========================================================
 
     def action_domains(self):
 
-        for relation in self.relations_of_type("BELONGS_TO"):
+        for relation in self.relations_of_type(
+            "BELONGS_TO"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # ACTION -> ACHIEVED -> METRIC
-    # -------------------------------------------------
+    # ========================================================
+    # ACHIEVEMENTS
+    # ========================================================
 
     def achievements(self):
 
-        for relation in self.relations_of_type("ACHIEVED"):
+        for relation in self.relations_of_type(
+            "ACHIEVED"
+        ):
 
             yield (
-
                 self.entity(relation.source_id),
-
                 self.entity(relation.target_id),
-
                 relation,
-
             )
 
-    # -------------------------------------------------
-    # Utility
-    # -------------------------------------------------
+    # ========================================================
+    # COUNTS
+    # ========================================================
+
+    @property
+    def entity_count(self) -> int:
+
+        return len(self.entities)
+
+    @property
+    def relation_count(self) -> int:
+
+        return len(self.relations)
 
     def __len__(self):
 
@@ -685,13 +648,172 @@ class BusinessStatement:
     def __repr__(self):
 
         return (
-
             f"<BusinessStatement "
-
+            f"id={self.statement_id!r} "
             f"entities={len(self.entities)} "
-
             f"relations={len(self.relations)} "
-
             f"confidence={self.confidence}>"
-
         )
+
+
+# ============================================================
+# SEMANTIC RESOLUTION
+# ============================================================
+
+@dataclass
+class SemanticResolution:
+    """
+    Final output produced by SemanticResolver.
+    """
+
+    entities: list[SemanticEntity] = field(
+        default_factory=list
+    )
+
+    dependencies: list[SemanticDependency] = field(
+        default_factory=list
+    )
+
+    clusters: list[SemanticCluster] = field(
+        default_factory=list
+    )
+
+    business_statements: list[BusinessStatement] = field(
+        default_factory=list
+    )
+
+    confidence: float = 0.0
+
+    metadata: SemanticMetadata = field(
+        default_factory=SemanticMetadata
+    )
+
+    warnings: list[str] = field(
+        default_factory=list
+    )
+
+    def entity(
+        self,
+        entity_id: str,
+    ) -> Optional[SemanticEntity]:
+
+        for entity in self.entities:
+
+            if entity.entity_id == entity_id:
+                return entity
+
+        return None
+
+    def entities_of_type(
+        self,
+        entity_type: str,
+    ):
+
+        entity_type = entity_type.lower()
+
+        return [
+            entity
+            for entity in self.entities
+            if entity.entity_type.lower()
+            == entity_type
+        ]
+
+    @property
+    def actions(self):
+
+        return self.entities_of_type("action")
+
+    @property
+    def targets(self):
+
+        return self.entities_of_type("target")
+
+    @property
+    def objects(self):
+
+        return self.targets
+
+    @property
+    def domains(self):
+
+        return self.entities_of_type("domain")
+
+    @property
+    def standards(self):
+
+        return self.entities_of_type("standard")
+
+    @property
+    def methodologies(self):
+
+        return self.entities_of_type("methodology")
+
+    @property
+    def skills(self):
+
+        return self.entities_of_type("skill")
+
+    @property
+    def metrics(self):
+
+        return self.entities_of_type("metric")
+
+    @property
+    def measurements(self):
+
+        return self.entities_of_type("measurement")
+
+    @property
+    def kpis(self):
+
+        return self.entities_of_type("kpi")
+
+    @property
+    def primary_cluster(self):
+
+        if not self.clusters:
+            return None
+
+        return max(
+            self.clusters,
+            key=lambda cluster: cluster.confidence,
+        )
+
+    @property
+    def semantic_summary(self):
+
+        cluster = self.primary_cluster
+
+        if cluster is None:
+            return ""
+
+        return cluster.semantic_type
+
+    @property
+    def is_achievement(self):
+
+        return self.metadata.achievement
+
+    def __len__(self):
+
+        return len(self.entities)
+
+    def __repr__(self):
+
+        return (
+            f"<SemanticResolution "
+            f"entities={len(self.entities)} "
+            f"dependencies={len(self.dependencies)} "
+            f"clusters={len(self.clusters)} "
+            f"statements={len(self.business_statements)} "
+            f"confidence={self.confidence}>"
+        )
+
+
+# ============================================================
+# BACKWARD COMPATIBILITY
+# ============================================================
+
+DependencyEdge = SemanticDependency
+
+SemanticResult = SemanticResolution
