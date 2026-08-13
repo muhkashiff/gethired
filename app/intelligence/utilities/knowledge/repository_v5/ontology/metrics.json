@@ -48,17 +48,6 @@
     "impact_weight": 0.99
 },
 
-"line efficiency": {
-    "entity_id": "KPI_LINE_EFFICIENCY",
-    "canonical": "Line Efficiency",
-    "aliases": ["production line efficiency","line performance"],
-    "category": "operations",
-    "business_area": "manufacturing",
-    "description": "Efficiency of manufacturing line.",
-    "unit": "%",
-    "higher_is_better": true,
-    "impact_weight": 0.98
-},
 
 "overall equipment effectiveness": {
     "entity_id": "KPI_OEE",
@@ -87,7 +76,7 @@
 "performance rate": {
     "entity_id": "KPI_PERFORMANCE_RATE",
     "canonical": "Performance Rate",
-    "aliases": ["performance"],
+    "aliases": [],
     "category": "operations",
     "business_area": "manufacturing",
     "description": "Machine operating speed compared with ideal speed.",

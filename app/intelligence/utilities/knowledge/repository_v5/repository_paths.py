@@ -40,7 +40,7 @@ class RepositoryPaths:
         )
 
         self.metrics = (
-            ONTOLOGY / "metrics_dictionary.json"
+            ONTOLOGY / "metrics.json"
         )
 
         self.business_kpis = (

@@ -1,5 +1,21 @@
-from __future__ import annotations
 
+"""
+Enterprise V5 — Certification Parser Extractor Test
+
+Tests:
+
+    certifications ontology
+        ↓
+    GenericOntologyParserExtractor
+        ↓
+    CertificationParserExtractor
+        ↓
+    CertificationParserModel
+        ↓
+    ExtractionResult
+"""
+
+from __future__ import annotations
 import sys
 from pathlib import Path
 
@@ -9,273 +25,220 @@ ROOT = Path(__file__).resolve().parents[4]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-def main() -> None:
+"""
+Enterprise V5 — METRICS Parser Extractor Test
+"""
+
+from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
+    ExtractionRequest,
+)
+
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
+    KnowledgeV5Pipeline,
+)
+
+from app.parser.extractors.metric_parser_extractor import (
+    MetricParserExtractor,
+)
+
+
+def main():
 
     print("=" * 70)
-    print("ENTERPRISE V5 — SKILL PARSER EXTRACTOR TEST")
+    print("ENTERPRISE V5 — METRICS PARSER EXTRACTOR TEST")
     print("=" * 70)
 
-    # ---------------------------------------------------------------
-    # IMPORTS
-    # ---------------------------------------------------------------
-
-    from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
-        ExtractionRequest,
+    sentence = (
+        "The facility improved production performance, "
+        "increased line efficiency, optimized production yield, "
+        "and reduced downtime."
     )
 
-    from app.parser.extractors.skill_parser_extractor import (
-        SkillParserExtractor,
-    )
+    print("\nSENTENCE")
+    print("-" * 70)
+    print(sentence)
 
-    from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
-        KnowledgeV5Pipeline,
-    )
+    print("\nONTOLOGY")
+    print("-" * 70)
+    print("Metric-KPI")
 
-    # ---------------------------------------------------------------
-    # CREATE PIPELINE
-    # ---------------------------------------------------------------
+    # ==============================================================
+    # PIPELINE
+    # ==============================================================
 
     pipeline = KnowledgeV5Pipeline()
 
-    # ---------------------------------------------------------------
-    # CREATE SKILL PARSER EXTRACTOR
-    # ---------------------------------------------------------------
+    # ==============================================================
+    # EXTRACTOR
+    # ==============================================================
 
-    extractor = SkillParserExtractor(
-        pipeline=pipeline,
+    extractor = MetricParserExtractor(
+        pipeline=pipeline
     )
 
-    # ---------------------------------------------------------------
-    # TEST SENTENCE
-    # ---------------------------------------------------------------
-
-    sentence = (
-        "Experienced in HACCP, ISO 9001, "
-        "food safety management and data analysis."
-    )
+    # ==============================================================
+    # REQUEST
+    # ==============================================================
 
     request = ExtractionRequest(
-        sentence=sentence,
-        context={
-            "sentence_index": 0,
-        },
+        sentence=sentence
     )
 
-    # ---------------------------------------------------------------
-    # EXTRACT
-    # ---------------------------------------------------------------
+    # ==============================================================
+    # EXTRACTION
+    # ==============================================================
 
     result = extractor.extract(
         request
     )
 
-    # ---------------------------------------------------------------
-    # BASIC RESULT
-    # ---------------------------------------------------------------
+    # ==============================================================
+    # RESULT
+    # ==============================================================
 
-    print()
-    print("ONTOLOGY")
-    print("-" * 70)
-    print(result.ontology)
-
-    print()
-    print("FOUND")
+    print("\nFOUND")
     print("-" * 70)
     print(result.found)
 
-    print()
-    print("COUNT")
+    print("\nCOUNT")
     print("-" * 70)
     print(result.count)
 
-    # ---------------------------------------------------------------
-    # EXTRACTED ENTITIES
-    # ---------------------------------------------------------------
+    # ==============================================================
+    # ENTITIES
+    # ==============================================================
 
-    print()
-    print("EXTRACTED SKILLS")
+    print("\nEXTRACTED Metrics")
     print("=" * 70)
 
-    for index, knowledge in enumerate(
+    for index, entity in enumerate(
         result.entities,
         start=1,
     ):
 
-        print()
-        print(f"SKILL #{index}")
+        print(f"\nMetrics #{index}")
         print("-" * 70)
 
         print(
             f"found              : "
-            f"{knowledge.found}"
+            f"{entity.found}"
         )
 
         print(
             f"confidence         : "
-            f"{knowledge.confidence}"
+            f"{entity.confidence}"
         )
 
         print(
             f"original           : "
-            f"{knowledge.original}"
+            f"{entity.original}"
         )
 
         print(
             f"canonical          : "
-            f"{knowledge.canonical}"
+            f"{entity.canonical}"
         )
 
         print(
             f"normalized         : "
-            f"{knowledge.normalized}"
+            f"{entity.normalized}"
         )
 
         print(
             f"entity_id          : "
-            f"{knowledge.entity_id}"
+            f"{entity.entity_id}"
         )
 
         print(
             f"entity_type        : "
-            f"{knowledge.entity_type}"
+            f"{entity.entity_type}"
         )
 
         print(
             f"ontology_name      : "
-            f"{knowledge.ontology_name}"
+            f"{entity.ontology_name}"
         )
 
         print(
             f"category           : "
-            f"{knowledge.category}"
+            f"{entity.category}"
         )
 
         print(
             f"business_area      : "
-            f"{knowledge.business_area}"
+            f"{entity.business_area}"
         )
 
         print(
-            f"domain             : "
-            f"{knowledge.domain}"
+            f"description        : "
+            f"{entity.description}"
         )
 
         print(
-            f"skill_family       : "
-            f"{knowledge.skill_family}"
+            f"related_metrics    : "
+            f"{entity.related_metrics}"
         )
 
         print(
-            f"skill_group        : "
-            f"{knowledge.skill_group}"
+            f"higher_is_better   : "
+            f"{entity.higher_is_better}"
         )
 
         print(
-            f"level              : "
-            f"{knowledge.level}"
-        )
-
-        print(
-            f"technical          : "
-            f"{knowledge.technical}"
-        )
-
-        print(
-            f"managerial         : "
-            f"{knowledge.managerial}"
-        )
-
-        print(
-            f"analytical         : "
-            f"{knowledge.analytical}"
-        )
-
-        print(
-            f"operational        : "
-            f"{knowledge.operational}"
-        )
-
-        print(
-            f"compliance         : "
-            f"{knowledge.compliance}"
-        )
-
-        print(
-            f"leadership         : "
-            f"{knowledge.leadership}"
-        )
-
-        print(
-            f"communication      : "
-            f"{knowledge.communication}"
-        )
-
-        print(
-            f"transferable       : "
-            f"{knowledge.transferable}"
-        )
-
-        print(
-            f"certification_req. : "
-            f"{knowledge.certification_required}"
-        )
-
-        print(
-            f"years_required     : "
-            f"{knowledge.years_required}"
-        )
-
-        print(
-            f"ats_weight         : "
-            f"{knowledge.ats_weight}"
-        )
-
-        print(
-            f"graph_node         : "
-            f"{knowledge.graph_node}"
+            f"impact_weight      : "
+            f"{entity.impact_weight}"
         )
 
         print(
             f"matched_phrase     : "
-            f"{knowledge.matched_phrase}"
+            f"{entity.matched_phrase}"
         )
 
         print(
             f"matched_alias      : "
-            f"{knowledge.matched_alias}"
+            f"{entity.matched_alias}"
         )
 
         print(
             f"start_char         : "
-            f"{knowledge.start_char}"
+            f"{entity.start_char}"
         )
 
         print(
             f"end_char           : "
-            f"{knowledge.end_char}"
+            f"{entity.end_char}"
         )
 
         print(
             f"token_index        : "
-            f"{knowledge.token_index}"
+            f"{entity.token_index}"
         )
 
         print(
             f"token_count        : "
-            f"{knowledge.token_count}"
+            f"{entity.token_count}"
         )
 
         print(
             f"sentence_index     : "
-            f"{knowledge.sentence_index}"
+            f"{entity.sentence_index}"
         )
 
-    # ---------------------------------------------------------------
-    # MATCHES
-    # ---------------------------------------------------------------
+        print(
+            f"graph_node         : "
+            f"{entity.graph_node}"
+        )
 
-    print()
-    print("MATCH RESULTS")
+        print(
+            f"metric_count       : "
+            f"{entity.metric_count}"
+        )
+
+    # ==============================================================
+    # MATCH RESULTS
+    # ==============================================================
+
+    print("\nMATCH RESULTS")
     print("=" * 70)
 
     for index, match in enumerate(
@@ -283,8 +246,7 @@ def main() -> None:
         start=1,
     ):
 
-        print()
-        print(f"MATCH #{index}")
+        print(f"\nMATCH #{index}")
         print("-" * 70)
 
         print(
@@ -312,13 +274,12 @@ def main() -> None:
             f"{match.entity_type}"
         )
 
-    # ---------------------------------------------------------------
-    # FIRST ENTITY TEST
-    # ---------------------------------------------------------------
+    # ==============================================================
+    # FIRST ENTITY
+    # ==============================================================
 
-    print()
-    print("FIRST ENTITY")
-    print("=" * 70)
+    print("\nFIRST ENTITY")
+    print("-" * 70)
 
     first = result.first
 
@@ -334,31 +295,32 @@ def main() -> None:
             f"{first.entity_type}"
         )
 
+        print(
+            f"Category  : "
+            f"{first.category}"
+        )
+
+        print(
+            f"Business Area : "
+            f"{first.business_area}"
+        )
+
+        print(
+            f"Entity ID : "
+            f"{first.entity_id}"
+        )
+
+        print(
+            f"Metrics   : "
+            f"{first.related_metrics}"
+        )
+
     else:
 
-        print(
-            "No first entity."
-        )
+        print("None")
 
-    # ---------------------------------------------------------------
-    # FINAL STATUS
-    # ---------------------------------------------------------------
-
-    print()
-    print("=" * 70)
-
-    if result.found:
-
-        print(
-            "TEST PASSED — skills were extracted."
-        )
-
-    else:
-
-        print(
-            "TEST FAILED — no skills were extracted."
-        )
-
+    print("\n" + "=" * 70)
+    print("METRICS PARSER EXTRACTOR TEST COMPLETE")
     print("=" * 70)
 
 

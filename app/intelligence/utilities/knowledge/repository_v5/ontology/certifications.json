@@ -36,6 +36,7 @@
     "canonical": "FSSC 22000 Certification",
     "aliases": [
       "FSSC22000",
+      "FSSC 22000",
       "Food Safety System Certification 22000",
       "FSSC 22000 Certification"
     ],
@@ -45,7 +46,7 @@
   },
   "FSSC 22000 Lead Auditor": {
     "entity_id": "CERT_FSSC_22000_LEAD_AUDITOR",
-    "canonical": "FSSC 22000 Lead AuditorCertification",
+    "canonical": "FSSC 22000 Lead Auditor Certification",
     "aliases": [
       "FSSC22000 Lead auditor",
       "Food Safety System Certification 22000 Lead Auditor",
@@ -336,17 +337,7 @@
     "globally_recognized": true
   },
 
-  "Lead Auditor": {
-    "entity_id": "CERT_LEAD_AUDITOR",
-    "canonical": "Lead Auditor",
-    "aliases": [
-      "Certified Lead Auditor"
-    ],
-    "category": "auditing",
-    "business_area": "quality"
-  },
-
-  "Internal Auditor": {
+    "Internal Auditor": {
     "entity_id": "CERT_INTERNAL_AUDITOR",
     "canonical": "Internal Auditor",
     "aliases": [
