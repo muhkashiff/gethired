@@ -236,6 +236,21 @@
     "food_safety": true,
     "professional": true
   },
+"HACCP Level 4": {
+    "entity_id": "CERT_HACCP_LEVEL_4",
+    "canonical": "HACCP_Level_4",
+    "aliases": [
+      "Hazard Analysis and Critical Control Points Level 4",
+      "Hazard Analysis and Critical Control Points Level four",
+      "HACCP Level 4 Certification",
+      "HACCP Level 4 Certified"
+    ],
+    "category": "food_safety",
+    "business_area": "food_safety",
+    "description": "Hazard Analysis and Critical Control Points food safety system and certification/qualification Level 4.",
+    "food_safety": true,
+    "professional": true
+  },
 
   "PCQI": {
     "entity_id": "CERT_PCQI",

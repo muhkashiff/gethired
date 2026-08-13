@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from typing import List
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.action_models import ActionKnowledge
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.target_models import ObjectKnowledge
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.target_models import TargetKnowledge
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_models import DomainKnowledge
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.metric_models import MetricKnowledge
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.measurement_models import MeasurementKnowledge
@@ -60,7 +60,7 @@ class Clause:
 
     action: ActionKnowledge = field(default_factory=ActionKnowledge)
 
-    object: ObjectKnowledge = field(default_factory=ObjectKnowledge)
+    target: TargetKnowledge = field(default_factory=TargetKnowledge)
 
     domain: DomainKnowledge = field(default_factory=DomainKnowledge)
 

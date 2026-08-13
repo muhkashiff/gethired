@@ -55,16 +55,45 @@ DEFAULT_ONTOLOGIES = (
 @dataclass(frozen=True)
 class ExtractedEntity:
 
-    entity_id: str
+    entity_id: str = ""
 
-    canonical: str
+    canonical: str = ""
 
-    phrase: str
+    phrase: str = ""
 
-    confidence: float
+    confidence: float = 0.0
 
-    ontology: str
+    ontology: str = ""
 
+    # Repository identity
+    entity_type: str = ""
+
+    category: str = ""
+
+    business_area: str = ""
+
+    domain: str = ""
+
+    impact_weight: float = 1.0
+
+    # Matching information
+    matched_alias: str = ""
+
+    is_alias: bool = False
+
+    # Position information
+    token_index: int = 0
+
+    token_count: int = 0
+
+    start_char: int = 0
+
+    end_char: int = 0
+
+    # Repository metadata
+    metadata: dict = field(
+        default_factory=dict
+    )
 
 # =====================================================================
 # EXTRACTION RESULT
@@ -269,63 +298,179 @@ class ExtractionCoordinator:
 
         for match in matches:
 
-            # ---------------------------------------------------------
-            # Only use fields that actually exist in MatchResult
-            # ---------------------------------------------------------
-
             entity_id = getattr(
                 match,
                 "entity_id",
                 None,
             )
 
-            canonical = getattr(
-                match,
-                "canonical",
-                "",
-            )
-
-            phrase = getattr(
-                match,
-                "phrase",
-                "",
-            )
-
-            confidence = getattr(
-                match,
-                "confidence",
-                0.0,
-            )
-
-            # ---------------------------------------------------------
-            # Defensive validation
-            # ---------------------------------------------------------
-
             if not entity_id:
-
                 continue
 
+            entity = getattr(
+                match,
+                "entity",
+                None,
+            )
+
             entities.append(
+
                 ExtractedEntity(
+
+                    # -------------------------------------------------
+                    # Identity
+                    # -------------------------------------------------
 
                     entity_id=str(
                         entity_id
                     ),
 
                     canonical=str(
-                        canonical
+                        getattr(
+                            match,
+                            "canonical",
+                            "",
+                        )
                     ),
 
                     phrase=str(
-                        phrase
-                    ),
-
-                    confidence=float(
-                        confidence
+                        getattr(
+                            match,
+                            "phrase",
+                            "",
+                        )
                     ),
 
                     ontology=ontology,
+
+                    # -------------------------------------------------
+                    # Confidence
+                    # -------------------------------------------------
+
+                    confidence=float(
+                        getattr(
+                            match,
+                            "confidence",
+                            0.0,
+                        )
+                    ),
+
+                    # -------------------------------------------------
+                    # Repository information
+                    # -------------------------------------------------
+
+                    entity_type=str(
+                        getattr(
+                            match,
+                            "entity_type",
+                            "",
+                        )
+                    ),
+
+                    category=str(
+                        getattr(
+                            match,
+                            "category",
+                            "",
+                        )
+                    ),
+
+                    business_area=str(
+                        getattr(
+                            match,
+                            "business_area",
+                            "",
+                        )
+                    ),
+
+                    domain=str(
+                        getattr(
+                            match,
+                            "domain",
+                            "",
+                        )
+                    ),
+
+                    impact_weight=float(
+                        getattr(
+                            match,
+                            "impact_weight",
+                            1.0,
+                        )
+                    ),
+
+                    # -------------------------------------------------
+                    # Match information
+                    # -------------------------------------------------
+
+                    matched_alias=str(
+                        getattr(
+                            match,
+                            "matched_alias",
+                            "",
+                        )
+                        or ""
+                    ),
+
+                    is_alias=bool(
+                        getattr(
+                            match,
+                            "is_alias",
+                            False,
+                        )
+                    ),
+
+                    # -------------------------------------------------
+                    # Position
+                    # -------------------------------------------------
+
+                    token_index=int(
+                        getattr(
+                            match,
+                            "token_index",
+                            0,
+                        )
+                    ),
+
+                    token_count=int(
+                        getattr(
+                            match,
+                            "token_count",
+                            0,
+                        )
+                    ),
+
+                    start_char=int(
+                        getattr(
+                            match,
+                            "start_char",
+                            0,
+                        )
+                    ),
+
+                    end_char=int(
+                        getattr(
+                            match,
+                            "end_char",
+                            0,
+                        )
+                    ),
+
+                    # -------------------------------------------------
+                    # Metadata
+                    # -------------------------------------------------
+
+                    metadata=dict(
+                        getattr(
+                            entity,
+                            "metadata",
+                            {},
+                        )
+                        or {}
+                    ),
+
                 )
+
             )
 
         return entities

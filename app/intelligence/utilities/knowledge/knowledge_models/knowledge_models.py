@@ -34,11 +34,6 @@ class KnowledgeFact:
         default_factory=KnowledgeInterpretation
     )
 
-    
-    # -----------------------------
-    # Existing
-    # -----------------------------
-
     achievement: bool = False
 
     quantified: bool = False
@@ -47,8 +42,13 @@ class KnowledgeFact:
 
     confidence: float = 0.0
 
-    practice: PracticeKnowledge = field(default_factory=PracticeKnowledge)
+    practice: PracticeKnowledge = field(
+        default_factory=PracticeKnowledge
+    )
 
+    metadata: Dict[str, Any] = field(
+        default_factory=dict
+    )
 
 # ---------------------------------------------------------
 # Knowledge Clause

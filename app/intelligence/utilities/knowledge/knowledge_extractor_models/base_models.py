@@ -1,26 +1,41 @@
 """
 Enterprise Knowledge Entity
+Enterprise V5
 
-Every ontology knowledge model inherits from this.
+Common knowledge model shared by all ontology parser extractors.
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 
 
 @dataclass
 class KnowledgeEntity:
+    """
+    Common base model for every ontology-derived knowledge object.
 
-    ####################################################################
-    # Detection
-    ####################################################################
+    Examples:
+
+        SkillKnowledge
+        ActionKnowledge
+        CertificationKnowledge
+        StandardKnowledge
+        TechnologyKnowledge
+        BusinessKPIKnowledge
+    """
+
+    # ==============================================================
+    # DETECTION
+    # ==============================================================
 
     found: bool = False
 
     confidence: float = 0.0
 
-    ####################################################################
-    # Linguistic
-    ####################################################################
+    # ==============================================================
+    # LINGUISTIC
+    # ==============================================================
 
     original: str = ""
 
@@ -28,19 +43,29 @@ class KnowledgeEntity:
 
     normalized: str = ""
 
-    category: str = ""
+    base: str = ""
 
-    ####################################################################
-    # Ontology
-    ####################################################################
+    past: str = ""
+
+    gerund: str = ""
+
+    plural: str = ""
+
+    singular: str = ""
+
+    abbreviation: str = ""
+
+    short_name: str = ""
+
+    # ==============================================================
+    # CLASSIFICATION
+    # ==============================================================
+
+    category: str = ""
 
     entity_id: str = ""
 
     entity_type: str = ""
-
-    matched_phrase: str = ""
-
-    matched_alias: bool = False
 
     ontology_name: str = ""
 
@@ -48,15 +73,37 @@ class KnowledgeEntity:
 
     domain: str = ""
 
+    description: str = ""
+
+    # ==============================================================
+    # BUSINESS / SEMANTIC
+    # ==============================================================
+
+    related_metrics: list[str] = field(
+        default_factory=list
+    )
+
     impact_weight: float = 1.0
 
-    source: str = ""
+    business_meaning: str = ""
 
-    metadata: dict = field(default_factory=dict)
+    preferred_direction: str = ""
 
-    ####################################################################
-    # Position
-    ####################################################################
+    preferred_unit: str = ""
+
+    higher_is_better: bool = True
+
+    # ==============================================================
+    # MATCH INFORMATION
+    # ==============================================================
+
+    matched_phrase: str = ""
+
+    matched_alias: bool = False
+
+    # ==============================================================
+    # POSITION
+    # ==============================================================
 
     start_char: int = -1
 
@@ -67,3 +114,13 @@ class KnowledgeEntity:
     token_count: int = 0
 
     sentence_index: int = 0
+
+    # ==============================================================
+    # REPOSITORY
+    # ==============================================================
+
+    source: str = ""
+
+    metadata: dict = field(
+        default_factory=dict
+    )
