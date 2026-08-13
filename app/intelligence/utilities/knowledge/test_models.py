@@ -27,33 +27,31 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 """
-Enterprise V5 — Technology Parser Extractor Test
+Enterprise V5 — Domain Knowledge Extractor Test
 """
 
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_models import (
+    DomainKnowledge,
+)
 
+from app.intelligence.utilities.knowledge.knowledge_extractors.domain_extractor import (
+    DomainExtractor,
+)
 
 from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
     ExtractionRequest,
 )
 
-from app.parser.extractors.technology_parser_extractor import (
-    TechnologyParserExtractor,
-)
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (KnowledgeV5Pipeline)
 
-def main():
+def test_domain_extractor():
 
     print("=" * 70)
-    print("ENTERPRISE V5 — TECHNOLOGY PARSER EXTRACTOR TEST")
+    print("ENTERPRISE V5 — DOMAIN KNOWLEDGE EXTRACTOR TEST")
     print("=" * 70)
-
-    # ==============================================================
-    # SENTENCE
-    # ==============================================================
 
     sentence = (
-        "The data analytics team used Python and SQL for analytics, "
-        "while R was used for statistical analysis."
+        "The facility improved operations and quality management "
+        "while strengthening food safety and compliance."
     )
 
     print()
@@ -61,45 +59,30 @@ def main():
     print("-" * 70)
     print(sentence)
 
-    # ==============================================================
-    # ONTOLOGY
-    # ==============================================================
-
     print()
     print("ONTOLOGY")
     print("-" * 70)
-    print("technologies")
+    print("domains")
 
-    # ==============================================================
-    # EXTRACTION REQUEST
-    # ==============================================================
+    # ------------------------------------------------------------
+    # REQUEST
+    # ------------------------------------------------------------
 
     request = ExtractionRequest(
-        sentence=sentence,
-        context={
-            "sentence_index": 0,
-        },
+        sentence=sentence
     )
-    pipeline = KnowledgeV5Pipeline()
-    # ==============================================================
+
+    # ------------------------------------------------------------
     # EXTRACTOR
-    # ==============================================================
+    # ------------------------------------------------------------
 
-    extractor = TechnologyParserExtractor(
-        pipeline=pipeline,
-    )
+    extractor = DomainExtractor()
 
-    # ==============================================================
-    # EXTRACT
-    # ==============================================================
+    result = extractor.extract(request)
 
-    result = extractor.extract(
-        request
-    )
-
-    # ==============================================================
-    # RESULT SUMMARY
-    # ==============================================================
+    # ------------------------------------------------------------
+    # RESULT
+    # ------------------------------------------------------------
 
     print()
     print("FOUND")
@@ -111,232 +94,137 @@ def main():
     print("-" * 70)
     print(len(result.entities))
 
-    # ==============================================================
-    # EXTRACTED TECHNOLOGIES
-    # ==============================================================
+    # ------------------------------------------------------------
+    # ENTITIES
+    # ------------------------------------------------------------
 
     print()
-    print("EXTRACTED TECHNOLOGIES")
+    print("EXTRACTED DOMAINS")
     print("=" * 70)
 
-    for index, technology in enumerate(
+    for index, domain in enumerate(
         result.entities,
         start=1,
     ):
 
         print()
-        print(f"TECHNOLOGY #{index}")
+        print(f"DOMAIN #{index}")
         print("-" * 70)
 
         print(
             f"found              : "
-            f"{technology.found}"
+            f"{domain.found}"
         )
 
         print(
             f"confidence         : "
-            f"{technology.confidence:.3f}"
+            f"{domain.confidence:.3f}"
         )
 
         print(
             f"original           : "
-            f"{technology.original}"
+            f"{domain.original}"
         )
 
         print(
             f"canonical          : "
-            f"{technology.canonical}"
+            f"{domain.canonical}"
         )
 
         print(
             f"normalized         : "
-            f"{technology.normalized}"
+            f"{domain.normalized}"
         )
 
         print(
             f"entity_id          : "
-            f"{technology.entity_id}"
+            f"{domain.entity_id}"
         )
 
         print(
             f"entity_type        : "
-            f"{technology.entity_type}"
+            f"{domain.entity_type}"
         )
 
         print(
             f"ontology_name      : "
-            f"{technology.ontology_name}"
+            f"{domain.ontology_name}"
         )
 
         print(
             f"category           : "
-            f"{technology.category}"
+            f"{domain.category}"
         )
 
         print(
             f"business_area      : "
-            f"{technology.business_area}"
+            f"{domain.business_area}"
         )
 
         print(
             f"domain             : "
-            f"{technology.domain}"
-        )
-
-        print(
-            f"description        : "
-            f"{technology.description}"
-        )
-
-        print(
-            f"technology_family  : "
-            f"{technology.technology_family}"
-        )
-
-        print(
-            f"technology_group   : "
-            f"{technology.technology_group}"
-        )
-
-        print(
-            f"vendor             : "
-            f"{technology.vendor}"
-        )
-
-        print(
-            f"version            : "
-            f"{technology.version}"
-        )
-
-        print(
-            f"abbreviation       : "
-            f"{technology.abbreviation}"
-        )
-
-        print(
-            f"programming_language: "
-            f"{technology.programming_language}"
-        )
-
-        print(
-            f"database           : "
-            f"{technology.database}"
-        )
-
-        print(
-            f"analytics_tool     : "
-            f"{technology.analytics_tool}"
-        )
-
-        print(
-            f"cloud_platform     : "
-            f"{technology.cloud_platform}"
-        )
-
-        print(
-            f"operating_system   : "
-            f"{technology.operating_system}"
-        )
-
-        print(
-            f"framework          : "
-            f"{technology.framework}"
-        )
-
-        print(
-            f"erp                : "
-            f"{technology.erp}"
-        )
-
-        print(
-            f"visualization_tool : "
-            f"{technology.visualization_tool}"
-        )
-
-        print(
-            f"commercial         : "
-            f"{technology.commercial}"
-        )
-
-        print(
-            f"open_source        : "
-            f"{technology.open_source}"
-        )
-
-        print(
-            f"certification_available: "
-            f"{technology.certification_available}"
-        )
-
-        print(
-            f"maturity_level     : "
-            f"{technology.maturity_level}"
+            f"{getattr(domain, 'domain', '')}"
         )
 
         print(
             f"impact_weight      : "
-            f"{technology.impact_weight}"
-        )
-
-        print(
-            f"ats_weight         : "
-            f"{technology.ats_weight}"
+            f"{domain.impact_weight}"
         )
 
         print(
             f"matched_phrase     : "
-            f"{technology.matched_phrase}"
+            f"{domain.matched_phrase}"
         )
 
         print(
             f"matched_alias      : "
-            f"{technology.matched_alias}"
+            f"{domain.matched_alias}"
         )
 
         print(
             f"start_char         : "
-            f"{technology.start_char}"
+            f"{domain.start_char}"
         )
 
         print(
             f"end_char           : "
-            f"{technology.end_char}"
+            f"{domain.end_char}"
         )
 
         print(
             f"token_index        : "
-            f"{technology.token_index}"
+            f"{domain.token_index}"
         )
 
         print(
             f"token_count        : "
-            f"{technology.token_count}"
+            f"{domain.token_count}"
         )
 
         print(
             f"sentence_index     : "
-            f"{technology.sentence_index}"
+            f"{domain.sentence_index}"
         )
 
         print(
             f"graph_node         : "
-            f"{technology.graph_node}"
+            f"{domain.graph_node}"
         )
 
         print(
             f"metadata           : "
-            f"{technology.metadata}"
+            f"{domain.metadata}"
         )
 
-    # ==============================================================
+    # ------------------------------------------------------------
     # MATCH RESULTS
-    # ==============================================================
+    # ------------------------------------------------------------
 
     print()
     print("MATCH RESULTS")
     print("=" * 70)
 
-    for index, technology in enumerate(
+    for index, domain in enumerate(
         result.entities,
         start=1,
     ):
@@ -347,32 +235,32 @@ def main():
 
         print(
             f"phrase             : "
-            f"{technology.matched_phrase}"
+            f"{domain.matched_phrase}"
         )
 
         print(
             f"confidence         : "
-            f"{technology.confidence:.3f}"
+            f"{domain.confidence:.3f}"
         )
 
         print(
             f"matched_alias      : "
-            f"{technology.matched_alias}"
+            f"{domain.matched_alias}"
         )
 
         print(
             f"entity_id          : "
-            f"{technology.entity_id}"
+            f"{domain.entity_id}"
         )
 
         print(
             f"entity_type        : "
-            f"{technology.entity_type}"
+            f"{domain.entity_type}"
         )
 
-    # ==============================================================
+    # ------------------------------------------------------------
     # FIRST ENTITY
-    # ==============================================================
+    # ------------------------------------------------------------
 
     if result.entities:
 
@@ -404,7 +292,7 @@ def main():
 
         print(
             f"Domain    : "
-            f"{first.domain}"
+            f"{getattr(first, 'domain', '')}"
         )
 
         print(
@@ -414,9 +302,9 @@ def main():
 
     print()
     print("=" * 70)
-    print("TECHNOLOGY PARSER EXTRACTOR TEST COMPLETE")
+    print("DOMAIN KNOWLEDGE EXTRACTOR TEST COMPLETE")
     print("=" * 70)
 
 
 if __name__ == "__main__":
-    main()
+    test_domain_extractor()
