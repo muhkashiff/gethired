@@ -1,4 +1,5 @@
 
+
 """
 Enterprise V5 — Certification Parser Extractor Test
 
@@ -26,66 +27,70 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 """
-Enterprise V5 — METRICS Parser Extractor Test
+Enterprise V5 — Technology Parser Extractor Test
 """
+
+
 
 from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
     ExtractionRequest,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
-    KnowledgeV5Pipeline,
+from app.parser.extractors.technology_parser_extractor import (
+    TechnologyParserExtractor,
 )
-
-from app.parser.extractors.metric_parser_extractor import (
-    MetricParserExtractor,
-)
-
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (KnowledgeV5Pipeline)
 
 def main():
 
     print("=" * 70)
-    print("ENTERPRISE V5 — METRICS PARSER EXTRACTOR TEST")
+    print("ENTERPRISE V5 — TECHNOLOGY PARSER EXTRACTOR TEST")
     print("=" * 70)
 
+    # ==============================================================
+    # SENTENCE
+    # ==============================================================
+
     sentence = (
-        "The facility improved production performance, "
-        "increased line efficiency, optimized production yield, "
-        "and reduced downtime."
+        "The data analytics team used Python and SQL for analytics, "
+        "while R was used for statistical analysis."
     )
 
-    print("\nSENTENCE")
+    print()
+    print("SENTENCE")
     print("-" * 70)
     print(sentence)
 
-    print("\nONTOLOGY")
+    # ==============================================================
+    # ONTOLOGY
+    # ==============================================================
+
+    print()
+    print("ONTOLOGY")
     print("-" * 70)
-    print("Metric-KPI")
+    print("technologies")
 
     # ==============================================================
-    # PIPELINE
+    # EXTRACTION REQUEST
     # ==============================================================
 
+    request = ExtractionRequest(
+        sentence=sentence,
+        context={
+            "sentence_index": 0,
+        },
+    )
     pipeline = KnowledgeV5Pipeline()
-
     # ==============================================================
     # EXTRACTOR
     # ==============================================================
 
-    extractor = MetricParserExtractor(
-        pipeline=pipeline
+    extractor = TechnologyParserExtractor(
+        pipeline=pipeline,
     )
 
     # ==============================================================
-    # REQUEST
-    # ==============================================================
-
-    request = ExtractionRequest(
-        sentence=sentence
-    )
-
-    # ==============================================================
-    # EXTRACTION
+    # EXTRACT
     # ==============================================================
 
     result = extractor.extract(
@@ -93,197 +98,289 @@ def main():
     )
 
     # ==============================================================
-    # RESULT
+    # RESULT SUMMARY
     # ==============================================================
 
-    print("\nFOUND")
+    print()
+    print("FOUND")
     print("-" * 70)
     print(result.found)
 
-    print("\nCOUNT")
+    print()
+    print("COUNT")
     print("-" * 70)
-    print(result.count)
+    print(len(result.entities))
 
     # ==============================================================
-    # ENTITIES
+    # EXTRACTED TECHNOLOGIES
     # ==============================================================
 
-    print("\nEXTRACTED Metrics")
+    print()
+    print("EXTRACTED TECHNOLOGIES")
     print("=" * 70)
 
-    for index, entity in enumerate(
+    for index, technology in enumerate(
         result.entities,
         start=1,
     ):
 
-        print(f"\nMetrics #{index}")
+        print()
+        print(f"TECHNOLOGY #{index}")
         print("-" * 70)
 
         print(
             f"found              : "
-            f"{entity.found}"
+            f"{technology.found}"
         )
 
         print(
             f"confidence         : "
-            f"{entity.confidence}"
+            f"{technology.confidence:.3f}"
         )
 
         print(
             f"original           : "
-            f"{entity.original}"
+            f"{technology.original}"
         )
 
         print(
             f"canonical          : "
-            f"{entity.canonical}"
+            f"{technology.canonical}"
         )
 
         print(
             f"normalized         : "
-            f"{entity.normalized}"
+            f"{technology.normalized}"
         )
 
         print(
             f"entity_id          : "
-            f"{entity.entity_id}"
+            f"{technology.entity_id}"
         )
 
         print(
             f"entity_type        : "
-            f"{entity.entity_type}"
+            f"{technology.entity_type}"
         )
 
         print(
             f"ontology_name      : "
-            f"{entity.ontology_name}"
+            f"{technology.ontology_name}"
         )
 
         print(
             f"category           : "
-            f"{entity.category}"
+            f"{technology.category}"
         )
 
         print(
             f"business_area      : "
-            f"{entity.business_area}"
+            f"{technology.business_area}"
+        )
+
+        print(
+            f"domain             : "
+            f"{technology.domain}"
         )
 
         print(
             f"description        : "
-            f"{entity.description}"
+            f"{technology.description}"
         )
 
         print(
-            f"related_metrics    : "
-            f"{entity.related_metrics}"
+            f"technology_family  : "
+            f"{technology.technology_family}"
         )
 
         print(
-            f"higher_is_better   : "
-            f"{entity.higher_is_better}"
+            f"technology_group   : "
+            f"{technology.technology_group}"
+        )
+
+        print(
+            f"vendor             : "
+            f"{technology.vendor}"
+        )
+
+        print(
+            f"version            : "
+            f"{technology.version}"
+        )
+
+        print(
+            f"abbreviation       : "
+            f"{technology.abbreviation}"
+        )
+
+        print(
+            f"programming_language: "
+            f"{technology.programming_language}"
+        )
+
+        print(
+            f"database           : "
+            f"{technology.database}"
+        )
+
+        print(
+            f"analytics_tool     : "
+            f"{technology.analytics_tool}"
+        )
+
+        print(
+            f"cloud_platform     : "
+            f"{technology.cloud_platform}"
+        )
+
+        print(
+            f"operating_system   : "
+            f"{technology.operating_system}"
+        )
+
+        print(
+            f"framework          : "
+            f"{technology.framework}"
+        )
+
+        print(
+            f"erp                : "
+            f"{technology.erp}"
+        )
+
+        print(
+            f"visualization_tool : "
+            f"{technology.visualization_tool}"
+        )
+
+        print(
+            f"commercial         : "
+            f"{technology.commercial}"
+        )
+
+        print(
+            f"open_source        : "
+            f"{technology.open_source}"
+        )
+
+        print(
+            f"certification_available: "
+            f"{technology.certification_available}"
+        )
+
+        print(
+            f"maturity_level     : "
+            f"{technology.maturity_level}"
         )
 
         print(
             f"impact_weight      : "
-            f"{entity.impact_weight}"
+            f"{technology.impact_weight}"
+        )
+
+        print(
+            f"ats_weight         : "
+            f"{technology.ats_weight}"
         )
 
         print(
             f"matched_phrase     : "
-            f"{entity.matched_phrase}"
+            f"{technology.matched_phrase}"
         )
 
         print(
             f"matched_alias      : "
-            f"{entity.matched_alias}"
+            f"{technology.matched_alias}"
         )
 
         print(
             f"start_char         : "
-            f"{entity.start_char}"
+            f"{technology.start_char}"
         )
 
         print(
             f"end_char           : "
-            f"{entity.end_char}"
+            f"{technology.end_char}"
         )
 
         print(
             f"token_index        : "
-            f"{entity.token_index}"
+            f"{technology.token_index}"
         )
 
         print(
             f"token_count        : "
-            f"{entity.token_count}"
+            f"{technology.token_count}"
         )
 
         print(
             f"sentence_index     : "
-            f"{entity.sentence_index}"
+            f"{technology.sentence_index}"
         )
 
         print(
             f"graph_node         : "
-            f"{entity.graph_node}"
+            f"{technology.graph_node}"
         )
 
         print(
-            f"metric_count       : "
-            f"{entity.metric_count}"
+            f"metadata           : "
+            f"{technology.metadata}"
         )
 
     # ==============================================================
     # MATCH RESULTS
     # ==============================================================
 
-    print("\nMATCH RESULTS")
+    print()
+    print("MATCH RESULTS")
     print("=" * 70)
 
-    for index, match in enumerate(
-        result.matches,
+    for index, technology in enumerate(
+        result.entities,
         start=1,
     ):
 
-        print(f"\nMATCH #{index}")
+        print()
+        print(f"MATCH #{index}")
         print("-" * 70)
 
         print(
             f"phrase             : "
-            f"{match.phrase}"
+            f"{technology.matched_phrase}"
         )
 
         print(
             f"confidence         : "
-            f"{match.confidence}"
+            f"{technology.confidence:.3f}"
         )
 
         print(
             f"matched_alias      : "
-            f"{match.matched_alias}"
+            f"{technology.matched_alias}"
         )
 
         print(
             f"entity_id          : "
-            f"{match.entity_id}"
+            f"{technology.entity_id}"
         )
 
         print(
             f"entity_type        : "
-            f"{match.entity_type}"
+            f"{technology.entity_type}"
         )
 
     # ==============================================================
     # FIRST ENTITY
     # ==============================================================
 
-    print("\nFIRST ENTITY")
-    print("-" * 70)
+    if result.entities:
 
-    first = result.first
+        first = result.entities[0]
 
-    if first is not None:
+        print()
+        print("FIRST ENTITY")
+        print("-" * 70)
 
         print(
             f"Canonical : "
@@ -306,21 +403,18 @@ def main():
         )
 
         print(
+            f"Domain    : "
+            f"{first.domain}"
+        )
+
+        print(
             f"Entity ID : "
             f"{first.entity_id}"
         )
 
-        print(
-            f"Metrics   : "
-            f"{first.related_metrics}"
-        )
-
-    else:
-
-        print("None")
-
-    print("\n" + "=" * 70)
-    print("METRICS PARSER EXTRACTOR TEST COMPLETE")
+    print()
+    print("=" * 70)
+    print("TECHNOLOGY PARSER EXTRACTOR TEST COMPLETE")
     print("=" * 70)
 
 
