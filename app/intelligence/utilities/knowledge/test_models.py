@@ -1,310 +1,374 @@
 
-
 """
-Enterprise V5 — Certification Parser Extractor Test
+Enterprise V5
+Section Extraction Adapter Test
 
 Tests:
 
-    certifications ontology
+    ResumeSection
         ↓
-    GenericOntologyParserExtractor
-        ↓
-    CertificationParserExtractor
-        ↓
-    CertificationParserModel
-        ↓
-    ExtractionResult
+    SectionExtractionAdapter
+        ├── EducationExtractor
+        └── ExperienceExtractor
 """
 
 from __future__ import annotations
+
 import sys
 from pathlib import Path
 
+
+# ============================================================
+# PROJECT ROOT
+# ============================================================
 
 ROOT = Path(__file__).resolve().parents[4]
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-"""
-Enterprise V5 — Domain Knowledge Extractor Test
-"""
 
-from app.intelligence.utilities.knowledge.knowledge_extractor_models.domain_models import (
-    DomainKnowledge,
+# ============================================================
+# IMPORTS
+# ============================================================
+
+from app.parser.parsed_models.resume_section import (
+    ResumeSection,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.domain_extractor import (
-    DomainExtractor,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
-    ExtractionRequest,
+from app.parser.section_extraction_adapter import (
+    SectionExtractionAdapter,
 )
 
 
-def test_domain_extractor():
+# ============================================================
+# MAIN TEST
+# ============================================================
+
+def main():
 
     print("=" * 70)
-    print("ENTERPRISE V5 — DOMAIN KNOWLEDGE EXTRACTOR TEST")
+    print("ENTERPRISE V5 — SECTION EXTRACTION ADAPTER TEST")
     print("=" * 70)
 
-    sentence = (
-        "The facility improved operations and quality management "
-        "while strengthening food safety and compliance."
+    # ========================================================
+    # EDUCATION SECTION
+    # ========================================================
+
+    education_section = ResumeSection(
+        name="education",
+        title="Education",
+        items=[
+            (
+                "Bootcamp Certificate: Data Analytics"
+                "\t\t"
+                "University of Toronto, ON, Canada"
+            ),
+
+            (
+                "Completed a Data Analytics Certificate from "
+                "the University of Toronto, gaining practical "
+                "experience in Python, data visualization, "
+                "machine learning, and data-driven "
+                "decision-making. Skilled in analyzing complex "
+                "datasets, uncovering actionable insights, and "
+                "communicating findings through effective data "
+                "storytelling."
+            ),
+
+            (
+                "Post Graduation Diploma: Business Administration"
+                "\t\t"
+                "Selkirk College, BC, Canada"
+            ),
+
+            (
+                "A comprehensive 2-year business management "
+                "program with a core focus on Accounting, "
+                "Economics, Business Mathematics, Leadership, "
+                "Communication Skills, and Market Strategy."
+            ),
+
+            (
+                "M.Sc. Chemistry (Organic Chemistry Major)"
+                "\t\t"
+                "University of the Punjab, Pakistan"
+            ),
+
+            (
+                "Four-year Bachelor's degree academic "
+                "equivalency verified by WES. 16 years of "
+                "formalized higher education with an advanced "
+                "thesis and curriculum focusing on Organic "
+                "Chemistry and laboratory methodologies."
+            ),
+        ],
     )
 
-    print()
-    print("SENTENCE")
-    print("-" * 70)
-    print(sentence)
+    # ========================================================
+    # EXPERIENCE SECTION
+    # ========================================================
 
-    print()
-    print("ONTOLOGY")
-    print("-" * 70)
-    print("domains")
+    experience_section = ResumeSection(
+        name="experience",
+        title="Experience",
+        items=[
+            (
+                "QA Chemist | Coca-Cola Beverages Pakistan Ltd. "
+                "2010 - 2016 | Lahore, Pakistan"
+            ),
 
-    # ------------------------------------------------------------
-    # REQUEST
-    # ------------------------------------------------------------
+            (
+                "Spearheaded the site-wide implementation, "
+                "execution, and regulatory compliance of the "
+                "integrated Quality and Food Safety Management "
+                "System (QMS)."
+            ),
 
-    request = ExtractionRequest(
-        sentence=sentence
+            (
+                "Oversaw strict laboratory and floor product "
+                "inspections, meticulously executing and "
+                "governing the finished product release program "
+                "based on established quality criteria."
+            ),
+
+            "Key Accomplishments",
+
+            (
+                "Achieved a remarkable 99%+ production line "
+                "product yield through targeted waste reduction "
+                "and down-time minimization initiatives."
+            ),
+
+            (
+                "Managing Director | Nutrain (Pvt) Ltd. "
+                "2025 - 2026 | Lahore, Pakistan"
+            ),
+
+            (
+                "Led the strategic growth and day-to-day "
+                "operations of a food and FMCG business "
+                "specializing in premium rice, edible oils, "
+                "ghee, juices, and other consumer products."
+            ),
+
+            (
+                "Directed sales, marketing, procurement, "
+                "inventory management, supply chain operations, "
+                "distribution, and financial performance."
+            ),
+
+            "Key Accomplishments",
+
+            (
+                "Successfully expanded distribution channels "
+                "and increased sales through market development "
+                "and customer-focused initiatives."
+            ),
+
+            (
+                "Retail Store Manager | Shell Gas Station & "
+                "Retail Store 2016 - 2024 | Canada"
+            ),
+
+            (
+                "Managed multi-faceted retail business "
+                "operations by forecasting and meeting evolving "
+                "consumer needs using predictive demand "
+                "parameters."
+            ),
+
+            (
+                "Governed comprehensive vendor management, "
+                "inventory cycle counts, merchandise ordering, "
+                "and financial cash flow optimization."
+            ),
+
+            "Key Accomplishments",
+
+            (
+                "Obtained a perfect 100% score for the highly "
+                "regulated corporate Shell Mystery Shopper "
+                "program."
+            ),
+        ],
     )
 
-    # ------------------------------------------------------------
-    # EXTRACTOR
-    # ------------------------------------------------------------
+    # ========================================================
+    # ADAPTER
+    # ========================================================
 
-    extractor = DomainExtractor()
+    adapter = SectionExtractionAdapter()
 
-    result = extractor.extract(request)
+    # ========================================================
+    # EXTRACT
+    # ========================================================
 
-    # ------------------------------------------------------------
-    # RESULT
-    # ------------------------------------------------------------
+    education_result = adapter.extract_education(
+        education_section
+    )
 
-    print()
-    print("FOUND")
-    print("-" * 70)
-    print(result.found)
+    experience_result = adapter.extract_experience(
+        experience_section
+    )
 
-    print()
-    print("COUNT")
-    print("-" * 70)
-    print(len(result.entities))
-
-    # ------------------------------------------------------------
-    # ENTITIES
-    # ------------------------------------------------------------
+    # ========================================================
+    # EDUCATION OUTPUT
+    # ========================================================
 
     print()
-    print("EXTRACTED DOMAINS")
+    print("=" * 70)
+    print("EDUCATION")
     print("=" * 70)
 
-    for index, domain in enumerate(
-        result.entities,
+    print(
+        "Success     :",
+        education_result.success,
+    )
+
+    print(
+        "Count       :",
+        education_result.count,
+    )
+
+    print(
+        "Confidence  :",
+        education_result.confidence,
+    )
+
+    print("-" * 70)
+
+    for index, education in enumerate(
+        education_result.records,
         start=1,
     ):
 
-        print()
-        print(f"DOMAIN #{index}")
-        print("-" * 70)
-
         print(
-            f"found              : "
-            f"{domain.found}"
+            f"\n[EDUCATION {index}]"
         )
 
         print(
-            f"confidence         : "
-            f"{domain.confidence:.3f}"
+            education
         )
 
-        print(
-            f"original           : "
-            f"{domain.original}"
-        )
-
-        print(
-            f"canonical          : "
-            f"{domain.canonical}"
-        )
-
-        print(
-            f"normalized         : "
-            f"{domain.normalized}"
-        )
-
-        print(
-            f"entity_id          : "
-            f"{domain.entity_id}"
-        )
-
-        print(
-            f"entity_type        : "
-            f"{domain.entity_type}"
-        )
-
-        print(
-            f"ontology_name      : "
-            f"{domain.ontology_name}"
-        )
-
-        print(
-            f"category           : "
-            f"{domain.category}"
-        )
-
-        print(
-            f"business_area      : "
-            f"{domain.business_area}"
-        )
-
-        print(
-            f"domain             : "
-            f"{getattr(domain, 'domain', '')}"
-        )
-
-        print(
-            f"impact_weight      : "
-            f"{domain.impact_weight}"
-        )
-
-        print(
-            f"matched_phrase     : "
-            f"{domain.matched_phrase}"
-        )
-
-        print(
-            f"matched_alias      : "
-            f"{domain.matched_alias}"
-        )
-
-        print(
-            f"start_char         : "
-            f"{domain.start_char}"
-        )
-
-        print(
-            f"end_char           : "
-            f"{domain.end_char}"
-        )
-
-        print(
-            f"token_index        : "
-            f"{domain.token_index}"
-        )
-
-        print(
-            f"token_count        : "
-            f"{domain.token_count}"
-        )
-
-        print(
-            f"sentence_index     : "
-            f"{domain.sentence_index}"
-        )
-
-        print(
-            f"graph_node         : "
-            f"{domain.graph_node}"
-        )
-
-        print(
-            f"metadata           : "
-            f"{domain.metadata}"
-        )
-
-    # ------------------------------------------------------------
-    # MATCH RESULTS
-    # ------------------------------------------------------------
+    # ========================================================
+    # EXPERIENCE OUTPUT
+    # ========================================================
 
     print()
-    print("MATCH RESULTS")
+    print("=" * 70)
+    print("EXPERIENCE")
     print("=" * 70)
 
-    for index, domain in enumerate(
-        result.entities,
+    print(
+        "Success     :",
+        experience_result.success,
+    )
+
+    print(
+        "Count       :",
+        experience_result.count,
+    )
+
+    print(
+        "Confidence  :",
+        experience_result.confidence,
+    )
+
+    print("-" * 70)
+
+    for index, experience in enumerate(
+        experience_result.records,
         start=1,
     ):
 
-        print()
-        print(f"MATCH #{index}")
-        print("-" * 70)
-
         print(
-            f"phrase             : "
-            f"{domain.matched_phrase}"
+            f"\n[EXPERIENCE {index}]"
         )
 
         print(
-            f"confidence         : "
-            f"{domain.confidence:.3f}"
+            experience
         )
 
-        print(
-            f"matched_alias      : "
-            f"{domain.matched_alias}"
-        )
-
-        print(
-            f"entity_id          : "
-            f"{domain.entity_id}"
-        )
-
-        print(
-            f"entity_type        : "
-            f"{domain.entity_type}"
-        )
-
-    # ------------------------------------------------------------
-    # FIRST ENTITY
-    # ------------------------------------------------------------
-
-    if result.entities:
-
-        first = result.entities[0]
-
-        print()
-        print("FIRST ENTITY")
-        print("-" * 70)
-
-        print(
-            f"Canonical : "
-            f"{first.canonical}"
-        )
-
-        print(
-            f"Type      : "
-            f"{first.entity_type}"
-        )
-
-        print(
-            f"Category  : "
-            f"{first.category}"
-        )
-
-        print(
-            f"Business Area : "
-            f"{first.business_area}"
-        )
-
-        print(
-            f"Domain    : "
-            f"{getattr(first, 'domain', '')}"
-        )
-
-        print(
-            f"Entity ID : "
-            f"{first.entity_id}"
-        )
+    # ========================================================
+    # REGRESSION CHECKS
+    # ========================================================
 
     print()
     print("=" * 70)
-    print("DOMAIN KNOWLEDGE EXTRACTOR TEST COMPLETE")
+    print("REGRESSION CHECKS")
     print("=" * 70)
 
+    assert education_result.success is True
+
+    assert education_result.count == 3, (
+        "Education regression failure: "
+        f"expected 3, got {education_result.count}"
+    )
+
+    assert experience_result.success is True
+
+    assert experience_result.count == 3, (
+        "Experience regression failure: "
+        f"expected 3, got {experience_result.count}"
+    )
+
+    # --------------------------------------------------------
+    # Education identity checks
+    # --------------------------------------------------------
+
+    assert (
+        education_result.records[0].institution
+        == "University of Toronto"
+    )
+
+    assert (
+        education_result.records[1].institution
+        == "Selkirk College"
+    )
+
+    assert (
+        education_result.records[2].institution
+        == "University of the Punjab"
+    )
+
+    assert (
+        education_result.records[2].major
+        == "Organic Chemistry"
+    )
+
+    # --------------------------------------------------------
+    # Experience identity checks
+    # --------------------------------------------------------
+
+    assert (
+        experience_result.records[0].company
+        == "Coca-Cola Beverages Pakistan Ltd."
+    )
+
+    assert (
+        experience_result.records[1].company
+        == "Nutrain (Pvt) Ltd."
+    )
+
+    assert (
+        experience_result.records[2].company
+        == "Shell Gas Station & Retail Store"
+    )
+
+    print()
+    print("ALL REGRESSION CHECKS PASSED")
+
+    print()
+    print("=" * 70)
+    print("TEST COMPLETE")
+    print("=" * 70)
+
+
+# ============================================================
+# PYTHON ENTRY POINT
+# ============================================================
 
 if __name__ == "__main__":
-    test_domain_extractor()
+    main()
+

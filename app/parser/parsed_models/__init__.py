@@ -1,10 +1,15 @@
 from .resume import Resume
+from .resume_section import ResumeSection
+from .actions import ActionParserModel
+from .skills import SkillParserModel
 from .personal_information import PersonalInformation
+from .target import TargetParserModel
 from .experience import Experience
 from .education import Education
-from ...intelligence.utilities.knowledge.knowledge_extractor_models.certification_models import Certification
+from .certification import CertificationParserModel
+from .standard import StandardParserModel
+from .businesskpi import BusinessKPIParserModel
 from .project import Project
-from ...intelligence.utilities.knowledge.knowledge_extractor_models.skill_models import Skill
 from .language import Language
 from .award import Award
 from .publication import Publication
@@ -13,23 +18,28 @@ from .membership import Membership
 from .reference import Reference
 from .industry import Industry
 from .seniority import Seniority
-from ...intelligence.utilities.knowledge.knowledge_extractor_models.technology_models import Technology
+from .technology import TechnologyParserModel
 
 __all__ = [
     "Resume",
     "PersonalInformation",
     "Experience",
     "Education",
-    "Certification",
+    "CertificationParserModel",
+    "StandardParserModel",
+    "BusinessKPIParserModel",
     "Project",
-    "Skill",
+    "SkillParserModel",
+    "ActionParserModel",
     "Language",
     "Award",
     "Publication",
     "Achievement",
     "Membership",
     "Reference",
-    "Technology",
+    "TechnologyParserModel",
     "Industry",
     "Seniority",
+    "TargetParserModel",
+    "ResumeSection",
 ]

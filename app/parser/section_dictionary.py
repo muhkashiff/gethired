@@ -2,14 +2,21 @@
 GetHired
 Section Dictionary
 
-Contains all supported resume section names.
+Enterprise V5
+
+Canonical resume section names and their supported aliases.
+
+The SectionDetector uses this dictionary only to identify
+resume section boundaries.
+
+It does NOT interpret the content of a section.
 """
 
 SECTION_HEADERS = {
 
-    # ---------------------------------------------------------
+    # =========================================================
     # SUMMARY
-    # ---------------------------------------------------------
+    # =========================================================
 
     "summary": [
 
@@ -25,9 +32,9 @@ SECTION_HEADERS = {
         "CAREER OBJECTIVE",
     ],
 
-    # ---------------------------------------------------------
+    # =========================================================
     # SKILLS
-    # ---------------------------------------------------------
+    # =========================================================
 
     "skills": [
 
@@ -39,30 +46,13 @@ SECTION_HEADERS = {
         "COMPETENCIES",
         "AREAS OF EXPERTISE",
         "TECHNICAL EXPERTISE",
-        "CORE LEADERSHIP COMPETENCIES",
 
+        "CORE LEADERSHIP COMPETENCIES",
         "LEADERSHIP COMPETENCIES",
 
         "TECHNOLOGY",
-
         "TECHNOLOGIES",
 
-        "TECHNICAL PROFICIENCIES",
-
-        "TOOLS",
-
-        "SOFTWARE",
-
-        "SOFTWARE SKILLS",
-
-        "COMPUTER SKILLS",
-        "CORE LEADERSHIP COMPETENCIES",
-        "LEADERSHIP COMPETENCIES",
-        "CORE COMPETENCIES",
-        "CORE SKILLS",
-        "TECHNOLOGY",
-        "TECHNOLOGIES",
-        "TECHNICAL SKILLS",
         "TECHNICAL PROFICIENCIES",
         "TOOLS",
         "SOFTWARE",
@@ -70,9 +60,9 @@ SECTION_HEADERS = {
         "COMPUTER SKILLS",
     ],
 
-    # ---------------------------------------------------------
+    # =========================================================
     # EXPERIENCE
-    # ---------------------------------------------------------
+    # =========================================================
 
     "experience": [
 
@@ -85,9 +75,9 @@ SECTION_HEADERS = {
         "WORK HISTORY",
     ],
 
-    # ---------------------------------------------------------
+    # =========================================================
     # EDUCATION
-    # ---------------------------------------------------------
+    # =========================================================
 
     "education": [
 
@@ -95,96 +85,86 @@ SECTION_HEADERS = {
         "ACADEMIC BACKGROUND",
         "ACADEMIC QUALIFICATIONS",
         "EDUCATIONAL QUALIFICATIONS",
-        "QUALIFICATIONS",
     ],
 
-    # ---------------------------------------------------------
-    # CERTIFICATIONS
-    # ---------------------------------------------------------
+    # =========================================================
+    # CERTIFICATIONS / TRAINING
+    # =========================================================
 
     "certifications": [
-        "PROFESSIONAL CERTIFICATES",
-        "LICENSES & CERTIFICATIONS",
-        "TRAINING & CERTIFICATIONS",
+
         "CERTIFICATIONS",
         "CERTIFICATES",
-        "LICENSES",
-        "ACCREDITATIONS",
-        "PROFESSIONAL CERTIFICATIONS",
-        "PROFESSIONAL CERTIFICATIONS ACCREDITATIONS",
-        "PROFESSIONAL CERTIFICATIONS & ACCREDITATIONS",
-        "TRAINING",
-        "TRAININGS",
-        "COURSES",
         "PROFESSIONAL CERTIFICATIONS",
         "PROFESSIONAL CERTIFICATES",
-        "PROFESSIONAL CERTIFICATIONS & ACCREDITATIONS",
+
+        "LICENSES",
         "LICENSES & CERTIFICATIONS",
+
+        "ACCREDITATIONS",
+
+        "PROFESSIONAL CERTIFICATIONS ACCREDITATIONS",
+        "PROFESSIONAL CERTIFICATIONS & ACCREDITATIONS",
+
+        "TRAINING",
+        "TRAININGS",
         "TRAINING & CERTIFICATIONS",
+
+        "COURSES",
     ],
 
-    # ---------------------------------------------------------
+    # =========================================================
     # PROJECTS
-    # ---------------------------------------------------------
+    # =========================================================
 
     "projects": [
 
         "PROJECTS",
-
         "KEY PROJECTS",
-
         "PROJECT EXPERIENCE",
     ],
 
-    # ---------------------------------------------------------
-    # AWARDS
-    # ---------------------------------------------------------
+    # =========================================================
+    # AWARDS / RECOGNITION
+    # =========================================================
 
     "awards": [
 
         "AWARDS",
-
         "HONOURS",
-
         "HONORS",
-
         "ACHIEVEMENTS",
-
         "RECOGNITION",
     ],
 
-    # ---------------------------------------------------------
-    # PUBLICATIONS
-    # ---------------------------------------------------------
+    # =========================================================
+    # PUBLICATIONS / RESEARCH
+    # =========================================================
 
     "publications": [
 
         "PUBLICATIONS",
-
         "RESEARCH",
-
         "PAPERS",
     ],
 
-    # ---------------------------------------------------------
+    # =========================================================
     # LANGUAGES
-    # ---------------------------------------------------------
+    # =========================================================
 
     "languages": [
 
         "LANGUAGES",
-
         "LANGUAGE",
     ],
 
-    # ---------------------------------------------------------
+    # =========================================================
     # REFERENCES
-    # ---------------------------------------------------------
+    # =========================================================
 
     "references": [
 
         "REFERENCES",
-
         "REFEREES",
     ],
 }

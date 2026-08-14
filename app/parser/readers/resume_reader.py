@@ -1,26 +1,33 @@
 """
 GetHired
 
-Production Resume Reader
+Enterprise V5 Resume Reader
 
-Reads DOCX resumes while preserving the
-original document order.
+Reads DOCX resumes while preserving:
 
-Supports
+- document order
+- paragraphs
+- tables
+- nested tables
+- source position
+- block type
 
-✓ Paragraphs
-✓ Tables
-✓ Nested Tables
+Canonical input format:
+    DOCX
 
-Future
+Canonical output:
+    ResumeBlock[]
 
-□ Headers
-□ Footers
-□ Text Boxes
-□ Shapes
+The reader does NOT perform semantic extraction.
+
+Its responsibility is document ingestion only.
 """
 
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Iterator, Optional
 
 from docx import Document
 from docx.document import Document as DocxDocument
@@ -31,106 +38,313 @@ from docx.oxml.text.paragraph import CT_P
 from docx.oxml.table import CT_Tbl
 
 
+# ================================================================
+# RESUME BLOCK
+# ================================================================
+
+
+@dataclass
+class ResumeBlock:
+
+    # ------------------------------------------------------------
+    # POSITION
+    # ------------------------------------------------------------
+
+    index: int = -1
+
+    # ------------------------------------------------------------
+    # CONTENT
+    # ------------------------------------------------------------
+
+    text: str = ""
+
+    # ------------------------------------------------------------
+    # STRUCTURE
+    # ------------------------------------------------------------
+
+    block_type: str = "paragraph"
+
+    section: str = "header"
+
+    # ------------------------------------------------------------
+    # DOCUMENT LOCATION
+    # ------------------------------------------------------------
+
+    paragraph_index: int = -1
+
+    table_index: int = -1
+
+    row_index: int = -1
+
+    cell_index: int = -1
+
+    parent_block_index: int = -1
+
+    # ------------------------------------------------------------
+    # SOURCE
+    # ------------------------------------------------------------
+
+    source: str = "docx"
+
+    metadata: dict = field(
+        default_factory=dict
+    )
+
+    @property
+    def is_paragraph(self) -> bool:
+
+        return self.block_type == "paragraph"
+
+    @property
+    def is_table(self) -> bool:
+
+        return self.block_type == "table"
+
+    def __repr__(self) -> str:
+
+        return (
+            "ResumeBlock("
+            f"index={self.index!r}, "
+            f"text={self.text!r}, "
+            f"block_type={self.block_type!r}, "
+            f"section={self.section!r}, "
+            f"paragraph_index={self.paragraph_index!r}, "
+            f"table_index={self.table_index!r}, "
+            f"row_index={self.row_index!r}, "
+            f"cell_index={self.cell_index!r}"
+            ")"
+        )
+
+
+# ================================================================
+# RESUME READER
+# ================================================================
+
+
 class ResumeReader:
+
+    """
+    Enterprise DOCX reader.
+
+    Important:
+
+    This class only reads the document.
+
+    It does NOT:
+
+    - detect entities
+    - detect ontology
+    - analyze skills
+    - analyze leadership
+    - score candidates
+    - analyze JD matching
+    """
+
+    # ============================================================
+    # INITIALIZATION
+    # ============================================================
 
     def __init__(self):
 
         pass
 
-    # =====================================================
+    # ============================================================
     # PUBLIC
-    # =====================================================
+    # ============================================================
 
-    def read(self, file_path):
+    def read(
+        self,
+        file_path,
+    ) -> list[ResumeBlock]:
 
-        document = Document(Path(file_path))
+        document = Document(
+            Path(file_path)
+        )
 
-        lines = []
+        blocks = []
+
+        paragraph_index = 0
+        table_index = 0
 
         for block in self.iter_block_items(document):
 
-            # --------------------------
-            # Paragraph
-            # --------------------------
+            # ----------------------------------------------------
+            # PARAGRAPH
+            # ----------------------------------------------------
 
-            if isinstance(block, Paragraph):
+            if isinstance(
+                block,
+                Paragraph,
+            ):
 
                 text = block.text.strip()
 
-                if text:
-                    lines.append(text)
+                if not text:
+                    continue
 
-            # --------------------------
-            # Table
-            # --------------------------
-
-            elif isinstance(block, Table):
-
-                lines.extend(
-                    self.read_table(block)
+                blocks.append(
+                    ResumeBlock(
+                        index=len(blocks),
+                        text=text,
+                        block_type="paragraph",
+                        paragraph_index=paragraph_index,
+                    )
                 )
 
-        return lines
+                paragraph_index += 1
 
-    # =====================================================
+            # ----------------------------------------------------
+            # TABLE
+            # ----------------------------------------------------
+
+            elif isinstance(
+                block,
+                Table,
+            ):
+
+                table_blocks = self.read_table(
+                    block,
+                    table_index=table_index,
+                    parent_block_index=len(blocks),
+                )
+
+                blocks.extend(
+                    table_blocks
+                )
+
+                table_index += 1
+
+        # --------------------------------------------------------
+        # Re-index after all blocks have been collected
+        # --------------------------------------------------------
+
+        for index, block in enumerate(blocks):
+
+            block.index = index
+
+        return blocks
+
+    # ============================================================
     # READ TABLE
-    # =====================================================
+    # ============================================================
 
-    def read_table(self, table):
+    def read_table(
+        self,
+        table,
+        table_index: int = -1,
+        parent_block_index: int = -1,
+    ) -> list[ResumeBlock]:
 
-        lines = []
+        blocks = []
 
-        for row in table.rows:
+        for row_index, row in enumerate(
+            table.rows
+        ):
 
-            for cell in row.cells:
+            for cell_index, cell in enumerate(
+                row.cells
+            ):
 
-                lines.extend(
-                    self.read_cell(cell)
+                cell_blocks = self.read_cell(
+                    cell,
+                    table_index=table_index,
+                    row_index=row_index,
+                    cell_index=cell_index,
+                    parent_block_index=parent_block_index,
                 )
 
-        return lines
+                blocks.extend(
+                    cell_blocks
+                )
 
-    # =====================================================
+        return blocks
+
+    # ============================================================
     # READ CELL
-    # =====================================================
+    # ============================================================
 
-    def read_cell(self, cell):
+    def read_cell(
+        self,
+        cell,
+        table_index: int = -1,
+        row_index: int = -1,
+        cell_index: int = -1,
+        parent_block_index: int = -1,
+    ) -> list[ResumeBlock]:
 
-        lines = []
+        blocks = []
 
-        for block in self.iter_block_items(cell):
+        for block in self.iter_block_items(
+            cell
+        ):
 
-            if isinstance(block, Paragraph):
+            # ----------------------------------------------------
+            # PARAGRAPH
+            # ----------------------------------------------------
+
+            if isinstance(
+                block,
+                Paragraph,
+            ):
 
                 text = block.text.strip()
 
-                if text:
+                if not text:
+                    continue
 
-                    lines.append(text)
-
-            elif isinstance(block, Table):
-
-                lines.extend(
-                    self.read_table(block)
+                blocks.append(
+                    ResumeBlock(
+                        index=-1,
+                        text=text,
+                        block_type="table_cell_paragraph",
+                        table_index=table_index,
+                        row_index=row_index,
+                        cell_index=cell_index,
+                        parent_block_index=parent_block_index,
+                    )
                 )
 
-        return lines
+            # ----------------------------------------------------
+            # NESTED TABLE
+            # ----------------------------------------------------
 
-    # =====================================================
+            elif isinstance(
+                block,
+                Table,
+            ):
+
+                blocks.extend(
+                    self.read_table(
+                        block,
+                        table_index=table_index,
+                        parent_block_index=parent_block_index,
+                    )
+                )
+
+        return blocks
+
+    # ============================================================
     # ITERATE DOCUMENT IN ORDER
-    # =====================================================
+    # ============================================================
 
-    def iter_block_items(self, parent):
-        """
-        Yield Paragraph and Table objects
-        in the order they appear inside Word.
-        """
+    def iter_block_items(
+        self,
+        parent,
+    ) -> Iterator:
 
-        if isinstance(parent, DocxDocument):
+        if isinstance(
+            parent,
+            DocxDocument,
+        ):
 
-            parent_element = parent.element.body
+            parent_element = (
+                parent.element.body
+            )
 
-        elif isinstance(parent, _Cell):
+        elif isinstance(
+            parent,
+            _Cell,
+        ):
 
             parent_element = parent._tc
 
@@ -142,10 +356,22 @@ class ResumeReader:
 
         for child in parent_element.iterchildren():
 
-            if isinstance(child, CT_P):
+            if isinstance(
+                child,
+                CT_P,
+            ):
 
-                yield Paragraph(child, parent)
+                yield Paragraph(
+                    child,
+                    parent,
+                )
 
-            elif isinstance(child, CT_Tbl):
+            elif isinstance(
+                child,
+                CT_Tbl,
+            ):
 
-                yield Table(child, parent)
+                yield Table(
+                    child,
+                    parent,
+                )

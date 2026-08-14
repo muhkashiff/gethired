@@ -86,3 +86,4 @@ class KnowledgeParser:
     ) -> KnowledgeDocument:
 
         return self.parse(text)
+    

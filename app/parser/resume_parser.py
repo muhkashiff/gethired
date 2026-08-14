@@ -1,61 +1,97 @@
-"""
-GetHired Resume Parser
 
-Reads DOCX resumes and detects logical resume sections.
+"""
+GetHired
+
+Enterprise V5 Resume Parser
+
+Pipeline
+--------
+DOCX
+ ↓
+ResumeReader
+ ↓
+SectionDetector
+ ↓
+ResumeSection objects
 """
 
-from pathlib import Path
+from __future__ import annotations
+
 from .readers import ResumeReader
-
 from .section_detector import SectionDetector
 
 
 class ResumeParser:
-    """
-    Production Resume Parser
 
-    Stateless parser:
-    parser = ResumeParser()
-    sections = parser.parse("resume.docx")
-    """
+    # ==========================================================
+    # INITIALIZATION
+    # ==========================================================
 
     def __init__(self):
 
-        self.detector = SectionDetector()
         self.reader = ResumeReader()
+
+        self.detector = SectionDetector()
+
     # ==========================================================
-    # Read DOCX Paragraphs
+    # READ BLOCKS
+    # ==========================================================
+
+    def blocks(self, file_path):
+
+        return self.reader.read(
+            file_path
+        )
+
+    # ==========================================================
+    # PARAGRAPHS
     # ==========================================================
 
     def paragraphs(self, file_path):
 
-        return self.reader.read(file_path)
+        return self.blocks(
+            file_path
+        )
 
     # ==========================================================
-    # Complete Resume Text
+    # FULL TEXT
     # ==========================================================
 
     def full_text(self, file_path):
 
+        blocks = self.blocks(
+            file_path
+        )
+
         return "\n".join(
-            self.paragraphs(file_path)
+
+            block.text
+            if hasattr(block, "text")
+            else str(block)
+
+            for block in blocks
         )
 
     # ==========================================================
-    # Detect Resume Sections
+    # SECTION PARSING
     # ==========================================================
 
     def parse(self, file_path):
 
-        paragraphs = self.paragraphs(file_path)
+        blocks = self.blocks(
+            file_path
+        )
 
         return self.detector.detect(
-            paragraphs
+            blocks
         )
+
     # ==========================================================
-    # Alias
+    # ALIAS
     # ==========================================================
 
     def sections(self, file_path):
 
-        return self.parse(file_path)
+        return self.parse(
+            file_path
+        )

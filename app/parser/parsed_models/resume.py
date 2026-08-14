@@ -1,46 +1,126 @@
-from dataclasses import dataclass, field
+
+"""
+GetHired
+
+Enterprise V5 Resume Model
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field as dc_field
+from typing import Any
 
 from .personal_information import PersonalInformation
-from .experience import Experience
-from .education import Education
-from ...intelligence.utilities.knowledge.knowledge_extractor_models.certification_models import Certification
-from .project import Project
-from .language import Language
-from .award import Award
-from .publication import Publication
-from .achievement import Achievement
-from .membership import Membership
-from .reference import Reference
-from ...intelligence.utilities.knowledge.knowledge_extractor_models.skill_models import Skill
-
+from .resume_section import ResumeSection
 
 
 @dataclass
 class Resume:
 
-    personal_information: PersonalInformation = field(default_factory=PersonalInformation)
+    # ============================================================
+    # PERSONAL INFORMATION
+    # ============================================================
+
+    personal_information: PersonalInformation = dc_field(
+        default_factory=PersonalInformation
+    )
+
+    # ============================================================
+    # SUMMARY
+    # ============================================================
 
     summary: str = ""
 
-    skills: list[Skill] = field(default_factory=list)
+    # ============================================================
+    # STRUCTURED SECTIONS
+    # ============================================================
 
-    experience: list[Experience] = field(default_factory=list)
+    skills: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    education: list[Education] = field(default_factory=list)
+    experience: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    certifications: list[Certification] = field(default_factory=list)
+    education: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    projects: list[Project] = field(default_factory=list)
+    certifications: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    awards: list[Award] = field(default_factory=list)
+    projects: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    achievements: list[Achievement] = field(default_factory=list)
+    awards: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    memberships: list[Membership] = field(default_factory=list)
+    languages: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    publications: list[Publication] = field(default_factory=list)
+    references: list[Any] = dc_field(
+        default_factory=list
+    )
 
-    languages: list[Language] = field(default_factory=list)
+    # ============================================================
+    # SOURCE
+    # ============================================================
 
-    references: list[Reference] = field(default_factory=list)
+    source_file: str = ""
+
+    source_format: str = "docx"
+
+    raw_blocks: list[Any] = dc_field(
+        default_factory=list
+    )
+
+    # ============================================================
+    # PARSER SECTIONS
+    # ============================================================
+
+    sections: dict[str, ResumeSection] = dc_field(
+        default_factory=dict
+    )
+
+    # ============================================================
+    # METADATA
+    # ============================================================
+
+    metadata: dict[str, Any] = dc_field(
+        default_factory=dict
+    )
+
+    # ============================================================
+    # CONVENIENCE
+    # ============================================================
+
+    @property
+    def full_text(self) -> str:
+
+        return "\n".join(
+
+            block.text
+            if hasattr(block, "text")
+            else str(block)
+
+            for block in self.raw_blocks
+        )
+
+    # ============================================================
+    # SECTION ACCESS
+    # ============================================================
+
+    def get_section(
+        self,
+        name: str,
+    ) -> ResumeSection | None:
+
+        return self.sections.get(
+            name
+        )
 

@@ -1,4 +1,4 @@
-from app.parser.normalize import normalize_heading
+from app.parser.resume_normalizer import normalize_heading
 from app.parser.section_dictionary import SECTION_HEADERS
 
 heading = "PROFESSIONAL CERTIFICATIONS & ACCREDITATIONS"
