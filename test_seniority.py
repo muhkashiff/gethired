@@ -1,4 +1,4 @@
-from app.parser.extractors.non_ontology_extractors.seniority_detector import SeniorityDetector
+from app.intelligence.enrichment.seniority_detector import SeniorityDetector
 
 detector = SeniorityDetector()
 

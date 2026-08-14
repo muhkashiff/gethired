@@ -1,4 +1,4 @@
-from app.parser.extractors.non_ontology_extractors.industry_detector import IndustryDetector
+from app.intelligence.enrichment.industry_detector import IndustryDetector
 
 detector = IndustryDetector()
 

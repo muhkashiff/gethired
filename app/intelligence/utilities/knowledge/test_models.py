@@ -28,347 +28,726 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-# ============================================================
-# IMPORTS
-# ============================================================
+"""
+Enterprise V5
+Resume Intelligence Enrichment Test
 
-from app.parser.parsed_models.resume_section import (
-    ResumeSection,
+Tests:
+
+1. Experience enrichment
+2. Seniority detection
+3. Domain detection
+4. Leadership detection
+5. Achievement intelligence
+6. Education enrichment
+7. Industry enrichment
+8. Complete enrichment pipeline
+"""
+
+
+from dataclasses import dataclass, field
+
+from app.intelligence.enrichment.experience_enricher import (
+    ExperienceEnricher,
 )
 
-from app.parser.section_extraction_adapter import (
-    SectionExtractionAdapter,
+from app.intelligence.enrichment.resume_enrichment_pipeline import (
+    ResumeEnrichmentPipeline,
 )
 
 
-# ============================================================
-# MAIN TEST
-# ============================================================
+# ======================================================================
+# TEST MODELS
+# ======================================================================
 
-def main():
 
-    print("=" * 70)
-    print("ENTERPRISE V5 — SECTION EXTRACTION ADAPTER TEST")
-    print("=" * 70)
+@dataclass
+class TestExperience:
 
-    # ========================================================
-    # EDUCATION SECTION
-    # ========================================================
+    title: str = ""
 
-    education_section = ResumeSection(
-        name="education",
-        title="Education",
-        items=[
-            (
-                "Bootcamp Certificate: Data Analytics"
-                "\t\t"
-                "University of Toronto, ON, Canada"
+    company: str = ""
+
+    location: str = ""
+
+    start_year: int = 0
+
+    end_year: int = 0
+
+    current_job: bool = False
+
+    duration: float = 0.0
+
+    responsibilities: list[str] = field(
+        default_factory=list
+    )
+
+    achievements: list[str] = field(
+        default_factory=list
+    )
+
+
+@dataclass
+class TestEducation:
+
+    degree: str = ""
+
+    major: str = ""
+
+    institution: str = ""
+
+    description: str = ""
+
+    location: str = ""
+
+    graduation_year: int = 0
+
+    level: str = ""
+
+    keywords: list[str] = field(
+        default_factory=list
+    )
+
+
+@dataclass
+class TestResume:
+
+    name: str = ""
+
+    summary: str = ""
+
+    experience: list[TestExperience] = field(
+        default_factory=list
+    )
+
+    education: list[TestEducation] = field(
+        default_factory=list
+    )
+
+
+# ======================================================================
+# REALISTIC RESUME DATA
+# ======================================================================
+
+
+def build_test_resume():
+
+    return TestResume(
+
+        name="MUHAMMAD KASHIF",
+
+        summary=(
+            "Quality Assurance Specialist, Business "
+            "Operations Leader and Data Analyst with "
+            "15+ years of experience."
+        ),
+
+        experience=[
+
+            # ----------------------------------------------------------
+            # QA CHEMIST
+            # ----------------------------------------------------------
+
+            TestExperience(
+
+                title="QA Chemist",
+
+                company=(
+                    "Coca-Cola Beverages Pakistan Ltd."
+                ),
+
+                location=(
+                    "Lahore, Pakistan"
+                ),
+
+                start_year=2010,
+
+                end_year=2016,
+
+                duration=6,
+
+                responsibilities=[
+
+                    "Spearheaded the site-wide "
+                    "implementation of the integrated "
+                    "Quality and Food Safety Management "
+                    "System.",
+
+                    "Oversaw laboratory and floor product "
+                    "inspections and finished product release.",
+
+                    "Led cross-functional teams at the "
+                    "contract Toll Filling facility.",
+
+                    "Drove continuous process improvement "
+                    "to minimize raw material waste and "
+                    "machinery downtime.",
+
+                    "Led site-wide HACCP governance across "
+                    "CSD and NCB operations.",
+                ],
+
+                achievements=[
+
+                    "Achieved 99%+ production line product yield.",
+
+                    "Sustained a 99.5% plant-wide quality rating.",
+
+                    "Achieved 98.6% staff participation in "
+                    "Food Safety and Quality Training programs.",
+                ],
             ),
 
-            (
-                "Completed a Data Analytics Certificate from "
-                "the University of Toronto, gaining practical "
-                "experience in Python, data visualization, "
-                "machine learning, and data-driven "
-                "decision-making. Skilled in analyzing complex "
-                "datasets, uncovering actionable insights, and "
-                "communicating findings through effective data "
-                "storytelling."
+            # ----------------------------------------------------------
+            # MANAGING DIRECTOR
+            # ----------------------------------------------------------
+
+            TestExperience(
+
+                title="Managing Director",
+
+                company="Nutrain (Pvt) Ltd.",
+
+                location="Lahore, Pakistan",
+
+                start_year=2025,
+
+                end_year=2026,
+
+                duration=1,
+
+                responsibilities=[
+
+                    "Led the strategic growth and day-to-day "
+                    "operations of a food and FMCG business.",
+
+                    "Directed sales, marketing, procurement, "
+                    "inventory management, supply chain "
+                    "operations, distribution and financial "
+                    "performance.",
+
+                    "Developed and expanded the USVA Premium "
+                    "Basmati Rice brand.",
+
+                    "Managed wholesalers, retailers, "
+                    "distributors and key accounts.",
+
+                    "Oversaw budgeting, forecasting and "
+                    "operational performance.",
+                ],
+
+                achievements=[
+
+                    "Successfully expanded distribution "
+                    "channels and increased sales.",
+
+                    "Improved supply chain efficiency and "
+                    "profitability through supplier negotiations.",
+
+                    "Established strong wholesale and retail "
+                    "partnerships.",
+                ],
             ),
 
-            (
-                "Post Graduation Diploma: Business Administration"
-                "\t\t"
-                "Selkirk College, BC, Canada"
+            # ----------------------------------------------------------
+            # RETAIL STORE MANAGER
+            # ----------------------------------------------------------
+
+            TestExperience(
+
+                title="Retail Store Manager",
+
+                company=(
+                    "Shell Gas Station & Retail Store"
+                ),
+
+                location="Canada",
+
+                start_year=2016,
+
+                end_year=2024,
+
+                duration=8,
+
+                responsibilities=[
+
+                    "Managed multi-faceted retail business "
+                    "operations.",
+
+                    "Governed vendor management, inventory "
+                    "cycle counts and merchandise ordering.",
+
+                    "Directed talent acquisition, staff "
+                    "onboarding and shift scheduling.",
+
+                    "Optimized operations to maximize "
+                    "product turnover.",
+                ],
+
+                achievements=[
+
+                    "Obtained a perfect 100% Shell Mystery "
+                    "Shopper score.",
+
+                    "Achieved a flawless 100% Food Safety "
+                    "Surprise Audit score.",
+
+                    "Performed KPI reporting and performance "
+                    "tracking to drive retail profitability.",
+                ],
+            ),
+        ],
+
+        education=[
+
+            TestEducation(
+                degree=(
+                    "Bootcamp Certificate: Data Analytics"
+                ),
+                institution="University of Toronto",
+                location="ON, Canada",
+                level="certificate",
+                description=(
+                    "Python, data visualization, "
+                    "machine learning and data analytics."
+                ),
+                keywords=[
+                    "data analytics"
+                ],
             ),
 
-            (
-                "A comprehensive 2-year business management "
-                "program with a core focus on Accounting, "
-                "Economics, Business Mathematics, Leadership, "
-                "Communication Skills, and Market Strategy."
+            TestEducation(
+                degree=(
+                    "Post Graduation Diploma: "
+                    "Business Administration"
+                ),
+                institution="Selkirk College",
+                location="BC, Canada",
+                level="diploma",
+                description=(
+                    "Accounting, Economics, Business "
+                    "Mathematics, Leadership and "
+                    "Market Strategy."
+                ),
+                keywords=[
+                    "business administration"
+                ],
             ),
 
-            (
-                "M.Sc. Chemistry (Organic Chemistry Major)"
-                "\t\t"
-                "University of the Punjab, Pakistan"
-            ),
-
-            (
-                "Four-year Bachelor's degree academic "
-                "equivalency verified by WES. 16 years of "
-                "formalized higher education with an advanced "
-                "thesis and curriculum focusing on Organic "
-                "Chemistry and laboratory methodologies."
+            TestEducation(
+                degree="M.Sc. Chemistry",
+                major="Organic Chemistry",
+                institution="University of the Punjab",
+                location="Pakistan",
+                level="master",
+                description=(
+                    "Advanced thesis and curriculum "
+                    "focusing on Organic Chemistry "
+                    "and laboratory methodologies."
+                ),
+                keywords=[
+                    "chemistry",
+                    "organic chemistry",
+                ],
             ),
         ],
     )
 
-    # ========================================================
-    # EXPERIENCE SECTION
-    # ========================================================
 
-    experience_section = ResumeSection(
-        name="experience",
-        title="Experience",
-        items=[
-            (
-                "QA Chemist | Coca-Cola Beverages Pakistan Ltd. "
-                "2010 - 2016 | Lahore, Pakistan"
-            ),
+# ======================================================================
+# TEST 1
+# ======================================================================
 
-            (
-                "Spearheaded the site-wide implementation, "
-                "execution, and regulatory compliance of the "
-                "integrated Quality and Food Safety Management "
-                "System (QMS)."
-            ),
 
-            (
-                "Oversaw strict laboratory and floor product "
-                "inspections, meticulously executing and "
-                "governing the finished product release program "
-                "based on established quality criteria."
-            ),
+def test_experience_enricher():
 
-            "Key Accomplishments",
+    resume = build_test_resume()
 
-            (
-                "Achieved a remarkable 99%+ production line "
-                "product yield through targeted waste reduction "
-                "and down-time minimization initiatives."
-            ),
+    enricher = ExperienceEnricher()
 
-            (
-                "Managing Director | Nutrain (Pvt) Ltd. "
-                "2025 - 2026 | Lahore, Pakistan"
-            ),
-
-            (
-                "Led the strategic growth and day-to-day "
-                "operations of a food and FMCG business "
-                "specializing in premium rice, edible oils, "
-                "ghee, juices, and other consumer products."
-            ),
-
-            (
-                "Directed sales, marketing, procurement, "
-                "inventory management, supply chain operations, "
-                "distribution, and financial performance."
-            ),
-
-            "Key Accomplishments",
-
-            (
-                "Successfully expanded distribution channels "
-                "and increased sales through market development "
-                "and customer-focused initiatives."
-            ),
-
-            (
-                "Retail Store Manager | Shell Gas Station & "
-                "Retail Store 2016 - 2024 | Canada"
-            ),
-
-            (
-                "Managed multi-faceted retail business "
-                "operations by forecasting and meeting evolving "
-                "consumer needs using predictive demand "
-                "parameters."
-            ),
-
-            (
-                "Governed comprehensive vendor management, "
-                "inventory cycle counts, merchandise ordering, "
-                "and financial cash flow optimization."
-            ),
-
-            "Key Accomplishments",
-
-            (
-                "Obtained a perfect 100% score for the highly "
-                "regulated corporate Shell Mystery Shopper "
-                "program."
-            ),
-        ],
+    result = enricher.enrich(
+        resume.experience
     )
 
-    # ========================================================
-    # ADAPTER
-    # ========================================================
+    assert result.success is True
 
-    adapter = SectionExtractionAdapter()
-
-    # ========================================================
-    # EXTRACT
-    # ========================================================
-
-    education_result = adapter.extract_education(
-        education_section
-    )
-
-    experience_result = adapter.extract_experience(
-        experience_section
-    )
-
-    # ========================================================
-    # EDUCATION OUTPUT
-    # ========================================================
+    assert len(
+        result.records
+    ) == 3
 
     print()
     print("=" * 70)
-    print("EDUCATION")
+    print("TEST 1 — EXPERIENCE ENRICHER")
     print("=" * 70)
 
-    print(
-        "Success     :",
-        education_result.success,
-    )
+    for item in result.records:
 
-    print(
-        "Count       :",
-        education_result.count,
-    )
-
-    print(
-        "Confidence  :",
-        education_result.confidence,
-    )
-
-    print("-" * 70)
-
-    for index, education in enumerate(
-        education_result.records,
-        start=1,
-    ):
-
+        print()
         print(
-            f"\n[EDUCATION {index}]"
+            f"Title       : {item.title}"
         )
 
         print(
-            education
-        )
-
-    # ========================================================
-    # EXPERIENCE OUTPUT
-    # ========================================================
-
-    print()
-    print("=" * 70)
-    print("EXPERIENCE")
-    print("=" * 70)
-
-    print(
-        "Success     :",
-        experience_result.success,
-    )
-
-    print(
-        "Count       :",
-        experience_result.count,
-    )
-
-    print(
-        "Confidence  :",
-        experience_result.confidence,
-    )
-
-    print("-" * 70)
-
-    for index, experience in enumerate(
-        experience_result.records,
-        start=1,
-    ):
-
-        print(
-            f"\n[EXPERIENCE {index}]"
+            f"Company     : {item.company}"
         )
 
         print(
-            experience
+            f"Seniority   : {item.seniority}"
         )
 
-    # ========================================================
-    # REGRESSION CHECKS
-    # ========================================================
+        print(
+            f"Domains     : {item.domains}"
+        )
+
+        print(
+            f"Functions   : {item.functional_areas}"
+        )
+
+        print(
+            f"Leadership  : {item.leadership_score}"
+        )
+
+        print(
+            f"Business    : {item.business_score}"
+        )
+
+        print(
+            f"Achievements: {len(item.achievements)}"
+        )
+
+        print(
+            f"Confidence  : {item.confidence}"
+        )
+
+
+# ======================================================================
+# TEST 2
+# ======================================================================
+
+
+def test_expected_seniority():
+
+    resume = build_test_resume()
+
+    result = ExperienceEnricher().enrich(
+        resume.experience
+    )
+
+    seniorities = [
+        item.seniority
+        for item in result.records
+    ]
 
     print()
     print("=" * 70)
-    print("REGRESSION CHECKS")
+    print("TEST 2 — SENIORITY")
     print("=" * 70)
 
-    assert education_result.success is True
-
-    assert education_result.count == 3, (
-        "Education regression failure: "
-        f"expected 3, got {education_result.count}"
+    print(
+        "Actual:",
+        seniorities,
     )
 
-    assert experience_result.success is True
+    assert seniorities[0] in {
+        "Professional",
+        "Senior Professional",
+    }
 
-    assert experience_result.count == 3, (
-        "Experience regression failure: "
-        f"expected 3, got {experience_result.count}"
+    assert seniorities[1] == "Executive"
+
+    assert seniorities[2] == "Manager"
+
+    print(
+        "PASS — Experience seniority detection"
     )
 
-    # --------------------------------------------------------
-    # Education identity checks
-    # --------------------------------------------------------
 
-    assert (
-        education_result.records[0].institution
-        == "University of Toronto"
+# ======================================================================
+# TEST 3
+# ======================================================================
+
+
+def test_domains():
+
+    resume = build_test_resume()
+
+    result = ExperienceEnricher().enrich(
+        resume.experience
     )
 
-    assert (
-        education_result.records[1].institution
-        == "Selkirk College"
-    )
+    qa = result.records[0]
 
-    assert (
-        education_result.records[2].institution
-        == "University of the Punjab"
-    )
+    md = result.records[1]
 
-    assert (
-        education_result.records[2].major
-        == "Organic Chemistry"
-    )
-
-    # --------------------------------------------------------
-    # Experience identity checks
-    # --------------------------------------------------------
-
-    assert (
-        experience_result.records[0].company
-        == "Coca-Cola Beverages Pakistan Ltd."
-    )
-
-    assert (
-        experience_result.records[1].company
-        == "Nutrain (Pvt) Ltd."
-    )
-
-    assert (
-        experience_result.records[2].company
-        == "Shell Gas Station & Retail Store"
-    )
-
-    print()
-    print("ALL REGRESSION CHECKS PASSED")
+    retail = result.records[2]
 
     print()
     print("=" * 70)
-    print("TEST COMPLETE")
+    print("TEST 3 — DOMAIN DETECTION")
     print("=" * 70)
 
+    print(
+        "QA Chemist:",
+        qa.domains,
+    )
 
-# ============================================================
-# PYTHON ENTRY POINT
-# ============================================================
+    print(
+        "Managing Director:",
+        md.domains,
+    )
+
+    print(
+        "Retail Store Manager:",
+        retail.domains,
+    )
+
+    assert "quality" in qa.domains
+
+    assert "food_safety" in qa.domains
+
+    assert "manufacturing" in qa.domains
+
+    assert "business" in md.domains
+
+    assert "supply_chain" in md.domains
+
+    assert "retail" in retail.domains
+
+    print(
+        "PASS — Domain detection"
+    )
+
+
+# ======================================================================
+# TEST 4
+# ======================================================================
+
+
+def test_achievement_enrichment():
+
+    resume = build_test_resume()
+
+    result = ExperienceEnricher().enrich(
+        resume.experience
+    )
+
+    print()
+    print("=" * 70)
+    print("TEST 4 — ACHIEVEMENT INTELLIGENCE")
+    print("=" * 70)
+
+    for experience in result.records:
+
+        print()
+        print(
+            experience.title
+        )
+
+        for achievement in (
+            experience.achievements
+        ):
+
+            print(
+                f"  {achievement.text}"
+            )
+
+            print(
+                f"    quantified   = "
+                f"{achievement.quantified}"
+            )
+
+            print(
+                f"    business     = "
+                f"{achievement.business_impact}"
+            )
+
+            print(
+                f"    leadership   = "
+                f"{achievement.leadership}"
+            )
+
+            print(
+                f"    score        = "
+                f"{achievement.score}"
+            )
+
+    assert any(
+        item.quantified
+        for item in result.records[0].achievements
+    )
+
+    assert any(
+        item.quantified
+        for item in result.records[2].achievements
+    )
+
+    print(
+        "PASS — Achievement enrichment"
+    )
+
+
+# ======================================================================
+# TEST 5
+# ======================================================================
+
+
+def test_complete_pipeline():
+
+    resume = build_test_resume()
+
+    pipeline = ResumeEnrichmentPipeline()
+
+    result = pipeline.enrich(
+        resume
+    )
+
+    assert result.success is True
+
+    assert len(
+        result.experience
+    ) == 3
+
+    assert result.seniority.score > 0
+
+    assert result.education.score > 0
+
+    assert result.industry.confidence > 0
+
+    assert result.leadership.score > 0
+
+    assert result.achievements.score > 0
+
+    print()
+    print("=" * 70)
+    print("TEST 5 — COMPLETE RESUME ENRICHMENT PIPELINE")
+    print("=" * 70)
+
+    print(
+        f"Success           : {result.success}"
+    )
+
+    print(
+        f"Experience count   : "
+        f"{len(result.experience)}"
+    )
+
+    print(
+        f"Seniority score    : "
+        f"{result.seniority.score}"
+    )
+
+    print(
+        f"Education score    : "
+        f"{result.education.score}"
+    )
+
+    print(
+        f"Industry score     : "
+        f"{result.industry.score}"
+    )
+
+    print(
+        f"Leadership score   : "
+        f"{result.leadership.score}"
+    )
+
+    print(
+        f"Quality score      : "
+        f"{result.quality.score}"
+    )
+
+    print(
+        f"Operations score   : "
+        f"{result.operations.score}"
+    )
+
+    print(
+        f"Achievement score  : "
+        f"{result.achievements.score}"
+    )
+
+    print(
+        f"Overall score      : "
+        f"{result.overall_score}"
+    )
+
+    print(
+        f"Confidence         : "
+        f"{result.confidence}"
+    )
+
+    print()
+    print(
+        "STRENGTHS"
+    )
+
+    for item in result.experience:
+
+        print(
+            f"\n{item.title}"
+        )
+
+        for strength in item.strengths:
+
+            print(
+                f"  + {strength}"
+            )
+
+    print()
+    print(
+        "RECOMMENDATIONS"
+    )
+
+    for item in result.experience:
+
+        for recommendation in (
+            item.recommendations
+        ):
+
+            print(
+                f"  - {item.title}: "
+                f"{recommendation}"
+            )
+
+    print()
+    print(
+        "PASS — Complete enrichment pipeline"
+    )
+
+
+# ======================================================================
+# RUN ALL
+# ======================================================================
+
+
+def run_all_tests():
+
+    print()
+    print("=" * 70)
+    print(
+        "ENTERPRISE V5 — RESUME "
+        "INTELLIGENCE ENRICHMENT TEST"
+    )
+    print("=" * 70)
+
+    test_experience_enricher()
+
+    test_expected_seniority()
+
+    test_domains()
+
+    test_achievement_enrichment()
+
+    test_complete_pipeline()
+
+    print()
+    print("=" * 70)
+    print(
+        "ALL RESUME ENRICHMENT TESTS PASSED"
+    )
+    print("=" * 70)
+
 
 if __name__ == "__main__":
-    main()
 
+    run_all_tests()
