@@ -1420,34 +1420,6 @@
   "impact_weight": 1.0
 },
 
-"power_bi": {
-  "entity_id": "SKILL_POWER_BI",
-  "canonical": "Power BI",
-  "aliases": [
-    "Microsoft Power BI",
-    "PowerBI",
-    "BI reporting"
-  ],
-  "category": "data_analytics",
-  "business_area": "business_analytics",
-  "domain": "business_intelligence",
-  "skill_type": "technical",
-  "related_actions": [
-    "ACT_ANALYZE",
-    "ACT_REPORT",
-    "ACT_MONITOR"
-  ],
-  "related_targets": [
-    "TGT_DASHBOARD"
-  ],
-  "related_metrics": [
-    "KPI_DECISION_SPEED",
-    "KPI_REPORTING_ACCURACY",
-    "KPI_DATA_ACCURACY"
-  ],
-  "related_standards": [],
-  "impact_weight": 0.95
-},
 
 "preventive_controls": {
   "entity_id": "SKILL_PREVENTIVE_CONTROLS",

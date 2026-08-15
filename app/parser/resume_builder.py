@@ -1,110 +1,89 @@
-# Enterprise V5 — Universal ResumeBuilder
-
 """
 GetHired
+Enterprise V5
 
-Enterprise V5 Resume Builder
-============================
-
-Universal Resume Builder
-
-Converts the object-oriented ResumeParser output into
-the strongly typed Resume model.
+Universal ResumeBuilder
+=======================
 
 Architecture
 ------------
 
 DOCX
-    ↓
+    |
+    v
 ResumeReader
-    ↓
+    |
+    v
 ResumeBlock
-    ↓
+    |
+    v
 SectionDetector
-    ↓
+    |
+    v
 ResumeSection
-    ↓
+    |
+    v
 ResumeParser
-    ↓
+    |
+    v
 ResumeBuilder
-    ↓
+    |
+    v
 Resume
-    ↓
-Intelligence / Enrichment
-    ↓
-JD Matching
+    |
+    +----------------------------+
+    |                            |
+    v                            v
+Structural Resume          Knowledge V5
+                           |
+                           +--> tokenization
+                           +--> normalization
+                           +--> matching
+                           +--> confidence
+                           +--> overlap resolution
+                           +--> ranking
+                           +--> ontology entities
 
 
 IMPORTANT ARCHITECTURAL PRINCIPLE
 ----------------------------------
 
-ResumeBuilder is a structural normalization boundary.
+ResumeBuilder is a STRUCTURAL boundary.
 
-The parser is responsible for:
-
-    DOCX -> ResumeBlock -> ResumeSection
-
-The builder is responsible for:
+ResumeBuilder is responsible for:
 
     ResumeSection
-        ↓
-    universal structural normalization
-        ↓
-    typed extractor-compatible input
-        ↓
-    Resume
+        |
+        v
+    structural normalization
+        |
+        v
+    typed Resume
+       
+ResumeBuilder is NOT responsible for:
 
-The builder MUST NOT assume that a particular resume layout,
-table structure, indentation style, or education format was used.
+    ontology matching
+    skill extraction
+    certification ontology matching
+    standards ontology matching
+    action ontology matching
+    target ontology matching
+    domain ontology matching
+    metric ontology matching
+    ranking ontology entities
+    overlap resolution
+    knowledge reasoning
 
-It must therefore handle resumes such as:
+Those responsibilities belong to Knowledge V5.
 
-    M.Sc. Chemistry
-    University of the Punjab
-    2010 - 2012
+The builder must preserve parser structure whenever specialized
+extractors need ResumeSection / ResumeBlock metadata.
 
-or:
-
-    M.Sc. Chemistry, University of the Punjab, Pakistan
-    Four-year Bachelor's degree equivalency verified by WES.
-
-or:
-
-    University of the Punjab
-    M.Sc. Chemistry
-    Lahore, Pakistan
-
-or:
-
-    M.Sc. Chemistry (Organic Chemistry Major)
-        University of the Punjab, Pakistan
-        Four-year Bachelor's degree academic equivalency...
-
-All of the above should become ONE education record.
-
-Likewise, experience headers must be separated from the
-previous job's responsibilities/achievements.
-
-Example:
-
-    QA Chemist | Coca-Cola ... 2010 - 2016
-
-    ...
-
-    Managing Director | Nutrain (Pvt) Ltd.
-    2025 - 2026 | Lahore, Pakistan
-
-The second header MUST NOT become an achievement belonging
-to Coca-Cola.
-
-Ontology-controlled extraction for skills, certifications,
-and standards is intentionally NOT duplicated here.
 """
 
 from __future__ import annotations
 
 import re
-from pathlib import Path
 from typing import Any
 
 from .parsed_models.resume import Resume
@@ -131,123 +110,52 @@ from app.parser.extractors import (
 
 class ResumeBuilder:
     """
-    Enterprise V5 Resume Builder.
+    Enterprise V5 Universal Resume Builder.
 
     Responsibilities
     ----------------
 
-    1. Convert ResumeSection objects into extractor-compatible text.
-    2. Normalize structural record boundaries.
-    3. Prevent education descriptions from becoming new records.
-    4. Prevent experience headers from becoming achievements.
-    5. Populate the strongly typed Resume model.
-    6. Preserve raw parser information.
-    7. Preserve parser -> builder traceability.
-    8. Keep ontology extraction outside this builder.
-    9. Remain layout-independent.
-    10. Provide a stable boundary between parser and intelligence layers.
+    1. Preserve parser -> builder traceability.
+    2. Normalize ResumeSection content safely.
+    3. Populate personal/contact information.
+    4. Preserve ResumeSection objects for specialized extractors.
+    5. Populate experience and education structurally.
+    6. Populate languages/projects/awards/references.
+    7. Preserve raw blocks.
+    8. Preserve original parser sections.
+    9. Keep ontology extraction outside ResumeBuilder.
+    10. Provide a stable structural boundary before Knowledge V5.
 
-    The builder does NOT attempt to understand every semantic
-    detail of a resume.
+    IMPORTANT
+    ---------
 
-    Instead it establishes reliable structural boundaries
-    before invoking the existing typed extractors.
+    Skills and certifications are intentionally NOT populated
+    by ontology matching here.
+
+    They remain available through the parser sections and raw
+    text so KnowledgeV5Pipeline can process them.
+
+    This keeps:
+
+        ResumeBuilder
+            =
+        structural parsing
+
+    separate from:
+
+        KnowledgeV5Pipeline
+            =
+        semantic / ontology knowledge extraction
     """
 
-    # ========================================================
-    # EXTRACTOR INPUT PREPARATION
-    # ========================================================
-
-    def _prepare_extractor_input(
-        self,
-        sections,
-    ):
-        """
-        Prepare parser sections for the modular section adapter.
-
-        ResumeBuilder is responsible only for routing data.
-
-        It does NOT parse education or experience records.
-
-        The SectionAdapter owns section-specific extraction.
-        """
-
-        if sections is None:
-            return {}
-
-        prepared = {}
-
-        # ----------------------------------------------------
-        # HEADER
-        # ----------------------------------------------------
-
-        header_section = sections.get("header")
-
-        if header_section is not None:
-            prepared["header"] = header_section
-
-        # ----------------------------------------------------
-        # SUMMARY
-        # ----------------------------------------------------
-
-        summary_section = sections.get("summary")
-
-        if summary_section is not None:
-            prepared["summary"] = summary_section
-
-        # ----------------------------------------------------
-        # SKILLS
-        # ----------------------------------------------------
-
-        skills_section = sections.get("skills")
-
-        if skills_section is not None:
-            prepared["skills"] = skills_section
-
-        # ----------------------------------------------------
-        # EXPERIENCE
-        # ----------------------------------------------------
-
-        experience_section = sections.get("experience")
-
-        if experience_section is not None:
-            prepared["experience"] = experience_section
-
-        # ----------------------------------------------------
-        # EDUCATION
-        # ----------------------------------------------------
-
-        education_section = sections.get("education")
-
-        if education_section is not None:
-            prepared["education"] = education_section
-
-        # ----------------------------------------------------
-        # CERTIFICATIONS
-        # ----------------------------------------------------
-
-        certifications_section = sections.get(
-            "certifications"
-        )
-
-        if certifications_section is not None:
-            prepared["certifications"] = certifications_section
-
-        # ----------------------------------------------------
-        # LANGUAGES
-        # ----------------------------------------------------
-
-        languages_section = sections.get("languages")
-
-        if languages_section is not None:
-            prepared["languages"] = languages_section
-
-        return prepared
     # ============================================================
     # UNIVERSAL PATTERNS
     # ============================================================
 
-    # Date ranges commonly found in resumes.
+    _YEAR_RE = re.compile(
+        r"\b(?:19|20)\d{2}\b"
+    )
+
     _DATE_RANGE_RE = re.compile(
         r"""
         (?:
@@ -275,24 +183,129 @@ class ResumeBuilder:
             |
             (?:19|20)\d{2}
             |
-            \d{1,2}
-            /
-            (?:19|20)\d{2}
+            \d{1,2}/(?:19|20)\d{2}
             |
-            [A-Za-z]{3,9}
-            \s+
-            (?:19|20)\d{2}
+            [A-Za-z]{3,9}\s+(?:19|20)\d{2}
         )
         """,
         re.IGNORECASE | re.VERBOSE,
     )
 
-    # More flexible date presence.
-    _YEAR_RE = re.compile(
-        r"\b(?:19|20)\d{2}\b"
+    # ------------------------------------------------------------
+    # Safe contact patterns
+    #
+    # These are deliberately simple and syntactically conservative.
+    # Do not use a giant phone regex.
+    # ------------------------------------------------------------
+
+    _EMAIL_RE = re.compile(
+        r"""
+        (?<![\w.+-])
+        [A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+
+        @
+        [A-Za-z0-9-]+
+        (?:\.[A-Za-z0-9-]+)+
+        """,
+        re.IGNORECASE | re.VERBOSE,
     )
 
-    
+    _PHONE_RE = re.compile(
+        r"""
+        (?<!\d)
+        (?:\+?\d[\d\s().-]{6,}\d)
+        (?!\d)
+        """,
+        re.VERBOSE,
+    )
+
+    _LINKEDIN_RE = re.compile(
+        r"""
+        (?:
+            https?://
+        )?
+        (?:
+            www\.
+        )?
+        linkedin\.com/in/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+
+        """,
+        re.IGNORECASE | re.VERBOSE,
+    )
+
+    _GITHUB_RE = re.compile(
+        r"""
+        (?:
+            https?://
+        )?
+        (?:
+            www\.
+        )?
+        github\.com/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+
+        """,
+        re.IGNORECASE | re.VERBOSE,
+    )
+
+    _LOCATION_LABEL_RE = re.compile(
+        r"""
+        \b
+        (?:location|address)
+        \s*[:\-]\s*
+        ([^|\n]+)
+        """,
+        re.IGNORECASE | re.VERBOSE,
+    )
+
+    # ------------------------------------------------------------
+    # Generic heading detection.
+    # ------------------------------------------------------------
+
+    _HEADING_RE = re.compile(
+        r"""
+        ^\s*
+        (?:
+            summary
+            |
+            profile
+            |
+            professional\s+summary
+            |
+            objective
+            |
+            skills?
+            |
+            core\s+skills?
+            |
+            core\s+leadership\s+competencies
+            |
+            professional\s+experience
+            |
+            work\s+experience
+            |
+            experience
+            |
+            education
+            |
+            certifications?
+            |
+            professional\s+certifications?
+            |
+            languages?
+            |
+            projects?
+            |
+            awards?
+            |
+            references?
+            |
+            technology
+            |
+            technologies
+        )
+        \s*
+        $
+        """,
+        re.IGNORECASE | re.VERBOSE,
+    )
+
     # ============================================================
     # INITIALIZATION
     # ============================================================
@@ -304,8 +317,6 @@ class ResumeBuilder:
         # --------------------------------------------------------
 
         self.normalizer = UniversalResumeNormalizer()
-
-        self.section_adapter = ResumeSectionAdapter()
 
         # --------------------------------------------------------
         # NON-ONTOLOGY EXTRACTORS
@@ -335,20 +346,15 @@ class ResumeBuilder:
         )
 
     # ============================================================
-    # BASIC TEXT NORMALIZATION
+    # BASIC BLOCK TEXT
     # ============================================================
 
     @staticmethod
-    def _block_text(block: Any) -> str:
+    def _block_text(
+        block: Any,
+    ) -> str:
         """
-        Convert a ResumeBlock or compatible object into plain text.
-
-        Supported inputs:
-
-            ResumeBlock
-            string
-            objects exposing .text
-            arbitrary objects with string representation
+        Safely convert a ResumeBlock-compatible object to text.
         """
 
         if block is None:
@@ -359,25 +365,32 @@ class ResumeBuilder:
 
         if hasattr(block, "text"):
 
-            text = getattr(block, "text", "")
+            value = getattr(
+                block,
+                "text",
+                "",
+            )
 
-            if text is None:
+            if value is None:
                 return ""
 
-            return str(text).strip()
+            return str(value).strip()
 
         return str(block).strip()
 
     # ============================================================
+    # TEXT CLEANING
+    # ============================================================
 
     @classmethod
-    def _clean_text(cls, text: Any) -> str:
+    def _clean_text(
+        cls,
+        text: Any,
+    ) -> str:
         """
-        Universal text cleanup.
+        Safe structural text cleanup.
 
-        This deliberately performs only safe structural cleanup.
-
-        It does NOT aggressively rewrite resume content.
+        Does NOT perform semantic rewriting.
         """
 
         if text is None:
@@ -385,24 +398,37 @@ class ResumeBuilder:
 
         text = str(text)
 
-        # Normalize unusual whitespace.
-        text = text.replace("\xa0", " ")
+        # Non-breaking spaces.
+        text = text.replace(
+            "\xa0",
+            " ",
+        )
 
-        # Normalize tabs.
-        text = text.replace("\t", " ")
+        # Tabs.
+        text = text.replace(
+            "\t",
+            " ",
+        )
 
-        # Normalize line endings.
-        text = text.replace("\r\n", "\n")
-        text = text.replace("\r", "\n")
+        # Windows / old Mac line endings.
+        text = text.replace(
+            "\r\n",
+            "\n",
+        )
 
-        # Collapse repeated spaces but preserve line boundaries.
+        text = text.replace(
+            "\r",
+            "\n",
+        )
+
+        # Collapse spaces without destroying line boundaries.
         text = re.sub(
             r"[ \t]+",
             " ",
             text,
         )
 
-        # Remove whitespace around newlines.
+        # Remove spaces around line breaks.
         text = re.sub(
             r"[ \t]*\n[ \t]*",
             "\n",
@@ -412,15 +438,22 @@ class ResumeBuilder:
         return text.strip()
 
     # ============================================================
-    # SECTION EXTRACTION
+    # SECTION ITEMS
     # ============================================================
 
     @classmethod
-    def _section_items(cls, section: Any) -> list[str]:
+    def _section_items(
+        cls,
+        section: Any,
+    ) -> list[str]:
         """
-        Convert a ResumeSection into a list of strings.
+        Convert a ResumeSection / list / tuple / block into text.
 
-        This is the first compatibility boundary.
+        IMPORTANT:
+
+        This method is used only for flat structural normalization.
+
+        Specialized extractors receive the ORIGINAL ResumeSection.
         """
 
         if section is None:
@@ -430,14 +463,21 @@ class ResumeBuilder:
         # ResumeSection
         # --------------------------------------------------------
 
-        if hasattr(section, "items"):
+        if hasattr(
+            section,
+            "items",
+        ):
 
-            items = getattr(section, "items", None)
+            items = getattr(
+                section,
+                "items",
+                None,
+            )
 
-            if items is None:
+            if not items:
                 return []
 
-            result = []
+            result: list[str] = []
 
             for item in items:
 
@@ -451,12 +491,15 @@ class ResumeBuilder:
             return result
 
         # --------------------------------------------------------
-        # Legacy list / tuple
+        # list / tuple
         # --------------------------------------------------------
 
-        if isinstance(section, (list, tuple)):
+        if isinstance(
+            section,
+            (list, tuple),
+        ):
 
-            result = []
+            result: list[str] = []
 
             for item in section:
 
@@ -473,21 +516,39 @@ class ResumeBuilder:
         # Single parser block
         # --------------------------------------------------------
 
-        if hasattr(section, "text"):
+        if hasattr(
+            section,
+            "text",
+        ):
 
-            text = cls._clean_text(section)
+            text = cls._clean_text(
+                cls._block_text(section)
+            )
 
-            return [text] if text else []
+            return (
+                [text]
+                if text
+                else []
+            )
 
         # --------------------------------------------------------
         # Single string
         # --------------------------------------------------------
 
-        if isinstance(section, str):
+        if isinstance(
+            section,
+            str,
+        ):
 
-            text = cls._clean_text(section)
+            text = cls._clean_text(
+                section
+            )
 
-            return [text] if text else []
+            return (
+                [text]
+                if text
+                else []
+            )
 
         raise TypeError(
             "Unsupported resume section object: "
@@ -504,22 +565,19 @@ class ResumeBuilder:
         sections: dict[str, Any],
     ) -> dict[str, list[str]]:
         """
-        Convert:
+        Normalize parser sections into flat text collections.
 
-            dict[str, ResumeSection]
-
-        into:
-
-            dict[str, list[str]]
-
-        while preserving the original parser objects.
+        The ORIGINAL sections remain untouched and are preserved
+        separately on the Resume object.
         """
 
         if sections is None:
             return {}
 
-        if not isinstance(sections, dict):
-
+        if not isinstance(
+            sections,
+            dict,
+        ):
             raise TypeError(
                 "ResumeBuilder expected sections to be dict, "
                 f"received {type(sections).__name__}"
@@ -529,35 +587,39 @@ class ResumeBuilder:
 
         for section_name, section in sections.items():
 
-            key = str(section_name).strip().lower()
+            key = str(
+                section_name
+            ).strip().lower()
 
-            normalized[key] = cls._section_items(section)
+            normalized[key] = (
+                cls._section_items(section)
+            )
 
         return normalized
 
     # ============================================================
-    # SECTION HEADING DETECTION
+    # HEADING DETECTION
     # ============================================================
 
     @classmethod
-    def _is_heading(cls, text: str) -> bool:
-        """
-        Determine whether a line is a section/subsection heading.
-        """
+    def _is_heading(
+        cls,
+        text: str,
+    ) -> bool:
 
         if not text:
             return False
 
         clean = text.strip()
 
-        if cls._HEADING_RE.match(clean):
-            return True
+        return bool(
+            cls._HEADING_RE.match(
+                clean
+            )
+        )
 
-        return False
-
-        
     # ============================================================
-    # CONTACT NORMALIZATION
+    # HEADER NORMALIZATION
     # ============================================================
 
     @classmethod
@@ -566,7 +628,15 @@ class ResumeBuilder:
         header: list[str],
     ) -> list[str]:
         """
-        Normalize header lines without destroying their structure.
+        Normalize header content while preserving embedded lines.
+
+        A single ResumeBlock can contain:
+
+            Phone...
+            LinkedIn...
+
+        so embedded newline characters are expanded into
+        independent header lines.
         """
 
         if not header:
@@ -574,17 +644,30 @@ class ResumeBuilder:
 
         result: list[str] = []
 
-        for line in header:
+        for item in header:
 
-            text = cls._clean_text(line)
+            clean = cls._clean_text(
+                item
+            )
 
-            if text:
-                result.append(text)
+            if not clean:
+                continue
+
+            # ----------------------------------------------------
+            # Split embedded lines.
+            # ----------------------------------------------------
+
+            for line in clean.split("\n"):
+
+                line = line.strip()
+
+                if line:
+                    result.append(line)
 
         return result
 
     # ============================================================
-    # SUMMARY NORMALIZATION
+    # SUMMARY
     # ============================================================
 
     @classmethod
@@ -592,26 +675,27 @@ class ResumeBuilder:
         cls,
         summary: list[str],
     ) -> str:
-        """
-        Convert summary blocks into one clean paragraph.
-        """
 
         if not summary:
             return ""
 
-        parts = []
+        parts: list[str] = []
 
         for item in summary:
 
-            text = cls._clean_text(item)
+            text = cls._clean_text(
+                item
+            )
 
             if text:
                 parts.append(text)
 
-        return " ".join(parts).strip()
+        return " ".join(
+            parts
+        ).strip()
 
     # ============================================================
-    # GENERAL FLAT SECTION NORMALIZATION
+    # GENERIC SECTION
     # ============================================================
 
     @classmethod
@@ -619,16 +703,14 @@ class ResumeBuilder:
         cls,
         lines: list[str],
     ) -> list[str]:
-        """
-        Safe normalization for sections that do not require
-        specialized record-boundary reconstruction.
-        """
 
         result: list[str] = []
 
         for line in lines:
 
-            text = cls._clean_text(line)
+            text = cls._clean_text(
+                line
+            )
 
             if text:
                 result.append(text)
@@ -636,21 +718,231 @@ class ResumeBuilder:
         return result
 
     # ============================================================
-    # SAFE EXTRACTOR CALL
+    # EXTRACTOR INPUT
+    # ============================================================
+
+    @classmethod
+    def _prepare_extractor_input(
+        cls,
+        normalized: dict[str, list[str]],
+    ) -> dict[str, list[str]]:
+        """
+        Prepare flat inputs for extractors.
+
+        Specialized education and experience extraction DOES NOT
+        use these flat values. It uses the original ResumeSection
+        objects in build().
+
+        This prevents loss of ResumeBlock metadata.
+        """
+
+        prepared: dict[str, list[str]] = {}
+
+        for key, lines in normalized.items():
+
+            prepared[key] = (
+                cls._normalize_generic_lines(
+                    lines
+                )
+            )
+
+        return prepared
+
+    # ============================================================
+    # CONTACT EXTRACTION
+    # ============================================================
+
+    @classmethod
+    def _extract_contact(
+        cls,
+        header: list[str],
+    ) -> dict[str, str]:
+        """
+        Robust contact extraction.
+
+        This is intentionally performed at the structural boundary
+        because the parser may provide contact information inside
+        one or more ResumeBlocks.
+
+        Example input:
+
+            Phone: +923334940827 | Email: muhkashiff@gmail.com
+            | Location: Lahore, Punjab, Pakistan
+            LinkedIn: linkedin.com/in/muhkashiff |
+            GitHub: github.com/muhkashiff
+        """
+
+        result = {
+            "email": "",
+            "phone": "",
+            "linkedin": "",
+            "github": "",
+            "location": "",
+        }
+
+        if not header:
+            return result
+
+        # --------------------------------------------------------
+        # Join header lines for contact scanning.
+        # --------------------------------------------------------
+
+        text = "\n".join(
+            line
+            for line in header
+            if line
+        )
+
+        # --------------------------------------------------------
+        # EMAIL
+        # --------------------------------------------------------
+
+        email_match = cls._EMAIL_RE.search(
+            text
+        )
+
+        if email_match:
+            result["email"] = (
+                email_match.group(0)
+                .strip()
+                .rstrip(".,;")
+            )
+
+        # --------------------------------------------------------
+        # PHONE
+        # --------------------------------------------------------
+
+        phone_match = cls._PHONE_RE.search(
+            text
+        )
+
+        if phone_match:
+
+            phone = (
+                phone_match.group(0)
+                .strip()
+            )
+
+            # Remove accidental trailing punctuation.
+            phone = phone.rstrip(
+                ".,;|"
+            )
+
+            result["phone"] = phone
+
+        # --------------------------------------------------------
+        # LINKEDIN
+        # --------------------------------------------------------
+
+        linkedin_match = (
+            cls._LINKEDIN_RE.search(
+                text
+            )
+        )
+
+        if linkedin_match:
+
+            result["linkedin"] = (
+                linkedin_match.group(0)
+                .strip()
+                .rstrip(".,;|")
+            )
+
+        # --------------------------------------------------------
+        # GITHUB
+        # --------------------------------------------------------
+
+        github_match = (
+            cls._GITHUB_RE.search(
+                text
+            )
+        )
+
+        if github_match:
+
+            result["github"] = (
+                github_match.group(0)
+                .strip()
+                .rstrip(".,;|")
+            )
+
+        # --------------------------------------------------------
+        # LOCATION
+        # --------------------------------------------------------
+
+        location_match = (
+            cls._LOCATION_LABEL_RE.search(
+                text
+            )
+        )
+
+        if location_match:
+
+            location = (
+                location_match.group(1)
+                .strip()
+                .rstrip(".,;|")
+            )
+
+            result["location"] = location
+
+        # --------------------------------------------------------
+        # Fallback location extraction
+        #
+        # If Location: was not detected, inspect the header lines.
+        # --------------------------------------------------------
+
+        if not result["location"]:
+
+            for line in header:
+
+                clean = line.strip()
+
+                if (
+                    "location:" in clean.lower()
+                ):
+
+                    parts = re.split(
+                        r"location\s*:\s*",
+                        clean,
+                        maxsplit=1,
+                        flags=re.IGNORECASE,
+                    )
+
+                    if len(parts) == 2:
+
+                        location = (
+                            parts[1]
+                            .split("|")[0]
+                            .strip()
+                            .rstrip(".,;")
+                        )
+
+                        if location:
+                            result["location"] = (
+                                location
+                            )
+
+                        break
+
+        return result
+
+    # ============================================================
+    # SAFE EXTRACTOR
     # ============================================================
 
     @staticmethod
     def _safe_extract(
         extractor: Any,
-        lines: list[str],
+        lines: Any,
         default: Any,
     ) -> Any:
         """
-        Execute an extractor without allowing a malformed optional
-        section to destroy the entire resume build.
+        Safely call a legacy/simple extractor.
 
-        The exception is re-raised after being annotated in a
-        predictable way so debugging remains possible.
+        This method is intended for flat text extractors only.
+
+        Education and experience use ResumeSectionAdapter.
         """
 
         if not lines:
@@ -671,76 +963,8 @@ class ResumeBuilder:
 
             raise RuntimeError(
                 f"{extractor.__class__.__name__} failed while "
-                f"processing resume section."
+                "processing resume section."
             ) from exc
-
-    # ============================================================
-    # EDUCATION VALIDATION
-    # ============================================================
-
-    @classmethod
-    def _education_diagnostics(
-        cls,
-        raw_lines: list[str],
-        extracted: list[Any],
-    ) -> dict[str, Any]:
-        """
-        Generate lightweight diagnostics.
-
-        These diagnostics do NOT modify extraction.
-
-        They help identify structural regressions such as:
-
-            education input = 3 logical records
-            extracted output = 4 records
-
-        without making the builder dependent on one particular
-        resume.
-        """
-
-        degree_headers = 0
-
-        for line in raw_lines:
-
-            if cls._is_education_degree_line(line):
-                degree_headers += 1
-
-        return {
-            "input_lines": len(raw_lines),
-            "degree_header_candidates": degree_headers,
-            "extracted_records": len(
-                extracted or []
-            ),
-        }
-
-    # ============================================================
-    # EXPERIENCE VALIDATION
-    # ============================================================
-
-    @classmethod
-    def _experience_diagnostics(
-        cls,
-        raw_lines: list[str],
-        extracted: list[Any],
-    ) -> dict[str, Any]:
-        """
-        Generate lightweight experience-boundary diagnostics.
-        """
-
-        header_candidates = 0
-
-        for line in raw_lines:
-
-            if cls._looks_like_experience_header(line):
-                header_candidates += 1
-
-        return {
-            "input_lines": len(raw_lines),
-            "header_candidates": header_candidates,
-            "extracted_records": len(
-                extracted or []
-            ),
-        }
 
     # ============================================================
     # BUILD
@@ -755,12 +979,13 @@ class ResumeBuilder:
         raw_blocks: list[Any] | None = None,
     ) -> Resume:
         """
-        Build a strongly typed Resume object.
+        Build strongly typed Resume.
 
         Parameters
         ----------
+
         sections:
-            Output from ResumeParser.
+            Exact output of ResumeParser.parse(file_path).
 
         source_file:
             Original resume path.
@@ -773,23 +998,41 @@ class ResumeBuilder:
 
         Returns
         -------
+
         Resume
         """
 
         # ========================================================
-        # 1. RAW SECTION NORMALIZATION
+        # 1. VALIDATE INPUT
         # ========================================================
 
-        normalized = self._normalize_sections(
-            sections
+        if sections is None:
+            sections = {}
+
+        if not isinstance(
+            sections,
+            dict,
+        ):
+            raise TypeError(
+                "ResumeBuilder.build expected parser sections "
+                "as dict, received "
+                f"{type(sections).__name__}"
+            )
+
+        # ========================================================
+        # 2. FLAT NORMALIZATION
+        # ========================================================
+
+        normalized = (
+            self._normalize_sections(
+                sections
+            )
         )
 
-        # ========================================================
-        # 2. UNIVERSAL STRUCTURAL NORMALIZATION
-        # ========================================================
-
-        prepared = self._prepare_extractor_input(
-            normalized
+        prepared = (
+            self._prepare_extractor_input(
+                normalized
+            )
         )
 
         # ========================================================
@@ -810,30 +1053,38 @@ class ResumeBuilder:
             source_format or "docx"
         )
 
-        # Preserve original reader objects.
+        # ========================================================
+        # 5. RAW BLOCK TRACEABILITY
+        # ========================================================
+
         if raw_blocks is not None:
 
             resume.raw_blocks = list(
                 raw_blocks
             )
 
-        # Preserve original parser sections.
-        if sections:
+        # ========================================================
+        # 6. ORIGINAL SECTION TRACEABILITY
+        # ========================================================
 
-            resume.sections = dict(
-                sections
-            )
+        resume.sections = dict(
+            sections
+        )
 
         # ========================================================
-        # 5. PERSONAL INFORMATION
+        # 7. PERSONAL INFORMATION
         # ========================================================
 
         header = self._normalize_header(
-            prepared.get(
+            normalized.get(
                 "header",
                 [],
             )
         )
+
+        # --------------------------------------------------------
+        # NAME
+        # --------------------------------------------------------
 
         if header:
 
@@ -841,14 +1092,70 @@ class ResumeBuilder:
                 header[0].strip()
             )
 
-        contact = self._safe_extract(
-            self.contact_extractor,
-            header,
-            {},
+        # --------------------------------------------------------
+        # CONTACT
+        #
+        # IMPORTANT:
+        #
+        # Do NOT depend exclusively on ContactExtractor here.
+        #
+        # The current parser can place multiple contact fields
+        # inside one ResumeBlock.
+        # --------------------------------------------------------
+
+        contact = self._extract_contact(
+            header
         )
 
-        if contact is None:
-            contact = {}
+        # --------------------------------------------------------
+        # Optional ContactExtractor enrichment
+        #
+        # We try it, but do not allow an empty/malformed result
+        # to erase the robust structural extraction above.
+        # --------------------------------------------------------
+
+        try:
+
+            extracted_contact = (
+                self.contact_extractor.extract(
+                    header
+                )
+            )
+
+            if isinstance(
+                extracted_contact,
+                dict,
+            ):
+
+                for key in (
+                    "email",
+                    "phone",
+                    "linkedin",
+                    "github",
+                    "location",
+                ):
+
+                    value = (
+                        extracted_contact.get(
+                            key,
+                            "",
+                        )
+                    )
+
+                    if value:
+
+                        contact[key] = (
+                            str(value).strip()
+                        )
+
+        except Exception:
+            # Contact extraction is optional because the builder
+            # already performed robust structural extraction.
+            pass
+
+        # --------------------------------------------------------
+        # Assign personal information.
+        # --------------------------------------------------------
 
         resume.personal_information.email = (
             contact.get(
@@ -886,22 +1193,26 @@ class ResumeBuilder:
         )
 
         # ========================================================
-        # 6. SUMMARY
+        # 8. SUMMARY
         # ========================================================
 
-        resume.summary = self._normalize_summary(
-            prepared.get(
-                "summary",
-                [],
+        resume.summary = (
+            self._normalize_summary(
+                normalized.get(
+                    "summary",
+                    [],
+                )
             )
         )
 
         # ========================================================
-        # 7. EXPERIENCE
+        # 9. EXPERIENCE
         # ========================================================
 
-        experience_section = sections.get(
-            "experience"
+        experience_section = (
+            sections.get(
+                "experience"
+            )
         )
 
         if experience_section is not None:
@@ -930,11 +1241,13 @@ class ResumeBuilder:
             resume.experience = []
 
         # ========================================================
-        # 8. EDUCATION
+        # 10. EDUCATION
         # ========================================================
 
-        education_section = sections.get(
-            "education"
+        education_section = (
+            sections.get(
+                "education"
+            )
         )
 
         if education_section is not None:
@@ -963,7 +1276,7 @@ class ResumeBuilder:
             resume.education = []
 
         # ========================================================
-        # 9. PROJECTS
+        # 11. PROJECTS
         # ========================================================
 
         project_lines = prepared.get(
@@ -973,10 +1286,12 @@ class ResumeBuilder:
 
         if project_lines:
 
-            resume.projects = self._safe_extract(
-                self.project_extractor,
-                project_lines,
-                [],
+            resume.projects = (
+                self._safe_extract(
+                    self.project_extractor,
+                    project_lines,
+                    [],
+                )
             )
 
         else:
@@ -984,7 +1299,7 @@ class ResumeBuilder:
             resume.projects = []
 
         # ========================================================
-        # 10. AWARDS
+        # 12. AWARDS
         # ========================================================
 
         award_lines = prepared.get(
@@ -994,10 +1309,12 @@ class ResumeBuilder:
 
         if award_lines:
 
-            resume.awards = self._safe_extract(
-                self.award_extractor,
-                award_lines,
-                [],
+            resume.awards = (
+                self._safe_extract(
+                    self.award_extractor,
+                    award_lines,
+                    [],
+                )
             )
 
         else:
@@ -1005,7 +1322,7 @@ class ResumeBuilder:
             resume.awards = []
 
         # ========================================================
-        # 11. LANGUAGES
+        # 13. LANGUAGES
         # ========================================================
 
         language_lines = prepared.get(
@@ -1015,10 +1332,12 @@ class ResumeBuilder:
 
         if language_lines:
 
-            resume.languages = self._safe_extract(
-                self.language_extractor,
-                language_lines,
-                [],
+            resume.languages = (
+                self._safe_extract(
+                    self.language_extractor,
+                    language_lines,
+                    [],
+                )
             )
 
         else:
@@ -1026,7 +1345,7 @@ class ResumeBuilder:
             resume.languages = []
 
         # ========================================================
-        # 12. REFERENCES
+        # 14. REFERENCES
         # ========================================================
 
         reference_lines = prepared.get(
@@ -1036,10 +1355,12 @@ class ResumeBuilder:
 
         if reference_lines:
 
-            resume.references = self._safe_extract(
-                self.reference_extractor,
-                reference_lines,
-                [],
+            resume.references = (
+                self._safe_extract(
+                    self.reference_extractor,
+                    reference_lines,
+                    [],
+                )
             )
 
         else:
@@ -1047,7 +1368,7 @@ class ResumeBuilder:
             resume.references = []
 
         # --------------------------------------------------------
-        # UNIVERSAL REFERENCE FALLBACK
+        # Default reference fallback.
         # --------------------------------------------------------
 
         if not resume.references:
@@ -1059,7 +1380,41 @@ class ResumeBuilder:
             ]
 
         # ========================================================
-        # 13. BUILDER METADATA
+        # 15. KNOWLEDGE V5 BOUNDARY
+        # ========================================================
+
+        # --------------------------------------------------------
+        # IMPORTANT
+        #
+        # Do NOT populate:
+        #
+        #     resume.skills
+        #     resume.certifications
+        #
+        # through ontology extraction here.
+        #
+        # KnowledgeV5Pipeline is responsible for:
+        #
+        #     tokenization
+        #     normalization
+        #     matching
+        #     confidence
+        #     overlap resolution
+        #     ranking
+        #     ontology entity extraction
+        #
+        # Therefore skills/certifications remain available in:
+        #
+        #     resume.sections["skills"]
+        #     resume.sections["certifications"]
+        #
+        # and in raw blocks/full resume text.
+        #
+        # This is intentional.
+        # --------------------------------------------------------
+
+        # ========================================================
+        # 16. BUILDER METADATA
         # ========================================================
 
         resume.metadata[
@@ -1074,8 +1429,16 @@ class ResumeBuilder:
             "normalization"
         ] = "universal_structural"
 
+        resume.metadata[
+            "knowledge_boundary"
+        ] = "KnowledgeV5Pipeline"
+
+        resume.metadata[
+            "ontology_extraction"
+        ] = "deferred_to_knowledge_v5"
+
         # --------------------------------------------------------
-        # Original parser section sizes.
+        # Original section counts.
         # --------------------------------------------------------
 
         resume.metadata[
@@ -1086,7 +1449,7 @@ class ResumeBuilder:
         }
 
         # --------------------------------------------------------
-        # Extractor input sizes.
+        # Prepared section counts.
         # --------------------------------------------------------
 
         resume.metadata[
@@ -1097,27 +1460,7 @@ class ResumeBuilder:
         }
 
         # --------------------------------------------------------
-        # Education diagnostics.
-        # --------------------------------------------------------
-
-        # Education diagnostics are now handled by the
-        # modular EducationExtractor / EducationSectionResult.
-        #
-        # Do not perform education parsing or classification
-        # inside ResumeBuilder.
-
-        # --------------------------------------------------------
-        # Experience diagnostics.
-        # --------------------------------------------------------
-
-        # Education diagnostics are now handled by the
-        # modular ExperienceExtractor / ExperienceSectionResult.
-        #
-        # Do not perform education parsing or classification
-        # inside ResumeBuilder.
-
-        # --------------------------------------------------------
-        # Traceability.
+        # Raw block count.
         # --------------------------------------------------------
 
         resume.metadata[
@@ -1128,11 +1471,45 @@ class ResumeBuilder:
             else 0
         )
 
+        # --------------------------------------------------------
+        # Raw section count.
+        # --------------------------------------------------------
+
         resume.metadata[
             "raw_section_count"
         ] = len(
-            sections or {}
+            sections
         )
 
+        # --------------------------------------------------------
+        # Structural content diagnostics.
+        # --------------------------------------------------------
+
+        resume.metadata[
+            "contact_extraction"
+        ] = {
+            "name": bool(
+                resume.personal_information.name
+            ),
+            "email": bool(
+                resume.personal_information.email
+            ),
+            "phone": bool(
+                resume.personal_information.phone
+            ),
+            "linkedin": bool(
+                resume.personal_information.linkedin
+            ),
+            "github": bool(
+                resume.personal_information.github
+            ),
+            "address": bool(
+                resume.personal_information.address
+            ),
+        }
+
+        # ========================================================
+        # 17. RETURN
+        # ========================================================
+
         return resume
-    

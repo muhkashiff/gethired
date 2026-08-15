@@ -77,57 +77,57 @@ class TechnologyExtractor(GenericOntologyExtractor[Technology]):
 
             "programming_language": metadata.get(
                 "programming_language",
-                False,
+                True,
             ),
 
             "database": metadata.get(
                 "database",
-                False,
+                True,
             ),
 
             "analytics_tool": metadata.get(
                 "analytics_tool",
-                False,
+                True,
             ),
 
             "cloud_platform": metadata.get(
                 "cloud_platform",
-                False,
+                True,
             ),
 
             "operating_system": metadata.get(
                 "operating_system",
-                False,
+                True,
             ),
 
             "framework": metadata.get(
                 "framework",
-                False,
+                True,
             ),
 
             "erp": metadata.get(
                 "erp",
-                False,
+                True,
             ),
 
             "visualization_tool": metadata.get(
                 "visualization_tool",
-                False,
+                True,
             ),
 
             "commercial": metadata.get(
                 "commercial",
-                False,
+                True,
             ),
 
             "open_source": metadata.get(
                 "open_source",
-                False,
+                True,
             ),
 
             "certification_available": metadata.get(
                 "certification_available",
-                False,
+                True,
             ),
 
             "maturity_level": metadata.get(

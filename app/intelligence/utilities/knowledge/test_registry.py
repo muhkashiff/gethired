@@ -83,1102 +83,408 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 
-# ================================================================
-# IMPORTS
-# ================================================================
+"""
+Enterprise V5 — Knowledge Entity / Extractor Traversal Test
 
-from app.parser.readers import ResumeReader
-from app.parser.section_detector import SectionDetector
-from app.parser.resume_parser import ResumeParser
-from app.parser.resume_builder import ResumeBuilder
+Validates the actual KnowledgeV5Pipeline API.
+
+Pipeline API:
+
+    run(ontology, sentence)
+    best(ontology, sentence)
+    build_parser_context(...)
+
+Architecture:
+
+    sentence
+        ↓
+    KnowledgeV5Pipeline
+        ↓
+    Tokenizer
+        ↓
+    Matcher
+        ↓
+    Confidence
+        ↓
+    OverlapResolver
+        ↓
+    Ranker
+        ↓
+    Knowledge entities
+"""
 
 
-# ================================================================
-# CONFIGURATION
-# ================================================================
 
-RESUME_PATH = (
-    PROJECT_ROOT
-    / "uploads"
-    / "project_2"
-    / "resume_original.docx"
+
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
+    KnowledgeV5Pipeline,
 )
 
 
-# ================================================================
+# ======================================================================
+# TEST DATA
+# ======================================================================
+
+TEST_SENTENCES = {
+
+    "skills": (
+        "Experienced in Python, SQL, Tableau, Power BI, "
+        "pandas and scikit-learn."
+    ),
+
+    "actions": (
+        "Implemented FSSC 22000 requirements and improved "
+        "manufacturing yield through data based decision making."
+    ),
+
+    "metrics": (
+        "Increased yield from 70% to 99%."
+    ),
+
+    "domains": (
+        "Worked across quality assurance, food safety, "
+        "manufacturing and supply chain operations."
+    ),
+
+    "standards": (
+        "Maintained compliance with FSSC 22000, ISO 9001 "
+        "and BRCGS requirements."
+    ),
+
+    "targets": (
+        "Improved production yield from 70% to 99%."
+    ),
+}
+
+
+# ======================================================================
 # DISPLAY HELPERS
-# ================================================================
+# ======================================================================
 
-def banner(title: str):
+def print_result(
+    ontology: str,
+    sentence: str,
+    result,
+) -> None:
+
+    print()
+    print("-" * 70)
+    print(f"ONTOLOGY : {ontology}")
+    print(f"SENTENCE : {sentence}")
+    print(f"RESULT TYPE : {type(result).__name__}")
+
+    print("RESULT:")
+    print(result)
+
+    print("-" * 70)
+
+
+# ======================================================================
+# TEST 1
+# ======================================================================
+
+def test_pipeline_creation():
+
+    print("=" * 70)
+    print("TEST 1 — KNOWLEDGE V5 PIPELINE CREATION")
+    print("=" * 70)
+
+    pipeline = KnowledgeV5Pipeline()
+
+    assert pipeline is not None
+
+    print("PASS — KnowledgeV5Pipeline created.")
+
+    return pipeline
+
+
+# ======================================================================
+# TEST 2
+# ======================================================================
+
+def test_pipeline_api():
 
     print()
     print("=" * 70)
-    print(title)
+    print("TEST 2 — KNOWLEDGE V5 PIPELINE API")
     print("=" * 70)
 
-
-def section(title: str):
-
-    print()
-    print("-" * 70)
-    print(title)
-    print("-" * 70)
-
-
-def pass_message(message: str):
-
-    print(f"PASS — {message}")
-
-
-def fail_message(message: str):
-
-    print(f"FAIL — {message}")
-
-
-# ================================================================
-# STAGE 0
-# ================================================================
-
-def test_file():
-
-    section("STAGE 0 — RESUME FILE")
-
-    print(f"Project root : {PROJECT_ROOT}")
-    print(f"Resume       : {RESUME_PATH}")
-    print()
-
-    if not RESUME_PATH.exists():
-
-        raise FileNotFoundError(
-            f"Resume not found:\n{RESUME_PATH}"
-        )
-
-    if RESUME_PATH.suffix.lower() != ".docx":
-
-        raise ValueError(
-            f"Unsupported resume format: {RESUME_PATH.suffix}"
-        )
-
-    pass_message("DOCX resume located.")
-
-    return RESUME_PATH
-
-
-# ================================================================
-# STAGE 1
-# RESUME READER
-# ================================================================
-
-def test_reader(file_path):
-
-    section("STAGE 1 — RESUME READER")
-
-    reader = ResumeReader()
-
-    blocks = reader.read(file_path)
-
-    print(
-        f"Reader output type : {type(blocks).__name__}"
-    )
-
-    print(
-        f"Block count        : {len(blocks)}"
-    )
-
-    if not blocks:
-
-        raise AssertionError(
-            "ResumeReader returned no blocks."
-        )
-
-    print()
-    print("FIRST 15 BLOCKS")
-    print("-" * 70)
-
-    for index, block in enumerate(
-        blocks[:15],
-        start=1,
-    ):
-
-        print(
-            f"{index:03d} : {block}"
-        )
-
-    pass_message(
-        "ResumeReader successfully read the DOCX."
-    )
-
-    return blocks
-
-
-# ================================================================
-# STAGE 2
-# SECTION DETECTOR
-# ================================================================
-
-def test_section_detector(blocks):
-
-    section("STAGE 2 — SECTION DETECTOR")
-
-    detector = SectionDetector()
-
-    sections = detector.detect(blocks)
-
-    print(
-        f"Detector output type : "
-        f"{type(sections).__name__}"
-    )
-
-    if not isinstance(sections, dict):
-
-        raise TypeError(
-            "SectionDetector must return dict."
-        )
-
-    print()
-    print("DETECTED SECTIONS")
-    print("-" * 70)
-
-    total_items = 0
-
-    for section_name, content in sections.items():
-
-        print()
-
-        print(
-            f"[{section_name.upper()}]"
-        )
-
-        print(
-            f"Object type : "
-            f"{type(content).__name__}"
-        )
-
-        # --------------------------------------------------------
-        # ResumeSection
-        # --------------------------------------------------------
-
-        if hasattr(content, "items"):
-
-            items = content.items
-
-        # --------------------------------------------------------
-        # Legacy list compatibility
-        # --------------------------------------------------------
-
-        elif isinstance(content, list):
-
-            items = content
-
-        else:
-
-            raise TypeError(
-                f"Unsupported section object: "
-                f"{type(content).__name__}"
-            )
-
-        print(
-            f"Items       : {len(items)}"
-        )
-
-        total_items += len(items)
-
-        for item in items[:8]:
-
-            print(
-                f"  - {item}"
-            )
-
-        if len(items) > 8:
-
-            print(
-                f"  ... "
-                f"{len(items) - 8} more"
-            )
-
-    print()
-    print(
-        f"Total section content items : "
-        f"{total_items}"
-    )
-
-    if not sections:
-
-        raise AssertionError(
-            "SectionDetector returned no sections."
-        )
-
-    pass_message(
-        "SectionDetector successfully produced "
-        "typed ResumeSection objects."
-    )
-
-    return sections
-
-
-# ================================================================
-# STAGE 3
-# RESUME PARSER
-# ================================================================
-
-def test_resume_parser(file_path):
-
-    section("STAGE 3 — RESUME PARSER")
-
-    parser = ResumeParser()
-
-    # ------------------------------------------------------------
-    # Blocks
-    # ------------------------------------------------------------
-
-    blocks = parser.paragraphs(
-        file_path
-    )
-
-    print(
-        f"Parser block count : {len(blocks)}"
-    )
-
-    # ------------------------------------------------------------
-    # Full text
-    # ------------------------------------------------------------
-
-    full_text = parser.full_text(
-        file_path
-    )
-
-    print(
-        f"Full text length   : {len(full_text)}"
-    )
-
-    if not full_text.strip():
-
-        raise AssertionError(
-            "ResumeParser produced empty full text."
-        )
-
-    # ------------------------------------------------------------
-    # Sections
-    # ------------------------------------------------------------
-
-    sections = parser.parse(
-        file_path
-    )
-
-    print(
-        f"Section count      : {len(sections)}"
-    )
-
-    print()
-    print("PARSER SECTIONS")
-    print("-" * 70)
-
-    for name, value in sections.items():
-
-        if hasattr(value, "items"):
-
-            count = len(value.items)
-
-        elif isinstance(value, list):
-
-            count = len(value)
-
-        else:
-
-            count = "?"
-
-        print(
-            f"{name:<20}"
-            f"{type(value).__name__:<25}"
-            f"items={count}"
-        )
-
-    if not sections:
-
-        raise AssertionError(
-            "ResumeParser returned no sections."
-        )
-
-    pass_message(
-        "ResumeParser successfully connected "
-        "reader and section detector."
-    )
-
-    return parser, sections
-
-
-# ================================================================
-# SECTION CONSISTENCY
-# ================================================================
-
-def test_section_consistency(
-    detector_sections,
-    parser_sections,
-):
-
-    section(
-        "SECTION DETECTION CONSISTENCY"
-    )
-
-    detector_keys = set(
-        detector_sections.keys()
-    )
-
-    parser_keys = set(
-        parser_sections.keys()
-    )
-
-    if detector_keys != parser_keys:
-
-        print(
-            "Detector keys:",
-            sorted(detector_keys)
-        )
-
-        print(
-            "Parser keys:",
-            sorted(parser_keys)
-        )
-
-        raise AssertionError(
-            "Section keys differ between "
-            "SectionDetector and ResumeParser."
-        )
-
-    pass_message(
-        "Section keys are consistent."
-    )
-
-
-# ================================================================
-# HELPER
-# ================================================================
-
-def get_section_items(
-    sections,
-    section_name,
-):
-
-    content = sections.get(
-        section_name
-    )
-
-    if content is None:
-
-        return []
-
-    if hasattr(content, "items"):
-
-        return content.items
-
-    if isinstance(content, list):
-
-        return content
-
-    raise TypeError(
-        f"Unsupported section type for "
-        f"{section_name}: "
-        f"{type(content).__name__}"
-    )
-
-
-# ================================================================
-# STAGE 4
-# RESUME BUILDER
-# ================================================================
-
-def test_resume_builder(
-    sections,
-):
-
-    section(
-        "STAGE 4 — RESUME BUILDER"
-    )
-
-    print(
-        "Creating ResumeBuilder..."
-    )
-
-    builder = ResumeBuilder()
-
-    print(
-        "ResumeBuilder created."
-    )
-
-    resume = builder.build(
-        sections
-    )
-
-    if resume is None:
-
-        raise AssertionError(
-            "ResumeBuilder returned None."
-        )
-
-    print()
-    print(
-        f"Resume object type : "
-        f"{type(resume).__name__}"
-    )
-
-    # ============================================================
-    # PERSONAL INFORMATION
-    # ============================================================
-
-    print()
-    print("PERSONAL INFORMATION")
-    print("-" * 70)
-
-    personal = getattr(
-        resume,
-        "personal_information",
-        None,
-    )
-
-    if personal is None:
-
-        raise AssertionError(
-            "Resume has no personal_information."
-        )
-
-    for attribute in [
-        "name",
-        "email",
-        "phone",
-        "linkedin",
-        "github",
-        "address",
-    ]:
-
-        value = getattr(
-            personal,
-            attribute,
-            "",
-        )
-
-        print(
-            f"{attribute:<15}: {value}"
-        )
-
-    # ============================================================
-    # SUMMARY
-    # ============================================================
-
-    print()
-    print("SUMMARY")
-    print("-" * 70)
-
-    summary = getattr(
-        resume,
-        "summary",
-        "",
-    )
-
-    print(
-        summary[:1000]
-    )
-
-    # ============================================================
-    # COLLECTIONS
-    # ============================================================
-
-    collection_fields = [
-        "skills",
-        "experience",
-        "education",
-        "certifications",
-        "projects",
-        "awards",
-        "languages",
-        "references",
-    ]
-
-    print()
-    print("RESUME COLLECTIONS")
-    print("-" * 70)
-
-    for field_name in collection_fields:
-
-        value = getattr(
-            resume,
-            field_name,
+    pipeline = KnowledgeV5Pipeline()
+
+    assert callable(
+        getattr(
+            pipeline,
+            "run",
             None,
         )
+    )
 
-        if value is None:
+    assert callable(
+        getattr(
+            pipeline,
+            "best",
+            None,
+        )
+    )
 
-            print(
-                f"{field_name:<20}: MISSING"
-            )
+    assert callable(
+        getattr(
+            pipeline,
+            "build_parser_context",
+            None,
+        )
+    )
 
-            continue
+    print("PASS — run(ontology, sentence) available.")
+    print("PASS — best(ontology, sentence) available.")
+    print(
+        "PASS — build_parser_context(...) available."
+    )
 
-        try:
+    return pipeline
 
-            count = len(value)
 
-        except TypeError:
+# ======================================================================
+# TEST 3
+# ======================================================================
 
-            count = "NON-COLLECTION"
+def test_knowledge_entity_extraction():
 
+    print()
+    print("=" * 70)
+    print("TEST 3 — KNOWLEDGE ENTITY EXTRACTION")
+    print("=" * 70)
+
+    pipeline = KnowledgeV5Pipeline()
+
+    results = {}
+
+    for ontology, sentence in TEST_SENTENCES.items():
+
+        print()
         print(
-            f"{field_name:<20}: "
-            f"{type(value).__name__} "
-            f"count={count}"
+            f"Running ontology: {ontology}"
         )
 
-    pass_message(
-        "ResumeBuilder successfully created "
-        "the Resume object."
-    )
-
-    return resume
-
-
-# ================================================================
-# STAGE 5
-# EXTRACTOR VALIDATION
-# ================================================================
-
-def test_extracted_resume_content(
-    resume,
-):
-
-    section(
-        "STAGE 5 — EXTRACTED RESUME CONTENT"
-    )
-
-    # ------------------------------------------------------------
-    # CONTACT / PERSONAL
-    # ------------------------------------------------------------
-
-    print()
-    print("CONTACT EXTRACTION")
-    print("-" * 70)
-
-    personal = resume.personal_information
-
-    contact_values = {
-        "name": personal.name,
-        "email": personal.email,
-        "phone": personal.phone,
-        "linkedin": personal.linkedin,
-        "github": personal.github,
-        "address": personal.address,
-    }
-
-    for key, value in contact_values.items():
-
-        print(
-            f"{key:<15}: {value}"
+        result = pipeline.run(
+            ontology,
+            sentence,
         )
 
-    # ------------------------------------------------------------
-    # EXPERIENCE
-    # ------------------------------------------------------------
+        results[ontology] = result
 
-    print()
-    print("EXPERIENCE EXTRACTION")
-    print("-" * 70)
-
-    experience = getattr(
-        resume,
-        "experience",
-        [],
-    )
-
-    print(
-        f"Count : {len(experience)}"
-    )
-
-    for item in experience[:5]:
-
-        print(
-            f"  - {item}"
+        print_result(
+            ontology,
+            sentence,
+            result,
         )
 
-    # ------------------------------------------------------------
-    # EDUCATION
-    # ------------------------------------------------------------
+    print()
+    print(
+        "PASS — KnowledgeV5Pipeline.run() "
+        "executed for all test ontologies."
+    )
+
+    return results
+
+
+# ======================================================================
+# TEST 4
+# ======================================================================
+
+def test_best_entity_selection():
 
     print()
-    print("EDUCATION EXTRACTION")
-    print("-" * 70)
+    print("=" * 70)
+    print("TEST 4 — BEST KNOWLEDGE ENTITY")
+    print("=" * 70)
 
-    education = getattr(
-        resume,
-        "education",
-        [],
-    )
+    pipeline = KnowledgeV5Pipeline()
 
-    print(
-        f"Count : {len(education)}"
-    )
+    successful = 0
 
-    for item in education[:5]:
+    for ontology, sentence in TEST_SENTENCES.items():
 
-        print(
-            f"  - {item}"
+        result = pipeline.best(
+            ontology,
+            sentence,
         )
 
-    # ------------------------------------------------------------
-    # PROJECTS
-    # ------------------------------------------------------------
-
-    print()
-    print("PROJECT EXTRACTION")
-    print("-" * 70)
-
-    projects = getattr(
-        resume,
-        "projects",
-        [],
-    )
-
-    print(
-        f"Count : {len(projects)}"
-    )
-
-    for item in projects[:5]:
-
+        print()
         print(
-            f"  - {item}"
+            f"Ontology: {ontology}"
         )
 
-    # ------------------------------------------------------------
-    # AWARDS
-    # ------------------------------------------------------------
-
-    print()
-    print("AWARD EXTRACTION")
-    print("-" * 70)
-
-    awards = getattr(
-        resume,
-        "awards",
-        [],
-    )
-
-    print(
-        f"Count : {len(awards)}"
-    )
-
-    for item in awards[:5]:
-
         print(
-            f"  - {item}"
+            f"Best result: {result}"
         )
 
-    # ------------------------------------------------------------
-    # REFERENCES
-    # ------------------------------------------------------------
+        if result is not None:
+
+            successful += 1
 
     print()
-    print("REFERENCE EXTRACTION")
-    print("-" * 70)
 
-    references = getattr(
-        resume,
-        "references",
-        [],
+    print(
+        f"Best results returned: "
+        f"{successful}/{len(TEST_SENTENCES)}"
     )
 
     print(
-        f"Count : {len(references)}"
+        "PASS — KnowledgeV5Pipeline.best() "
+        "executed successfully."
     )
 
-    for item in references[:5]:
+    return successful
 
-        print(
-            f"  - {item}"
+
+# ======================================================================
+# TEST 5
+# ======================================================================
+
+def test_parser_context():
+
+    print()
+    print("=" * 70)
+    print("TEST 5 — KNOWLEDGE PARSER CONTEXT")
+    print("=" * 70)
+
+    pipeline = KnowledgeV5Pipeline()
+
+    context = pipeline.build_parser_context(
+        verb=True,
+        obj=True,
+        metric=True,
+        modifier=True,
+        numeric=True,
+        domain=True,
+    )
+
+    assert context is not None
+
+    print(
+        "Parser context type:",
+        type(context).__name__,
+    )
+
+    print(
+        "Parser context:"
+    )
+
+    print(context)
+
+    print(
+        "PASS — Parser context created."
+    )
+
+    return context
+
+
+# ======================================================================
+# TEST 6
+# ======================================================================
+
+def test_multiple_ontology_traversal():
+
+    print()
+    print("=" * 70)
+    print("TEST 6 — MULTI-ONTOLOGY TRAVERSAL")
+    print("=" * 70)
+
+    pipeline = KnowledgeV5Pipeline()
+
+    total_results = 0
+
+    for ontology, sentence in TEST_SENTENCES.items():
+
+        result = pipeline.run(
+            ontology,
+            sentence,
         )
 
-    # ------------------------------------------------------------
-    # LANGUAGES
-    # ------------------------------------------------------------
+        if result is not None:
 
-    print()
-    print("LANGUAGE EXTRACTION")
-    print("-" * 70)
-
-    languages = getattr(
-        resume,
-        "languages",
-        [],
-    )
-
-    print(
-        f"Count : {len(languages)}"
-    )
-
-    for item in languages[:5]:
+            total_results += 1
 
         print(
-            f"  - {item}"
+            f"{ontology:<15} -> "
+            f"{type(result).__name__}"
         )
 
-    pass_message(
-        "Non-ontology resume extraction stage completed."
-    )
+    print()
 
-
-# ================================================================
-# STAGE 6
-# ONTOLOGY EXTRACTION
-# ================================================================
-
-def test_ontology_fields(
-    resume,
-):
-
-    section(
-        "STAGE 6 — ONTOLOGY EXTRACTION"
-    )
+    assert total_results > 0
 
     print(
-        "Ontology-controlled fields"
+        f"PASS — {total_results} ontology "
+        "traversals returned results."
     )
 
-    print(
-        "are intentionally validated "
-        "through their existing extractor output."
-    )
+    return total_results
 
-    # ------------------------------------------------------------
-    # SKILLS
-    # ------------------------------------------------------------
+
+# ======================================================================
+# MAIN TEST RUNNER
+# ======================================================================
+
+def test_knowledge_pipeline_api():
 
     print()
-    print("SKILLS")
-    print("-" * 70)
-
-    skills = getattr(
-        resume,
-        "skills",
-        [],
-    )
-
+    print("=" * 70)
     print(
-        f"Count : {len(skills)}"
-    )
-
-    for skill in skills[:15]:
-
-        print(
-            f"  - {skill}"
-        )
-
-    # ------------------------------------------------------------
-    # CERTIFICATIONS
-    # ------------------------------------------------------------
-
-    print()
-    print("CERTIFICATIONS")
-    print("-" * 70)
-
-    certifications = getattr(
-        resume,
-        "certifications",
-        [],
-    )
-
-    print(
-        f"Count : {len(certifications)}"
-    )
-
-    for certification in certifications[:15]:
-
-        print(
-            f"  - {certification}"
-        )
-
-    pass_message(
-        "Ontology-controlled fields are connected "
-        "to ResumeBuilder."
-    )
-
-
-# ================================================================
-# STAGE 7
-# RAW TEXT TRACEABILITY
-# ================================================================
-
-def test_traceability(
-    parser,
-    resume,
-):
-
-    section(
-        "STAGE 7 — RAW TEXT TRACEABILITY"
-    )
-
-    full_text = parser.full_text(
-        RESUME_PATH
-    )
-
-    print(
-        f"Raw resume characters : "
-        f"{len(full_text)}"
-    )
-
-    checks = [
-        "MUHAMMAD KASHIF",
-        "SUMMARY",
-        "EXPERIENCE",
-        "EDUCATION",
-        "CERTIFICATIONS",
-    ]
-
-    for expected in checks:
-
-        if expected.lower() in full_text.lower():
-
-            print(
-                f"PASS  {expected}"
-            )
-
-        else:
-
-            print(
-                f"WARN  {expected} "
-                "not found in raw text"
-            )
-
-    pass_message(
-        "Raw resume remains traceable "
-        "through the parser."
-    )
-
-
-# ================================================================
-# STAGE 8
-# ENRICHMENT / INTELLIGENCE
-# ================================================================
-
-def test_intelligence_boundary(
-    resume,
-):
-
-    section(
-        "STAGE 8 — INTELLIGENCE / ENRICHMENT BOUNDARY"
-    )
-
-    print(
-        "ResumeBuilder responsibility:"
-    )
-
-    print(
-        "  DOCX -> sections -> Resume"
-    )
-
-    print()
-    print(
-        "Post-builder intelligence:"
-    )
-
-    print(
-        "  Resume -> SeniorityDetector"
-    )
-
-    print(
-        "  Resume -> EducationEnricher"
-    )
-
-    print(
-        "  Resume -> IndustryDetector"
-    )
-
-    print()
-    print(
-        "These components are NOT instantiated "
-        "inside ResumeBuilder."
-    )
-
-    pass_message(
-        "Builder/intelligence boundary is preserved."
-    )
-
-
-# ================================================================
-# COMPLETE PIPELINE
-# ================================================================
-
-def test_complete_pipeline():
-
-    banner(
         "ENTERPRISE V5 — "
-        "COMPLETE RESUME INGESTION PIPELINE"
+        "KNOWLEDGE PIPELINE TRAVERSAL TEST"
+    )
+    print("=" * 70)
+
+    pipeline = test_pipeline_creation()
+
+    test_pipeline_api()
+
+    results = test_knowledge_entity_extraction()
+
+    test_best_entity_selection()
+
+    test_parser_context()
+
+    test_multiple_ontology_traversal()
+
+    print()
+    print("=" * 70)
+    print(
+        "ENTERPRISE V5 — "
+        "KNOWLEDGE PIPELINE TRAVERSAL PASSED"
+    )
+    print("=" * 70)
+
+    print()
+    print(
+        "KnowledgeV5Pipeline : PASS"
     )
 
-    try:
+    print(
+        "run() API           : PASS"
+    )
 
-        # --------------------------------------------------------
-        # FILE
-        # --------------------------------------------------------
+    print(
+        "best() API          : PASS"
+    )
 
-        file_path = test_file()
+    print(
+        "Parser context      : PASS"
+    )
 
-        # --------------------------------------------------------
-        # READER
-        # --------------------------------------------------------
+    print(
+        "Multi-ontology      : PASS"
+    )
 
-        blocks = test_reader(
-            file_path
-        )
+    print(
+        "Knowledge traversal : PASS"
+    )
 
-        # --------------------------------------------------------
-        # DETECTOR
-        # --------------------------------------------------------
+    return results
 
-        detector_sections = (
-            test_section_detector(
-                blocks
-            )
-        )
-
-        # --------------------------------------------------------
-        # PARSER
-        # --------------------------------------------------------
-
-        parser, parser_sections = (
-            test_resume_parser(
-                file_path
-            )
-        )
-
-        # --------------------------------------------------------
-        # CONSISTENCY
-        # --------------------------------------------------------
-
-        test_section_consistency(
-            detector_sections,
-            parser_sections,
-        )
-
-        # --------------------------------------------------------
-        # BUILDER
-        # --------------------------------------------------------
-
-        resume = test_resume_builder(
-            parser_sections
-        )
-
-        # --------------------------------------------------------
-        # EXTRACTIONS
-        # --------------------------------------------------------
-
-        test_extracted_resume_content(
-            resume
-        )
-
-        # --------------------------------------------------------
-        # ONTOLOGY
-        # --------------------------------------------------------
-
-        test_ontology_fields(
-            resume
-        )
-
-        # --------------------------------------------------------
-        # TRACEABILITY
-        # --------------------------------------------------------
-
-        test_traceability(
-            parser,
-            resume
-        )
-
-        # --------------------------------------------------------
-        # INTELLIGENCE BOUNDARY
-        # --------------------------------------------------------
-
-        test_intelligence_boundary(
-            resume
-        )
-
-        # --------------------------------------------------------
-        # COMPLETE
-        # --------------------------------------------------------
-
-        banner(
-            "ENTERPRISE V5 — "
-            "RESUME INGESTION PIPELINE PASSED"
-        )
-
-        print()
-        print(
-            "Reader                 : PASS"
-        )
-
-        print(
-            "Section Detector       : PASS"
-        )
-
-        print(
-            "Resume Parser          : PASS"
-        )
-
-        print(
-            "Section Consistency    : PASS"
-        )
-
-        print(
-            "Resume Builder         : PASS"
-        )
-
-        print(
-            "Non-Ontology Extractors: PASS"
-        )
-
-        print(
-            "Ontology Extractors    : PASS"
-        )
-
-        print(
-            "Traceability            : PASS"
-        )
-
-        print(
-            "Intelligence Boundary  : PASS"
-        )
-
-        print()
-        print(
-            "NEXT ARCHITECTURAL STAGE"
-        )
-
-        print(
-            "Resume -> Intelligence "
-            "Enrichment -> JD Matching"
-        )
-
-        print()
-
-        return resume
-
-    except Exception as exc:
-
-        banner(
-            "ENTERPRISE V5 — "
-            "RESUME INGESTION PIPELINE FAILED"
-        )
-
-        print(
-            f"{type(exc).__name__}: {exc}"
-        )
-
-        print()
-
-        traceback.print_exc()
-
-        raise
-
-
-# ================================================================
-# ENTRY POINT
-# ================================================================
 
 if __name__ == "__main__":
 
-    test_complete_pipeline()
-
+    test_knowledge_pipeline_api()

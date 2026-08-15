@@ -1,279 +1,253 @@
 """
 Enterprise Metric Extractor
+Enterprise V5
 
-Repository compatible.
+Responsibility
+--------------
+Convert metric MatchResult objects into MetricKnowledge objects.
 
-Responsibilities:
+Pipeline:
 
-1. Detect metric entity.
-2. Convert repository metric into MetricKnowledge.
-3. Preserve ontology metadata.
-4. Provide higher-is-better business direction.
-5. Provide measurement expectations.
+ExtractionRequest
+        ↓
+KnowledgeV5Pipeline
+        ↓
+MatchResult
+        ↓
+MetricExtractor
+        ↓
+MetricKnowledge
+        ↓
+ExtractionResult[MetricKnowledge]
 
-Enterprise V3
+Architecture
+------------
+This extractor intentionally inherits from GenericOntologyExtractor.
+
+The generic extractor is responsible for:
+
+    - multi-match extraction
+    - confidence filtering
+    - entity filtering
+    - common KnowledgeEntity fields
+    - repository metadata
+    - match positions
+    - alias information
+    - ExtractionResult construction
+
+MetricExtractor is responsible only for
+metric-specific fields.
 """
 
-from app.intelligence.utilities.knowledge.repository_v5.repository import (
-    Repository,
-)
+from __future__ import annotations
+
+from typing import Any, Mapping
 
 from app.intelligence.utilities.knowledge.knowledge_extractor_models.metric_models import (
     MetricKnowledge,
 )
 
+from .generic_ontology_extractor import (
+    GenericOntologyExtractor,
+)
 
-class MetricExtractor:
 
-    ####################################################################
-    # INITIALIZATION
-    ####################################################################
+class MetricExtractor(
+    GenericOntologyExtractor[MetricKnowledge]
+):
+    """
+    Enterprise V5 metric knowledge extractor.
 
-    def __init__(self, repository=None):
+    Extracts one or more metric entities from a sentence
+    and converts every MatchResult into a MetricKnowledge object.
+    """
 
-        self.repository = repository or Repository()
+    # ==================================================================
+    # CONFIGURATION
+    # ==================================================================
 
-    ####################################################################
-    # MAIN
-    ####################################################################
+    ontology_name = "metrics"
 
-    def extract(self, sentence):
+    knowledge_class = MetricKnowledge
 
+    entity_type = "metric"
+
+    # ==================================================================
+    # METRIC-SPECIFIC FIELDS
+    # ==================================================================
+
+    def extra_fields(
+        self,
+        entity: Any,
+        metadata: Mapping[str, Any],
+    ) -> dict[str, Any]:
         """
-        Extract a metric from a sentence.
+        Populate fields specific to MetricKnowledge.
 
-        Expected repository behaviour:
-
-            repository.search(...)
-            
-        The exact repository lookup should remain compatible with
-        the existing repository implementation.
+        All common KnowledgeEntity fields are populated by
+        GenericOntologyExtractor.populate_entity().
         """
 
-        if not sentence:
-
-            return MetricKnowledge()
-
-        ################################################################
-        # Repository lookup
-        ################################################################
-
-        result = self.repository.search(
-            ontology="metrics",
-            text=sentence,
-        )
-
-        if not result:
-
-            return MetricKnowledge()
-
-        ################################################################
-        # Select metric entity
-        ################################################################
-
-        metric = result[0] if isinstance(result, list) else result
-
-        if metric is None:
-
-            return MetricKnowledge()
-
-        ################################################################
-        # Metadata
-        ################################################################
-
-        metadata = getattr(metric, "metadata", None)
-
-        if metadata is None:
-
-            metadata = {}
-
-        ################################################################
-        # Direction
-        ################################################################
+        # --------------------------------------------------------------
+        # HIGHER / LOWER IS BETTER
+        # --------------------------------------------------------------
 
         higher_is_better = metadata.get(
             "higher_is_better",
-            getattr(metric, "higher_is_better", True),
+            getattr(
+                entity,
+                "higher_is_better",
+                True,
+            ),
         )
 
-        ################################################################
-        # Target
-        ################################################################
+        higher_is_better = bool(
+            higher_is_better
+        )
+
+        # --------------------------------------------------------------
+        # TARGET VALUE
+        # --------------------------------------------------------------
 
         target_value = metadata.get(
             "target_value",
             0.0,
         )
 
-        ################################################################
-        # Build knowledge object
-        ################################################################
+        try:
+            target_value = float(
+                target_value
+            )
+        except (
+            TypeError,
+            ValueError,
+        ):
+            target_value = 0.0
 
-        return MetricKnowledge(
+        # --------------------------------------------------------------
+        # IMPACT WEIGHT
+        # --------------------------------------------------------------
 
-            ################################################################
-            # Detection
-            ################################################################
-
-            found=True,
-
-            confidence=getattr(
-                metric,
-                "confidence",
-                0.99,
+        impact_weight = metadata.get(
+            "impact_weight",
+            getattr(
+                entity,
+                "impact_weight",
+                1.0,
             ),
+        )
 
-            phrase=getattr(
-                metric,
-                "phrase",
-                "",
-            ),
+        try:
+            impact_weight = float(
+                impact_weight
+            )
+        except (
+            TypeError,
+            ValueError,
+        ):
+            impact_weight = 1.0
 
-            alias_match=getattr(
-                metric,
-                "alias_match",
-                False,
-            ),
+        # --------------------------------------------------------------
+        # METRIC-SPECIFIC VALUES
+        # --------------------------------------------------------------
 
-            ################################################################
-            # Identity
-            ################################################################
+        return {
 
-            metric_family=metadata.get(
+            # ==========================================================
+            # IDENTITY
+            # ==========================================================
+
+            "metric_family": metadata.get(
                 "metric_family",
                 "",
             ),
 
-            metric_group=metadata.get(
+            "metric_group": metadata.get(
                 "metric_group",
                 "",
             ),
 
-            canonical=getattr(
-                metric,
-                "canonical",
-                "",
-            ),
-
-            unit=metadata.get(
+            "unit": metadata.get(
                 "unit",
-                "",
+                metadata.get(
+                    "preferred_unit",
+                    "",
+                ),
             ),
 
-            ################################################################
-            # Classification
-            ################################################################
+            # ==========================================================
+            # DIRECTION
+            # ==========================================================
 
-            category=getattr(
-                metric,
-                "category",
-                metadata.get("category", ""),
-            ),
-
-            business_area=getattr(
-                metric,
-                "business_area",
-                metadata.get("business_area", ""),
-            ),
-
-            ################################################################
-            # Direction
-            ################################################################
-
-            higher_is_better=bool(
+            "higher_is_better": (
                 higher_is_better
             ),
 
-            lower_is_better=not bool(
-                higher_is_better
+            "lower_is_better": (
+                not higher_is_better
             ),
 
-            ################################################################
-            # Metric type
-            ################################################################
+            # ==========================================================
+            # METRIC CLASSIFICATION
+            # ==========================================================
 
-            percentage_metric=metadata.get(
+            "percentage_metric": metadata.get(
                 "percentage_metric",
                 False,
             ),
 
-            financial_metric=metadata.get(
+            "financial_metric": metadata.get(
                 "financial_metric",
                 False,
             ),
 
-            quality_metric=metadata.get(
+            "quality_metric": metadata.get(
                 "quality_metric",
                 False,
             ),
 
-            productivity_metric=metadata.get(
+            "productivity_metric": metadata.get(
                 "productivity_metric",
                 False,
             ),
 
-            operational_metric=metadata.get(
+            "operational_metric": metadata.get(
                 "operational_metric",
                 False,
             ),
 
-            ################################################################
+            # ==========================================================
             # KPI
-            ################################################################
+            # ==========================================================
 
-            kpi=metadata.get(
+            "kpi": metadata.get(
                 "kpi",
                 False,
             ),
 
-            benchmark_available=metadata.get(
+            "benchmark_available": metadata.get(
                 "benchmark_available",
                 False,
             ),
 
-            target_value=target_value,
+            "target_value": (
+                target_value
+            ),
 
-            ################################################################
-            # Measurement
-            ################################################################
+            # ==========================================================
+            # MEASUREMENT
+            # ==========================================================
 
-            measurement_expected=metadata.get(
+            "measurement_expected": metadata.get(
                 "measurement_expected",
                 True,
             ),
 
-            ################################################################
-            # Business
-            ################################################################
+            # ==========================================================
+            # BUSINESS
+            # ==========================================================
 
-            impact_weight=getattr(
-                metric,
-                "impact_weight",
-                metadata.get("impact_weight", 0.0),
+            "impact_weight": (
+                impact_weight
             ),
-
-            ################################################################
-            # Source
-            ################################################################
-
-            source=getattr(
-                metric,
-                "source",
-                "",
-            ),
-
-            ################################################################
-            # Description
-            ################################################################
-
-            description=metadata.get(
-                "description",
-                "",
-            ),
-
-            ################################################################
-            # Metadata
-            ################################################################
-
-            metadata=metadata,
-        )
+        }

@@ -256,4 +256,58 @@ Resume Intelligence
  ├── ATS
  └── JD matching
  
+
+                     RESUME INGESTION
+                          │
+                          ▼
+                   ResumeBuilder
+                          │
+                          ▼
+                 ┌─────────────────┐
+                 │ Resume          │
+                 │                 │
+                 │ structural     │
+                 │ extraction     │
+                 └────────┬────────┘
+                          │
+                          ▼
+              ResumeKnowledgeAdapter
+                          │
+                          ▼
+              ResumeEntityCandidates
+                          │
+              ┌───────────┼───────────┐
+              ▼           ▼           ▼
+           Skill       Cert        Standard
+          Extractor   Extractor   Extractor
+              │           │           │
+              ▼           ▼           ▼
+          Knowledge    Knowledge    Knowledge
+           Entity       Entity       Entity
+              │           │           │
+              └───────────┼───────────┘
+                          ▼
+                 Knowledge Extractor
+                       Layer
+                          │
+                          ▼
+                    Reasoner Layer
+                          │
+                          ▼
+                   Knowledge Graph
+                          │
+                          ▼
+                     Traversal
+                          │
+                          ▼
+                    Knowledge Profile
+                          │
+                          ▼
+                    JD Intelligence
+                          │
+                          ▼
+                    JD Matching
+                          │
+                          ▼
+                       ATS
                   """
