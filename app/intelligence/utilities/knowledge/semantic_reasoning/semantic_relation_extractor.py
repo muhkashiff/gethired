@@ -1,38 +1,45 @@
 """
-Enterprise Relation Extractor
-Enterprise V12
+Enterprise Semantic Relation Extractor
 
-Converts semantic dependencies into higher-level
-StatementRelation objects.
+Enterprise V12 - NEW ARCHITECTURE
 
-Pipeline
+Converts resolved SemanticEntity objects into StatementRelation
+objects without using the old SemanticDependency architecture.
 
-SemanticEntity[]
-        +
-SemanticDependency[]
+NEW FLOW
+
+KnowledgeDocument
         ↓
-RelationExtractor
+KnowledgeFact
         ↓
-StatementRelation[]
+KnowledgeInterpretation
+        ↓
+SemanticEntity
+        ↓
+SemanticRelationExtractor
+        ↓
+StatementRelation
+        ↓
+BusinessStatementBuilder
+        ↓
+KnowledgeGraphBuilder
 
-Responsibilities
-----------------
-• Convert dependencies into semantic relations
-• Preserve source/target entity IDs
-• Preserve confidence
-• Preserve entity types
-• Preserve statement boundaries
-• Prevent duplicate relations
-• Keep KPI and BKPI distinctions
-• Remain independent from KnowledgeGraphBuilder
+This module deliberately does NOT depend on:
 
-This class does NOT build the knowledge graph.
+    SemanticDependency
+    SemanticResolution
+    SemanticCluster
+    SemanticMetadata
+
+Those belong to the retired semantic architecture.
 """
 
 from __future__ import annotations
 
+from itertools import combinations
+from typing import Iterable
+
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
-    SemanticDependency,
     SemanticEntity,
     StatementRelation,
 )
@@ -40,13 +47,16 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models imp
 
 class SemanticRelationExtractor:
     """
-    Extracts higher-level semantic relations from
-    already-resolved SemanticDependency objects.
+    Build StatementRelation objects directly from SemanticEntity objects.
 
-    DependencyResolver determines that a relationship exists.
+    Relations are inferred from entity types and the semantic information
+    carried by the entities themselves.
 
-    RelationExtractor determines how that dependency should
-    be represented as a StatementRelation.
+    The extractor is intentionally lightweight.
+
+    It does NOT build the knowledge graph.
+    It does NOT build BusinessStatement objects.
+    It does NOT perform ontology resolution.
     """
 
     # ==========================================================
@@ -56,237 +66,541 @@ class SemanticRelationExtractor:
     def extract(
         self,
         entities: list[SemanticEntity],
-        dependencies: list[SemanticDependency],
     ) -> list[StatementRelation]:
         """
-        Convert semantic dependencies into StatementRelation objects.
+        Convert semantic entities into statement-level relations.
+
+        Entities belonging to different statements are never connected.
         """
 
-        if not entities or not dependencies:
+        if not entities:
+
             return []
 
-        entity_lookup = {
-            entity.entity_id: entity
+        valid_entities = [
+
+            entity
+
             for entity in entities
-            if isinstance(entity, SemanticEntity)
+
+            if isinstance(
+                entity,
+                SemanticEntity,
+            )
             and entity.entity_id
-        }
+        ]
+
+        if not valid_entities:
+
+            return []
+
+        grouped = self._group_by_statement(
+            valid_entities
+        )
 
         relations: list[StatementRelation] = []
 
-        for dependency in dependencies:
+        for statement_id, statement_entities in grouped.items():
 
-            source = entity_lookup.get(
-                dependency.source_entity
-            )
+            self._extract_statement_relations(
 
-            target = entity_lookup.get(
-                dependency.target_entity
-            )
+                statement_id=statement_id,
 
-            if source is None or target is None:
-                continue
+                entities=statement_entities,
 
-            if not self._same_statement(
-                source,
-                target,
-            ):
-                continue
-
-            relation_type = self._map_relation(
-                dependency.relation
-            )
-
-            if relation_type is None:
-                continue
-
-            self._append_relation(
                 relations=relations,
-                source=source,
-                target=target,
-                relation_type=relation_type,
-                confidence=dependency.confidence,
-                dependency=dependency,
             )
 
         return relations
 
     # ==========================================================
-    # RELATION MAPPING
+    # GROUP BY STATEMENT
     # ==========================================================
 
     @staticmethod
-    def _map_relation(
-        relation: str | None,
-    ) -> str | None:
-        """
-        Convert DependencyResolver relation names into
-        standardized StatementRelation names.
-        """
+    def _group_by_statement(
+        entities: Iterable[SemanticEntity],
+    ) -> dict[str, list[SemanticEntity]]:
 
-        if not relation:
-            return None
+        grouped: dict[
+            str,
+            list[SemanticEntity],
+        ] = {}
 
-        mapping = {
+        for entity in entities:
 
-            # ----------------------------------------------
-            # TARGET RELATIONS
-            # ----------------------------------------------
+            statement_id = (
 
-            "targets": "ACTS_ON",
-            "creates": "CREATES",
-            "manages": "MANAGES",
-            "monitors": "MONITORS",
-            "maintains": "MAINTAINS",
-            "optimizes": "OPTIMIZES",
-            "improves": "IMPROVES",
-            "controls": "CONTROLS",
-            "executes": "EXECUTES",
-            "certifies": "CERTIFIES",
+                getattr(
+                    entity,
+                    "statement_id",
+                    "",
+                )
 
-            # ----------------------------------------------
-            # STANDARD
-            # ----------------------------------------------
+                or getattr(
+                    entity,
+                    "source_statement_id",
+                    "",
+                )
 
-            "complies_with": "COMPLIES_WITH",
-            "certified_against": "CERTIFIED_AGAINST",
-            "audited_against": "AUDITED_AGAINST",
-
-            # ----------------------------------------------
-            # METHODOLOGY
-            # ----------------------------------------------
-
-            "performed_using": "USES",
-
-            # ----------------------------------------------
-            # SKILL
-            # ----------------------------------------------
-
-            "requires": "REQUIRES",
-
-            # ----------------------------------------------
-            # KPI / METRIC
-            # ----------------------------------------------
-
-            "improved": "AFFECTS",
-            "reduced": "AFFECTS",
-            "increased": "AFFECTS",
-            "optimized": "AFFECTS",
-            "measures": "MEASURES",
-            "measured_by": "MEASURED_BY",
-
-            # ----------------------------------------------
-            # BKPI
-            # ----------------------------------------------
-
-            "contributes_to": "CONTRIBUTES_TO",
-            "supports": "SUPPORTS",
-
-            # ----------------------------------------------
-            # DOMAIN
-            # ----------------------------------------------
-
-            "belongs_to": "BELONGS_TO",
-        }
-
-        return mapping.get(
-            relation
-        )
-
-    # ==========================================================
-    # STATEMENT BOUNDARY
-    # ==========================================================
-
-    @staticmethod
-    def _same_statement(
-        source: SemanticEntity,
-        target: SemanticEntity,
-    ) -> bool:
-        """
-        Prevent relations from crossing statements.
-        """
-
-        source_statement = (
-            getattr(
-                source,
-                "statement_id",
-                "",
+                or "STATEMENT_1"
             )
-            or "STATEMENT_1"
-        )
 
-        target_statement = (
-            getattr(
-                target,
-                "statement_id",
-                "",
-            )
-            or "STATEMENT_1"
-        )
+            grouped.setdefault(
+                statement_id,
+                [],
+            ).append(entity)
 
-        return source_statement == target_statement
+        return grouped
 
     # ==========================================================
-    # DUPLICATE PROTECTION
+    # STATEMENT RELATIONS
+    # ==========================================================
+
+    def _extract_statement_relations(
+        self,
+        statement_id: str,
+        entities: list[SemanticEntity],
+        relations: list[StatementRelation],
+    ) -> None:
+
+        actions = self._entities(
+            entities,
+            "action",
+        )
+
+        targets = self._entities(
+            entities,
+            "target",
+        )
+
+        objects = self._entities(
+            entities,
+            "object",
+        )
+
+        metrics = self._entities(
+            entities,
+            "metric",
+        )
+
+        measurements = self._entities(
+            entities,
+            "measurement",
+        )
+
+        skills = self._entities(
+            entities,
+            "skill",
+        )
+
+        standards = self._entities(
+            entities,
+            "standard",
+        )
+
+        methodologies = self._entities(
+            entities,
+            "methodology",
+        )
+
+        technologies = self._entities(
+            entities,
+            "technology",
+        )
+
+        certifications = self._entities(
+            entities,
+            "certification",
+        )
+
+        domains = self._entities(
+            entities,
+            "domain",
+        )
+
+        kpis = self._entities(
+            entities,
+            "kpi",
+        )
+
+        # ------------------------------------------------------
+        # ACTION → TARGET
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            targets + objects,
+            "ACTS_ON",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → METRIC
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            metrics,
+            "AFFECTS",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # METRIC → MEASUREMENT
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            metrics,
+            measurements,
+            "MEASURED_BY",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → SKILL
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            skills,
+            "REQUIRES",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → STANDARD
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            standards,
+            "COMPLIES_WITH",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → METHODOLOGY
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            methodologies,
+            "USES",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → TECHNOLOGY
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            technologies,
+            "USES",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → CERTIFICATION
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            certifications,
+            "CERTIFIES",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → DOMAIN
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            domains,
+            "BELONGS_TO",
+            statement_id,
+        )
+
+        # ------------------------------------------------------
+        # ACTION → KPI
+        # ------------------------------------------------------
+
+        self._connect(
+
+            relations,
+            actions,
+            kpis,
+            "AFFECTS",
+            statement_id,
+        )
+
+    # ==========================================================
+    # ENTITY FILTER
     # ==========================================================
 
     @staticmethod
-    def _append_relation(
+    def _entities(
+        entities: list[SemanticEntity],
+        entity_type: str,
+    ) -> list[SemanticEntity]:
+
+        entity_type = entity_type.casefold()
+
+        return [
+
+            entity
+
+            for entity in entities
+
+            if str(
+                getattr(
+                    entity,
+                    "entity_type",
+                    "",
+                )
+                or getattr(
+                    entity,
+                    "semantic_type",
+                    "",
+                )
+            ).casefold()
+            == entity_type
+
+        ]
+
+    # ==========================================================
+    # CONNECT
+    # ==========================================================
+
+    def _connect(
+        self,
+        relations: list[StatementRelation],
+        sources: list[SemanticEntity],
+        targets: list[SemanticEntity],
+        relation_type: str,
+        statement_id: str,
+    ) -> None:
+
+        if not sources or not targets:
+
+            return
+
+        for source, target in combinations(
+            sources + targets,
+            2,
+        ):
+
+            source_type = self._type(
+                source
+            )
+
+            target_type = self._type(
+                target
+            )
+
+            if (
+                source_type == "action"
+                and target_type != "action"
+            ):
+
+                self._append(
+
+                    relations=relations,
+
+                    source=source,
+
+                    target=target,
+
+                    relation_type=relation_type,
+
+                    statement_id=statement_id,
+                )
+
+    # ==========================================================
+    # APPEND
+    # ==========================================================
+
+    @staticmethod
+    def _append(
         relations: list[StatementRelation],
         source: SemanticEntity,
         target: SemanticEntity,
         relation_type: str,
-        confidence: float,
-        dependency: SemanticDependency,
+        statement_id: str,
     ) -> None:
-        """
-        Add a StatementRelation unless the exact relation
-        already exists.
-        """
+
+        if not source.entity_id:
+            return
+
+        if not target.entity_id:
+            return
 
         for existing in relations:
 
             if (
+
                 existing.source_id
                 == source.entity_id
-                and existing.target_id
+
+                and
+
+                existing.target_id
                 == target.entity_id
-                and existing.relation_type
+
+                and
+
+                existing.relation_type
                 == relation_type
+
             ):
+
                 return
 
-        effective_confidence = min(
-            source.confidence,
-            target.confidence,
-            confidence,
+        confidence = min(
+
+            SemanticRelationExtractor._confidence(
+                source
+            ),
+
+            SemanticRelationExtractor._confidence(
+                target
+            ),
+
         )
 
         reasoning = (
+
             f"{source.canonical} "
+
             f"{relation_type.replace('_', ' ').lower()} "
+
             f"{target.canonical}"
+
         )
 
         relations.append(
+
             StatementRelation(
+
                 source_id=source.entity_id,
+
                 target_id=target.entity_id,
+
                 relation_type=relation_type,
-                confidence=effective_confidence,
+
+                confidence=confidence,
+
                 reasoning=reasoning,
+
                 metadata={
-                    "source_type": source.entity_type,
-                    "target_type": target.entity_type,
-                    "dependency_relation": dependency.relation,
-                    "statement_id": (
-                        getattr(
-                            source,
-                            "statement_id",
-                            "",
+
+                    "statement_id": statement_id,
+
+                    "source_type": (
+                        SemanticRelationExtractor._type(
+                            source
                         )
-                        or "STATEMENT_1"
                     ),
+
+                    "target_type": (
+                        SemanticRelationExtractor._type(
+                            target
+                        )
+                    ),
+
+                    "source_canonical": (
+                        source.canonical
+                    ),
+
+                    "target_canonical": (
+                        target.canonical
+                    ),
+
                 },
+
             )
+
+        )
+
+    # ==========================================================
+    # TYPE
+    # ==========================================================
+
+    @staticmethod
+    def _type(
+        entity: SemanticEntity,
+    ) -> str:
+
+        value = (
+
+            getattr(
+                entity,
+                "entity_type",
+                "",
+            )
+
+            or getattr(
+                entity,
+                "semantic_type",
+                "",
+            )
+
+        )
+
+        return str(
+            value or ""
+        ).strip().casefold()
+
+    # ==========================================================
+    # CONFIDENCE
+    # ==========================================================
+
+    @staticmethod
+    def _confidence(
+        entity: SemanticEntity,
+    ) -> float:
+
+        try:
+
+            value = float(
+                getattr(
+                    entity,
+                    "confidence",
+                    1.0,
+                )
+            )
+
+        except (
+            TypeError,
+            ValueError,
+        ):
+
+            value = 1.0
+
+        return max(
+            0.0,
+            min(
+                1.0,
+                value,
+            ),
         )

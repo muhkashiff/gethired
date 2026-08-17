@@ -1,35 +1,28 @@
+from __future__ import annotations
+
 """
 Enterprise Resume Knowledge Pipeline
 Enterprise V5
 
-Responsibility:
+Architecture
+------------
 
-Resume
-    ↓
-Resume textual units
+Sentence
     ↓
 ExtractionCoordinator
     ↓
 KnowledgeV5Pipeline
     ↓
-Ontology knowledge entities
+ExtractedEntity
     ↓
 KnowledgeEntity
     ↓
+KnowledgeInterpretation
+    ↓
 KnowledgeFact
-
-This layer does NOT:
-
-- tokenize
-- match
-- calculate confidence
-- resolve overlaps
-- rank ontology matches
-- perform reasoning
-- build the knowledge graph
-
-Those responsibilities remain in their existing layers.
 """
+
+from typing import Iterable
 
 from app.intelligence.utilities.knowledge.knowledge_models import (
     KnowledgeFact,
@@ -57,7 +50,7 @@ class ResumeKnowledgePipeline:
     def __init__(
         self,
         coordinator=None,
-    ):
+    ) -> None:
 
         self.coordinator = (
             coordinator
@@ -65,19 +58,18 @@ class ResumeKnowledgePipeline:
         )
 
     # =========================================================
-    # PROCESS ONE TEXT UNIT
+    # PROCESS ONE SENTENCE
     # =========================================================
 
     def process_sentence(
         self,
         sentence: str,
-    ):
+    ) -> KnowledgeFact | None:
 
         if not isinstance(
             sentence,
             str,
         ):
-
             raise TypeError(
                 "sentence must be a string."
             )
@@ -85,158 +77,172 @@ class ResumeKnowledgePipeline:
         sentence = sentence.strip()
 
         if not sentence:
-
             return None
 
-        # -----------------------------------------------------
-        # IMPORTANT:
-        #
-        # ExtractionCoordinator internally invokes:
-        #
-        # ExtractionCoordinator
-        #       ↓
-        # KnowledgeV5Pipeline
-        #       ↓
-        # Tokenizer
-        #       ↓
-        # Matcher
-        #       ↓
-        # Confidence
-        #       ↓
-        # Overlap
-        #       ↓
-        # Ranker
-        # -----------------------------------------------------
+        # =====================================================
+        # EXTRACTION
+        # =====================================================
 
         extraction = self.coordinator.run(
             sentence
         )
 
+        # =====================================================
+        # CREATE INTERPRETATION
+        # =====================================================
+
         interpretation = (
             KnowledgeInterpretation()
         )
 
-        entities = []
+        # =====================================================
+        # CONVERT EXTRACTED ENTITIES
+        # =====================================================
 
-        # =====================================================
-        # CONVERT ExtractedEntity
-        # → KnowledgeEntity
-        # =====================================================
+        knowledge_entities = []
 
         for extracted in (
             extraction.all_entities
         ):
 
-            entity = KnowledgeEntity(
+            if extracted is None:
+                continue
 
-                found=True,
+            knowledge_entity = (
+                KnowledgeEntity(
 
-                confidence=float(
-                    extracted.confidence
-                ),
+                    found=True,
 
-                extraction_method=(
-                    "knowledge_v5"
-                ),
+                    confidence=float(
+                        extracted.confidence
+                    ),
 
-                original=(
-                    extracted.phrase
-                ),
+                    extraction_method=(
+                        "knowledge_v5"
+                    ),
 
-                canonical=(
-                    extracted.canonical
-                ),
+                    original=(
+                        extracted.phrase
+                    ),
 
-                normalized=(
-                    extracted.canonical
-                    .lower()
-                ),
+                    canonical=(
+                        extracted.canonical
+                    ),
 
-                entity_id=(
-                    extracted.entity_id
-                ),
+                    normalized=(
+                        extracted.canonical
+                        .strip()
+                        .casefold()
+                    ),
 
-                entity_type=(
-                    extracted.entity_type
-                ),
+                    entity_id=(
+                        extracted.entity_id
+                    ),
 
-                category=(
-                    extracted.category
-                ),
+                    entity_type=(
+                        extracted.entity_type
+                    ),
 
-                ontology_name=(
-                    extracted.ontology
-                ),
+                    category=(
+                        extracted.category
+                    ),
 
-                business_area=(
-                    extracted.business_area
-                ),
+                    ontology_name=(
+                        extracted.ontology
+                    ),
 
-                domain=(
-                    extracted.domain
-                ),
+                    business_area=(
+                        extracted.business_area
+                    ),
 
-                impact_weight=float(
-                    extracted.impact_weight
-                ),
+                    domain=(
+                        extracted.domain
+                    ),
 
-                source="resume",
+                    impact_weight=float(
+                        extracted.impact_weight
+                    ),
 
-                matched_phrase=(
-                    extracted.phrase
-                ),
+                    source="resume",
 
-                matched_alias=(
-                    extracted.is_alias
-                ),
+                    matched_phrase=(
+                        extracted.phrase
+                    ),
 
-                start_char=int(
-                    extracted.start_char
-                ),
+                    matched_alias=(
+                        extracted.is_alias
+                    ),
 
-                end_char=int(
-                    extracted.end_char
-                ),
+                    start_char=int(
+                        extracted.start_char
+                    ),
 
-                token_index=int(
-                    extracted.token_index
-                ),
+                    end_char=int(
+                        extracted.end_char
+                    ),
 
-                token_count=int(
-                    extracted.token_count
-                ),
+                    token_index=int(
+                        extracted.token_index
+                    ),
 
-                metadata=dict(
-                    extracted.metadata
-                    or {}
-                ),
+                    token_count=int(
+                        extracted.token_count
+                    ),
+
+                    metadata=dict(
+                        extracted.metadata
+                        or {}
+                    ),
+                )
             )
 
-            entities.append(
-                entity
+            knowledge_entities.append(
+                knowledge_entity
             )
 
         # =====================================================
-        # INTERPRETATION
+        # INTERPRETATION ENTITY HANDOFF
         # =====================================================
 
         interpretation.entities = (
-            entities
+            knowledge_entities
         )
+
+        # =====================================================
+        # CONFIDENCE
+        # =====================================================
 
         interpretation.confidence = max(
             (
                 entity.confidence
-                for entity in entities
+                for entity in knowledge_entities
             ),
             default=0.0,
+        )
+
+        # =====================================================
+        # QUANTIFICATION
+        # =====================================================
+
+        interpretation.quantified = any(
+            bool(
+                getattr(
+                    entity,
+                    "metadata",
+                    {},
+                ).get(
+                    "quantified",
+                    False,
+                )
+            )
+            for entity in knowledge_entities
         )
 
         # =====================================================
         # FACT
         # =====================================================
 
-        return KnowledgeFact(
+        fact = KnowledgeFact(
 
             text=sentence,
 
@@ -251,14 +257,16 @@ class ResumeKnowledgePipeline:
             ),
         )
 
+        return fact
+
     # =========================================================
-    # PROCESS MULTIPLE TEXT UNITS
+    # PROCESS MANY SENTENCES
     # =========================================================
 
     def process(
         self,
-        sentences,
-    ):
+        sentences: Iterable[str],
+    ) -> list[KnowledgeFact]:
 
         facts = []
 
@@ -268,13 +276,6 @@ class ResumeKnowledgePipeline:
                 sentence,
                 str,
             ):
-
-                continue
-
-            sentence = sentence.strip()
-
-            if not sentence:
-
                 continue
 
             fact = (

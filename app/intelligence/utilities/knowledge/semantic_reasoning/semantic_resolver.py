@@ -1,719 +1,1754 @@
 """
 Enterprise Semantic Resolver
+Enterprise V13
 
-Enterprise V12
-
-Master semantic reasoning pipeline.
+Purpose
+-------
+Convert KnowledgeInterpretation objects into SemanticResolution.
 
 Pipeline
+--------
 
-KnowledgeV5 MatchResult
+KnowledgeDocument
         ↓
-SemanticEntity
+KnowledgeFact
         ↓
-DependencyResolver
+KnowledgeInterpretation
         ↓
-BusinessStatementBuilder
-        ↓
-BusinessStatement
-        ↓
-ClusterBuilder
-        ↓
-ClusterClassifier
-        ↓
-MetadataBuilder
+SemanticResolver
         ↓
 SemanticResolution
+    ├── SemanticEntity[]
+    ├── StatementRelation[]
+    ├── SemanticDependency[]
+    └── SemanticCluster[]
 
-Responsibilities
-----------------
-• Consume KnowledgeV5 MatchResult objects
-• Convert MatchResult → SemanticEntity
-• Preserve repository entity identity
-• Preserve KPI / BKPI / Metric distinctions
-• Resolve semantic dependencies
-• Build Business Statements
-• Build clusters
-• Build semantic metadata
-• Calculate overall confidence
+The resolver does NOT:
 
-This class does NOT:
-• build the Knowledge Graph
-• access graph storage
-• load ontology files directly
-• perform repository matching
+    - build BusinessStatement
+    - build KnowledgeGraph
+    - build KnowledgeProfile
+    - calculate final resume scores
+
+It is responsible for semantic normalization and
+semantic relationship discovery only.
 """
 
 from __future__ import annotations
 
-from collections.abc import Iterable
-
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.matcher.match_result import (
-    MatchResult,
-)
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.dependency_resolver import (
-    DependencyResolver,
-)
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.business_statement_builder import (
-    BusinessStatementBuilder,
-)
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.cluster_builder import (
-    ClusterBuilder,
-)
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.cluster_classifier import (
-    ClusterClassifier,
-)
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.metadata_builder import (
-    MetadataBuilder,
-)
+from typing import Any, Iterable
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
-    SemanticResolution,
+    SemanticCluster,
+    SemanticDependency,
     SemanticEntity,
+    SemanticResolution,
+    StatementRelation,
 )
 
 
 class SemanticResolver:
+    """
+    Enterprise semantic resolver.
 
-    # ==========================================================
-    # INITIALIZATION
-    # ==========================================================
+    Converts extracted KnowledgeInterpretation objects
+    into the semantic contract used by the rest of the
+    enterprise pipeline.
+    """
 
-    def __init__(self) -> None:
-
-        self.dependency_resolver = (
-            DependencyResolver()
-        )
-
-        self.statement_builder = (
-            BusinessStatementBuilder()
-        )
-
-        self.cluster_builder = (
-            ClusterBuilder()
-        )
-
-        self.cluster_classifier = (
-            ClusterClassifier()
-        )
-
-        self.metadata_builder = (
-            MetadataBuilder()
-        )
-
-    # ==========================================================
-    # PUBLIC RESOLVE API
-    # ==========================================================
+    # ================================================================
+    # PUBLIC API
+    # ================================================================
 
     def resolve(
         self,
-        matches,
+        knowledge_document: Any,
     ) -> SemanticResolution:
         """
-        Resolve KnowledgeV5 MatchResult objects.
-
-        Expected input
-        ---------------
-
-        list[MatchResult]
-
-        Example:
-
-            matches = [
-                MatchResult(...),
-                MatchResult(...),
-                MatchResult(...),
-            ]
-
-        Pipeline:
-
-            MatchResult
-                ↓
-            SemanticEntity
-                ↓
-            DependencyResolver
-                ↓
-            BusinessStatementBuilder
-                ↓
-            SemanticResolution
+        Resolve an entire KnowledgeDocument.
         """
 
-        result = SemanticResolution()
+        resolution = SemanticResolution()
 
-        # ------------------------------------------------------
-        # Normalize input
-        # ------------------------------------------------------
+        if knowledge_document is None:
 
-        match_results = self._normalize_matches(
-            matches
+            return resolution
+
+        facts = self._extract_facts(
+            knowledge_document
         )
 
-        if not match_results:
-
-            result.entities = []
-            result.dependencies = []
-            result.business_statements = []
-            result.clusters = []
-            result.metadata = {}
-            result.confidence = 0.0
-
-            return result
-
-        # ------------------------------------------------------
-        # Convert MatchResult → SemanticEntity
-        # ------------------------------------------------------
-
-        entities = self._convert_matches(
-            match_results
+        resolution.fact_count = len(
+            facts
         )
 
-        result.entities = entities
+        resolution.sentence_count = self._sentence_count(
+            knowledge_document
+        )
 
-        # ------------------------------------------------------
-        # Resolve Dependencies
-        # ------------------------------------------------------
+        for fact_index, fact in enumerate(facts):
 
-        dependencies = (
-            self.dependency_resolver.resolve(
-                entities
+            interpretation = self._get_interpretation(
+                fact
             )
-        )
 
-        result.dependencies = dependencies
+            if interpretation is None:
 
-        # ------------------------------------------------------
-        # Build Business Statements
-        # ------------------------------------------------------
+                continue
 
-        business_statements = (
-            self.statement_builder.build(
+            source_text = self._source_text(
+                fact,
+                interpretation,
+            )
+
+            statement_id = self._statement_id(
+                fact_index,
+                fact,
+                interpretation,
+            )
+
+            entities = self._resolve_interpretation(
+                interpretation=interpretation,
+                fact=fact,
+                statement_id=statement_id,
+                source_text=source_text,
+            )
+
+            for entity in entities:
+
+                self._append_unique_entity(
+                    resolution,
+                    entity,
+                )
+
+            relations = self._build_relations(
                 entities=entities,
-                dependencies=dependencies,
-            )
-        )
-
-        result.business_statements = (
-            business_statements
-        )
-
-        # ------------------------------------------------------
-        # Build Clusters
-        # ------------------------------------------------------
-
-        clusters = (
-            self.cluster_builder.build(
-                business_statements
-            )
-        )
-
-        # ------------------------------------------------------
-        # Classify Clusters
-        # ------------------------------------------------------
-
-        classified_clusters = []
-
-        for cluster in clusters:
-
-            classified_cluster = (
-                self.cluster_classifier.classify(
-                    cluster
-                )
+                interpretation=interpretation,
+                fact=fact,
+                statement_id=statement_id,
+                source_text=source_text,
             )
 
-            classified_clusters.append(
-                classified_cluster
-            )
+            for relation in relations:
 
-        result.clusters = (
-            classified_clusters
-        )
-
-        # ------------------------------------------------------
-        # Metadata
-        # ------------------------------------------------------
-
-        result.metadata = (
-            self.metadata_builder.build(
-                result
-            )
-        )
-
-        # ------------------------------------------------------
-        # Overall Confidence
-        # ------------------------------------------------------
-
-        result.confidence = (
-            self._calculate_confidence(
-                result
-            )
-        )
-
-        return result
-
-    # ==========================================================
-    # NORMALIZE MATCH INPUT
-    # ==========================================================
-
-    def _normalize_matches(
-        self,
-        matches,
-    ) -> list[MatchResult]:
-        """
-        Normalize V5 match input.
-
-        Primary supported input:
-
-            list[MatchResult]
-
-        For backward compatibility this method also accepts
-        iterable containers containing MatchResult objects.
-
-        Invalid objects are ignored.
-        """
-
-        if matches is None:
-
-            return []
-
-        if isinstance(
-            matches,
-            MatchResult,
-        ):
-
-            return [matches]
-
-        if isinstance(
-            matches,
-            (str, bytes),
-        ):
-
-            return []
-
-        try:
-
-            iterable = list(matches)
-
-        except TypeError:
-
-            return []
-
-        normalized = []
-
-        for item in iterable:
-
-            if isinstance(
-                item,
-                MatchResult,
-            ):
-
-                normalized.append(
-                    item
+                self._append_unique_relation(
+                    resolution,
+                    relation,
                 )
 
-        return normalized
-
-    # ==========================================================
-    # MATCH RESULT → SEMANTIC ENTITY
-    # ==========================================================
-
-    def _convert_matches(
-        self,
-        matches: list[MatchResult],
-    ) -> list[SemanticEntity]:
-        """
-        Convert KnowledgeV5 MatchResult objects into
-        SemanticEntity objects.
-
-        Repository identity is preserved exactly.
-        """
-
-        entities = []
-
-        seen_ids = set()
-
-        for match in matches:
-
-            if not isinstance(
-                match,
-                MatchResult,
-            ):
-
-                continue
-
-            entity_id = (
-                match.entity_id
-                or ""
-            ).strip()
-
-            if not entity_id:
-
-                continue
-
-            # --------------------------------------------------
-            # Duplicate entity protection
-            #
-            # Same entity can appear more than once in a
-            # sentence. Do not destroy positional information,
-            # therefore only skip exact duplicate matches.
-            # --------------------------------------------------
-
-            duplicate_key = (
-                entity_id,
-                match.start_char,
-                match.end_char,
-                match.statement_id,
+            dependencies = self._build_dependencies(
+                entities=entities,
+                relations=relations,
+                fact=fact,
+                statement_id=statement_id,
             )
 
-            if duplicate_key in seen_ids:
+            for dependency in dependencies:
 
-                continue
-
-            seen_ids.add(
-                duplicate_key
-            )
-
-            # --------------------------------------------------
-            # Preserve repository metadata
-            # --------------------------------------------------
-
-            metadata = {}
-
-            if match.metadata:
-
-                metadata.update(
-                    match.metadata
+                self._append_unique_dependency(
+                    resolution,
+                    dependency,
                 )
 
-            # --------------------------------------------------
-            # Explicit semantic identity
-            # --------------------------------------------------
-
-            metadata.update(
-                {
-                    "repository_entity_id":
-                        match.entity_id,
-
-                    "repository_entity_type":
-                        match.entity_type,
-
-                    "repository_canonical":
-                        match.canonical,
-
-                    "matched_phrase":
-                        match.phrase,
-
-                    "matched_alias":
-                        match.matched_alias,
-
-                    "is_alias":
-                        match.is_alias,
-
-                    "statement_id":
-                        match.statement_id,
-
-                    "sentence_index":
-                        match.sentence_index,
-
-                    "start_char":
-                        match.start_char,
-
-                    "end_char":
-                        match.end_char,
-
-                    "token_index":
-                        match.token_index,
-
-                    "token_count":
-                        match.token_count,
-                }
+        resolution.clusters = (
+            self._build_clusters(
+                resolution.entities,
+                resolution.dependencies,
             )
+        )
 
-            # --------------------------------------------------
-            # Create SemanticEntity
-            # --------------------------------------------------
-
-            semantic_entity = SemanticEntity(
-
-                entity_id=match.entity_id,
-
-                entity_type=match.entity_type,
-
-                canonical=match.canonical,
-
-                original=match.phrase,
-
-                matched_text=match.phrase,
-
-                category=match.category,
-
-                business_area=match.business_area,
-
-                confidence=self._safe_confidence(
-                    match.confidence
-                ),
-
-                metadata=metadata,
-
+        resolution.confidence = (
+            self._calculate_resolution_confidence(
+                resolution
             )
+        )
 
-            # --------------------------------------------------
-            # Preserve statement information if the
-            # SemanticEntity model supports it.
-            #
-            # setattr is intentionally used so this remains
-            # compatible with older SemanticEntity versions.
-            # --------------------------------------------------
+        resolution.metadata = {
 
-            self._set_optional_attribute(
-                semantic_entity,
-                "statement_id",
-                match.statement_id,
-            )
+            "resolver": self.__class__.__name__,
 
-            self._set_optional_attribute(
-                semantic_entity,
-                "sentence_index",
-                match.sentence_index,
-            )
+            "architecture": "Enterprise V13",
 
-            self._set_optional_attribute(
-                semantic_entity,
-                "start_char",
-                match.start_char,
-            )
+            "fact_count": resolution.fact_count,
 
-            self._set_optional_attribute(
-                semantic_entity,
-                "end_char",
-                match.end_char,
-            )
+            "entity_count": resolution.entity_count,
 
-            self._set_optional_attribute(
-                semantic_entity,
-                "token_index",
-                match.token_index,
-            )
+            "relation_count": resolution.relation_count,
 
-            self._set_optional_attribute(
-                semantic_entity,
-                "token_count",
-                match.token_count,
-            )
+            "dependency_count": resolution.dependency_count,
 
-            # --------------------------------------------------
-            # Preserve KPI / BKPI / Metric identity explicitly.
-            #
-            # DO NOT normalize these into one type.
-            # --------------------------------------------------
+            "cluster_count": resolution.cluster_count,
 
-            self._preserve_entity_type_metadata(
-                semantic_entity
-            )
+        }
 
-            entities.append(
-                semantic_entity
-            )
+        return resolution
 
-        return entities
-
-    # ==========================================================
-    # ENTITY TYPE PRESERVATION
-    # ==========================================================
+    # ================================================================
+    # FACT EXTRACTION
+    # ================================================================
 
     @staticmethod
-    def _preserve_entity_type_metadata(
-        entity: SemanticEntity,
-    ) -> None:
+    def _extract_facts(
+        knowledge_document: Any,
+    ) -> list[Any]:
         """
-        Preserve exact repository semantic type.
+        Safely retrieve KnowledgeFact objects.
 
-        Important distinction:
+        Supports both:
 
-            metric
-            KPI
-            BKPI
-            business_kpi
+            document.facts
 
-        are NOT collapsed here.
-
-        The repository remains the authority for entity type.
+        and documents where facts are stored inside
+        sentences.
         """
 
-        entity_type = (
-            getattr(
-                entity,
-                "entity_type",
-                "",
-            )
-            or ""
-        )
-
-        metadata = getattr(
-            entity,
-            "metadata",
+        facts = getattr(
+            knowledge_document,
+            "facts",
             None,
         )
 
-        if metadata is None:
+        if facts:
+
+            return list(
+                facts
+            )
+
+        sentences = getattr(
+            knowledge_document,
+            "sentences",
+            [],
+        ) or []
+
+        output = []
+
+        for sentence in sentences:
+
+            sentence_facts = getattr(
+                sentence,
+                "facts",
+                [],
+            ) or []
+
+            output.extend(
+                sentence_facts
+            )
+
+        return output
+
+    # ================================================================
+    # SENTENCE COUNT
+    # ================================================================
+
+    @staticmethod
+    def _sentence_count(
+        knowledge_document: Any,
+    ) -> int:
+
+        sentences = getattr(
+            knowledge_document,
+            "sentences",
+            [],
+        ) or []
+
+        if sentences:
+
+            return len(
+                sentences
+            )
+
+        return 0
+
+    # ================================================================
+    # INTERPRETATION
+    # ================================================================
+
+    @staticmethod
+    def _get_interpretation(
+        fact: Any,
+    ) -> Any:
+
+        return getattr(
+            fact,
+            "interpretation",
+            None,
+        )
+
+    # ================================================================
+    # SOURCE TEXT
+    # ================================================================
+
+    @staticmethod
+    def _source_text(
+        fact: Any,
+        interpretation: Any,
+    ) -> str:
+
+        text = getattr(
+            fact,
+            "text",
+            "",
+        )
+
+        if text:
+
+            return str(
+                text
+            ).strip()
+
+        text = getattr(
+            interpretation,
+            "original_text",
+            "",
+        )
+
+        return str(
+            text or ""
+        ).strip()
+
+    # ================================================================
+    # STATEMENT ID
+    # ================================================================
+
+    @staticmethod
+    def _statement_id(
+        fact_index: int,
+        fact: Any,
+        interpretation: Any,
+    ) -> str:
+
+        metadata = getattr(
+            interpretation,
+            "metadata",
+            {},
+        )
+
+        if isinstance(
+            metadata,
+            dict,
+        ):
+
+            value = metadata.get(
+                "statement_id"
+            )
+
+            if value:
+
+                return str(
+                    value
+                )
+
+            value = metadata.get(
+                "sentence_id"
+            )
+
+            if value:
+
+                return str(
+                    value
+                )
+
+        value = getattr(
+            fact,
+            "statement_id",
+            "",
+        )
+
+        if value:
+
+            return str(
+                value
+            )
+
+        return (
+            f"STATEMENT_{fact_index + 1}"
+        )
+
+    # ================================================================
+    # INTERPRETATION → ENTITIES
+    # ================================================================
+
+    def _resolve_interpretation(
+        self,
+        interpretation: Any,
+        fact: Any,
+        statement_id: str,
+        source_text: str,
+    ) -> list[SemanticEntity]:
+
+        entities: list[SemanticEntity] = []
+
+        # ------------------------------------------------------------
+        # Explicit entity collection
+        # ------------------------------------------------------------
+
+        raw_entities = getattr(
+            interpretation,
+            "entities",
+            [],
+        ) or []
+
+        for item in raw_entities:
+
+            entity_type = self._entity_type(
+                item
+            )
+
+            entity = self._convert_knowledge_object(
+                item=item,
+                entity_type=entity_type,
+                fact=fact,
+                statement_id=statement_id,
+                source_text=source_text,
+            )
+
+            if entity:
+
+                entities.append(
+                    entity
+                )
+
+        # ------------------------------------------------------------
+        # If the interpretation has no explicit entities,
+        # inspect the structured fields.
+        # ------------------------------------------------------------
+
+        if not entities:
+
+            structured_fields = (
+                "action",
+                "target",
+                "domain",
+                "metric",
+                "measurement",
+                "practice",
+            )
+
+            for field_name in structured_fields:
+
+                item = getattr(
+                    interpretation,
+                    field_name,
+                    None,
+                )
+
+                if item is None:
+
+                    continue
+
+                entity = self._convert_knowledge_object(
+                    item=item,
+                    entity_type=field_name,
+                    fact=fact,
+                    statement_id=statement_id,
+                    source_text=source_text,
+                )
+
+                if entity:
+
+                    entities.append(
+                        entity
+                    )
+
+            modifiers = getattr(
+                interpretation,
+                "modifiers",
+                [],
+            ) or []
+
+            for item in modifiers:
+
+                entity = self._convert_knowledge_object(
+                    item=item,
+                    entity_type="modifier",
+                    fact=fact,
+                    statement_id=statement_id,
+                    source_text=source_text,
+                )
+
+                if entity:
+
+                    entities.append(
+                        entity
+                    )
+
+        return self._deduplicate_entities(
+            entities
+        )
+
+    # ================================================================
+    # KNOWLEDGE OBJECT → SEMANTIC ENTITY
+    # ================================================================
+
+    def _convert_knowledge_object(
+        self,
+        item: Any,
+        entity_type: str,
+        fact: Any,
+        statement_id: str,
+        source_text: str,
+    ) -> SemanticEntity | None:
+
+        if item is None:
+
+            return None
+
+        # ------------------------------------------------------------
+        # Already SemanticEntity
+        # ------------------------------------------------------------
+
+        if isinstance(
+            item,
+            SemanticEntity,
+        ):
+
+            if not item.fact_id:
+
+                item.fact_id = self._fact_id(
+                    fact
+                )
+
+            if not item.statement_id:
+
+                item.statement_id = (
+                    statement_id
+                )
+
+            if not item.source_text:
+
+                item.source_text = (
+                    source_text
+                )
+
+            return item
+
+        # ------------------------------------------------------------
+        # Identity
+        # ------------------------------------------------------------
+
+        canonical = self._first_value(
+            item,
+            (
+                "canonical",
+                "name",
+                "label",
+                "normalized",
+                "original",
+                "matched_phrase",
+            ),
+        )
+
+        original = self._first_value(
+            item,
+            (
+                "original",
+                "matched_phrase",
+                "canonical",
+                "name",
+                "label",
+            ),
+        )
+
+        normalized = self._first_value(
+            item,
+            (
+                "normalized",
+                "canonical",
+                "original",
+            ),
+        )
+
+        if not canonical and not original:
+
+            return None
+
+        canonical = str(
+            canonical or original
+        ).strip()
+
+        original = str(
+            original or canonical
+        ).strip()
+
+        normalized = str(
+            normalized or canonical
+        ).strip().casefold()
+
+        if not canonical:
+
+            return None
+
+        # ------------------------------------------------------------
+        # Entity ID
+        # ------------------------------------------------------------
+
+        entity_id = self._entity_id(
+            item=item,
+            entity_type=entity_type,
+            canonical=canonical,
+            fact=fact,
+        )
+
+        # ------------------------------------------------------------
+        # Metadata
+        # ------------------------------------------------------------
+
+        metadata = getattr(
+            item,
+            "metadata",
+            {},
+        )
+
+        if not isinstance(
+            metadata,
+            dict,
+        ):
 
             metadata = {}
 
-            try:
+        metadata = dict(
+            metadata
+        )
 
-                entity.metadata = metadata
+        metadata.setdefault(
+            "source_text",
+            source_text,
+        )
 
-            except Exception:
+        metadata.setdefault(
+            "fact_id",
+            self._fact_id(fact),
+        )
 
-                return
+        metadata.setdefault(
+            "statement_id",
+            statement_id,
+        )
 
-        metadata[
-            "semantic_entity_type"
-        ] = entity_type
+        # ------------------------------------------------------------
+        # Build semantic entity
+        # ------------------------------------------------------------
 
-        # Explicit flags make downstream debugging
-        # and graph validation easier.
+        return SemanticEntity(
 
-        normalized = (
-            entity_type
-            .strip()
+            entity_id=entity_id,
+
+            entity_type=(
+                entity_type
+                or getattr(
+                    item,
+                    "entity_type",
+                    "",
+                )
+                or "unknown"
+            ),
+
+            canonical=canonical,
+
+            normalized=normalized,
+
+            original=original,
+
+            label=canonical,
+
+            category=str(
+                getattr(
+                    item,
+                    "category",
+                    "",
+                )
+                or ""
+            ),
+
+            ontology_name=str(
+                getattr(
+                    item,
+                    "ontology_name",
+                    "",
+                )
+                or ""
+            ),
+
+            primary_domain=str(
+                getattr(
+                    item,
+                    "primary_domain",
+                    getattr(
+                        item,
+                        "domain",
+                        "",
+                    ),
+                )
+                or ""
+            ),
+
+            business_area=str(
+                getattr(
+                    item,
+                    "business_area",
+                    "",
+                )
+                or ""
+            ),
+
+            semantic_type=(
+                entity_type
+                or "unknown"
+            ),
+
+            fact_id=self._fact_id(
+                fact
+            ),
+
+            statement_id=statement_id,
+
+            sentence_index=self._int_value(
+                item,
+                "sentence_index",
+                self._int_value(
+                    fact,
+                    "sentence_index",
+                    -1,
+                ),
+            ),
+
+            start_char=self._int_value(
+                item,
+                "start_char",
+                -1,
+            ),
+
+            end_char=self._int_value(
+                item,
+                "end_char",
+                -1,
+            ),
+
+            token_index=self._int_value(
+                item,
+                "token_index",
+                -1,
+            ),
+
+            token_count=self._int_value(
+                item,
+                "token_count",
+                0,
+            ),
+
+            source_text=source_text,
+
+            source="resume",
+
+            extraction_method=str(
+                getattr(
+                    item,
+                    "extraction_method",
+                    "",
+                )
+                or ""
+            ),
+
+            description=str(
+                getattr(
+                    item,
+                    "description",
+                    "",
+                )
+                or ""
+            ),
+
+            business_meaning=str(
+                getattr(
+                    item,
+                    "business_meaning",
+                    "",
+                )
+                or ""
+            ),
+
+            confidence=self._float_value(
+                item,
+                "confidence",
+                self._float_value(
+                    fact,
+                    "confidence",
+                    0.0,
+                ),
+            ),
+
+            impact_weight=self._float_value(
+                item,
+                "impact_weight",
+                1.0,
+            ),
+
+            achievement=self._bool_value(
+                item,
+                "achievement",
+                self._bool_value(
+                    fact,
+                    "achievement",
+                    False,
+                ),
+            ),
+
+            quantified=self._bool_value(
+                item,
+                "quantified",
+                self._bool_value(
+                    fact,
+                    "quantified",
+                    False,
+                ),
+            ),
+
+            preferred_direction=str(
+                getattr(
+                    item,
+                    "preferred_direction",
+                    "",
+                )
+                or ""
+            ),
+
+            preferred_unit=str(
+                getattr(
+                    item,
+                    "preferred_unit",
+                    "",
+                )
+                or ""
+            ),
+
+            higher_is_better=self._bool_value(
+                item,
+                "higher_is_better",
+                True,
+            ),
+
+            related_metrics=list(
+                getattr(
+                    item,
+                    "related_metrics",
+                    [],
+                )
+                or []
+            ),
+
+            knowledge_object=item,
+
+            ontology_object=getattr(
+                item,
+                "ontology_object",
+                None,
+            ),
+
+            metadata=metadata,
+        )
+
+    # ================================================================
+    # ENTITY TYPE
+    # ================================================================
+
+    @staticmethod
+    def _entity_type(
+        item: Any,
+    ) -> str:
+
+        value = getattr(
+            item,
+            "entity_type",
+            "",
+        )
+
+        if value:
+
+            return str(
+                value
+            ).strip().casefold()
+
+        value = getattr(
+            item,
+            "type",
+            "",
+        )
+
+        if value:
+
+            return str(
+                value
+            ).strip().casefold()
+
+        value = getattr(
+            item,
+            "semantic_type",
+            "",
+        )
+
+        if value:
+
+            return str(
+                value
+            ).strip().casefold()
+
+        return (
+            item.__class__.__name__
+            .replace(
+                "Knowledge",
+                "",
+            )
             .casefold()
         )
 
-        metadata[
-            "is_metric"
-        ] = normalized == "metric"
+    # ================================================================
+    # RELATION BUILDING
+    # ================================================================
 
-        metadata[
-            "is_kpi"
-        ] = normalized == "kpi"
+    def _build_relations(
+        self,
+        entities: list[SemanticEntity],
+        interpretation: Any,
+        fact: Any,
+        statement_id: str,
+        source_text: str,
+    ) -> list[StatementRelation]:
 
-        metadata[
-            "is_bkpi"
-        ] = normalized in {
-            "bkpi",
-            "business_kpi",
-        }
+        if len(
+            entities
+        ) < 2:
 
-    # ==========================================================
-    # CONFIDENCE
-    # ==========================================================
+            return []
+
+        relations: list[
+            StatementRelation
+        ] = []
+
+        action_entities = [
+            entity
+            for entity in entities
+            if entity.entity_type
+            .casefold()
+            == "action"
+        ]
+
+        target_entities = [
+            entity
+            for entity in entities
+            if entity.entity_type
+            .casefold()
+            in {
+                "target",
+                "object",
+                "practice",
+            }
+        ]
+
+        metric_entities = [
+            entity
+            for entity in entities
+            if entity.entity_type
+            .casefold()
+            in {
+                "metric",
+                "kpi",
+                "business_kpi",
+            }
+        ]
+
+        domain_entities = [
+            entity
+            for entity in entities
+            if entity.entity_type
+            .casefold()
+            == "domain"
+        ]
+
+        # ------------------------------------------------------------
+        # ACTION → TARGET
+        # ------------------------------------------------------------
+
+        for action in action_entities:
+
+            for target in target_entities:
+
+                relations.append(
+                    self._relation(
+                        relation_type="ACTS_ON",
+                        source=action,
+                        target=target,
+                        fact=fact,
+                        statement_id=statement_id,
+                        source_text=source_text,
+                    )
+                )
+
+        # ------------------------------------------------------------
+        # ACTION → METRIC
+        # ------------------------------------------------------------
+
+        for action in action_entities:
+
+            for metric in metric_entities:
+
+                relations.append(
+                    self._relation(
+                        relation_type="AFFECTS",
+                        source=action,
+                        target=metric,
+                        fact=fact,
+                        statement_id=statement_id,
+                        source_text=source_text,
+                    )
+                )
+
+        # ------------------------------------------------------------
+        # ACTION → DOMAIN
+        # ------------------------------------------------------------
+
+        for action in action_entities:
+
+            for domain in domain_entities:
+
+                relations.append(
+                    self._relation(
+                        relation_type="BELONGS_TO",
+                        source=action,
+                        target=domain,
+                        fact=fact,
+                        statement_id=statement_id,
+                        source_text=source_text,
+                    )
+                )
+
+        return self._deduplicate_relations(
+            relations
+        )
+
+    # ================================================================
+    # DEPENDENCY BUILDING
+    # ================================================================
+
+    def _build_dependencies(
+        self,
+        entities: list[SemanticEntity],
+        relations: list[StatementRelation],
+        fact: Any,
+        statement_id: str,
+    ) -> list[SemanticDependency]:
+
+        dependencies: list[
+            SemanticDependency
+        ] = []
+
+        for relation in relations:
+
+            dependencies.append(
+
+                SemanticDependency(
+
+                    dependency_id=(
+                        f"DEP_"
+                        f"{relation.source_id}_"
+                        f"{relation.relation_type}_"
+                        f"{relation.target_id}"
+                    ),
+
+                    dependency_type=(
+                        relation.relation_type
+                    ),
+
+                    source_id=(
+                        relation.source_id
+                    ),
+
+                    target_id=(
+                        relation.target_id
+                    ),
+
+                    confidence=(
+                        relation.confidence
+                    ),
+
+                    weight=(
+                        relation.weight
+                    ),
+
+                    fact_id=(
+                        self._fact_id(
+                            fact
+                        )
+                    ),
+
+                    statement_id=(
+                        statement_id
+                    ),
+
+                    sentence_index=(
+                        relation.sentence_index
+                    ),
+
+                    explanation=(
+                        relation.explanation
+                    ),
+
+                    evidence=[
+                        relation.source_text
+                    ],
+
+                    metadata={
+                        "relation_type":
+                            relation.relation_type,
+                    },
+                )
+            )
+
+        return self._deduplicate_dependencies(
+            dependencies
+        )
+
+    # ================================================================
+    # RELATION OBJECT
+    # ================================================================
 
     @staticmethod
-    def _safe_confidence(
-        value,
+    def _relation(
+        relation_type: str,
+        source: SemanticEntity,
+        target: SemanticEntity,
+        fact: Any,
+        statement_id: str,
+        source_text: str,
+    ) -> StatementRelation:
+
+        confidence = min(
+            source.confidence,
+            target.confidence,
+        )
+
+        relation_id = (
+            f"REL_"
+            f"{source.entity_id}_"
+            f"{relation_type}_"
+            f"{target.entity_id}"
+        )
+
+        explanation = (
+            f"{source.canonical} "
+            f"{relation_type.replace('_', ' ').lower()} "
+            f"{target.canonical}"
+        )
+
+        return StatementRelation(
+
+            relation_id=relation_id,
+
+            relation_type=relation_type,
+
+            source_id=source.entity_id,
+
+            target_id=target.entity_id,
+
+            confidence=confidence,
+
+            weight=min(
+                source.impact_weight,
+                target.impact_weight,
+            ),
+
+            fact_id=(
+                SemanticResolver._fact_id(
+                    fact
+                )
+            ),
+
+            statement_id=statement_id,
+
+            sentence_index=(
+                source.sentence_index
+            ),
+
+            source_text=source_text,
+
+            explanation=explanation,
+
+            metadata={
+                "source_type":
+                    source.entity_type,
+
+                "target_type":
+                    target.entity_type,
+            },
+        )
+
+    # ================================================================
+    # CLUSTER BUILDING
+    # ================================================================
+
+    @staticmethod
+    def _build_clusters(
+        entities: list[SemanticEntity],
+        dependencies: list[SemanticDependency],
+    ) -> list[SemanticCluster]:
+
+        if not entities:
+
+            return []
+
+        clusters: dict[
+            str,
+            SemanticCluster,
+        ] = {}
+
+        # ------------------------------------------------------------
+        # Group by business area/domain
+        # ------------------------------------------------------------
+
+        for entity in entities:
+
+            key = (
+                entity.business_area
+                or entity.primary_domain
+                or entity.entity_type
+                or "general"
+            ).strip().casefold()
+
+            if not key:
+
+                key = "general"
+
+            if key not in clusters:
+
+                cluster_id = (
+                    "CLUSTER_"
+                    + SemanticResolver._safe_id(
+                        key
+                    )
+                )
+
+                clusters[key] = (
+                    SemanticCluster(
+                        cluster_id=cluster_id,
+
+                        label=(
+                            entity.business_area
+                            or entity.primary_domain
+                            or entity.entity_type
+                            or "General"
+                        ),
+
+                        cluster_type=(
+                            "business_area"
+                            if entity.business_area
+                            else "domain"
+                        ),
+
+                        primary_domain=(
+                            entity.primary_domain
+                        ),
+
+                        business_area=(
+                            entity.business_area
+                        ),
+
+                        confidence=(
+                            entity.confidence
+                        ),
+                    )
+                )
+
+            clusters[key].add_entity(
+                entity.entity_id
+            )
+
+            clusters[key].confidence = max(
+                clusters[key].confidence,
+                entity.confidence,
+            )
+
+        # ------------------------------------------------------------
+        # Attach dependencies
+        # ------------------------------------------------------------
+
+        for dependency in dependencies:
+
+            for cluster in clusters.values():
+
+                if (
+                    dependency.source_id
+                    in cluster.entity_ids
+                    or
+                    dependency.target_id
+                    in cluster.entity_ids
+                ):
+
+                    cluster.add_dependency(
+                        dependency.dependency_id
+                    )
+
+        return list(
+            clusters.values()
+        )
+
+    # ================================================================
+    # DEDUPLICATION
+    # ================================================================
+
+    @staticmethod
+    def _deduplicate_entities(
+        entities: Iterable[
+            SemanticEntity
+        ],
+    ) -> list[SemanticEntity]:
+
+        output: list[
+            SemanticEntity
+        ] = []
+
+        seen = set()
+
+        for entity in entities:
+
+            key = (
+                entity.entity_id
+                or
+                (
+                    entity.entity_type,
+                    entity.normalized,
+                    entity.statement_id,
+                )
+            )
+
+            if key in seen:
+
+                continue
+
+            seen.add(
+                key
+            )
+
+            output.append(
+                entity
+            )
+
+        return output
+
+    @staticmethod
+    def _deduplicate_relations(
+        relations: Iterable[
+            StatementRelation
+        ],
+    ) -> list[StatementRelation]:
+
+        output = []
+
+        seen = set()
+
+        for relation in relations:
+
+            key = (
+                relation.source_id,
+                relation.relation_type,
+                relation.target_id,
+                relation.statement_id,
+            )
+
+            if key in seen:
+
+                continue
+
+            seen.add(
+                key
+            )
+
+            output.append(
+                relation
+            )
+
+        return output
+
+    @staticmethod
+    def _deduplicate_dependencies(
+        dependencies: Iterable[
+            SemanticDependency
+        ],
+    ) -> list[SemanticDependency]:
+
+        output = []
+
+        seen = set()
+
+        for dependency in dependencies:
+
+            key = (
+                dependency.source_id,
+                dependency.dependency_type,
+                dependency.target_id,
+                dependency.statement_id,
+            )
+
+            if key in seen:
+
+                continue
+
+            seen.add(
+                key
+            )
+
+            output.append(
+                dependency
+            )
+
+        return output
+
+    # ================================================================
+    # RESOLUTION DEDUPLICATION
+    # ================================================================
+
+    @staticmethod
+    def _append_unique_entity(
+        resolution: SemanticResolution,
+        entity: SemanticEntity,
+    ) -> None:
+
+        for existing in resolution.entities:
+
+            if (
+                existing.entity_id
+                == entity.entity_id
+            ):
+
+                return
+
+        resolution.entities.append(
+            entity
+        )
+
+    @staticmethod
+    def _append_unique_relation(
+        resolution: SemanticResolution,
+        relation: StatementRelation,
+    ) -> None:
+
+        for existing in resolution.relations:
+
+            if (
+                existing.source_id
+                == relation.source_id
+                and
+                existing.target_id
+                == relation.target_id
+                and
+                existing.relation_type
+                == relation.relation_type
+                and
+                existing.statement_id
+                == relation.statement_id
+            ):
+
+                return
+
+        resolution.relations.append(
+            relation
+        )
+
+    @staticmethod
+    def _append_unique_dependency(
+        resolution: SemanticResolution,
+        dependency: SemanticDependency,
+    ) -> None:
+
+        for existing in resolution.dependencies:
+
+            if (
+                existing.source_id
+                == dependency.source_id
+                and
+                existing.target_id
+                == dependency.target_id
+                and
+                existing.dependency_type
+                == dependency.dependency_type
+                and
+                existing.statement_id
+                == dependency.statement_id
+            ):
+
+                return
+
+        resolution.dependencies.append(
+            dependency
+        )
+
+    # ================================================================
+    # RESOLUTION CONFIDENCE
+    # ================================================================
+
+    @staticmethod
+    def _calculate_resolution_confidence(
+        resolution: SemanticResolution,
     ) -> float:
-        """
-        Normalize confidence into [0, 1].
-        """
+
+        if not resolution.entities:
+
+            return 0.0
+
+        total = sum(
+            entity.confidence
+            for entity in resolution.entities
+        )
+
+        return (
+            total
+            / len(
+                resolution.entities
+            )
+        )
+
+    # ================================================================
+    # VALUE HELPERS
+    # ================================================================
+
+    @staticmethod
+    def _first_value(
+        obj: Any,
+        names: tuple[str, ...],
+    ) -> Any:
+
+        for name in names:
+
+            try:
+
+                value = getattr(
+                    obj,
+                    name,
+                    None,
+                )
+
+            except Exception:
+
+                value = None
+
+            if value not in (
+                None,
+                "",
+                [],
+                {},
+            ):
+
+                return value
+
+        return None
+
+    @staticmethod
+    def _float_value(
+        obj: Any,
+        name: str,
+        default: float,
+    ) -> float:
+
+        value = getattr(
+            obj,
+            name,
+            default,
+        )
 
         try:
 
-            value = float(value)
+            return float(
+                value
+            )
 
         except (
             TypeError,
             ValueError,
         ):
 
-            return 0.0
-
-        return min(
-            max(value, 0.0),
-            1.0,
-        )
-
-    # ==========================================================
-    # OPTIONAL ATTRIBUTE
-    # ==========================================================
+            return default
 
     @staticmethod
-    def _set_optional_attribute(
-        entity,
-        attribute,
-        value,
-    ) -> None:
-        """
-        Set optional SemanticEntity attributes without
-        breaking older model versions.
-        """
+    def _int_value(
+        obj: Any,
+        name: str,
+        default: int,
+    ) -> int:
+
+        value = getattr(
+            obj,
+            name,
+            default,
+        )
 
         try:
 
-            setattr(
-                entity,
-                attribute,
-                value,
+            return int(
+                value
             )
 
         except (
-            AttributeError,
             TypeError,
+            ValueError,
         ):
 
-            pass
+            return default
 
-    # ==========================================================
-    # OVERALL CONFIDENCE
-    # ==========================================================
+    @staticmethod
+    def _bool_value(
+        obj: Any,
+        name: str,
+        default: bool,
+    ) -> bool:
 
-    def _calculate_confidence(
-        self,
-        result: SemanticResolution,
-    ) -> float:
-        """
-        Calculate overall semantic resolution confidence.
+        value = getattr(
+            obj,
+            name,
+            default,
+        )
 
-        Cluster confidence is used when available.
-        """
+        if isinstance(
+            value,
+            bool,
+        ):
 
-        if not result.clusters:
+            return value
 
-            # If clusters are unavailable but entities exist,
-            # use entity confidence as a fallback.
+        if isinstance(
+            value,
+            str,
+        ):
 
-            if result.entities:
+            return value.strip().casefold() in {
+                "true",
+                "1",
+                "yes",
+                "y",
+            }
 
-                scores = [
+        return bool(
+            value
+        )
 
-                    self._safe_confidence(
-                        entity.confidence
-                    )
+    # ================================================================
+    # FACT ID
+    # ================================================================
 
-                    for entity in result.entities
+    @staticmethod
+    def _fact_id(
+        fact: Any,
+    ) -> str:
 
-                ]
+        for field_name in (
+            "fact_id",
+            "id",
+            "knowledge_id",
+        ):
 
-                if scores:
-
-                    return round(
-                        sum(scores)
-                        / len(scores),
-                        2,
-                    )
-
-            return 0.0
-
-        scores = [
-
-            self._safe_confidence(
-                cluster.confidence
+            value = getattr(
+                fact,
+                field_name,
+                None,
             )
 
-            for cluster in result.clusters
+            if value:
 
-        ]
+                return str(
+                    value
+                )
 
-        if not scores:
-
-            return 0.0
-
-        return round(
-            sum(scores)
-            / len(scores),
-            2,
+        return (
+            f"FACT_"
+            f"{id(fact)}"
         )
+
+    # ================================================================
+    # ENTITY ID
+    # ================================================================
+
+    @staticmethod
+    def _entity_id(
+        item: Any,
+        entity_type: str,
+        canonical: str,
+        fact: Any,
+    ) -> str:
+
+        existing = getattr(
+            item,
+            "entity_id",
+            "",
+        )
+
+        if existing:
+
+            return str(
+                existing
+            )
+
+        fact_id = (
+            SemanticResolver._fact_id(
+                fact
+            )
+        )
+
+        return (
+            f"{entity_type.upper()}_"
+            f"{SemanticResolver._safe_id(canonical)}_"
+            f"{fact_id}"
+        )
+
+    # ================================================================
+    # SAFE ID
+    # ================================================================
+
+    @staticmethod
+    def _safe_id(
+        value: str,
+    ) -> str:
+
+        value = str(
+            value or ""
+        ).strip().upper()
+
+        output = []
+
+        for character in value:
+
+            if (
+                character.isalnum()
+                or character == "_"
+            ):
+
+                output.append(
+                    character
+                )
+
+            else:
+
+                output.append(
+                    "_"
+                )
+
+        result = "".join(
+            output
+        )
+
+        while "__" in result:
+
+            result = result.replace(
+                "__",
+                "_",
+            )
+
+        return (
+            result.strip("_")
+            or "UNKNOWN"
+        )
+
+
+# =====================================================================
+# PUBLIC EXPORT
+# =====================================================================
+
+__all__ = [
+    "SemanticResolver",
+]

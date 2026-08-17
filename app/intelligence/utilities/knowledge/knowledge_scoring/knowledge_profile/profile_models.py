@@ -1,98 +1,190 @@
+
 """
 Knowledge Profile Models
 
-The Knowledge Profile is the structured representation
-of everything extracted from a resume.
+Enterprise V14
 
-Every downstream AI engine works from this profile.
+This module contains ONLY the data models used by the
+graph-native Knowledge Profile system.
+
+Architecture
+------------
+
+KnowledgeGraph
+        ↓
+KnowledgeProfileBuilder
+        ↓
+KnowledgeProfile
+
+IMPORTANT
+---------
+
+This file must NOT import KnowledgeProfileBuilder.
+
+This file must NOT import itself.
+
+This file contains no graph-building logic.
+
+All profile construction logic belongs in:
+
+    knowledge_profile_builder.py
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
 
 
-# ------------------------------------------------------
-# Summary Profile
-# ------------------------------------------------------
+# =====================================================================
+# SUMMARY PROFILE
+# =====================================================================
 
 @dataclass
 class SummaryProfile:
+    """
+    High-level summary of the complete knowledge profile.
 
+    This model intentionally contains the aggregate scores that
+    KnowledgeProfileBuilder derives from the graph.
+    """
+
+    # Overall profile score
     overall_score: float = 0.0
 
+    # Core profile scores
+    impact_score: float = 0.0
+    ats_score: float = 0.0
     achievement_score: float = 0.0
-
     leadership_score: float = 0.0
-
     seniority_score: float = 0.0
 
+    # Career interpretation
     career_level: str = ""
 
 
-# ------------------------------------------------------
-# Achievement Profile
-# ------------------------------------------------------
+# =====================================================================
+# ENTITY PROFILE
+# =====================================================================
+
+@dataclass
+class EntityProfile:
+    """
+    Collection and classification of graph entities.
+    """
+
+    total_entities: int = 0
+
+    entity_counts: dict[str, int] = field(
+        default_factory=dict
+    )
+
+    entities: list[dict[str, Any]] = field(
+        default_factory=list
+    )
+
+
+# =====================================================================
+# ACHIEVEMENT PROFILE
+# =====================================================================
 
 @dataclass
 class AchievementProfile:
+    """
+    Achievement and business-value information extracted
+    from the KnowledgeGraph.
+    """
 
     overall_score: float = 0.0
 
     achievement_count: int = 0
 
+    quantified_count: int = 0
+
     impact_score: float = 0.0
 
     magnitude_score: float = 0.0
 
-    top_achievements: list = field(default_factory=list)
+    top_achievements: list[Any] = field(
+        default_factory=list
+    )
 
-    top_metrics: list = field(default_factory=list)
+    top_metrics: list[Any] = field(
+        default_factory=list
+    )
 
-    impact_distribution: dict = field(default_factory=dict)
+    impact_distribution: dict[str, float] = field(
+        default_factory=dict
+    )
 
-    magnitude_distribution: dict = field(default_factory=dict)
+    magnitude_distribution: dict[str, float] = field(
+        default_factory=dict
+    )
 
-    details: Any = None
+    details: dict[str, Any] = field(
+        default_factory=dict
+    )
 
 
-# ------------------------------------------------------
-# Leadership Profile
-# ------------------------------------------------------
+# =====================================================================
+# LEADERSHIP PROFILE
+# =====================================================================
 
 @dataclass
 class LeadershipProfile:
+    """
+    Leadership-related evidence derived from graph nodes.
+    """
 
     score: float = 0.0
 
     level: str = ""
 
-    actions: dict = field(default_factory=dict)
+    entity_count: int = 0
+
+    actions: dict[str, Any] = field(
+        default_factory=dict
+    )
 
     executive_actions: int = 0
 
 
-# ------------------------------------------------------
-# Seniority Profile
-# ------------------------------------------------------
+# =====================================================================
+# SENIORITY PROFILE
+# =====================================================================
 
 @dataclass
 class SeniorityProfile:
+    """
+    Seniority and career-level indicators.
+    """
 
     score: float = 0.0
 
     level: str = ""
 
-    actions: dict = field(default_factory=dict)
+    actions: dict[str, Any] = field(
+        default_factory=dict
+    )
 
-    domains: dict = field(default_factory=dict)
+    domains: dict[str, float] = field(
+        default_factory=dict
+    )
+
+    indicators: list[str] = field(
+        default_factory=list
+    )
 
 
-# ------------------------------------------------------
-# Metric Profile
-# ------------------------------------------------------
+# =====================================================================
+# METRIC PROFILE
+# =====================================================================
 
 @dataclass
 class MetricProfile:
+    """
+    KPI and metric information derived from the graph.
+    """
 
     total_metrics: int = 0
 
@@ -104,45 +196,136 @@ class MetricProfile:
 
     decrease_metrics: int = 0
 
+    metrics: list[dict[str, Any]] = field(
+        default_factory=list
+    )
 
-# ------------------------------------------------------
-# Domain Profile
-# ------------------------------------------------------
+
+# =====================================================================
+# DOMAIN PROFILE
+# =====================================================================
 
 @dataclass
 class DomainProfile:
+    """
+    Domain and business-area distribution.
+    """
 
-    domains: dict = field(default_factory=dict)
+    domains: dict[str, float] = field(
+        default_factory=dict
+    )
 
-    business_areas: dict = field(default_factory=dict)
+    business_areas: dict[str, float] = field(
+        default_factory=dict
+    )
 
 
-# ------------------------------------------------------
-# Modifier Profile
-# ------------------------------------------------------
+# =====================================================================
+# MODIFIER PROFILE
+# =====================================================================
 
 @dataclass
 class ModifierProfile:
+    """
+    Modifier information such as executive,
+    strategic, ownership, scale, etc.
+    """
 
     total_modifiers: int = 0
 
     executive_modifiers: int = 0
 
-    categories: dict = field(default_factory=dict)
+    categories: dict[str, float] = field(
+        default_factory=dict
+    )
 
 
-# ------------------------------------------------------
-# Master Knowledge Profile
-# ------------------------------------------------------
+# =====================================================================
+# IMPACT PROFILE
+# =====================================================================
+
+@dataclass
+class ImpactProfile:
+    """
+    Impact information derived directly from graph nodes.
+    """
+
+    total_impact: float = 0.0
+
+    average_impact: float = 0.0
+
+    maximum_impact: float = 0.0
+
+    entity_count: int = 0
+
+    weighted_entities: list[dict[str, Any]] = field(
+        default_factory=list
+    )
+
+
+# =====================================================================
+# ATS PROFILE
+# =====================================================================
+
+@dataclass
+class ATSProfile:
+    """
+    ATS-related scoring information.
+    """
+
+    score: float = 0.0
+
+    entity_count: int = 0
+
+    matched_entities: list[dict[str, Any]] = field(
+        default_factory=list
+    )
+
+
+# =====================================================================
+# BUSINESS STATEMENT PROFILE
+# =====================================================================
+
+@dataclass
+class BusinessStatementProfile:
+    """
+    Business statements associated with the profile.
+
+    These may originate from semantic resolution,
+    but the profile model itself does not depend on
+    the semantic-resolution implementation.
+    """
+
+    total_statements: int = 0
+
+    statements: list[dict[str, Any]] = field(
+        default_factory=list
+    )
+
+
+# =====================================================================
+# MASTER KNOWLEDGE PROFILE
+# =====================================================================
 
 @dataclass
 class KnowledgeProfile:
+    """
+    Master graph-derived knowledge profile.
+
+    This is the object returned by:
+
+        KnowledgeProfileBuilder.build()
+    """
 
     summary: SummaryProfile = field(
         default_factory=SummaryProfile
     )
 
-    achievement: AchievementProfile = field(
+    entities: EntityProfile = field(
+        default_factory=EntityProfile
+    )
+
+    achievements: AchievementProfile = field(
         default_factory=AchievementProfile
     )
 
@@ -166,4 +349,37 @@ class KnowledgeProfile:
         default_factory=ModifierProfile
     )
 
-    confidence: float = 1.0
+    impact: ImpactProfile = field(
+        default_factory=ImpactProfile
+    )
+
+    ats: ATSProfile = field(
+        default_factory=ATSProfile
+    )
+
+    business_statements: BusinessStatementProfile = field(
+        default_factory=BusinessStatementProfile
+    )
+
+    confidence: float = 0.0
+
+
+# =====================================================================
+# PUBLIC API
+# =====================================================================
+
+__all__ = [
+    "KnowledgeProfile",
+    "SummaryProfile",
+    "EntityProfile",
+    "AchievementProfile",
+    "LeadershipProfile",
+    "SeniorityProfile",
+    "MetricProfile",
+    "DomainProfile",
+    "ModifierProfile",
+    "ImpactProfile",
+    "ATSProfile",
+    "BusinessStatementProfile",
+]
+

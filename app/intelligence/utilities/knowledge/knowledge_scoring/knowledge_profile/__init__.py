@@ -11,7 +11,7 @@ from app.intelligence.utilities.knowledge.knowledge_profile import (
 )
 """
 
-from .profile_builder import ProfileBuilder
+from .knowledge_profile_builder import KnowledgeProfileBuilder
 
 from .profile_models import (
     KnowledgeProfile,
@@ -19,12 +19,11 @@ from .profile_models import (
     SeniorityProfile,
     MetricProfile,
     DomainProfile,
-    ModifierProfile,
 )
 
 __all__ = [
 
-    "ProfileBuilder",
+    "KnowledgeProfileBuilder",
 
     "KnowledgeProfile",
 

@@ -28,7 +28,7 @@ from app.intelligence.utilities.knowledge.knowledge_graph.knowledge_graph_builde
     KnowledgeGraphBuilder,
 )
 
-from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.profile_builder import (
+from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.knowledge_profile_builder import (
     ProfileBuilder,
 )
 
