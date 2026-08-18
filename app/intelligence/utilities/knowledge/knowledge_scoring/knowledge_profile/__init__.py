@@ -1,40 +1,42 @@
 """
 Knowledge Profile Package
-
-Public API for the GetHired Knowledge Profile.
-
-Example
-
-from app.intelligence.utilities.knowledge.knowledge_profile import (
-    ProfileBuilder,
-    KnowledgeProfile,
-)
+Enterprise V14
 """
-
-from .knowledge_profile_builder import KnowledgeProfileBuilder
 
 from .profile_models import (
     KnowledgeProfile,
+    SummaryProfile,
+    EntityProfile,
+    AchievementProfile,
     LeadershipProfile,
     SeniorityProfile,
     MetricProfile,
     DomainProfile,
+    ModifierProfile,
+    ImpactProfile,
+    ATSProfile,
+    BusinessStatementProfile,
 )
 
+from .knowledge_profile_builder import (
+    KnowledgeProfileBuilder,
+    build_knowledge_profile,
+)
+
+
 __all__ = [
-
-    "KnowledgeProfileBuilder",
-
     "KnowledgeProfile",
-
+    "SummaryProfile",
+    "EntityProfile",
+    "AchievementProfile",
     "LeadershipProfile",
-
     "SeniorityProfile",
-
     "MetricProfile",
-
     "DomainProfile",
-
     "ModifierProfile",
-
+    "ImpactProfile",
+    "ATSProfile",
+    "BusinessStatementProfile",
+    "KnowledgeProfileBuilder",
+    "build_knowledge_profile",
 ]

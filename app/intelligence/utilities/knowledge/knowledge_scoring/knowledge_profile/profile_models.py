@@ -1,33 +1,6 @@
-
 """
 Knowledge Profile Models
-
 Enterprise V14
-
-This module contains ONLY the data models used by the
-graph-native Knowledge Profile system.
-
-Architecture
-------------
-
-KnowledgeGraph
-        ↓
-KnowledgeProfileBuilder
-        ↓
-KnowledgeProfile
-
-IMPORTANT
----------
-
-This file must NOT import KnowledgeProfileBuilder.
-
-This file must NOT import itself.
-
-This file contains no graph-building logic.
-
-All profile construction logic belongs in:
-
-    knowledge_profile_builder.py
 """
 
 from __future__ import annotations
@@ -36,42 +9,22 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
-# =====================================================================
-# SUMMARY PROFILE
-# =====================================================================
-
 @dataclass
 class SummaryProfile:
-    """
-    High-level summary of the complete knowledge profile.
 
-    This model intentionally contains the aggregate scores that
-    KnowledgeProfileBuilder derives from the graph.
-    """
-
-    # Overall profile score
     overall_score: float = 0.0
 
-    # Core profile scores
     impact_score: float = 0.0
     ats_score: float = 0.0
     achievement_score: float = 0.0
     leadership_score: float = 0.0
     seniority_score: float = 0.0
 
-    # Career interpretation
     career_level: str = ""
 
 
-# =====================================================================
-# ENTITY PROFILE
-# =====================================================================
-
 @dataclass
 class EntityProfile:
-    """
-    Collection and classification of graph entities.
-    """
 
     total_entities: int = 0
 
@@ -84,16 +37,8 @@ class EntityProfile:
     )
 
 
-# =====================================================================
-# ACHIEVEMENT PROFILE
-# =====================================================================
-
 @dataclass
 class AchievementProfile:
-    """
-    Achievement and business-value information extracted
-    from the KnowledgeGraph.
-    """
 
     overall_score: float = 0.0
 
@@ -126,15 +71,8 @@ class AchievementProfile:
     )
 
 
-# =====================================================================
-# LEADERSHIP PROFILE
-# =====================================================================
-
 @dataclass
 class LeadershipProfile:
-    """
-    Leadership-related evidence derived from graph nodes.
-    """
 
     score: float = 0.0
 
@@ -149,15 +87,8 @@ class LeadershipProfile:
     executive_actions: int = 0
 
 
-# =====================================================================
-# SENIORITY PROFILE
-# =====================================================================
-
 @dataclass
 class SeniorityProfile:
-    """
-    Seniority and career-level indicators.
-    """
 
     score: float = 0.0
 
@@ -176,15 +107,8 @@ class SeniorityProfile:
     )
 
 
-# =====================================================================
-# METRIC PROFILE
-# =====================================================================
-
 @dataclass
 class MetricProfile:
-    """
-    KPI and metric information derived from the graph.
-    """
 
     total_metrics: int = 0
 
@@ -201,15 +125,8 @@ class MetricProfile:
     )
 
 
-# =====================================================================
-# DOMAIN PROFILE
-# =====================================================================
-
 @dataclass
 class DomainProfile:
-    """
-    Domain and business-area distribution.
-    """
 
     domains: dict[str, float] = field(
         default_factory=dict
@@ -220,16 +137,8 @@ class DomainProfile:
     )
 
 
-# =====================================================================
-# MODIFIER PROFILE
-# =====================================================================
-
 @dataclass
 class ModifierProfile:
-    """
-    Modifier information such as executive,
-    strategic, ownership, scale, etc.
-    """
 
     total_modifiers: int = 0
 
@@ -240,15 +149,8 @@ class ModifierProfile:
     )
 
 
-# =====================================================================
-# IMPACT PROFILE
-# =====================================================================
-
 @dataclass
 class ImpactProfile:
-    """
-    Impact information derived directly from graph nodes.
-    """
 
     total_impact: float = 0.0
 
@@ -263,15 +165,8 @@ class ImpactProfile:
     )
 
 
-# =====================================================================
-# ATS PROFILE
-# =====================================================================
-
 @dataclass
 class ATSProfile:
-    """
-    ATS-related scoring information.
-    """
 
     score: float = 0.0
 
@@ -282,19 +177,8 @@ class ATSProfile:
     )
 
 
-# =====================================================================
-# BUSINESS STATEMENT PROFILE
-# =====================================================================
-
 @dataclass
 class BusinessStatementProfile:
-    """
-    Business statements associated with the profile.
-
-    These may originate from semantic resolution,
-    but the profile model itself does not depend on
-    the semantic-resolution implementation.
-    """
 
     total_statements: int = 0
 
@@ -303,19 +187,8 @@ class BusinessStatementProfile:
     )
 
 
-# =====================================================================
-# MASTER KNOWLEDGE PROFILE
-# =====================================================================
-
 @dataclass
 class KnowledgeProfile:
-    """
-    Master graph-derived knowledge profile.
-
-    This is the object returned by:
-
-        KnowledgeProfileBuilder.build()
-    """
 
     summary: SummaryProfile = field(
         default_factory=SummaryProfile
@@ -364,10 +237,6 @@ class KnowledgeProfile:
     confidence: float = 0.0
 
 
-# =====================================================================
-# PUBLIC API
-# =====================================================================
-
 __all__ = [
     "KnowledgeProfile",
     "SummaryProfile",
@@ -382,4 +251,3 @@ __all__ = [
     "ATSProfile",
     "BusinessStatementProfile",
 ]
-

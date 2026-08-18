@@ -1,35 +1,53 @@
 """
-Enterprise V5
-Full Knowledge Extractor Traversal Test
+Enterprise Resume -> Knowledge Profile
+Enterprise Diagnostic Test
 
 Purpose
 -------
-Comprehensively validate:
+This is a DATA INSPECTION diagnostic.
 
-    KnowledgeV5Pipeline
-        ↓
-    ontology matcher
-        ↓
-    multi-match extraction
-        ↓
-    Knowledge Extractors
-        ↓
-    Knowledge Models
-        ↓
-    entity validation
+It does NOT assume that every downstream stage is populated.
 
-Important repository terminology
---------------------------------
-technologies  -> entity_type = "technologie"
-methodologies -> entity_type = "methodologie"
+It prints the actual data produced by every stage so that we can
+identify exactly where information is lost.
 
-The test intentionally does NOT assume that every extractor
-uses the same constructor signature.
+Pipeline
+--------
+Resume Text
+    ↓
+EnterpriseResumePipeline
+    ↓
+KnowledgeDocument
+    ↓
+KnowledgeSentence[]
+    ↓
+KnowledgeFact[]
+    ↓
+KnowledgeInterpretation
+    ↓
+Semantic Entities
+    ↓
+Relations
+    ↓
+Dependencies
+    ↓
+BusinessStatement[]
+    ↓
+KnowledgeGraph
+    ↓
+KnowledgeProfile
+
+IMPORTANT
+---------
+This diagnostic deliberately avoids model __repr__() because some
+knowledge models may contain convenience properties that are not
+compatible with the current architecture.
 """
 
 from __future__ import annotations
 
-import inspect
+import traceback
+from dataclasses import fields, is_dataclass
 from typing import Any
 
 
@@ -37,1556 +55,2856 @@ from typing import Any
 # PIPELINE
 # ============================================================================
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
-    KnowledgeV5Pipeline,
+from app.intelligence.utilities.knowledge.enterprise_resume_pipeline import (
+    EnterpriseResumePipeline,
 )
 
 
 # ============================================================================
-# EXTRACTION REQUEST
+# TEST RESUME
 # ============================================================================
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.extraction_request import (
-    ExtractionRequest,
-)
+TEST_RESUME = """
+Muhammad Kashif
 
+Quality Assurance & Food Safety Professional
 
-# ============================================================================
-# EXTRACTORS
-# ============================================================================
+Quality Assurance Specialist with 15+ years experience in food
+manufacturing, FMCG, supply chain and retail.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.skills_extractor import (
-    SkillsExtractor,
-)
+Led implementation of FSSC 22000 requirements.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.technology_extractor import (
-    TechnologyExtractor,
-)
+Implemented HACCP and BRCGS food safety systems.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.methodology_extractor import (
-    MethodologyExtractor,
-)
+Improved production yield from 70% to 99%.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.action_extractor import (
-    ActionExtractor,
-)
+Reduced customer complaints through root cause analysis.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.metric_extractor import (
-    MetricExtractor,
-)
+Performed inventory reconciliation.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.domain_extractor import (
-    DomainExtractor,
-)
+Used Lean Management and Six Sigma.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.standard_extractor import (
-    StandardExtractor,
-)
+Used ISO 9001 quality management system.
 
-from app.intelligence.utilities.knowledge.knowledge_extractors.target_extractor import (
-    TargetExtractor,
-)
+Used Python SQL PostgreSQL pandas scikit-learn Power BI Tableau.
 
+Completed Data Analytics training from University of Toronto.
 
-# ============================================================================
-# TEST DATA
-# ============================================================================
+Certified PCQI Human Food.
 
-SKILL_SENTENCE = (
-    "Experienced in quality assurance, food safety, leadership "
-    "and business intelligence."
-)
+Certified HACCP Level 4.
 
-TECHNOLOGY_SENTENCE = (
-    "Experienced in Python, SQL, Tableau, Power BI, pandas "
-    "and scikit-learn."
-)
+Certified Lead Auditor ISO 9001.
 
-METHODOLOGY_SENTENCE = (
-    "Experienced in HACCP, FSSC 22000, Lean Management, "
-    "Six Sigma and Agile Scrum."
-)
+Certified Lead Auditor Food Safety.
 
-ACTION_SENTENCE = (
-    "Implemented FSSC 22000 requirements and improved "
-    "manufacturing yield through data based decision making."
-)
+Managed quality assurance activities, production improvement,
+inventory control, customer complaints, food safety systems and
+business operations.
 
-METRIC_SENTENCE = (
-    "Increased production yield from 70% to 99%."
-)
-
-DOMAIN_SENTENCE = (
-    "Worked across quality assurance, food safety, manufacturing "
-    "and supply chain operations."
-)
-
-STANDARD_SENTENCE = (
-    "Maintained compliance with FSSC 22000, ISO 9001 and "
-    "BRCGS requirements."
-)
-
-TARGET_SENTENCE = (
-    "Improved production yield from 70% to 99%."
-)
+Improved operational performance through data-based decision making.
+"""
 
 
 # ============================================================================
-# EXPECTED PIPELINE ENTITIES
+# DISPLAY
 # ============================================================================
 
-EXPECTED_PIPELINE = {
+WIDTH = 110
 
-    "skills": {
-        "sentence": SKILL_SENTENCE,
-
-        # Adjust these IDs only if your repository uses different
-        # skill entity IDs.
-        "minimum": 1,
-    },
-
-    "technologies": {
-        "sentence": TECHNOLOGY_SENTENCE,
-
-        "expected": {
-            "TECH_PYTHON",
-            "TECH_SQL",
-            "TECH_TABLEAU",
-            "TECH_POWER_BI",
-            "TECH_PANDAS",
-            "TECH_SCIKIT_LEARN",
-        },
-
-        "expected_count": 6,
-
-        "entity_type": "technologie",
-    },
-
-    "methodologies": {
-        "sentence": METHODOLOGY_SENTENCE,
-
-        # These should be replaced with the exact repository IDs
-        # if they differ.
-        "minimum": 1,
-
-        "entity_type": "methodologie",
-    },
-
-    "actions": {
-        "sentence": ACTION_SENTENCE,
-        "minimum": 2,
-    },
-
-    "metrics": {
-        "sentence": METRIC_SENTENCE,
-        "minimum": 1,
-    },
-
-    "domains": {
-        "sentence": DOMAIN_SENTENCE,
-        "minimum": 3,
-    },
-
-    "standards": {
-        "sentence": STANDARD_SENTENCE,
-        "minimum": 2,
-    },
-
-    "targets": {
-        "sentence": TARGET_SENTENCE,
-        "minimum": 1,
-    },
-}
-
-
-# ============================================================================
-# EXTRACTOR DEFINITIONS
-# ============================================================================
-
-EXTRACTORS = {
-
-    "skills": SkillsExtractor,
-
-    "technologies": TechnologyExtractor,
-
-    "methodologies": MethodologyExtractor,
-
-    "actions": ActionExtractor,
-
-    "metrics": MetricExtractor,
-
-    "domains": DomainExtractor,
-
-    "standards": StandardExtractor,
-
-    "targets": TargetExtractor,
-}
-
-
-# ============================================================================
-# OUTPUT
-# ============================================================================
 
 def banner(title: str) -> None:
-
     print()
-    print("=" * 78)
+    print("=" * WIDTH)
     print(title)
-    print("=" * 78)
+    print("=" * WIDTH)
 
 
 def section(title: str) -> None:
-
     print()
-    print("-" * 78)
+    print("-" * WIDTH)
     print(title)
-    print("-" * 78)
+    print("-" * WIDTH)
+
+
+def subsection(title: str) -> None:
+    print()
+    print("." * WIDTH)
+    print(title)
+    print("." * WIDTH)
 
 
 # ============================================================================
-# CONSTRUCTOR HANDLING
+# SAFE OBJECT ACCESS
 # ============================================================================
 
-def create_extractor(
-    extractor_class: type,
-    pipeline: KnowledgeV5Pipeline,
-):
-    """
-    Instantiate an extractor without assuming that every extractor
-    has the same constructor signature.
+def safe_get(obj: Any, name: str, default: Any = None) -> Any:
 
-    Preferred:
-        Extractor(pipeline=pipeline)
+    if obj is None:
+        return default
 
-    If pipeline is not accepted:
-        Extractor()
+    if isinstance(obj, dict):
+        return obj.get(name, default)
 
-    If the constructor exposes another compatible parameter,
-    the test reports it rather than silently inventing arguments.
-    """
+    try:
+        return getattr(obj, name)
+    except Exception:
+        return default
 
-    signature = inspect.signature(
-        extractor_class.__init__
+
+def safe_type_name(obj: Any) -> str:
+
+    if obj is None:
+        return "None"
+
+    return type(obj).__name__
+
+
+def safe_module(obj: Any) -> str:
+
+    if obj is None:
+        return ""
+
+    return getattr(
+        type(obj),
+        "__module__",
+        "",
     )
 
-    parameters = signature.parameters
 
-    # --------------------------------------------------------------
-    # Preferred architecture
-    # --------------------------------------------------------------
+def as_list(value: Any) -> list:
 
-    if "pipeline" in parameters:
+    if value is None:
+        return []
 
-        parameter = parameters["pipeline"]
+    if isinstance(value, list):
+        return value
 
-        if (
-            parameter.kind
-            in (
-                inspect.Parameter.POSITIONAL_OR_KEYWORD,
-                inspect.Parameter.KEYWORD_ONLY,
+    if isinstance(value, tuple):
+        return list(value)
+
+    if isinstance(value, set):
+        return list(value)
+
+    return [value]
+
+
+# ============================================================================
+# SAFE VALUE FORMATTER
+# ============================================================================
+
+def safe_value(value: Any, max_length: int = 500) -> str:
+    """
+    Safely display a value without invoking dangerous model __repr__().
+    """
+
+    if value is None:
+        return "None"
+
+    if isinstance(value, (str, int, float, bool)):
+        text = str(value)
+
+    elif isinstance(value, dict):
+        text = "{"
+
+        parts = []
+
+        for key, item in value.items():
+
+            try:
+                item_text = safe_value(
+                    item,
+                    max_length=200,
+                )
+            except Exception:
+                item_text = "<unprintable>"
+
+            parts.append(
+                f"{key!s}: {item_text}"
             )
-        ):
 
-            return extractor_class(
-                pipeline=pipeline
-            )
+        text += ", ".join(parts)
+        text += "}"
 
-    # --------------------------------------------------------------
-    # Alternative name used by some implementations
-    # --------------------------------------------------------------
+    elif isinstance(value, (list, tuple, set)):
 
-    if "knowledge_pipeline" in parameters:
+        items = []
 
-        parameter = parameters["knowledge_pipeline"]
+        for item in list(value)[:20]:
 
-        if (
-            parameter.kind
-            in (
-                inspect.Parameter.POSITIONAL_OR_KEYWORD,
-                inspect.Parameter.KEYWORD_ONLY,
-            )
-        ):
+            try:
+                items.append(
+                    safe_value(
+                        item,
+                        max_length=150,
+                    )
+                )
+            except Exception:
+                items.append("<unprintable>")
 
-            return extractor_class(
-                knowledge_pipeline=pipeline
-            )
+        if isinstance(value, tuple):
+            text = "(" + ", ".join(items) + ")"
+        elif isinstance(value, set):
+            text = "{" + ", ".join(items) + "}"
+        else:
+            text = "[" + ", ".join(items) + "]"
 
-    # --------------------------------------------------------------
-    # No pipeline argument
-    # --------------------------------------------------------------
+        if len(value) > 20:
+            text += f" ... +{len(value) - 20} more"
 
-    required = []
+    else:
 
-    for name, parameter in parameters.items():
+        text = (
+            f"<{type(value).__name__} "
+            f"object>"
+        )
 
-        if name == "self":
+    if len(text) > max_length:
+        text = text[:max_length] + "..."
+
+    return text
+
+
+# ============================================================================
+# SAFE DATACLASS INSPECTION
+# ============================================================================
+
+def dataclass_field_names(obj: Any) -> list[str]:
+
+    try:
+
+        if is_dataclass(obj):
+
+            return [
+                field.name
+                for field in fields(obj)
+            ]
+
+    except Exception:
+        pass
+
+    return []
+
+
+def print_object_fields(
+    obj: Any,
+    indent: int = 2,
+    skip: set[str] | None = None,
+    max_value_length: int = 500,
+) -> None:
+
+    if obj is None:
+        print(" " * indent + "None")
+        return
+
+    skip = skip or set()
+
+    prefix = " " * indent
+
+    names = dataclass_field_names(obj)
+
+    if not names:
+
+        if isinstance(obj, dict):
+
+            for name, value in obj.items():
+
+                if name in skip:
+                    continue
+
+                print(
+                    f"{prefix}{name:<30}: "
+                    f"{safe_value(value, max_value_length)}"
+                )
+
+            return
+
+        print(
+            f"{prefix}Type: {type(obj).__name__}"
+        )
+
+        return
+
+    for name in names:
+
+        if name in skip:
             continue
 
-        if parameter.default is inspect.Parameter.empty:
+        try:
+            value = safe_get(
+                obj,
+                name,
+                None,
+            )
 
-            required.append(name)
+            # Never directly use repr(value)
+            text = safe_value(
+                value,
+                max_value_length,
+            )
 
-    if not required:
+            print(
+                f"{prefix}{name:<30}: {text}"
+            )
 
-        return extractor_class()
+        except Exception as exc:
 
-    raise TypeError(
-        f"{extractor_class.__name__} has unsupported "
-        f"constructor requirements: {required}. "
-        f"Signature: {signature}"
-    )
-
-
-# ============================================================================
-# REQUEST CREATION
-# ============================================================================
-
-def make_request(
-    sentence: str,
-) -> ExtractionRequest:
-
-    return ExtractionRequest(
-        sentence=sentence,
-        context={
-            "sentence_index": 0,
-        },
-    )
+            print(
+                f"{prefix}{name:<30}: "
+                f"<ERROR READING FIELD: {exc}>"
+            )
 
 
 # ============================================================================
-# TEST 1
+# PIPELINE RESULT
 # ============================================================================
 
-def test_pipeline_creation():
+def print_pipeline_result(result: Any) -> None:
 
-    banner(
-        "TEST 1 — KNOWLEDGE V5 PIPELINE CREATION"
-    )
-
-    pipeline = KnowledgeV5Pipeline()
-
-    assert pipeline is not None
-
-    print(
-        "PASS — KnowledgeV5Pipeline created."
-    )
-
-    return pipeline
-
-
-# ============================================================================
-# TEST 2
-# ============================================================================
-
-def test_pipeline_api(
-    pipeline: KnowledgeV5Pipeline,
-):
-
-    banner(
-        "TEST 2 — KNOWLEDGE V5 PIPELINE API"
-    )
-
-    assert callable(
-        getattr(
-            pipeline,
-            "run",
-            None,
-        )
+    section(
+        "PIPELINE RESULT"
     )
 
     print(
-        "PASS — run(...) available."
-    )
-
-    assert callable(
-        getattr(
-            pipeline,
-            "best",
-            None,
-        )
+        "Type   :",
+        safe_type_name(result),
     )
 
     print(
-        "PASS — best(...) available."
-    )
-
-    assert callable(
-        getattr(
-            pipeline,
-            "build_parser_context",
-            None,
-        )
+        "Module :",
+        safe_module(result),
     )
 
     print(
-        "PASS — build_parser_context(...) available."
+        "Fields:"
     )
 
+    names = dataclass_field_names(result)
 
-# ============================================================================
-# TEST 3
-# ============================================================================
+    if names:
 
-def test_pipeline_multi_ontology(
-    pipeline: KnowledgeV5Pipeline,
-):
+        for name in names:
 
-    banner(
-        "TEST 3 — PIPELINE MULTI-ONTOLOGY TRAVERSAL"
-    )
-
-    pipeline_results = {}
-
-    for ontology, config in EXPECTED_PIPELINE.items():
-
-        section(
-            f"ONTOLOGY : {ontology}"
-        )
-
-        sentence = config["sentence"]
-
-        print(
-            "SENTENCE :",
-            sentence,
-        )
-
-        results = pipeline.run(
-            ontology=ontology,
-            sentence=sentence,
-        )
-
-        pipeline_results[ontology] = results
-
-        print(
-            "RESULT TYPE :",
-            type(results).__name__,
-        )
-
-        print(
-            "MATCH COUNT :",
-            len(results),
-        )
-
-        for index, match in enumerate(
-            results,
-            start=1,
-        ):
-
-            entity_type = getattr(
-                match,
-                "entity_type",
-                "",
+            value = safe_get(
+                result,
+                name,
+                None,
             )
 
-            entity_id = getattr(
-                match,
-                "entity_id",
-                "",
-            )
+            if isinstance(value, list):
+                descriptor = (
+                    f"list[{len(value)}]"
+                )
 
-            canonical = getattr(
-                match,
-                "canonical",
-                "",
-            )
+            elif isinstance(value, dict):
+                descriptor = (
+                    f"dict[{len(value)}]"
+                )
 
-            phrase = getattr(
-                match,
-                "phrase",
-                "",
-            )
-
-            confidence = getattr(
-                match,
-                "confidence",
-                0.0,
-            )
-
-            print(
-                f"{index}. "
-                f"{entity_id=} "
-                f"{canonical=} "
-                f"{phrase=} "
-                f"{confidence=:.3f} "
-                f"{entity_type=}"
-            )
-
-        assert isinstance(
-            results,
-            list,
-        ), (
-            f"{ontology} did not return list."
-        )
-
-        minimum = config.get(
-            "minimum",
-            0,
-        )
-
-        assert len(results) >= minimum, (
-            f"{ontology} returned "
-            f"{len(results)} matches; "
-            f"expected at least {minimum}."
-        )
-
-        # ----------------------------------------------------------
-        # Technology exact validation
-        # ----------------------------------------------------------
-
-        if ontology == "technologies":
-
-            expected = config[
-                "expected"
-            ]
-
-            found = {
-                match.entity_id
-                for match in results
-            }
-
-            missing = (
-                expected
-                - found
-            )
-
-            unexpected = (
-                found
-                - expected
-            )
-
-            print()
-
-            print(
-                "EXPECTED TECHNOLOGIES"
-            )
-
-            print(
-                "Expected count :",
-                len(expected),
-            )
-
-            print(
-                "Found count    :",
-                len(found),
-            )
-
-            print(
-                "Missing        :",
-                sorted(missing),
-            )
-
-            print(
-                "Unexpected     :",
-                sorted(unexpected),
-            )
-
-            assert not missing, (
-                f"Technology ontology missing: "
-                f"{sorted(missing)}"
-            )
-
-            assert not unexpected, (
-                f"Unexpected technology entities: "
-                f"{sorted(unexpected)}"
-            )
-
-            assert len(found) == config[
-                "expected_count"
-            ], (
-                "Technology multi-match count "
-                "is incorrect."
-            )
-
-            # ------------------------------------------------------
-            # Repository terminology
-            # ------------------------------------------------------
-
-            for match in results:
-
-                assert match.entity_type == (
-                    config["entity_type"]
-                ), (
-                    f"Technology entity_type must be "
-                    f"'technologie', got "
-                    f"{match.entity_type!r}"
+            else:
+                descriptor = safe_type_name(
+                    value
                 )
 
             print(
-                "PASS — Technology ontology "
-                "returned all expected entities."
+                f"  {name:<35}: {descriptor}"
             )
 
-        # ----------------------------------------------------------
-        # Methodology terminology
-        # ----------------------------------------------------------
 
-        if ontology == "methodologies":
+# ============================================================================
+# PIPELINE STAGES
+# ============================================================================
 
-            expected_type = config[
-                "entity_type"
-            ]
+def print_pipeline_stages(result: Any) -> None:
 
-            for match in results:
+    section(
+        "PIPELINE STAGES"
+    )
 
-                assert match.entity_type == (
-                    expected_type
-                ), (
-                    "Methodology entity_type "
-                    f"must be {expected_type!r}, "
-                    f"got {match.entity_type!r}"
-                )
+    stages = safe_get(
+        result,
+        "stages",
+        {},
+    )
 
-            print(
-                "PASS — Methodology entity_type "
-                f"uses repository value "
-                f"{expected_type!r}."
-            )
+    if not isinstance(
+        stages,
+        dict,
+    ):
+        print(
+            "No stage dictionary available."
+        )
+        return
+
+    for name, status in stages.items():
+
+        print(
+            f"{name:<40}: "
+            f"{'PASS' if status else 'FAIL'}"
+        )
 
     print()
 
     print(
-        "PASS — All ontology pipeline traversals "
-        "executed successfully."
+        "success      :",
+        safe_get(
+            result,
+            "success",
+            None,
+        ),
     )
 
-    return pipeline_results
+    print(
+        "failed_stage :",
+        safe_get(
+            result,
+            "failed_stage",
+            None,
+        ),
+    )
+
+    print(
+        "error        :",
+        safe_value(
+            safe_get(
+                result,
+                "error",
+                None,
+            )
+        ),
+    )
+
+    print(
+        "confidence   :",
+        safe_get(
+            result,
+            "confidence",
+            None,
+        ),
+    )
 
 
 # ============================================================================
-# TEST 4
+# KNOWLEDGE DOCUMENT
 # ============================================================================
 
-def test_best_results(
-    pipeline: KnowledgeV5Pipeline,
-):
+def print_knowledge_document(
+    result: Any,
+) -> None:
 
-    banner(
-        "TEST 4 — BEST ENTITY TRAVERSAL"
+    section(
+        "1. KNOWLEDGE DOCUMENT"
     )
 
-    for ontology, config in EXPECTED_PIPELINE.items():
+    document = safe_get(
+        result,
+        "knowledge_document",
+        None,
+    )
 
-        result = pipeline.best(
-            ontology=ontology,
-            sentence=config["sentence"],
+    print(
+        "Type       :",
+        safe_type_name(document),
+    )
+
+    print(
+        "Module     :",
+        safe_module(document),
+    )
+
+    if document is None:
+
+        print(
+            "\nWARNING: KnowledgeDocument is None."
+        )
+
+        return
+
+    sentences = as_list(
+        safe_get(
+            document,
+            "sentences",
+            [],
+        )
+    )
+
+    facts = as_list(
+        safe_get(
+            document,
+            "facts",
+            [],
+        )
+    )
+
+    print(
+        "Sentences  :",
+        len(sentences),
+    )
+
+    print(
+        "Facts      :",
+        len(facts),
+    )
+
+    print(
+        "Confidence :",
+        safe_get(
+            document,
+            "confidence",
+            None,
+        ),
+    )
+
+    print(
+        "Source     :",
+        safe_get(
+            document,
+            "source",
+            None,
+        ),
+    )
+
+    print(
+        "Parsed     :",
+        safe_get(
+            document,
+            "parsed",
+            None,
+        ),
+    )
+
+    # ----------------------------------------------------------------
+    # SENTENCES
+    # ----------------------------------------------------------------
+
+    subsection(
+        "ALL KNOWLEDGE SENTENCES"
+    )
+
+    for index, sentence in enumerate(
+        sentences,
+        start=1,
+    ):
+
+        text = safe_get(
+            sentence,
+            "text",
+            "",
+        )
+
+        sentence_facts = as_list(
+            safe_get(
+                sentence,
+                "facts",
+                [],
+            )
+        )
+
+        print(
+            f"{index:03d}. "
+            f"text={safe_value(text, 300)}"
+        )
+
+        print(
+            f"      facts={len(sentence_facts)}"
+        )
+
+    # ----------------------------------------------------------------
+    # FACTS
+    # ----------------------------------------------------------------
+
+    subsection(
+        "ALL KNOWLEDGE FACTS"
+    )
+
+    for index, fact in enumerate(
+        facts,
+        start=1,
+    ):
+
+        print(
+            f"\nFACT [{index}]"
+        )
+
+        print(
+            "  text          :",
+            safe_get(
+                fact,
+                "text",
+                "",
+            ),
+        )
+
+        print(
+            "  fact_id       :",
+            safe_get(
+                fact,
+                "fact_id",
+                "",
+            ),
+        )
+
+        print(
+            "  sentence_index:",
+            safe_get(
+                fact,
+                "sentence_index",
+                None,
+            ),
+        )
+
+        print(
+            "  achievement   :",
+            safe_get(
+                fact,
+                "achievement",
+                False,
+            ),
+        )
+
+        print(
+            "  quantified    :",
+            safe_get(
+                fact,
+                "quantified",
+                False,
+            ),
+        )
+
+        print(
+            "  confidence    :",
+            safe_get(
+                fact,
+                "confidence",
+                None,
+            ),
+        )
+
+        interpretation = safe_get(
+            fact,
+            "interpretation",
+            None,
+        )
+
+        print(
+            "  interpretation:",
+            safe_type_name(
+                interpretation
+            ),
+        )
+
+
+# ============================================================================
+# SEMANTIC INTERPRETATION
+# ============================================================================
+
+def get_main_interpretation(
+    result: Any,
+) -> Any:
+
+    interpretations = as_list(
+        safe_get(
+            result,
+            "interpretations",
+            [],
+        )
+    )
+
+    if not interpretations:
+        return None
+
+    return interpretations[0]
+
+
+def print_semantic_interpretation(
+    result: Any,
+) -> None:
+
+    section(
+        "2. SEMANTIC INTERPRETATION"
+    )
+
+    interpretations = as_list(
+        safe_get(
+            result,
+            "interpretations",
+            [],
+        )
+    )
+
+    print(
+        "Interpretation count:",
+        len(interpretations),
+    )
+
+    for index, interpretation in enumerate(
+        interpretations,
+        start=1,
+    ):
+
+        print(
+            f"\nINTERPRETATION [{index:03d}]"
+        )
+
+        print(
+            "Type   :",
+            safe_type_name(
+                interpretation
+            ),
+        )
+
+        print(
+            "Module :",
+            safe_module(
+                interpretation
+            ),
+        )
+
+        # ------------------------------------------------------------
+        # IMPORTANT:
+        # Never print interpretation directly.
+        # ------------------------------------------------------------
+
+        print(
+            "\nFields:"
+        )
+
+        print_object_fields(
+            interpretation,
+            indent=2,
+            max_value_length=300,
+        )
+
+        # ------------------------------------------------------------
+        # ENTITIES
+        # ------------------------------------------------------------
+
+        entities = as_list(
+            safe_get(
+                interpretation,
+                "entities",
+                [],
+            )
+        )
+
+        relations = as_list(
+            safe_get(
+                interpretation,
+                "relations",
+                [],
+            )
+        )
+
+        dependencies = as_list(
+            safe_get(
+                interpretation,
+                "dependencies",
+                [],
+            )
+        )
+
+        clusters = as_list(
+            safe_get(
+                interpretation,
+                "clusters",
+                [],
+            )
         )
 
         print()
-
         print(
-            f"Ontology: {ontology}"
+            "Entities     :",
+            len(entities),
         )
 
         print(
-            "Best result:",
+            "Relations    :",
+            len(relations),
+        )
+
+        print(
+            "Dependencies :",
+            len(dependencies),
+        )
+
+        print(
+            "Clusters     :",
+            len(clusters),
+        )
+
+        # ------------------------------------------------------------
+        # ALL ENTITIES
+        # ------------------------------------------------------------
+
+        subsection(
+            "ALL SEMANTIC ENTITIES"
+        )
+
+        print_all_entities(
+            entities
+        )
+
+        # ------------------------------------------------------------
+        # ALL RELATIONS
+        # ------------------------------------------------------------
+
+        subsection(
+            "ALL SEMANTIC RELATIONS"
+        )
+
+        print_all_relations(
+            relations
+        )
+
+        # ------------------------------------------------------------
+        # ALL DEPENDENCIES
+        # ------------------------------------------------------------
+
+        subsection(
+            "ALL SEMANTIC DEPENDENCIES"
+        )
+
+        print_all_dependencies(
+            dependencies
+        )
+
+        # ------------------------------------------------------------
+        # CLUSTERS
+        # ------------------------------------------------------------
+
+        subsection(
+            "SEMANTIC CLUSTERS"
+        )
+
+        print_all_clusters(
+            clusters
+        )
+
+
+# ============================================================================
+# ENTITY PRINTING
+# ============================================================================
+
+def print_entity(
+    entity: Any,
+    index: int,
+) -> None:
+
+    print(
+        f"\n[ENTITY {index:03d}]"
+    )
+
+    print(
+        "  entity_id      :",
+        safe_get(
+            entity,
+            "entity_id",
+            "",
+        ),
+    )
+
+    print(
+        "  canonical      :",
+        safe_get(
+            entity,
+            "canonical",
+            "",
+        ),
+    )
+
+    print(
+        "  normalized     :",
+        safe_get(
+            entity,
+            "normalized",
+            "",
+        ),
+    )
+
+    print(
+        "  entity_type    :",
+        safe_get(
+            entity,
+            "entity_type",
+            "",
+        ),
+    )
+
+    print(
+        "  ontology_name  :",
+        safe_get(
+            entity,
+            "ontology_name",
+            "",
+        ),
+    )
+
+    print(
+        "  category       :",
+        safe_get(
+            entity,
+            "category",
+            "",
+        ),
+    )
+
+    print(
+        "  business_area  :",
+        safe_get(
+            entity,
+            "business_area",
+            "",
+        ),
+    )
+
+    print(
+        "  domain         :",
+        safe_get(
+            entity,
+            "domain",
+            "",
+        ),
+    )
+
+    print(
+        "  confidence     :",
+        safe_get(
+            entity,
+            "confidence",
+            None,
+        ),
+    )
+
+    print(
+        "  impact_weight  :",
+        safe_get(
+            entity,
+            "impact_weight",
+            None,
+        ),
+    )
+
+    print(
+        "  matched_phrase :",
+        safe_get(
+            entity,
+            "matched_phrase",
+            "",
+        ),
+    )
+
+    print(
+        "  matched_alias  :",
+        safe_get(
+            entity,
+            "matched_alias",
+            False,
+        ),
+    )
+
+
+def print_all_entities(
+    entities: list,
+) -> None:
+
+    if not entities:
+
+        print(
+            "NO SEMANTIC ENTITIES."
+        )
+
+        return
+
+    for index, entity in enumerate(
+        entities,
+        start=1,
+    ):
+
+        print_entity(
+            entity,
+            index,
+        )
+
+
+# ============================================================================
+# ENTITY TYPE DISTRIBUTION
+# ============================================================================
+
+def print_entity_distribution(
+    result: Any,
+) -> None:
+
+    section(
+        "3. ENTITY DISTRIBUTION"
+    )
+
+    entities = as_list(
+        safe_get(
             result,
+            "semantic_entities",
+            [],
+        )
+    )
+
+    if not entities:
+
+        interpretation = get_main_interpretation(
+            result
         )
 
-        if config.get(
-            "minimum",
-            0,
-        ) > 0:
-
-            assert result is not None, (
-                f"{ontology}.best() returned None."
+        entities = as_list(
+            safe_get(
+                interpretation,
+                "entities",
+                [],
             )
+        )
+
+    counts = {}
+
+    for entity in entities:
+
+        entity_type = str(
+            safe_get(
+                entity,
+                "entity_type",
+                "unknown",
+            )
+        ).strip().casefold()
+
+        if not entity_type:
+            entity_type = "unknown"
+
+        counts[entity_type] = (
+            counts.get(
+                entity_type,
+                0,
+            )
+            + 1
+        )
+
+    for entity_type, count in sorted(
+        counts.items()
+    ):
+
+        print(
+            f"{entity_type:<30}: {count}"
+        )
+
+    print(
+        "\nTotal entities:",
+        len(entities),
+    )
+
+
+# ============================================================================
+# RELATIONS
+# ============================================================================
+
+def print_relation(
+    relation: Any,
+    index: int,
+) -> None:
+
+    print(
+        f"\n[RELATION {index:03d}]"
+    )
+
+    print(
+        "  relation_type :",
+        safe_get(
+            relation,
+            "relation_type",
+            safe_get(
+                relation,
+                "type",
+                "",
+            ),
+        ),
+    )
+
+    print(
+        "  source_id     :",
+        safe_get(
+            relation,
+            "source_id",
+            safe_get(
+                relation,
+                "source",
+                "",
+            ),
+        ),
+    )
+
+    print(
+        "  target_id     :",
+        safe_get(
+            relation,
+            "target_id",
+            safe_get(
+                relation,
+                "target",
+                "",
+            ),
+        ),
+    )
+
+    print(
+        "  confidence    :",
+        safe_get(
+            relation,
+            "confidence",
+            None,
+        ),
+    )
+
+    print(
+        "  impact_weight :",
+        safe_get(
+            relation,
+            "impact_weight",
+            None,
+        ),
+    )
+
+
+def print_all_relations(
+    relations: list,
+) -> None:
+
+    if not relations:
+
+        print(
+            "NO SEMANTIC RELATIONS."
+        )
+
+        return
+
+    for index, relation in enumerate(
+        relations,
+        start=1,
+    ):
+
+        print_relation(
+            relation,
+            index,
+        )
+
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+
+def print_dependency(
+    dependency: Any,
+    index: int,
+) -> None:
+
+    print(
+        f"\n[DEPENDENCY {index:03d}]"
+    )
+
+    print(
+        "  type        :",
+        safe_get(
+            dependency,
+            "dependency_type",
+            safe_get(
+                dependency,
+                "type",
+                "",
+            ),
+        ),
+    )
+
+    print(
+        "  source      :",
+        safe_get(
+            dependency,
+            "source_id",
+            safe_get(
+                dependency,
+                "source",
+                "",
+            ),
+        ),
+    )
+
+    print(
+        "  target      :",
+        safe_get(
+            dependency,
+            "target_id",
+            safe_get(
+                dependency,
+                "target",
+                "",
+            ),
+        ),
+    )
+
+    print(
+        "  confidence  :",
+        safe_get(
+            dependency,
+            "confidence",
+            None,
+        ),
+    )
+
+
+def print_all_dependencies(
+    dependencies: list,
+) -> None:
+
+    if not dependencies:
+
+        print(
+            "NO SEMANTIC DEPENDENCIES."
+        )
+
+        return
+
+    for index, dependency in enumerate(
+        dependencies,
+        start=1,
+    ):
+
+        print_dependency(
+            dependency,
+            index,
+        )
+
+
+# ============================================================================
+# CLUSTERS
+# ============================================================================
+
+def print_all_clusters(
+    clusters: list,
+) -> None:
+
+    if not clusters:
+
+        print(
+            "NO SEMANTIC CLUSTERS."
+        )
+
+        return
+
+    for index, cluster in enumerate(
+        clusters,
+        start=1,
+    ):
+
+        print(
+            f"\n[CLUSTER {index:03d}]"
+        )
+
+        if isinstance(
+            cluster,
+            dict,
+        ):
+
+            for key, value in cluster.items():
+
+                print(
+                    f"  {key:<25}: "
+                    f"{safe_value(value, 300)}"
+                )
+
+        else:
+
+            print_object_fields(
+                cluster,
+                indent=2,
+                max_value_length=300,
+            )
+
+
+# ============================================================================
+# BUSINESS STATEMENTS
+# ============================================================================
+
+def print_business_statements(
+    result: Any,
+) -> None:
+
+    section(
+        "4. BUSINESS STATEMENTS"
+    )
+
+    statements = as_list(
+        safe_get(
+            result,
+            "business_statements",
+            [],
+        )
+    )
+
+    print(
+        "Business statement count:",
+        len(statements),
+    )
+
+    if not statements:
+
+        print()
+        print(
+            "NO BUSINESS STATEMENTS WERE GENERATED."
+        )
+
+        print()
+        print(
+            "This diagnostic does NOT treat that as "
+            "a test failure."
+        )
+
+        print(
+            "It means the semantic data reached this "
+            "stage but no BusinessStatement objects "
+            "were produced."
+        )
+
+        return
+
+    for index, statement in enumerate(
+        statements,
+        start=1,
+    ):
+
+        print(
+            f"\n[BUSINESS STATEMENT {index:03d}]"
+        )
+
+        print_object_fields(
+            statement,
+            indent=2,
+            max_value_length=500,
+        )
+
+
+# ============================================================================
+# KNOWLEDGE GRAPH
+# ============================================================================
+
+def get_graph_nodes(
+    graph: Any,
+) -> list:
+
+    if graph is None:
+        return []
+
+    method = getattr(
+        graph,
+        "get_nodes",
+        None,
+    )
+
+    if callable(method):
+
+        try:
+            return as_list(
+                method()
+            )
+        except Exception:
+            return []
+
+    return as_list(
+        safe_get(
+            graph,
+            "nodes",
+            [],
+        )
+    )
+
+
+def get_graph_edges(
+    graph: Any,
+) -> list:
+
+    if graph is None:
+        return []
+
+    method = getattr(
+        graph,
+        "get_edges",
+        None,
+    )
+
+    if callable(method):
+
+        try:
+            return as_list(
+                method()
+            )
+        except Exception:
+            return []
+
+    return as_list(
+        safe_get(
+            graph,
+            "edges",
+            [],
+        )
+    )
+
+
+def print_knowledge_graph(
+    result: Any,
+) -> None:
+
+    section(
+        "5. KNOWLEDGE GRAPH"
+    )
+
+    graph = safe_get(
+        result,
+        "knowledge_graph",
+        None,
+    )
+
+    print(
+        "Type   :",
+        safe_type_name(graph),
+    )
+
+    print(
+        "Module :",
+        safe_module(graph),
+    )
+
+    if graph is None:
+
+        print(
+            "\nKnowledgeGraph is None."
+        )
+
+        return
+
+    nodes = get_graph_nodes(
+        graph
+    )
+
+    edges = get_graph_edges(
+        graph
+    )
+
+    print(
+        "Nodes:",
+        len(nodes),
+    )
+
+    print(
+        "Edges:",
+        len(edges),
+    )
+
+    subsection(
+        "GRAPH NODE TYPE DISTRIBUTION"
+    )
+
+    counts = {}
+
+    for node in nodes:
+
+        kind = str(
+            safe_get(
+                node,
+                "entity_type",
+                "unknown",
+            )
+        ).strip().casefold()
+
+        counts[kind] = (
+            counts.get(
+                kind,
+                0,
+            )
+            + 1
+        )
+
+    for kind, count in sorted(
+        counts.items()
+    ):
+
+        print(
+            f"{kind:<30}: {count}"
+        )
+
+    subsection(
+        "ALL KNOWLEDGE GRAPH NODES"
+    )
+
+    if not nodes:
+
+        print(
+            "NO GRAPH NODES."
+        )
+
+    for index, node in enumerate(
+        nodes,
+        start=1,
+    ):
+
+        print_entity(
+            node,
+            index,
+        )
+
+    subsection(
+        "ALL KNOWLEDGE GRAPH EDGES"
+    )
+
+    if not edges:
+
+        print(
+            "NO GRAPH EDGES."
+        )
+
+    for index, edge in enumerate(
+        edges,
+        start=1,
+    ):
+
+        print(
+            f"\n[EDGE {index:03d}]"
+        )
+
+        print_object_fields(
+            edge,
+            indent=2,
+            max_value_length=300,
+        )
+
+
+# ============================================================================
+# KNOWLEDGE PROFILE
+# ============================================================================
+
+def print_profile_component(
+    title: str,
+    component: Any,
+) -> None:
+
+    subsection(
+        title
+    )
+
+    if component is None:
+
+        print(
+            "None"
+        )
+
+        return
+
+    print(
+        "Type   :",
+        safe_type_name(component),
+    )
+
+    print(
+        "Module :",
+        safe_module(component),
+    )
+
+    print(
+        "Fields:"
+    )
+
+    print_object_fields(
+        component,
+        indent=2,
+        max_value_length=700,
+    )
+
+
+def print_knowledge_profile(
+    result: Any,
+) -> None:
+
+    section(
+        "6. KNOWLEDGE PROFILE — COMPLETE OUTPUT"
+    )
+
+    profile = safe_get(
+        result,
+        "knowledge_profile",
+        None,
+    )
+
+    if profile is None:
+
+        print(
+            "KnowledgeProfile is None."
+        )
+
+        return
+
+    print(
+        "Type   :",
+        safe_type_name(profile),
+    )
+
+    print(
+        "Module :",
+        safe_module(profile),
+    )
+
+    print(
+        "Confidence:",
+        safe_get(
+            profile,
+            "confidence",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # SUMMARY
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.1 SUMMARY PROFILE",
+        safe_get(
+            profile,
+            "summary",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # ENTITIES
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.2 ENTITY PROFILE",
+        safe_get(
+            profile,
+            "entities",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # ACHIEVEMENTS
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.3 ACHIEVEMENT PROFILE",
+        safe_get(
+            profile,
+            "achievements",
+            safe_get(
+                profile,
+                "achievement",
+                None,
+            ),
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # LEADERSHIP
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.4 LEADERSHIP PROFILE",
+        safe_get(
+            profile,
+            "leadership",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # SENIORITY
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.5 SENIORITY PROFILE",
+        safe_get(
+            profile,
+            "seniority",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # METRICS
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.6 METRIC PROFILE",
+        safe_get(
+            profile,
+            "metrics",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # DOMAINS
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.7 DOMAIN PROFILE",
+        safe_get(
+            profile,
+            "domains",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # MODIFIERS
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.8 MODIFIER PROFILE",
+        safe_get(
+            profile,
+            "modifiers",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # IMPACT
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.9 IMPACT PROFILE",
+        safe_get(
+            profile,
+            "impact",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # ATS
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.10 ATS PROFILE",
+        safe_get(
+            profile,
+            "ats",
+            None,
+        ),
+    )
+
+    # ------------------------------------------------------------
+    # BUSINESS STATEMENTS
+    # ------------------------------------------------------------
+
+    print_profile_component(
+        "6.11 BUSINESS STATEMENT PROFILE",
+        safe_get(
+            profile,
+            "business_statements",
+            None,
+        ),
+    )
+
+
+# ============================================================================
+# PROFILE EXECUTIVE SUMMARY
+# ============================================================================
+
+def print_executive_summary(
+    result: Any,
+) -> None:
+
+    section(
+        "7. PROFILE EXECUTIVE SUMMARY"
+    )
+
+    profile = safe_get(
+        result,
+        "knowledge_profile",
+        None,
+    )
+
+    if profile is None:
+
+        print(
+            "KnowledgeProfile unavailable."
+        )
+
+        return
+
+    summary = safe_get(
+        profile,
+        "summary",
+        None,
+    )
+
+    achievements = safe_get(
+        profile,
+        "achievements",
+        safe_get(
+            profile,
+            "achievement",
+            None,
+        ),
+    )
+
+    leadership = safe_get(
+        profile,
+        "leadership",
+        None,
+    )
+
+    seniority = safe_get(
+        profile,
+        "seniority",
+        None,
+    )
+
+    metrics = safe_get(
+        profile,
+        "metrics",
+        None,
+    )
+
+    domains = safe_get(
+        profile,
+        "domains",
+        None,
+    )
+
+    modifiers = safe_get(
+        profile,
+        "modifiers",
+        None,
+    )
+
+    impact = safe_get(
+        profile,
+        "impact",
+        None,
+    )
+
+    ats = safe_get(
+        profile,
+        "ats",
+        None,
+    )
+
+    print(
+        "Profile confidence       :",
+        safe_get(
+            profile,
+            "confidence",
+            None,
+        ),
+    )
 
     print()
 
     print(
-        "PASS — best(...) executed for all "
-        "test ontologies."
+        "Overall score            :",
+        safe_get(
+            summary,
+            "overall_score",
+            None,
+        ),
+    )
+
+    print(
+        "Impact score             :",
+        safe_get(
+            summary,
+            "impact_score",
+            None,
+        ),
+    )
+
+    print(
+        "ATS score                :",
+        safe_get(
+            summary,
+            "ats_score",
+            None,
+        ),
+    )
+
+    print(
+        "Achievement score       :",
+        safe_get(
+            summary,
+            "achievement_score",
+            None,
+        ),
+    )
+
+    print(
+        "Leadership score        :",
+        safe_get(
+            summary,
+            "leadership_score",
+            None,
+        ),
+    )
+
+    print(
+        "Seniority score         :",
+        safe_get(
+            summary,
+            "seniority_score",
+            None,
+        ),
+    )
+
+    print(
+        "Career level             :",
+        safe_get(
+            summary,
+            "career_level",
+            None,
+        ),
+    )
+
+    print()
+
+    print(
+        "Achievement count       :",
+        safe_get(
+            achievements,
+            "achievement_count",
+            None,
+        ),
+    )
+
+    print(
+        "Quantified achievements :",
+        safe_get(
+            achievements,
+            "quantified_count",
+            None,
+        ),
+    )
+
+    print(
+        "Top achievements        :",
+        safe_value(
+            safe_get(
+                achievements,
+                "top_achievements",
+                [],
+            ),
+            1000,
+        ),
+    )
+
+    print()
+
+    print(
+        "Leadership level        :",
+        safe_get(
+            leadership,
+            "level",
+            None,
+        ),
+    )
+
+    print(
+        "Executive actions       :",
+        safe_get(
+            leadership,
+            "executive_actions",
+            None,
+        ),
+    )
+
+    print()
+
+    print(
+        "Seniority level         :",
+        safe_get(
+            seniority,
+            "level",
+            None,
+        ),
+    )
+
+    print(
+        "Seniority indicators    :",
+        safe_value(
+            safe_get(
+                seniority,
+                "indicators",
+                [],
+            ),
+            1000,
+        ),
+    )
+
+    print()
+
+    print(
+        "Total metrics           :",
+        safe_get(
+            metrics,
+            "total_metrics",
+            None,
+        ),
+    )
+
+    print(
+        "Positive metrics        :",
+        safe_get(
+            metrics,
+            "positive_metrics",
+            None,
+        ),
+    )
+
+    print(
+        "Negative metrics        :",
+        safe_get(
+            metrics,
+            "negative_metrics",
+            None,
+        ),
+    )
+
+    print(
+        "Increase metrics        :",
+        safe_get(
+            metrics,
+            "increase_metrics",
+            None,
+        ),
+    )
+
+    print(
+        "Decrease metrics        :",
+        safe_get(
+            metrics,
+            "decrease_metrics",
+            None,
+        ),
+    )
+
+    print()
+
+    print(
+        "Domains                 :",
+        safe_value(
+            safe_get(
+                domains,
+                "domains",
+                {},
+            ),
+            1000,
+        ),
+    )
+
+    print(
+        "Business areas          :",
+        safe_value(
+            safe_get(
+                domains,
+                "business_areas",
+                {},
+            ),
+            1000,
+        ),
+    )
+
+    print()
+
+    print(
+        "Total modifiers         :",
+        safe_get(
+            modifiers,
+            "total_modifiers",
+            None,
+        ),
+    )
+
+    print(
+        "Executive modifiers     :",
+        safe_get(
+            modifiers,
+            "executive_modifiers",
+            None,
+        ),
+    )
+
+    print()
+
+    print(
+        "Total impact            :",
+        safe_get(
+            impact,
+            "total_impact",
+            None,
+        ),
+    )
+
+    print(
+        "Average impact          :",
+        safe_get(
+            impact,
+            "average_impact",
+            None,
+        ),
+    )
+
+    print(
+        "Maximum impact          :",
+        safe_get(
+            impact,
+            "maximum_impact",
+            None,
+        ),
+    )
+
+    print()
+
+    print(
+        "ATS entity count        :",
+        safe_get(
+            ats,
+            "entity_count",
+            None,
+        ),
+    )
+
+    print(
+        "ATS matched entities    :",
+        safe_value(
+            safe_get(
+                ats,
+                "matched_entities",
+                [],
+            ),
+            1000,
+        ),
     )
 
 
 # ============================================================================
-# TEST 5
+# RAW PIPELINE STATISTICS
 # ============================================================================
 
-def test_parser_context(
-    pipeline: KnowledgeV5Pipeline,
-):
+def print_statistics(
+    result: Any,
+) -> None:
 
-    banner(
-        "TEST 5 — KNOWLEDGE PARSER CONTEXT"
+    section(
+        "8. FINAL PIPELINE STATISTICS"
     )
 
-    context = pipeline.build_parser_context(
-        verb=True,
-        obj=True,
-        metric=True,
-        modifier=True,
-        numeric=True,
-        domain=True,
+    statistics = safe_get(
+        result,
+        "statistics",
+        {},
     )
 
-    print(
-        "Context type:",
-        type(context).__name__,
-    )
-
-    print(
-        "Context:",
-        context,
-    )
-
-    assert isinstance(
-        context,
+    if not isinstance(
+        statistics,
         dict,
+    ):
+
+        print(
+            "Statistics unavailable."
+        )
+
+        return
+
+    for key, value in statistics.items():
+
+        print(
+            f"{key:<40}: "
+            f"{safe_value(value, 500)}"
+        )
+
+    # ------------------------------------------------------------
+    # Also print direct result counts
+    # ------------------------------------------------------------
+
+    print()
+
+    resume_text = safe_get(
+        result,
+        "resume_text",
+        "",
     )
 
-    expected_keys = {
-        "verb_found",
-        "object_found",
-        "metric_found",
-        "modifier_found",
-        "numeric_value",
-        "domain_found",
-    }
-
-    missing = (
-        expected_keys
-        - set(context)
+    document = safe_get(
+        result,
+        "knowledge_document",
+        None,
     )
 
-    assert not missing, (
-        f"Parser context missing keys: "
-        f"{sorted(missing)}"
+    semantic_entities = as_list(
+        safe_get(
+            result,
+            "semantic_entities",
+            [],
+        )
+    )
+
+    statements = as_list(
+        safe_get(
+            result,
+            "business_statements",
+            [],
+        )
+    )
+
+    graph = safe_get(
+        result,
+        "knowledge_graph",
+        None,
+    )
+
+    profile = safe_get(
+        result,
+        "knowledge_profile",
+        None,
     )
 
     print(
-        "PASS — Parser context created correctly."
+        "Resume characters        :",
+        len(resume_text),
+    )
+
+    print(
+        "Knowledge sentences      :",
+        len(
+            as_list(
+                safe_get(
+                    document,
+                    "sentences",
+                    [],
+                )
+            )
+        ),
+    )
+
+    print(
+        "Knowledge facts          :",
+        len(
+            as_list(
+                safe_get(
+                    document,
+                    "facts",
+                    [],
+                )
+            )
+        ),
+    )
+
+    print(
+        "Extracted entities       :",
+        len(
+            as_list(
+                safe_get(
+                    result,
+                    "extracted_entities",
+                    [],
+                )
+            )
+        ),
+    )
+
+    print(
+        "Semantic entities        :",
+        len(
+            semantic_entities
+        ),
+    )
+
+    print(
+        "Semantic dependencies    :",
+        len(
+            as_list(
+                safe_get(
+                    result,
+                    "semantic_dependencies",
+                    [],
+                )
+            )
+        ),
+    )
+
+    print(
+        "Business statements      :",
+        len(statements),
+    )
+
+    print(
+        "KnowledgeGraph nodes     :",
+        len(
+            get_graph_nodes(
+                graph
+            )
+        ),
+    )
+
+    print(
+        "KnowledgeGraph edges     :",
+        len(
+            get_graph_edges(
+                graph
+            )
+        ),
+    )
+
+    print(
+        "KnowledgeProfile         :",
+        "YES" if profile is not None else "NO",
+    )
+
+    print(
+        "KnowledgeProfile score   :",
+        safe_get(
+            safe_get(
+                profile,
+                "summary",
+                None,
+            ),
+            "overall_score",
+            None,
+        ),
     )
 
 
 # ============================================================================
-# TEST 6
+# DATA LOSS ANALYSIS
 # ============================================================================
 
-def test_extractor_creation(
-    pipeline: KnowledgeV5Pipeline,
-):
+def print_data_flow_analysis(
+    result: Any,
+) -> None:
+
+    section(
+        "9. DATA FLOW ANALYSIS"
+    )
+
+    document = safe_get(
+        result,
+        "knowledge_document",
+        None,
+    )
+
+    facts = as_list(
+        safe_get(
+            document,
+            "facts",
+            [],
+        )
+    )
+
+    interpretation = get_main_interpretation(
+        result
+    )
+
+    semantic_entities = as_list(
+        safe_get(
+            interpretation,
+            "entities",
+            [],
+        )
+    )
+
+    relations = as_list(
+        safe_get(
+            interpretation,
+            "relations",
+            [],
+        )
+    )
+
+    dependencies = as_list(
+        safe_get(
+            interpretation,
+            "dependencies",
+            [],
+        )
+    )
+
+    statements = as_list(
+        safe_get(
+            result,
+            "business_statements",
+            [],
+        )
+    )
+
+    graph = safe_get(
+        result,
+        "knowledge_graph",
+        None,
+    )
+
+    nodes = get_graph_nodes(
+        graph
+    )
+
+    edges = get_graph_edges(
+        graph
+    )
+
+    profile = safe_get(
+        result,
+        "knowledge_profile",
+        None,
+    )
+
+    print(
+        "KnowledgeDocument facts       :",
+        len(facts),
+    )
+
+    print(
+        "Semantic entities             :",
+        len(semantic_entities),
+    )
+
+    print(
+        "Semantic relations            :",
+        len(relations),
+    )
+
+    print(
+        "Semantic dependencies         :",
+        len(dependencies),
+    )
+
+    print(
+        "Business statements           :",
+        len(statements),
+    )
+
+    print(
+        "KnowledgeGraph nodes          :",
+        len(nodes),
+    )
+
+    print(
+        "KnowledgeGraph edges          :",
+        len(edges),
+    )
+
+    print(
+        "KnowledgeProfile              :",
+        "AVAILABLE"
+        if profile is not None
+        else "MISSING",
+    )
+
+    print()
+
+    print(
+        "DATA FLOW:"
+    )
+
+    print(
+        f"  Facts              {len(facts):>5}"
+        "  → Semantic entities"
+        f" {len(semantic_entities):>5}"
+    )
+
+    print(
+        f"  Semantic entities  {len(semantic_entities):>5}"
+        "  → Relations"
+        f"         {len(relations):>5}"
+    )
+
+    print(
+        f"  Relations          {len(relations):>5}"
+        "  → Statements"
+        f"       {len(statements):>5}"
+    )
+
+    print(
+        f"  Statements         {len(statements):>5}"
+        "  → Graph nodes"
+        f"       {len(nodes):>5}"
+    )
+
+    print(
+        f"  Graph nodes        {len(nodes):>5}"
+        "  → Profile"
+        f"           "
+        f"{'AVAILABLE' if profile else 'EMPTY'}"
+    )
+
+    print()
+
+    # ------------------------------------------------------------
+    # Diagnostic interpretation
+    # ------------------------------------------------------------
+
+    if semantic_entities and not statements:
+
+        print(
+            "WARNING:"
+        )
+
+        print(
+            "Semantic resolution is producing entities, "
+            "but BusinessStatementBuilder is producing ZERO statements."
+        )
+
+        print(
+            "This is the first major information-loss point."
+        )
+
+    if statements and not nodes:
+
+        print(
+            "WARNING:"
+        )
+
+        print(
+            "Business statements exist, but KnowledgeGraph "
+            "contains no usable nodes."
+        )
+
+    if nodes and profile:
+
+        print(
+            "KnowledgeGraph → KnowledgeProfile "
+            "data flow is populated."
+        )
+
+    if not nodes:
+
+        print(
+            "KnowledgeGraph currently contains no useful "
+            "semantic entity nodes."
+        )
+
+    if profile:
+
+        profile_confidence = safe_get(
+            profile,
+            "confidence",
+            0.0,
+        )
+
+        if not profile_confidence:
+
+            print(
+                "WARNING: KnowledgeProfile exists but "
+                "confidence is 0."
+            )
+
+
+# ============================================================================
+# RAW ENTITY LIST BY TYPE
+# ============================================================================
+
+def print_entities_grouped_by_type(
+    result: Any,
+) -> None:
+
+    section(
+        "10. ENTITIES GROUPED BY TYPE"
+    )
+
+    interpretation = get_main_interpretation(
+        result
+    )
+
+    entities = as_list(
+        safe_get(
+            interpretation,
+            "entities",
+            [],
+        )
+    )
+
+    groups = {}
+
+    for entity in entities:
+
+        kind = str(
+            safe_get(
+                entity,
+                "entity_type",
+                "unknown",
+            )
+        ).strip()
+
+        groups.setdefault(
+            kind,
+            [],
+        ).append(
+            entity
+        )
+
+    for kind in sorted(
+        groups
+    ):
+
+        group = groups[kind]
+
+        print()
+        print(
+            f"{kind.upper()} "
+            f"({len(group)})"
+        )
+
+        print(
+            "-" * 70
+        )
+
+        for entity in group:
+
+            print(
+                f"  {safe_get(entity, 'entity_id', '')}"
+                f" | "
+                f"{safe_get(entity, 'canonical', '')}"
+                f" | confidence="
+                f"{safe_get(entity, 'confidence', None)}"
+            )
+
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+def test_enterprise_resume_pipeline():
 
     banner(
-        "TEST 6 — ALL KNOWLEDGE EXTRACTOR CREATION"
+        "ENTERPRISE RESUME → KNOWLEDGE PROFILE DIAGNOSTIC"
     )
 
-    extractors = {}
+    print(
+        "\nRunning complete enterprise diagnostic..."
+    )
 
-    for ontology, extractor_class in (
-        EXTRACTORS.items()
-    ):
+    # ----------------------------------------------------------------
+    # IMPORT DIAGNOSTICS
+    # ----------------------------------------------------------------
+
+    section(
+        "IMPORT DIAGNOSTICS"
+    )
+
+    try:
+
+        from app.intelligence.utilities.knowledge.semantic_reasoning.business_statement_builder import (
+            BusinessStatementBuilder,
+        )
+
+        print(
+            "[PASS] BusinessStatementBuilder imported:"
+        )
+
+        print(
+            "  Class  :",
+            BusinessStatementBuilder,
+        )
+
+        print(
+            "  Module :",
+            BusinessStatementBuilder.__module__,
+        )
 
         try:
 
-            extractor = create_extractor(
-                extractor_class=extractor_class,
-                pipeline=pipeline,
-            )
-
-        except Exception as error:
-
-            signature = inspect.signature(
-                extractor_class.__init__
-            )
-
-            raise AssertionError(
-                f"{extractor_class.__name__} "
-                f"could not be instantiated.\n"
-                f"Ontology: {ontology}\n"
-                f"Constructor: {signature}\n"
-                f"Error: {error}"
-            ) from error
-
-        assert extractor is not None
-
-        extractors[
-            ontology
-        ] = extractor
-
-        print(
-            f"PASS — "
-            f"{ontology:<15} "
-            f"{extractor_class.__name__} created."
-        )
-
-    return extractors
-
-
-# ============================================================================
-# TEST 7
-# ============================================================================
-
-def test_extractor_multi_match(
-    extractors,
-):
-
-    banner(
-        "TEST 7 — KNOWLEDGE EXTRACTOR MULTI-MATCH"
-    )
-
-    extractor_results = {}
-
-    for ontology, extractor in (
-        extractors.items()
-    ):
-
-        section(
-            f"EXTRACTOR : {ontology}"
-        )
-
-        sentence = EXPECTED_PIPELINE[
-            ontology
-        ]["sentence"]
-
-        request = make_request(
-            sentence
-        )
-
-        print(
-            "REQUEST:",
-            sentence,
-        )
-
-        result = extractor.extract(
-            request
-        )
-
-        extractor_results[
-            ontology
-        ] = result
-
-        print(
-            "RESULT TYPE :",
-            type(result).__name__,
-        )
-
-        print(
-            "FOUND       :",
-            result.found,
-        )
-
-        print(
-            "COUNT       :",
-            result.count,
-        )
-
-        assert result is not None
-
-        assert result.found, (
-            f"{ontology} extractor "
-            "returned no entities."
-        )
-
-        minimum = EXPECTED_PIPELINE[
-            ontology
-        ].get(
-            "minimum",
-            0,
-        )
-
-        assert result.count >= minimum, (
-            f"{ontology} extractor returned "
-            f"{result.count} entities; "
-            f"expected at least {minimum}."
-        )
-
-        for index, entity in enumerate(
-            result.entities,
-            start=1,
-        ):
-
-            print()
+            builder = BusinessStatementBuilder()
 
             print(
-                f"{index}. "
-                f"type={type(entity).__name__}"
+                "[PASS] BusinessStatementBuilder instantiated."
             )
 
             print(
-                "   entity_id :",
-                entity.entity_id,
+                "  Builder class   :",
+                type(builder).__name__,
             )
 
             print(
-                "   canonical :",
-                entity.canonical,
+                "  Builder methods :",
+                [
+                    name
+                    for name in dir(builder)
+                    if not name.startswith("_")
+                ],
+            )
+
+        except Exception as exc:
+
+            print(
+                "[WARNING] Could not instantiate "
+                "BusinessStatementBuilder:"
             )
 
             print(
-                "   original  :",
-                entity.original,
+                repr(exc)
             )
 
-            print(
-                "   confidence:",
-                entity.confidence,
-            )
-
-        # ----------------------------------------------------------
-        # Technology validation
-        # ----------------------------------------------------------
-
-        if ontology == "technologies":
-
-            expected = EXPECTED_PIPELINE[
-                ontology
-            ]["expected"]
-
-            found = {
-                entity.entity_id
-                for entity in result.entities
-            }
-
-            missing = (
-                expected
-                - found
-            )
-
-            unexpected = (
-                found
-                - expected
-            )
-
-            print()
-
-            print(
-                "TECHNOLOGY ENTITY VALIDATION"
-            )
-
-            print(
-                "Expected:",
-                sorted(expected),
-            )
-
-            print(
-                "Found:",
-                sorted(found),
-            )
-
-            print(
-                "Missing:",
-                sorted(missing),
-            )
-
-            print(
-                "Unexpected:",
-                sorted(unexpected),
-            )
-
-            assert not missing
-
-            assert not unexpected
-
-            assert result.count == (
-                len(expected)
-            )
-
-            # Repository terminology:
-            for entity in result.entities:
-
-                assert entity.entity_type == (
-                    "technologie"
-                ), (
-                    f"{entity.entity_id} has "
-                    f"entity_type="
-                    f"{entity.entity_type!r}; "
-                    f"expected 'technologie'."
-                )
-
-            print(
-                "PASS — Technology extractor "
-                "returned all expected entities."
-            )
-
-        # ----------------------------------------------------------
-        # Methodology validation
-        # ----------------------------------------------------------
-
-        if ontology == "methodologies":
-
-            for entity in result.entities:
-
-                assert entity.entity_type == (
-                    "methodologie"
-                ), (
-                    f"{entity.entity_id} has "
-                    f"entity_type="
-                    f"{entity.entity_type!r}; "
-                    f"expected 'methodologie'."
-                )
-
-            print(
-                "PASS — Methodology extractor "
-                "uses entity_type='methodologie'."
-            )
-
-    print()
-
-    print(
-        "PASS — All knowledge extractors "
-        "performed extraction successfully."
-    )
-
-    return extractor_results
-
-
-# ============================================================================
-# TEST 8
-# ============================================================================
-
-def test_common_knowledge_fields(
-    extractor_results,
-):
-
-    banner(
-        "TEST 8 — COMMON KNOWLEDGE FIELD VALIDATION"
-    )
-
-    required_fields = {
-
-        "found",
-        "confidence",
-        "original",
-        "canonical",
-        "normalized",
-        "entity_id",
-        "entity_type",
-        "ontology_name",
-        "category",
-        "description",
-        "matched_phrase",
-        "matched_alias",
-        "start_char",
-        "end_char",
-        "token_index",
-        "token_count",
-        "sentence_index",
-        "source",
-        "metadata",
-    }
-
-    for ontology, result in (
-        extractor_results.items()
-    ):
-
-        print()
+    except Exception as exc:
 
         print(
-            f"Ontology: {ontology}"
-        )
-
-        for entity in result.entities:
-
-            missing = []
-
-            for field_name in required_fields:
-
-                if not hasattr(
-                    entity,
-                    field_name,
-                ):
-
-                    missing.append(
-                        field_name
-                    )
-
-            assert not missing, (
-                f"{ontology} entity "
-                f"{entity.entity_id} missing "
-                f"fields: {missing}"
-            )
-
-            assert entity.found is True
-
-            assert entity.confidence >= 0.0
-
-            assert entity.confidence <= 1.0
-
-            assert entity.entity_id
-
-            assert entity.canonical
-
-            print(
-                f"PASS — "
-                f"{entity.entity_id}: "
-                f"original={entity.original!r}, "
-                f"canonical={entity.canonical!r}, "
-                f"confidence={entity.confidence:.3f}"
-            )
-
-    print()
-
-    print(
-        "PASS — Common knowledge fields validated."
-    )
-
-
-# ============================================================================
-# TEST 9
-# ============================================================================
-
-def test_technology_specific_fields(
-    extractor_results,
-):
-
-    banner(
-        "TEST 9 — TECHNOLOGY KNOWLEDGE MODEL VALIDATION"
-    )
-
-    result = extractor_results[
-        "technologies"
-    ]
-
-    required_fields = {
-
-        "technology_family",
-        "technology_group",
-        "vendor",
-        "version",
-
-        "programming_language",
-        "database",
-        "analytics_tool",
-        "cloud_platform",
-        "operating_system",
-        "framework",
-        "erp",
-        "visualization_tool",
-
-        "commercial",
-        "open_source",
-        "certification_available",
-        "maturity_level",
-
-        "graph_node",
-        "ats_weight",
-    }
-
-    for entity in result.entities:
-
-        print()
-
-        print(
-            f"{entity.entity_id:<25}"
-            f"type={type(entity).__name__:<20}"
-            f"canonical={entity.canonical!r}"
-        )
-
-        missing = [
-            field
-            for field in required_fields
-            if not hasattr(
-                entity,
-                field,
-            )
-        ]
-
-        assert not missing, (
-            f"{entity.entity_id} missing "
-            f"technology fields: "
-            f"{missing}"
-        )
-
-        assert entity.entity_type == (
-            "technologie"
-        )
-
-        assert entity.ontology_name == (
-            "technologies"
-        )
-
-        assert isinstance(
-            entity.programming_language,
-            bool,
-        )
-
-        assert isinstance(
-            entity.database,
-            bool,
-        )
-
-        assert isinstance(
-            entity.analytics_tool,
-            bool,
-        )
-
-        assert isinstance(
-            entity.visualization_tool,
-            bool,
-        )
-
-        assert isinstance(
-            entity.maturity_level,
-            int,
-        )
-
-        assert isinstance(
-            entity.graph_node,
-            bool,
+            "[FAIL] BusinessStatementBuilder import:"
         )
 
         print(
-            "PASS — technology-specific "
-            "fields present."
+            repr(exc)
         )
 
-    print()
+    try:
 
-    print(
-        "PASS — Technology model validated."
-    )
-
-
-# ============================================================================
-# TEST 10
-# ============================================================================
-
-def test_multi_match_integrity(
-    pipeline,
-    extractor_results,
-):
-
-    banner(
-        "TEST 10 — PIPELINE → EXTRACTOR MULTI-MATCH INTEGRITY"
-    )
-
-    for ontology, result in (
-        extractor_results.items()
-    ):
-
-        sentence = EXPECTED_PIPELINE[
-            ontology
-        ]["sentence"]
-
-        pipeline_matches = pipeline.run(
-            ontology=ontology,
-            sentence=sentence,
-        )
-
-        pipeline_ids = [
-            match.entity_id
-            for match in pipeline_matches
-        ]
-
-        extractor_ids = [
-            entity.entity_id
-            for entity in result.entities
-        ]
-
-        print()
-
-        print(
-            f"{ontology:<15}"
-            f" pipeline={len(pipeline_ids):<3}"
-            f" extractor={len(extractor_ids):<3}"
-        )
-
-        # Every extractor entity must originate
-        # from a pipeline MatchResult.
-
-        pipeline_id_set = set(
-            pipeline_ids
-        )
-
-        extractor_id_set = set(
-            extractor_ids
-        )
-
-        unexpected = (
-            extractor_id_set
-            - pipeline_id_set
-        )
-
-        assert not unexpected, (
-            f"{ontology} extractor produced "
-            f"entities not present in pipeline: "
-            f"{sorted(unexpected)}"
+        from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.knowledge_profile_builder import (
+            KnowledgeProfileBuilder,
         )
 
         print(
-            "PASS — extractor entities correspond "
-            "to pipeline matches."
-        )
-
-    print()
-
-    print(
-        "PASS — Pipeline → Extractor "
-        "multi-match integrity validated."
-    )
-
-
-# ============================================================================
-# TEST 11
-# ============================================================================
-
-def test_no_single_match_regression(
-    extractor_results,
-):
-
-    banner(
-        "TEST 11 — MULTI-MATCH REGRESSION CHECK"
-    )
-
-    critical_multi_match = {
-        "technologies": 6,
-        "domains": 3,
-        "actions": 2,
-        "standards": 2,
-    }
-
-    for ontology, minimum in (
-        critical_multi_match.items()
-    ):
-
-        result = extractor_results[
-            ontology
-        ]
-
-        print(
-            f"{ontology:<15}"
-            f" count={result.count}"
-            f" expected>={minimum}"
-        )
-
-        assert result.count >= minimum, (
-            f"REGRESSION: {ontology} "
-            f"returned only {result.count} "
-            f"knowledge entities."
-        )
-
-    print()
-
-    print(
-        "PASS — No single-match regression "
-        "detected in critical ontologies."
-    )
-
-
-# ============================================================================
-# TEST 12
-# ============================================================================
-
-def test_entity_type_terminology(
-    extractor_results,
-):
-
-    banner(
-        "TEST 12 — ENTITY TYPE TERMINOLOGY"
-    )
-
-    expected_types = {
-
-        "technologies":
-            "technologie",
-
-        "methodologies":
-            "methodologie",
-    }
-
-    for ontology, expected_type in (
-        expected_types.items()
-    ):
-
-        result = extractor_results[
-            ontology
-        ]
-
-        print()
-
-        print(
-            f"Ontology : {ontology}"
+            "\n[PASS] KnowledgeProfileBuilder imported:"
         )
 
         print(
-            f"Expected : {expected_type}"
+            "  Class  :",
+            KnowledgeProfileBuilder,
         )
-
-        for entity in result.entities:
-
-            print(
-                f"  {entity.entity_id:<30}"
-                f"{entity.entity_type}"
-            )
-
-            assert entity.entity_type == (
-                expected_type
-            )
 
         print(
-            "PASS — Repository entity terminology "
-            "preserved."
+            "  Module :",
+            KnowledgeProfileBuilder.__module__,
         )
 
+    except Exception as exc:
 
-# ============================================================================
-# MASTER TEST
-# ============================================================================
+        print(
+            "\n[FAIL] KnowledgeProfileBuilder import:"
+        )
 
-def test_full_enterprise_v5_extractor_traversal():
+        print(
+            repr(exc)
+        )
 
-    banner(
-        "ENTERPRISE V5 — FULL KNOWLEDGE EXTRACTOR TRAVERSAL"
-    )
-
-    # ================================================================
+    # ----------------------------------------------------------------
     # PIPELINE
-    # ================================================================
+    # ----------------------------------------------------------------
 
-    pipeline = test_pipeline_creation()
+    try:
 
-    # ================================================================
-    # PIPELINE API
-    # ================================================================
+        pipeline = EnterpriseResumePipeline()
 
-    test_pipeline_api(
-        pipeline
-    )
+        print()
+        print(
+            "Pipeline class :",
+            type(pipeline).__name__,
+        )
 
-    # ================================================================
-    # PIPELINE MULTI-ONTOLOGY
-    # ================================================================
+        print(
+            "Pipeline module:",
+            type(pipeline).__module__,
+        )
 
-    test_pipeline_multi_ontology(
-        pipeline
-    )
+        print(
+            "\nExecuting pipeline..."
+        )
 
-    # ================================================================
-    # BEST
-    # ================================================================
+        result = pipeline.run(
+            TEST_RESUME
+        )
 
-    test_best_results(
-        pipeline
-    )
+        # ------------------------------------------------------------
+        # PRINT EVERYTHING
+        # ------------------------------------------------------------
 
-    # ================================================================
-    # PARSER CONTEXT
-    # ================================================================
+        print_pipeline_result(
+            result
+        )
 
-    test_parser_context(
-        pipeline
-    )
+        print_pipeline_stages(
+            result
+        )
 
-    # ================================================================
-    # EXTRACTORS
-    # ================================================================
+        print_knowledge_document(
+            result
+        )
 
-    extractors = test_extractor_creation(
-        pipeline
-    )
+        print_semantic_interpretation(
+            result
+        )
 
-    # ================================================================
-    # EXTRACTOR MULTI-MATCH
-    # ================================================================
+        print_entity_distribution(
+            result
+        )
 
-    extractor_results = test_extractor_multi_match(
-        extractors
-    )
+        print_business_statements(
+            result
+        )
 
-    # ================================================================
-    # COMMON FIELDS
-    # ================================================================
+        print_knowledge_graph(
+            result
+        )
 
-    test_common_knowledge_fields(
-        extractor_results
-    )
+        print_knowledge_profile(
+            result
+        )
 
-    # ================================================================
-    # TECHNOLOGY MODEL
-    # ================================================================
+        print_executive_summary(
+            result
+        )
 
-    test_technology_specific_fields(
-        extractor_results
-    )
+        print_statistics(
+            result
+        )
 
-    # ================================================================
-    # PIPELINE / EXTRACTOR INTEGRITY
-    # ================================================================
+        print_data_flow_analysis(
+            result
+        )
 
-    test_multi_match_integrity(
-        pipeline,
-        extractor_results,
-    )
+        print_entities_grouped_by_type(
+            result
+        )
 
-    # ================================================================
-    # REGRESSION
-    # ================================================================
+        # ------------------------------------------------------------
+        # COMPLETE
+        # ------------------------------------------------------------
 
-    test_no_single_match_regression(
-        extractor_results
-    )
+        banner(
+            "ENTERPRISE PIPELINE DIAGNOSTIC COMPLETE"
+        )
 
-    # ================================================================
-    # TERMINOLOGY
-    # ================================================================
+        print(
+            "\nPipeline execution finished."
+        )
 
-    test_entity_type_terminology(
-        extractor_results
-    )
+        print(
+            "The diagnostic intentionally does not fail "
+            "because downstream objects are empty."
+        )
 
-    # ================================================================
-    # FINAL
-    # ================================================================
+        return result
 
-    banner(
-        "ENTERPRISE V5 — FULL KNOWLEDGE EXTRACTOR TRAVERSAL PASSED"
-    )
+    except Exception as exc:
 
-    print()
-    print(
-        "KnowledgeV5Pipeline       : PASS"
-    )
+        banner(
+            "ENTERPRISE PIPELINE EXECUTION FAILED"
+        )
 
-    print(
-        "Pipeline multi-match      : PASS"
-    )
+        print(
+            "\nException type:",
+            type(exc).__name__,
+        )
 
-    print(
-        "Best entity API           : PASS"
-    )
+        print(
+            "Exception:",
+            str(exc),
+        )
 
-    print(
-        "Parser context            : PASS"
-    )
+        print(
+            "\nTraceback:"
+        )
 
-    print(
-        "All extractors            : PASS"
-    )
+        traceback.print_exc()
 
-    print(
-        "Technology extraction     : PASS"
-    )
-
-    print(
-        "Methodology extraction    : PASS"
-    )
-
-    print(
-        "Common knowledge fields   : PASS"
-    )
-
-    print(
-        "Technology model          : PASS"
-    )
-
-    print(
-        "Pipeline/extractor link   : PASS"
-    )
-
-    print(
-        "Multi-match regression    : PASS"
-    )
-
-    print(
-        "Entity terminology        : PASS"
-    )
-
-    print()
-    print(
-        "ENTERPRISE V5 KNOWLEDGE "
-        "EXTRACTOR TRAVERSAL : PASS"
-    )
+        raise
 
 
 # ============================================================================
@@ -1595,4 +2913,4 @@ def test_full_enterprise_v5_extractor_traversal():
 
 if __name__ == "__main__":
 
-    test_full_enterprise_v5_extractor_traversal()
+    test_enterprise_resume_pipeline()

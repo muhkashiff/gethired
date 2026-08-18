@@ -1,1648 +1,652 @@
 """
-Enterprise Business Statement Builder
-Enterprise V14
+Enterprise Business Statement Builder - FIXED V2
+Enterprise V18
 
-Purpose
--------
-
-Convert SemanticResolver output into BusinessStatement objects.
-
-Architecture
-------------
-
-SemanticEntity[]
-SemanticDependency[]
-        ↓
-BusinessStatementBuilder
-        ↓
-BusinessStatement[]
-        ↓
-KnowledgeGraphBuilder
-        ↓
-KnowledgeGraph
-        ↓
-Knowledge Profile
-
-Design Principles
------------------
-
-1. BusinessStatement is the single source of truth for statement-level
-   semantic information.
-
-2. Every resolved entity is preserved.
-
-3. Technologies remain entity_type="technology".
-
-4. Methodologies remain entity_type="methodology".
-
-5. Certifications remain entity_type="certification".
-
-6. Standards remain entity_type="standard".
-
-7. Entity metadata is preserved.
-
-8. impact_weight is preserved exactly from the entity.
-
-9. ATS-related information is preserved in metadata.
-
-10. No scoring is performed here.
-
-11. No ontology matching is performed here.
-
-12. No graph construction is performed here.
-
-13. No information is silently discarded.
-
-14. The builder is deliberately tolerant of small differences between
-    SemanticEntity / SemanticDependency implementations.
-
+FIX: Force grouping using clusters from SemanticResolution
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Iterable, Optional
-
-
-# ============================================================================
-# MODEL IMPORTS
-# ============================================================================
+from typing import Any, Iterable, Optional, Dict, List, Set
+import logging
+import uuid
 
 from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
     BusinessStatement,
-)
-
-from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models import (
     SemanticEntity,
     StatementRelation,
+    SemanticDependency,
+    SemanticCluster,
+    SemanticResolution,
 )
 
-
-# ============================================================================
-# BUSINESS STATEMENT BUILDER
-# ============================================================================
+logger = logging.getLogger(__name__)
 
 
 class BusinessStatementBuilder:
     """
     Convert semantic resolver output into BusinessStatement objects.
-
-    Input
-    -----
-
-        semantic_resolution
-
-    or, where required:
-
-        semantic_entities
-        semantic_dependencies
-
-    Output
-    ------
-
-        list[BusinessStatement]
-
-    The builder preserves the complete semantic information needed by
-    KnowledgeGraphBuilder and the downstream Knowledge Profile layer.
+    PRIORITIZES CLUSTERS for grouping.
     """
 
-    # ========================================================================
-    # INITIALIZATION
-    # ========================================================================
-
     def __init__(self) -> None:
+        """Initialize the builder."""
+        self.statements: List[BusinessStatement] = []
+        self.logger = logger
 
-        pass
-
-    # ========================================================================
+    # =========================================================================
     # PUBLIC API
-    # ========================================================================
+    # =========================================================================
 
     def build(
         self,
         semantic_resolution: Any = None,
         entities: Optional[Iterable[Any]] = None,
         dependencies: Optional[Iterable[Any]] = None,
+        clusters: Optional[Iterable[Any]] = None,
     ) -> list[BusinessStatement]:
         """
         Build BusinessStatement objects.
-
-        Preferred usage:
-
-            builder.build(
-                semantic_resolution
-            )
-
-        Compatibility usage:
-
-            builder.build(
-                entities=entities,
-                dependencies=dependencies,
-            )
-
-        Parameters
-        ----------
-        semantic_resolution:
-            Result returned by SemanticResolver.
-
-        entities:
-            Optional explicit SemanticEntity collection.
-
-        dependencies:
-            Optional explicit SemanticDependency / relation collection.
-
-        Returns
-        -------
-        list[BusinessStatement]
+        
+        CRITICAL: Pass clusters from semantic_resolution to enable grouping.
         """
+        self.logger.info("Starting BusinessStatementBuilder.build()")
 
-        semantic_entities = self._extract_entities(
-            semantic_resolution=semantic_resolution,
-            entities=entities,
-        )
-
-        semantic_dependencies = self._extract_dependencies(
-            semantic_resolution=semantic_resolution,
-            dependencies=dependencies,
-        )
+        # ---------------------------------------------------------------------
+        # Extract semantic entities
+        # ---------------------------------------------------------------------
+        semantic_entities = self._extract_entities(semantic_resolution, entities)
+        self.logger.info(f"Extracted {len(semantic_entities)} semantic entities")
 
         if not semantic_entities:
+            self.logger.warning("No semantic entities found")
             return []
 
-        # --------------------------------------------------------------------
-        # Build entity lookup.
-        # --------------------------------------------------------------------
+        # ---------------------------------------------------------------------
+        # Extract semantic dependencies
+        # ---------------------------------------------------------------------
+        semantic_dependencies = self._extract_dependencies(semantic_resolution, dependencies)
+        self.logger.info(f"Extracted {len(semantic_dependencies)} semantic dependencies")
 
-        entity_map = self._build_entity_map(
-            semantic_entities
-        )
+        # ---------------------------------------------------------------------
+        # Extract clusters - THIS IS THE KEY FIX
+        # ---------------------------------------------------------------------
+        semantic_clusters = self._extract_clusters(semantic_resolution, clusters)
+        self.logger.info(f"Extracted {len(semantic_clusters)} semantic clusters")
 
-        # --------------------------------------------------------------------
-        # Group entities into statements.
-        #
-        # Statement grouping is intentionally conservative.
-        #
-        # If an entity carries a statement_id, sentence_index or fact
-        # reference, that information is used.
-        #
-        # Otherwise entities are grouped by sentence / source context.
-        # --------------------------------------------------------------------
+        # ---------------------------------------------------------------------
+        # Build entity lookup
+        # ---------------------------------------------------------------------
+        entity_map = self._build_entity_map(semantic_entities)
 
-        groups = self._group_entities(
-            semantic_entities
-        )
+        # ---------------------------------------------------------------------
+        # GROUP BY CLUSTERS (Primary strategy)
+        # ---------------------------------------------------------------------
+        groups = self._group_by_clusters(semantic_clusters, entity_map)
 
+        # If clusters produced groups, use them
+        if groups:
+            self.logger.info(f"Created {len(groups)} groups from clusters")
+        else:
+            self.logger.warning("No groups from clusters - trying fallback grouping")
+            groups = self._group_by_relations(semantic_entities, semantic_dependencies)
+
+        # If still no groups, fallback to individual entities
+        if not groups:
+            self.logger.warning("No groups from relations - creating individual statements")
+            groups = self._group_individual_entities(semantic_entities)
+
+        # ---------------------------------------------------------------------
+        # Build statements from groups
+        # ---------------------------------------------------------------------
         statements: list[BusinessStatement] = []
 
-        for statement_id, statement_entities in groups.items():
-
-            statement_dependencies = (
-                self._dependencies_for_statement(
-                    statement_id=statement_id,
-                    statement_entities=statement_entities,
-                    dependencies=semantic_dependencies,
-                    entity_map=entity_map,
-                )
-            )
-
-            statement = self._build_statement(
-                statement_id=statement_id,
-                entities=statement_entities,
-                dependencies=statement_dependencies,
-            )
-
-            statements.append(
-                statement
-            )
-
-        return statements
-
-    # ========================================================================
-    # ENTITY EXTRACTION
-    # ========================================================================
-
-    @staticmethod
-    def _extract_entities(
-        semantic_resolution: Any = None,
-        entities: Optional[Iterable[Any]] = None,
-    ) -> list[Any]:
-        """
-        Extract SemanticEntity objects from the semantic resolution.
-
-        Supports:
-
-            resolution.entities
-            resolution.semantic_entities
-            explicit entities argument
-        """
-
-        if entities is not None:
-
-            return list(
-                entities
-            )
-
-        if semantic_resolution is None:
-
-            return []
-
-        candidates = getattr(
-            semantic_resolution,
-            "entities",
-            None,
-        )
-
-        if candidates is None:
-
-            candidates = getattr(
-                semantic_resolution,
-                "semantic_entities",
-                None,
-            )
-
-        if candidates is None:
-
-            return []
-
-        return list(
-            candidates
-        )
-
-    # ========================================================================
-    # DEPENDENCY EXTRACTION
-    # ========================================================================
-
-    @staticmethod
-    def _extract_dependencies(
-        semantic_resolution: Any = None,
-        dependencies: Optional[Iterable[Any]] = None,
-    ) -> list[Any]:
-        """
-        Extract semantic dependencies / relations.
-        """
-
-        if dependencies is not None:
-
-            return list(
-                dependencies
-            )
-
-        if semantic_resolution is None:
-
-            return []
-
-        candidates = getattr(
-            semantic_resolution,
-            "dependencies",
-            None,
-        )
-
-        if candidates is None:
-
-            candidates = getattr(
-                semantic_resolution,
-                "semantic_dependencies",
-                None,
-            )
-
-        if candidates is None:
-
-            return []
-
-        return list(
-            candidates
-        )
-
-    # ========================================================================
-    # ENTITY MAP
-    # ========================================================================
-
-    @staticmethod
-    def _build_entity_map(
-        entities: list[Any],
-    ) -> dict[str, Any]:
-        """
-        Build entity_id → SemanticEntity map.
-        """
-
-        result: dict[str, Any] = {}
-
-        for entity in entities:
-
-            entity_id = str(
-                getattr(
-                    entity,
-                    "entity_id",
-                    "",
-                )
-                or ""
-            ).strip()
-
-            if not entity_id:
+        for group_id, group_entities in groups.items():
+            if not group_entities:
                 continue
 
-            result[entity_id] = entity
+            # Find dependencies for this group
+            group_deps = self._find_dependencies_for_group(
+                group_entities, semantic_dependencies, entity_map
+            )
+
+            statement = self._create_statement(
+                group_id, group_entities, group_deps, entity_map
+            )
+
+            if statement and statement.is_valid:
+                statements.append(statement)
+
+        self.logger.info(f"Generated {len(statements)} business statements")
+        return statements
+
+    # =========================================================================
+    # EXTRACTION METHODS
+    # =========================================================================
+
+    @staticmethod
+    def _extract_entities(resolution: Any, entities: Optional[Iterable[Any]]) -> list[Any]:
+        """Extract entities from resolution or direct input."""
+        if entities is not None:
+            return list(entities)
+
+        if resolution is None:
+            return []
+
+        # Try common field names
+        for field in ("entities", "semantic_entities"):
+            val = getattr(resolution, field, None)
+            if val is not None:
+                return list(val)
+
+        return []
+
+    @staticmethod
+    def _extract_dependencies(resolution: Any, dependencies: Optional[Iterable[Any]]) -> list[Any]:
+        """Extract dependencies from resolution or direct input."""
+        if dependencies is not None:
+            return list(dependencies)
+
+        if resolution is None:
+            return []
+
+        result = []
+        for field in ("dependencies", "semantic_dependencies", "relations", "semantic_relations"):
+            val = getattr(resolution, field, None)
+            if val is not None:
+                result.extend(list(val))
 
         return result
 
-    # ========================================================================
-    # ENTITY GROUPING
-    # ========================================================================
+    @staticmethod
+    def _extract_clusters(resolution: Any, clusters: Optional[Iterable[Any]]) -> list[Any]:
+        """Extract clusters from resolution or direct input."""
+        if clusters is not None:
+            return list(clusters)
 
-    def _group_entities(
-        self,
-        entities: list[Any],
-    ) -> dict[str, list[Any]]:
-        """
-        Group entities into BusinessStatements.
+        if resolution is None:
+            return []
 
-        Priority:
+        # Try common field names
+        val = getattr(resolution, "clusters", None)
+        if val is not None:
+            return list(val)
 
-            1. statement_id
-            2. sentence_index
-            3. fact/source grouping
-            4. deterministic fallback
+        return []
 
-        This prevents unrelated entities from being merged simply because
-        they have the same entity type.
-        """
+    # =========================================================================
+    # ENTITY MAP
+    # =========================================================================
 
-        groups: dict[str, list[Any]] = {}
-
-        fallback_counter = 0
-
+    @staticmethod
+    def _build_entity_map(entities: list[Any]) -> Dict[str, Any]:
+        """Build entity_id → entity map."""
+        result = {}
         for entity in entities:
+            entity_id = BusinessStatementBuilder._get_entity_id(entity)
+            if entity_id:
+                result[entity_id] = entity
+        return result
 
-            statement_id = self._entity_statement_id(
-                entity
-            )
+    # =========================================================================
+    # GROUPING STRATEGIES
+    # =========================================================================
 
-            if not statement_id:
+    def _group_by_clusters(
+        self,
+        clusters: list[Any],
+        entity_map: Dict[str, Any]
+    ) -> Dict[str, List[Any]]:
+        """
+        PRIMARY STRATEGY: Group entities by their clusters.
+        
+        This is the key fix - clusters from the semantic resolver
+        contain the correct groupings.
+        """
+        groups: Dict[str, List[Any]] = {}
+        assigned: Set[str] = set()
 
-                sentence_index = getattr(
-                    entity,
-                    "sentence_index",
-                    -1,
+        for cluster in clusters:
+            # Get cluster ID
+            cluster_id = getattr(cluster, "cluster_id", None)
+            if not cluster_id:
+                cluster_id = getattr(cluster, "id", f"cluster_{uuid.uuid4().hex[:8]}")
+
+            # Get entity IDs from cluster
+            entity_ids = getattr(cluster, "entity_ids", None)
+            if not entity_ids:
+                entity_ids = getattr(cluster, "members", [])
+            if not entity_ids:
+                entity_ids = getattr(cluster, "entities", [])
+
+            # Convert to list if needed
+            if not isinstance(entity_ids, list):
+                entity_ids = list(entity_ids) if entity_ids else []
+
+            if not entity_ids:
+                self.logger.debug(f"Cluster {cluster_id} has no entity IDs")
+                continue
+
+            # Get actual entity objects
+            group_key = f"cluster_{cluster_id}"
+            groups[group_key] = []
+
+            for entity_id in entity_ids:
+                if entity_id in entity_map:
+                    entity = entity_map[entity_id]
+                    groups[group_key].append(entity)
+                    assigned.add(entity_id)
+
+            if groups[group_key]:
+                self.logger.debug(
+                    f"Cluster {cluster_id}: {len(groups[group_key])} entities, "
+                    f"labels: {getattr(cluster, 'label', 'N/A')}"
                 )
 
-                try:
-
-                    sentence_index = int(
-                        sentence_index
-                    )
-
-                except (
-                    TypeError,
-                    ValueError,
-                ):
-
-                    sentence_index = -1
-
-                if sentence_index >= 0:
-
-                    statement_id = (
-                        f"sentence_{sentence_index}"
-                    )
-
-                else:
-
-                    fallback_counter += 1
-
-                    statement_id = (
-                        f"statement_{fallback_counter}"
-                    )
-
-            groups.setdefault(
-                statement_id,
-                [],
-            ).append(
-                entity
-            )
+        # Log results
+        total_grouped = sum(len(g) for g in groups.values())
+        self.logger.info(f"Grouped {total_grouped} entities across {len(groups)} clusters")
 
         return groups
 
-    # ========================================================================
-    # STATEMENT ID
-    # ========================================================================
-
-    @staticmethod
-    def _entity_statement_id(
-        entity: Any,
-    ) -> str:
-        """
-        Obtain an existing statement identifier from an entity.
-        """
-
-        for attribute in (
-            "statement_id",
-            "business_statement_id",
-            "source_statement_id",
-            "fact_id",
-            "source_fact_id",
-        ):
-
-            value = getattr(
-                entity,
-                attribute,
-                None,
-            )
-
-            if value:
-
-                return str(
-                    value
-                )
-
-        return ""
-
-    # ========================================================================
-    # DEPENDENCIES FOR STATEMENT
-    # ========================================================================
-
-    def _dependencies_for_statement(
+    def _group_by_relations(
         self,
-        statement_id: str,
-        statement_entities: list[Any],
-        dependencies: list[Any],
-        entity_map: dict[str, Any],
+        entities: list[Any],
+        dependencies: list[Any]
+    ) -> Dict[str, List[Any]]:
+        """
+        FALLBACK STRATEGY: Group by action-target relationships.
+        """
+        groups: Dict[str, List[Any]] = {}
+        entity_map = self._build_entity_map(entities)
+
+        # Build source → targets map
+        source_map: Dict[str, List[tuple]] = {}
+        for dep in dependencies:
+            source_id = self._get_dependency_source(dep)
+            target_id = self._get_dependency_target(dep)
+            rel_type = self._get_relation_type(dep)
+
+            if source_id and target_id:
+                if source_id not in source_map:
+                    source_map[source_id] = []
+                source_map[source_id].append((target_id, rel_type))
+
+        # Group by action
+        for entity in entities:
+            entity_id = self._get_entity_id(entity)
+            entity_type = self._get_entity_type(entity)
+
+            if entity_type in {"action", "act"} and entity_id in source_map:
+                group_key = f"action_{entity_id}"
+                groups[group_key] = [entity]
+
+                # Add targets
+                for target_id, rel_type in source_map[entity_id]:
+                    if target_id in entity_map:
+                        groups[group_key].append(entity_map[target_id])
+
+                # Add related domains and metrics
+                for dep in dependencies:
+                    dep_source = self._get_dependency_source(dep)
+                    dep_target = self._get_dependency_target(dep)
+                    if dep_source == entity_id and dep_target in entity_map:
+                        target = entity_map[dep_target]
+                        if target not in groups[group_key]:
+                            ttype = self._get_entity_type(target)
+                            if ttype in {"domain", "metric", "kpi"}:
+                                groups[group_key].append(target)
+
+        return groups
+
+    def _group_individual_entities(self, entities: list[Any]) -> Dict[str, List[Any]]:
+        """FINAL FALLBACK: Create individual statements for important entities."""
+        groups = {}
+
+        # Prioritize actions and targets
+        for entity in entities:
+            entity_id = self._get_entity_id(entity)
+            entity_type = self._get_entity_type(entity)
+
+            if entity_type in {"action", "act", "target", "skill", "standard", "certification"}:
+                groups[f"single_{entity_id}"] = [entity]
+
+        # If no groups, put all in one
+        if not groups and entities:
+            groups["all_entities"] = entities
+
+        return groups
+
+    # =========================================================================
+    # DEPENDENCY HELPERS
+    # =========================================================================
+
+    def _find_dependencies_for_group(
+        self,
+        group_entities: list[Any],
+        all_dependencies: list[Any],
+        entity_map: Dict[str, Any]
     ) -> list[Any]:
-        """
-        Select relations belonging to the current statement.
-
-        A relation is retained when:
-
-        • it explicitly references an entity in the statement
-        • both endpoints belong to the statement
-        • it carries the same statement_id
-        """
-
-        entity_ids = {
-            str(
-                getattr(
-                    entity,
-                    "entity_id",
-                    "",
-                )
-                or ""
-            )
-            for entity in statement_entities
-        }
-
+        """Find dependencies relevant to this group."""
+        entity_ids = {self._get_entity_id(e) for e in group_entities}
         entity_ids.discard("")
 
-        selected: list[Any] = []
-
-        for dependency in dependencies:
-
-            dependency_statement_id = self._dependency_statement_id(
-                dependency
-            )
-
-            if (
-                dependency_statement_id
-                and dependency_statement_id == statement_id
-            ):
-
-                selected.append(
-                    dependency
-                )
-
-                continue
-
-            source_id = self._dependency_source_id(
-                dependency
-            )
-
-            target_id = self._dependency_target_id(
-                dependency
-            )
-
-            if (
-                source_id in entity_ids
-                or target_id in entity_ids
-            ):
-
-                selected.append(
-                    dependency
-                )
-
-        return self._deduplicate_dependencies(
-            selected
-        )
-
-    # ========================================================================
-    # DEPENDENCY HELPERS
-    # ========================================================================
-
-    @staticmethod
-    def _dependency_statement_id(
-        dependency: Any,
-    ) -> str:
-
-        for attribute in (
-            "statement_id",
-            "business_statement_id",
-        ):
-
-            value = getattr(
-                dependency,
-                attribute,
-                None,
-            )
-
-            if value:
-
-                return str(
-                    value
-                )
-
-        return ""
-
-    # ------------------------------------------------------------------------
-
-    @staticmethod
-    def _dependency_source_id(
-        dependency: Any,
-    ) -> str:
-
-        for attribute in (
-            "source_id",
-            "source_entity_id",
-            "from_id",
-        ):
-
-            value = getattr(
-                dependency,
-                attribute,
-                None,
-            )
-
-            if value:
-
-                return str(
-                    value
-                )
-
-        return ""
-
-    # ------------------------------------------------------------------------
-
-    @staticmethod
-    def _dependency_target_id(
-        dependency: Any,
-    ) -> str:
-
-        for attribute in (
-            "target_id",
-            "target_entity_id",
-            "to_id",
-        ):
-
-            value = getattr(
-                dependency,
-                attribute,
-                None,
-            )
-
-            if value:
-
-                return str(
-                    value
-                )
-
-        return ""
-
-    # ========================================================================
-    # BUILD SINGLE STATEMENT
-    # ========================================================================
-
-    def _build_statement(
-        self,
-        statement_id: str,
-        entities: list[Any],
-        dependencies: list[Any],
-    ) -> BusinessStatement:
-        """
-        Convert one entity group into BusinessStatement.
-        """
-
-        statement_label = self._build_label(
-            entities
-        )
-
-        confidence = self._statement_confidence(
-            entities
-        )
-
-        semantic_type = self._statement_semantic_type(
-            entities
-        )
-
-        primary_domain = self._primary_value(
-            entities,
-            "primary_domain",
-            "domain",
-        )
-
-        business_area = self._primary_value(
-            entities,
-            "business_area",
-        )
-
-        achievement = any(
-            bool(
-                getattr(
-                    entity,
-                    "achievement",
-                    False,
-                )
-            )
-            for entity in entities
-        )
-
-        statement_entities = []
-
-        for entity in entities:
-
-            normalized_entity = (
-                self._normalize_entity(
-                    entity
-                )
-            )
-
-            statement_entities.append(
-                normalized_entity
-            )
-
-        statement_relations = []
-
-        for dependency in dependencies:
-
-            relation = (
-                self._normalize_relation(
-                    dependency
-                )
-            )
-
-            if relation is not None:
-
-                statement_relations.append(
-                    relation
-                )
-
-        technologies = [
-            entity
-            for entity in statement_entities
-            if self._entity_type(
-                entity
-            ) == "technologie"
-        ]
-
-        methodologies = [
-            entity
-            for entity in statement_entities
-            if self._entity_type(
-                entity
-            ) == "methodologie"
-        ]
-
-        metadata = self._build_statement_metadata(
-            entities=statement_entities,
-            relations=statement_relations,
-        )
-
-        # Preserve technology and methodology as explicit single entity
-        # categories while also making them available through statement
-        # compatibility fields.
-        metadata["technologie_count"] = len(
-            technologies
-        )
-
-        metadata["methodologie_count"] = len(
-            methodologies
-        )
-
-        metadata["certification_count"] = len(
-            [
-                entity
-                for entity in statement_entities
-                if self._entity_type(entity)
-                == "certification"
-            ]
-        )
-
-        metadata["standard_count"] = len(
-            [
-                entity
-                for entity in statement_entities
-                if self._entity_type(entity)
-                == "standard"
-            ]
-        )
-
-        return BusinessStatement(
-
-            statement_id=statement_id,
-
-            label=statement_label,
-
-            confidence=confidence,
-
-            semantic_type=semantic_type,
-
-            primary_domain=primary_domain,
-
-            business_area=business_area,
-
-            achievement=achievement,
-
-            metadata=metadata,
-
-            technologies=technologies,
-
-            entities=statement_entities,
-
-            relations=statement_relations,
-        )
-
-    # ========================================================================
-    # ENTITY NORMALIZATION
-    # ========================================================================
-
-    @staticmethod
-    def _normalize_entity(
-        entity: Any,
-    ) -> Any:
-        """
-        Preserve the original SemanticEntity object.
-
-        We intentionally do not rebuild the entity into a smaller object.
-
-        This is critical because the entity may contain:
-
-            impact_weight
-            ATS score information
-            ontology information
-            metadata
-            confidence
-            business meaning
-            direction
-            unit
-            aliases
-            repository object
-
-        Returning the original object prevents information loss.
-        """
-
-        return entity
-
-    # ========================================================================
-    # RELATION NORMALIZATION
-    # ========================================================================
-
-    @staticmethod
-    def _normalize_relation(
-        dependency: Any,
-    ) -> Optional[Any]:
-        """
-        Convert a semantic dependency into StatementRelation.
-
-        If dependency is already a StatementRelation, preserve it.
-
-        Otherwise construct a StatementRelation using the fields that
-        are available.
-        """
-
-        if dependency is None:
-
-            return None
-
-        if isinstance(
-            dependency,
-            StatementRelation,
-        ):
-
-            return dependency
-
-        relation_type = ""
-
-        for attribute in (
-            "relation_type",
-            "relation",
-            "type",
-        ):
-
-            value = getattr(
-                dependency,
-                attribute,
-                None,
-            )
-
-            if value:
-
-                relation_type = str(
-                    value
-                ).upper()
-
-                break
-
-        source_id = (
-            BusinessStatementBuilder
-            ._dependency_source_id(
-                dependency
-            )
-        )
-
-        target_id = (
-            BusinessStatementBuilder
-            ._dependency_target_id(
-                dependency
-            )
-        )
-
-        if not relation_type:
-
-            relation_type = "RELATED_TO"
-
-        try:
-
-            return StatementRelation(
-
-                source_id=source_id,
-
-                target_id=target_id,
-
-                relation_type=relation_type,
-
-            )
-
-        except TypeError:
-
-            # Some versions may contain additional required fields.
-            # If the object cannot be constructed safely, preserve the
-            # dependency itself rather than silently losing it.
-            return dependency
-
-    # ========================================================================
-    # LABEL
-    # ========================================================================
-
-    @staticmethod
-    def _build_label(
-        entities: list[Any],
-    ) -> str:
-        """
-        Generate a human-readable statement label.
-        """
-
-        if not entities:
-
-            return ""
-
-        action = next(
-            (
-                entity
-                for entity in entities
-                if BusinessStatementBuilder._entity_type(
-                    entity
-                ) == "action"
-            ),
-            None,
-        )
-
-        target = next(
-            (
-                entity
-                for entity in entities
-                if BusinessStatementBuilder._entity_type(
-                    entity
-                ) in {
-                    "target",
-                    "object",
-                }
-            ),
-            None,
-        )
-
-        if action is not None:
-
-            action_name = (
-                BusinessStatementBuilder
-                ._entity_display_name(
-                    action
-                )
-            )
-
-            if target is not None:
-
-                target_name = (
-                    BusinessStatementBuilder
-                    ._entity_display_name(
-                        target
-                    )
-                )
-
-                if target_name:
-
-                    return (
-                        f"{action_name} "
-                        f"{target_name}"
-                    )
-
-            if action_name:
-
-                return action_name
-
-        names = []
-
-        for entity in entities:
-
-            name = (
-                BusinessStatementBuilder
-                ._entity_display_name(
-                    entity
-                )
-            )
-
-            if name and name not in names:
-
-                names.append(
-                    name
-                )
-
-        return " | ".join(
-            names[:8]
-        )
-
-    # ========================================================================
-    # DISPLAY NAME
-    # ========================================================================
-
-    @staticmethod
-    def _entity_display_name(
-        entity: Any,
-    ) -> str:
-
-        for attribute in (
-            "canonical",
-            "name",
-            "normalized",
-            "original",
-            "label",
-        ):
-
-            value = getattr(
-                entity,
-                attribute,
-                None,
-            )
-
-            if value:
-
-                return str(
-                    value
-                ).strip()
-
-        return ""
-
-    # ========================================================================
-    # ENTITY TYPE
-    # ========================================================================
-
-    @staticmethod
-    def _entity_type(
-        entity: Any,
-    ) -> str:
-
-        return str(
-            getattr(
-                entity,
-                "entity_type",
-                "",
-            )
-            or ""
-        ).strip().casefold()
-
-    # ========================================================================
-    # STATEMENT SEMANTIC TYPE
-    # ========================================================================
-
-    @staticmethod
-    def _statement_semantic_type(
-        entities: list[Any],
-    ) -> str:
-        """
-        Determine the dominant semantic type.
-
-        Achievement takes priority because it is important for downstream
-        business-value scoring.
-        """
-
-        if any(
-            bool(
-                getattr(
-                    entity,
-                    "achievement",
-                    False,
-                )
-            )
-            for entity in entities
-        ):
-
-            return "achievement"
-
-        entity_types = [
-            BusinessStatementBuilder._entity_type(
-                entity
-            )
-            for entity in entities
-        ]
-
-        if "action" in entity_types:
-
-            return "action_statement"
-
-        if "kpi" in entity_types:
-
-            return "kpi_statement"
-
-        if "metric" in entity_types:
-
-            return "metric_statement"
-
-        if "technologie" in entity_types:
-
-            return "technologie_statement"
-
-        if "certification" in entity_types:
-
-            return "certification_statement"
-
-        if "standard" in entity_types:
-
-            return "standard_statement"
-
-        return (
-            entity_types[0]
-            if entity_types
-            else ""
-        )
-
-    # ========================================================================
-    # PRIMARY VALUE
-    # ========================================================================
-
-    @staticmethod
-    def _primary_value(
-        entities: list[Any],
-        *attributes: str,
-    ) -> str:
-        """
-        Find the first useful value across candidate attributes.
-        """
-
-        for entity in entities:
-
-            for attribute in attributes:
-
-                value = getattr(
-                    entity,
-                    attribute,
-                    None,
-                )
-
-                if value:
-
-                    return str(
-                        value
-                    ).strip()
-
-        return ""
-
-    # ========================================================================
-    # CONFIDENCE
-    # ========================================================================
-
-    @classmethod
-    def _statement_confidence(
-        cls,
-        entities: list[Any],
-    ) -> float:
-        """
-        Calculate statement confidence from entity confidence.
-
-        This does NOT use impact_weight as confidence.
-
-        impact_weight is a business importance value and must remain
-        independent from extraction confidence.
-        """
-
-        values = []
-
-        for entity in entities:
-
-            value = getattr(
-                entity,
-                "confidence",
-                None,
-            )
-
-            try:
-
-                if value is not None:
-
-                    values.append(
-                        float(value)
-                    )
-
-            except (
-                TypeError,
-                ValueError,
-            ):
-
-                continue
-
-        if not values:
-
-            return 1.0
-
-        return round(
-            sum(values) / len(values),
-            4,
-        )
-
-    # ========================================================================
-    # STATEMENT METADATA
-    # ========================================================================
-
-    @classmethod
-    def _build_statement_metadata(
-        cls,
-        entities: list[Any],
-        relations: list[Any],
-    ) -> dict:
-        """
-        Preserve important information at statement level.
-
-        Entity-level information remains on each SemanticEntity.
-        This metadata provides an aggregated view for downstream systems.
-        """
-
-        metadata = {}
-
-        # --------------------------------------------------------------------
-        # Impact
-        # --------------------------------------------------------------------
-
-        impact_weights = []
-
-        for entity in entities:
-
-            value = getattr(
-                entity,
-                "impact_weight",
-                None,
-            )
-
-            try:
-
-                if value is not None:
-
-                    impact_weights.append(
-                        float(value)
-                    )
-
-            except (
-                TypeError,
-                ValueError,
-            ):
-
-                continue
-
-        if impact_weights:
-
-            metadata[
-                "impact_weight"
-            ] = round(
-                max(
-                    impact_weights
-                ),
-                4,
-            )
-
-            metadata[
-                "impact_weight_sum"
-            ] = round(
-                sum(
-                    impact_weights
-                ),
-                4,
-            )
-
-            metadata[
-                "impact_weight_average"
-            ] = round(
-                sum(
-                    impact_weights
-                )
-                / len(
-                    impact_weights
-                ),
-                4,
-            )
-
-        # --------------------------------------------------------------------
-        # ATS
-        # --------------------------------------------------------------------
-
-        ats_values = []
-
-        for entity in entities:
-
-            value = cls._extract_ats_value(
-                entity
-            )
-
-            if value is not None:
-
-                ats_values.append(
-                    value
-                )
-
-        if ats_values:
-
-            metadata[
-                "ats_score"
-            ] = round(
-                max(
-                    ats_values
-                ),
-                4,
-            )
-
-            metadata[
-                "ats_score_average"
-            ] = round(
-                sum(
-                    ats_values
-                )
-                / len(
-                    ats_values
-                ),
-                4,
-            )
-
-        # --------------------------------------------------------------------
-        # Entity type inventory
-        # --------------------------------------------------------------------
-
-        type_counts = {}
-
-        for entity in entities:
-
-            entity_type = cls._entity_type(
-                entity
-            )
-
-            if not entity_type:
-
-                continue
-
-            type_counts[
-                entity_type
-            ] = (
-                type_counts.get(
-                    entity_type,
-                    0,
-                )
-                + 1
-            )
-
-        metadata[
-            "entity_type_counts"
-        ] = type_counts
-
-        # --------------------------------------------------------------------
-        # Relations
-        # --------------------------------------------------------------------
-
-        metadata[
-            "relation_count"
-        ] = len(
-            relations
-        )
-
-        metadata[
-            "relation_types"
-        ] = sorted(
-            {
-                str(
-                    getattr(
-                        relation,
-                        "relation_type",
-                        getattr(
-                            relation,
-                            "relation",
-                            "",
-                        ),
-                    )
-                    or ""
-                ).upper()
-                for relation in relations
-                if getattr(
-                    relation,
-                    "relation_type",
-                    getattr(
-                        relation,
-                        "relation",
-                        "",
-                    ),
-                )
-            }
-        )
-
-        # --------------------------------------------------------------------
-        # Technologies
-        # --------------------------------------------------------------------
-
-        metadata[
-            "technologies"
-        ] = [
-            cls._entity_display_name(
-                entity
-            )
-            for entity in entities
-            if cls._entity_type(
-                entity
-            ) == "technologie"
-        ]
-
-        # --------------------------------------------------------------------
-        # Methodologies
-        # --------------------------------------------------------------------
-
-        metadata[
-            "methodologies"
-        ] = [
-            cls._entity_display_name(
-                entity
-            )
-            for entity in entities
-            if cls._entity_type(
-                entity
-            ) == "methodologie"
-        ]
-
-        # --------------------------------------------------------------------
-        # Certifications
-        # --------------------------------------------------------------------
-
-        metadata[
-            "certifications"
-        ] = [
-            cls._entity_display_name(
-                entity
-            )
-            for entity in entities
-            if cls._entity_type(
-                entity
-            ) == "certification"
-        ]
-
-        # --------------------------------------------------------------------
-        # Standards
-        # --------------------------------------------------------------------
-
-        metadata[
-            "standards"
-        ] = [
-            cls._entity_display_name(
-                entity
-            )
-            for entity in entities
-            if cls._entity_type(
-                entity
-            ) == "standard"
-        ]
-
-        return metadata
-
-    # ========================================================================
-    # ATS EXTRACTION
-    # ========================================================================
-
-    @staticmethod
-    def _extract_ats_value(
-        entity: Any,
-    ) -> Optional[float]:
-        """
-        Extract an entity ATS score without assuming one exact model layout.
-
-        Supported examples:
-
-            entity.ats_score
-            entity.ats_weight
-            entity.metadata["ats_score"]
-            entity.metadata["ats_weight"]
-            entity.metadata["ats"]["score"]
-        """
-
-        for attribute in (
-            "ats_score",
-            "ats_weight",
-        ):
-
-            value = getattr(
-                entity,
-                attribute,
-                None,
-            )
-
-            if value is not None:
-
-                try:
-
-                    return float(
-                        value
-                    )
-
-                except (
-                    TypeError,
-                    ValueError,
-                ):
-
-                    pass
-
-        metadata = getattr(
-            entity,
-            "metadata",
-            None,
-        )
-
-        if not isinstance(
-            metadata,
-            dict,
-        ):
-
-            return None
-
-        for key in (
-            "ats_score",
-            "ats_weight",
-        ):
-
-            value = metadata.get(
-                key
-            )
-
-            if value is not None:
-
-                try:
-
-                    return float(
-                        value
-                    )
-
-                except (
-                    TypeError,
-                    ValueError,
-                ):
-
-                    pass
-
-        ats = metadata.get(
-            "ats"
-        )
-
-        if isinstance(
-            ats,
-            dict,
-        ):
-
-            for key in (
-                "score",
-                "weight",
-            ):
-
-                value = ats.get(
-                    key
-                )
-
-                if value is not None:
-
-                    try:
-
-                        return float(
-                            value
-                        )
-
-                    except (
-                        TypeError,
-                        ValueError,
-                    ):
-
-                        pass
-
-        return None
-
-    # ========================================================================
-    # DEPENDENCY DEDUPLICATION
-    # ========================================================================
-
-    @classmethod
-    def _deduplicate_dependencies(
-        cls,
-        dependencies: list[Any],
-    ) -> list[Any]:
-        """
-        Deduplicate semantic relations.
-        """
-
         result = []
+        for dep in all_dependencies:
+            source = self._get_dependency_source(dep)
+            target = self._get_dependency_target(dep)
 
-        seen = set()
-
-        for dependency in dependencies:
-
-            source_id = cls._dependency_source_id(
-                dependency
-            )
-
-            target_id = cls._dependency_target_id(
-                dependency
-            )
-
-            relation_type = str(
-                getattr(
-                    dependency,
-                    "relation_type",
-                    getattr(
-                        dependency,
-                        "relation",
-                        "",
-                    ),
-                )
-                or ""
-            ).upper()
-
-            key = (
-                source_id,
-                target_id,
-                relation_type,
-            )
-
-            if key in seen:
-
-                continue
-
-            seen.add(
-                key
-            )
-
-            result.append(
-                dependency
-            )
+            if source in entity_ids or target in entity_ids:
+                result.append(dep)
 
         return result
+
+    # =========================================================================
+    # STATEMENT CREATION
+    # =========================================================================
+
+    def _create_statement(
+        self,
+        group_id: str,
+        entities: list[Any],
+        dependencies: list[Any],
+        entity_map: Dict[str, Any]
+    ) -> Optional[BusinessStatement]:
+        """Create a BusinessStatement from a group of entities."""
+        if not entities:
+            return None
+
+        # Remove duplicates
+        seen = set()
+        unique_entities = []
+        for e in entities:
+            eid = self._get_entity_id(e)
+            if eid and eid not in seen:
+                seen.add(eid)
+                unique_entities.append(e)
+
+        if not unique_entities:
+            return None
+
+        # Find components
+        action = self._find_entity_by_type(unique_entities, {"action", "act"})
+        target = self._find_entity_by_type(unique_entities, {"target", "skill", "technology", "certification", "standard"})
+        domain = self._find_entity_by_type(unique_entities, {"domain", "business_area"})
+        metric = self._find_entity_by_type(unique_entities, {"metric", "kpi", "business_kpi"})
+
+        # Build text
+        text = self._build_statement_text(action, target, domain, metric, unique_entities)
+
+        # Build statement
+        try:
+            statement = BusinessStatement(
+                statement_id=f"BS-{uuid.uuid4().hex[:8]}",
+                canonical=text,
+                text=text,
+                normalized=text.casefold() if text else "",
+                fact_id=self._get_fact_id(unique_entities),
+                sentence_index=self._get_sentence_index(unique_entities),
+                source_text=text,
+                source="resume",
+                action=action,
+                target=target,
+                domain=domain,
+                metric=metric,
+                entities=unique_entities,
+                relations=[d for d in dependencies if isinstance(d, StatementRelation)],
+                dependencies=dependencies,
+                achievement=self._check_achievement(unique_entities),
+                quantified=self._check_quantified(unique_entities),
+                impact=self._get_impact(metric, unique_entities),
+                business_value=self._get_business_value(unique_entities),
+                category=self._get_category(action, target, domain, metric),
+                business_area=self._get_business_area(domain, unique_entities),
+                confidence=self._calculate_confidence(unique_entities),
+                impact_weight=self._calculate_impact_weight(unique_entities),
+                metadata={
+                    "group_id": group_id,
+                    "entity_count": len(unique_entities),
+                    "entity_ids": [self._get_entity_id(e) for e in unique_entities],
+                    "entity_types": [self._get_entity_type(e) for e in unique_entities],
+                }
+            )
+            return statement
+        except Exception as e:
+            self.logger.error(f"Failed to create statement: {e}")
+            return None
+
+    # =========================================================================
+    # HELPER METHODS
+    # =========================================================================
+
+    @staticmethod
+    def _get_entity_id(entity: Any) -> str:
+        for attr in ("entity_id", "id", "canonical_id"):
+            val = getattr(entity, attr, None)
+            if val:
+                return str(val).strip()
+        return ""
+
+    @staticmethod
+    def _get_entity_type(entity: Any) -> str:
+        return str(getattr(entity, "entity_type", "") or "").strip().casefold()
+
+    @staticmethod
+    def _get_entity_name(entity: Any) -> str:
+        for attr in ("canonical", "name", "normalized", "original", "label", "text"):
+            val = getattr(entity, attr, None)
+            if val:
+                return str(val).strip()
+        return ""
+
+    @staticmethod
+    def _get_dependency_source(dep: Any) -> str:
+        for attr in ("source_id", "source_entity_id", "from_id", "source"):
+            val = getattr(dep, attr, None)
+            if val:
+                if not isinstance(val, (str, int, float)):
+                    nested = getattr(val, "entity_id", None)
+                    if nested:
+                        return str(nested).strip()
+                return str(val).strip()
+        return ""
+
+    @staticmethod
+    def _get_dependency_target(dep: Any) -> str:
+        for attr in ("target_id", "target_entity_id", "to_id", "target"):
+            val = getattr(dep, attr, None)
+            if val:
+                if not isinstance(val, (str, int, float)):
+                    nested = getattr(val, "entity_id", None)
+                    if nested:
+                        return str(nested).strip()
+                return str(val).strip()
+        return ""
+
+    @staticmethod
+    def _get_relation_type(dep: Any) -> str:
+        for attr in ("relation_type", "relation", "type"):
+            val = getattr(dep, attr, None)
+            if val:
+                return str(val).upper().strip()
+        return "RELATED_TO"
+
+    @staticmethod
+    def _get_fact_id(entities: list[Any]) -> str:
+        for e in entities:
+            val = getattr(e, "fact_id", None) or getattr(e, "source_fact_id", None)
+            if val:
+                return str(val).strip()
+        return ""
+
+    @staticmethod
+    def _get_sentence_index(entities: list[Any]) -> int:
+        for e in entities:
+            val = getattr(e, "sentence_index", -1)
+            try:
+                val = int(val)
+                if val >= 0:
+                    return val
+            except (TypeError, ValueError):
+                continue
+        return -1
+
+    @staticmethod
+    def _find_entity_by_type(entities: list[Any], types: set[str]) -> Optional[Any]:
+        """Find first entity matching any of the types."""
+        for entity in entities:
+            etype = BusinessStatementBuilder._get_entity_type(entity)
+            if etype and any(t in etype for t in types):
+                return entity
+        return None
+
+    @staticmethod
+    def _build_statement_text(
+        action: Optional[Any],
+        target: Optional[Any],
+        domain: Optional[Any],
+        metric: Optional[Any],
+        entities: list[Any]
+    ) -> str:
+        """Build a human-readable statement text."""
+        parts = []
+
+        # Action + Target
+        if action:
+            action_name = BusinessStatementBuilder._get_entity_name(action)
+            if action_name:
+                parts.append(action_name)
+
+        if target:
+            target_name = BusinessStatementBuilder._get_entity_name(target)
+            if target_name:
+                parts.append(target_name)
+
+        # If no action/target, use domain
+        if not parts and domain:
+            parts.append(BusinessStatementBuilder._get_entity_name(domain))
+
+        # If still nothing, use first entity name
+        if not parts and entities:
+            parts.append(BusinessStatementBuilder._get_entity_name(entities[0]) or "Professional Achievement")
+
+        # Add metric if present and quantified
+        if metric and BusinessStatementBuilder._check_quantified([metric]):
+            metric_name = BusinessStatementBuilder._get_entity_name(metric)
+            if metric_name:
+                parts.append(f"resulting in {metric_name}")
+
+        return " ".join(parts) if parts else "Professional Achievement"
+
+    @staticmethod
+    def _check_achievement(entities: list[Any]) -> bool:
+        for e in entities:
+            if getattr(e, "achievement", False):
+                return True
+        return False
+
+    @staticmethod
+    def _check_quantified(entities: list[Any]) -> bool:
+        for e in entities:
+            if getattr(e, "quantified", False):
+                return True
+        return False
+
+    @staticmethod
+    def _get_impact(metric: Optional[Any], entities: list[Any]) -> str:
+        if metric:
+            return BusinessStatementBuilder._get_entity_name(metric)
+        for e in entities:
+            impact = getattr(e, "impact", None)
+            if impact:
+                return str(impact)
+        return ""
+
+    @staticmethod
+    def _get_business_value(entities: list[Any]) -> str:
+        for e in entities:
+            val = getattr(e, "business_value", None) or getattr(e, "business_meaning", None)
+            if val:
+                return str(val)
+        return ""
+
+    @staticmethod
+    def _get_category(
+        action: Optional[Any],
+        target: Optional[Any],
+        domain: Optional[Any],
+        metric: Optional[Any]
+    ) -> str:
+        if action and target:
+            return "achievement"
+        elif action:
+            return "action_statement"
+        elif metric:
+            return "metric_statement"
+        elif domain:
+            return "domain_statement"
+        else:
+            return "professional_statement"
+
+    @staticmethod
+    def _get_business_area(domain: Optional[Any], entities: list[Any]) -> str:
+        if domain:
+            area = getattr(domain, "business_area", None) or BusinessStatementBuilder._get_entity_name(domain)
+            if area:
+                return area
+        for e in entities:
+            area = getattr(e, "business_area", None)
+            if area:
+                return str(area)
+        return ""
+
+    @staticmethod
+    def _calculate_confidence(entities: list[Any]) -> float:
+        confidences = []
+        for e in entities:
+            conf = getattr(e, "confidence", None)
+            if conf is not None:
+                try:
+                    confidences.append(float(conf))
+                except (TypeError, ValueError):
+                    pass
+        if not confidences:
+            return 0.5
+        return round(sum(confidences) / len(confidences), 4)
+
+    @staticmethod
+    def _calculate_impact_weight(entities: list[Any]) -> float:
+        weights = []
+        for e in entities:
+            w = getattr(e, "impact_weight", None)
+            if w is not None:
+                try:
+                    weights.append(float(w))
+                except (TypeError, ValueError):
+                    pass
+        if not weights:
+            return 1.0
+        return round(max(weights), 4)
 
 
 # ============================================================================
 # CONVENIENCE FUNCTION
 # ============================================================================
 
-
 def build_business_statements(
     semantic_resolution: Any = None,
     entities: Optional[Iterable[Any]] = None,
     dependencies: Optional[Iterable[Any]] = None,
+    clusters: Optional[Iterable[Any]] = None,
 ) -> list[BusinessStatement]:
-    """
-    Convenience API.
-
-    Example
-    -------
-
-        statements = build_business_statements(
-            semantic_resolution
-        )
-    """
-
-    builder = (
-        BusinessStatementBuilder()
-    )
-
+    """Convenience API for building business statements."""
+    builder = BusinessStatementBuilder()
     return builder.build(
         semantic_resolution=semantic_resolution,
         entities=entities,
         dependencies=dependencies,
+        clusters=clusters,
     )
 
 
-# ============================================================================
-# EXPORTS
-# ============================================================================
-
-__all__ = [
-    "BusinessStatementBuilder",
-    "build_business_statements",
-]
+__all__ = ["BusinessStatementBuilder", "build_business_statements"]
