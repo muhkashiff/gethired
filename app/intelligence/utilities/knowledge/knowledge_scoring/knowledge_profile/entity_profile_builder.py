@@ -1,6 +1,6 @@
 """
 Entity Profile Builder
-Enterprise V14
+Enterprise V14 - FIXED
 """
 
 from __future__ import annotations
@@ -16,34 +16,56 @@ class EntityProfileBuilder:
     def build(
         self,
         graph: Any = None,
+        semantic_entities: list = None,
+        extracted_entities: list = None,
     ) -> EntityProfile:
 
         profile = EntityProfile()
 
-        nodes = self._get_nodes(graph)
+        # Collect entities from all sources
+        all_entities = []
+        
+        # 1. Semantic entities (primary source)
+        if semantic_entities:
+            all_entities.extend(semantic_entities)
+        
+        # 2. Extracted entities
+        if extracted_entities:
+            all_entities.extend(extracted_entities)
+        
+        # 3. Graph nodes (as fallback)
+        if graph and not all_entities:
+            graph_nodes = self._get_nodes(graph)
+            all_entities.extend(graph_nodes)
 
-        for node in nodes:
+        # If still no entities, try graph as primary
+        if not all_entities and graph:
+            graph_nodes = self._get_nodes(graph)
+            all_entities.extend(graph_nodes)
 
-            data = self._node_data(node)
+        for entity in all_entities:
+            data = self._node_data(entity)
 
             entity_type = self._get_entity_type(
-                node,
+                entity,
                 data,
             )
 
             entity_id = self._get(
-                node,
+                entity,
                 data,
                 "entity_id",
                 "id",
+                "node_id",
             )
 
             canonical = self._get(
-                node,
+                entity,
                 data,
                 "canonical",
                 "name",
                 "label",
+                "text",
             )
 
             record = dict(data)
@@ -64,7 +86,7 @@ class EntityProfileBuilder:
             )
 
             node_id = self._get(
-                node,
+                entity,
                 data,
                 "node_id",
                 "id",
@@ -86,7 +108,7 @@ class EntityProfileBuilder:
             Counter(
                 item.get(
                     "entity_type",
-                    ""
+                    "unknown"
                 )
                 for item in profile.entities
                 if item.get(
@@ -99,7 +121,6 @@ class EntityProfileBuilder:
 
     @staticmethod
     def _get_nodes(graph):
-
         if graph is None:
             return []
 
@@ -112,6 +133,12 @@ class EntityProfileBuilder:
         if nodes is None:
             return []
 
+        if callable(nodes):
+            try:
+                nodes = nodes()
+            except Exception:
+                return []
+
         if isinstance(nodes, dict):
             return list(nodes.values())
 
@@ -119,7 +146,6 @@ class EntityProfileBuilder:
 
     @staticmethod
     def _node_data(node):
-
         if isinstance(node, dict):
             return dict(node)
 
@@ -154,10 +180,11 @@ class EntityProfileBuilder:
             "entity_type",
             "type",
             "category",
+            "kind",
         )
 
         return str(
-            value or ""
+            value or "unknown"
         ).strip().lower()
 
     @staticmethod

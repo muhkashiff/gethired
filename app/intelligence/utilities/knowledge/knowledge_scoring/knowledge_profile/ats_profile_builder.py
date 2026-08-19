@@ -1,6 +1,6 @@
 """
 ATS Profile Builder
-Enterprise V14
+Enterprise V14 - FIXED
 """
 
 from __future__ import annotations
@@ -14,198 +14,178 @@ class ATSProfileBuilder:
 
     def build(
         self,
+        semantic_entities: list = None,
+        extracted_entities: list = None,
         graph: Any = None,
     ) -> ATSProfile:
 
         profile = ATSProfile()
 
-        nodes = self._nodes(graph)
+        # Collect all entities from all sources
+        all_entities = []
+        
+        if semantic_entities:
+            all_entities.extend(semantic_entities)
+        
+        if extracted_entities:
+            all_entities.extend(extracted_entities)
+        
+        if graph:
+            graph_nodes = self._nodes(graph)
+            all_entities.extend(graph_nodes)
+
+        if not all_entities:
+            return profile
 
         matched = []
 
-        for node in nodes:
-
-            data = self._data(node)
-
-            ats_score = self._ats_score(
-                node,
-                data,
-            )
-
-            if ats_score is None:
+        for entity in all_entities:
+            data = self._data(entity)
+            
+            # Get ATS score from various possible locations
+            ats_score = self._extract_ats_score(entity, data)
+            
+            if ats_score is None or ats_score <= 0:
                 continue
 
-            if ats_score <= 0:
-                continue
-
-            record = dict(data)
-
-            record.setdefault(
-                "ats_score",
-                ats_score,
-            )
-
-            record.setdefault(
-                "entity_id",
-                self._get(
-                    node,
+            # Build matched entity record
+            record = {
+                "ats_score": ats_score,
+                "entity_id": self._get(
+                    entity,
                     data,
                     "entity_id",
                     "id",
+                    "node_id",
                 ),
-            )
-
-            record.setdefault(
-                "canonical",
-                self._get(
-                    node,
+                "canonical": self._get(
+                    entity,
                     data,
                     "canonical",
                     "name",
                     "label",
+                    "text",
                 ),
-            )
+                "entity_type": self._get(
+                    entity,
+                    data,
+                    "entity_type",
+                    "type",
+                ),
+                "confidence": self._get(
+                    entity,
+                    data,
+                    "confidence",
+                ),
+            }
+            
+            # Add any additional metadata
+            metadata = data.get("metadata", {})
+            if isinstance(metadata, dict):
+                for key, value in metadata.items():
+                    if key not in record:
+                        record[key] = value
 
-            matched.append(
-                record
-            )
+            matched.append(record)
 
-        profile.entity_count = len(
-            matched
-        )
-
+        profile.entity_count = len(matched)
         profile.matched_entities = sorted(
             matched,
-            key=lambda item: float(
-                item.get(
-                    "ats_score",
-                    0,
-                )
-            ),
+            key=lambda item: float(item.get("ats_score", 0)),
             reverse=True,
-        )
+        )[:20]  # Limit to top 20 for display
 
         if matched:
-
-            profile.score = round(
-                sum(
-                    float(
-                        item.get(
-                            "ats_score",
-                            0,
-                        )
-                    )
-                    for item in matched
-                )
-                / len(matched),
-                4,
-            )
+            # Calculate weighted score based on all matches
+            total_score = sum(float(item.get("ats_score", 0)) for item in matched)
+            profile.score = round(total_score / len(matched), 4)
 
         return profile
 
-    @classmethod
-    def _ats_score(
-        cls,
-        node,
-        data,
-    ):
-
+    def _extract_ats_score(self, entity, data):
+        """Extract ATS score from various possible locations."""
+        
+        # Check direct attributes
         for key in (
             "ats_score",
             "ats_weight",
             "ats_match_score",
             "keyword_score",
+            "score",
+            "weight",
         ):
-
-            value = cls._get(
-                node,
-                data,
-                key,
-            )
-
+            value = self._get(entity, data, key)
             if value is not None:
-
                 try:
-                    return float(value)
-
-                except (
-                    TypeError,
-                    ValueError,
-                ):
+                    score = float(value)
+                    if 0 <= score <= 1:
+                        return score
+                    # Normalize if score is 0-100
+                    if 0 <= score <= 100:
+                        return score / 100
+                    return score
+                except (TypeError, ValueError):
                     pass
 
-        metadata = data.get(
-            "metadata"
-        )
-
-        if isinstance(
-            metadata,
-            dict,
-        ):
-
+        # Check metadata
+        metadata = data.get("metadata", {})
+        if isinstance(metadata, dict):
             for key in (
                 "ats_score",
                 "ats_weight",
                 "ats_match_score",
                 "keyword_score",
+                "score",
             ):
-
-                value = metadata.get(
-                    key
-                )
-
+                value = metadata.get(key)
                 if value is not None:
-
                     try:
-                        return float(
-                            value
-                        )
-
-                    except (
-                        TypeError,
-                        ValueError,
-                    ):
+                        score = float(value)
+                        if 0 <= score <= 1:
+                            return score
+                        if 0 <= score <= 100:
+                            return score / 100
+                        return score
+                    except (TypeError, ValueError):
                         pass
 
-            ats = metadata.get(
-                "ats"
-            )
-
-            if isinstance(
-                ats,
-                dict,
-            ):
-
-                value = ats.get(
-                    "score"
-                )
-
+            # Check nested ats dict
+            ats = metadata.get("ats", {})
+            if isinstance(ats, dict):
+                value = ats.get("score")
                 if value is not None:
-
                     try:
-                        return float(
-                            value
-                        )
-
-                    except (
-                        TypeError,
-                        ValueError,
-                    ):
+                        score = float(value)
+                        if 0 <= score <= 1:
+                            return score
+                        if 0 <= score <= 100:
+                            return score / 100
+                        return score
+                    except (TypeError, ValueError):
                         pass
+
+        # Check if entity has confidence as ATS proxy
+        confidence = self._get(entity, data, "confidence")
+        if confidence is not None:
+            try:
+                return float(confidence)
+            except (TypeError, ValueError):
+                pass
 
         return None
 
     @staticmethod
     def _nodes(graph):
-
         if graph is None:
             return []
 
-        nodes = getattr(
-            graph,
-            "nodes",
-            []
-        )
+        nodes = getattr(graph, "nodes", [])
+        
+        if callable(nodes):
+            try:
+                nodes = nodes()
+            except Exception:
+                return []
 
         if isinstance(nodes, dict):
             return list(nodes.values())
@@ -214,41 +194,34 @@ class ATSProfileBuilder:
 
     @staticmethod
     def _data(node):
-
         if isinstance(node, dict):
             return dict(node)
 
-        data = getattr(
-            node,
-            "data",
-            None,
-        )
-
+        data = getattr(node, "data", None)
+        
         if isinstance(data, dict):
             return dict(data)
 
-        return dict(
-            getattr(
-                node,
-                "__dict__",
-                {},
-            )
-        )
+        # Try to get all attributes
+        result = {}
+        for key in dir(node):
+            if not key.startswith("_"):
+                try:
+                    value = getattr(node, key)
+                    if not callable(value):
+                        result[key] = value
+                except Exception:
+                    pass
+        
+        return result
 
     @staticmethod
     def _get(node, data, *names):
-
         for name in names:
-
             if name in data:
                 return data[name]
 
-            value = getattr(
-                node,
-                name,
-                None,
-            )
-
+            value = getattr(node, name, None)
             if value is not None:
                 return value
 
