@@ -208,13 +208,14 @@ class KnowledgeProfileBuilder:
     def __init__(
         self,
         top_n: int = 10,
+        debug: bool = False,  
     ) -> None:
 
         self.top_n = max(
             int(top_n),
             1,
         )
-
+        self.debug = debug  
     # =========================================================================
     # PUBLIC API
     # =========================================================================
@@ -722,32 +723,104 @@ class KnowledgeProfileBuilder:
     # -------------------------------------------------------------------------
 
     @classmethod
-    def _business_area(
-        cls,
-        entity: Any,
-    ) -> str:
-
-        return cls._text(
-            entity,
-            "business_area",
-            default="",
-        )
-
-    # -------------------------------------------------------------------------
-
-    @classmethod
     def _domain(
         cls,
         entity: Any,
     ) -> str:
-
-        return cls._text(
+        """
+        Extract domain from entity.
+        Checks: domain, primary_domain, business_area, category, entity_type
+        """
+        # Primary: domain field
+        value = cls._text(
             entity,
             "domain",
             "primary_domain",
             default="",
         )
+        
+        if value:
+            return value
+        
+        # Secondary: business_area
+        value = cls._text(
+            entity,
+            "business_area",
+            default="",
+        )
+        
+        if value:
+            return value
+        
+        # Tertiary: category
+        value = cls._text(
+            entity,
+            "category",
+            default="",
+        )
+        
+        if value:
+            return value
+        
+        # Fallback: entity_type
+        value = cls._text(
+            entity,
+            "entity_type",
+            "type",
+            default="",
+        )
+    
+        return value
 
+    @classmethod
+    def _business_area(
+        cls,
+        entity: Any,
+    ) -> str:
+        """
+        Extract business_area from entity.
+        Checks: business_area, category, domain, entity_type
+        """
+        # Primary: business_area
+        value = cls._text(
+            entity,
+            "business_area",
+            default="",
+        )
+        
+        if value:
+            return value
+        
+        # Secondary: category
+        value = cls._text(
+            entity,
+            "category",
+            default="",
+        )
+        
+        if value:
+            return value
+        
+        # Tertiary: domain
+        value = cls._text(
+            entity,
+            "domain",
+            "primary_domain",
+            default="",
+        )
+        
+        if value:
+            return value
+        
+        # Fallback: entity_type
+        value = cls._text(
+            entity,
+            "entity_type",
+            "type",
+            default="",
+        )
+        
+        return value
     # =========================================================================
     # ENTITY PROFILE
     # =========================================================================
@@ -806,106 +879,49 @@ class KnowledgeProfileBuilder:
     ) -> dict[str, Any]:
         """
         Convert graph node into a profile dictionary.
-
-        Important:
-        This preserves the important semantic information instead of
-        reducing the node to only its name.
+        Important: This preserves the important semantic information.
         """
 
-        metadata = cls._metadata(
-            entity
-        )
+        metadata = cls._metadata(entity)
 
         result = {
-
-            "node_id": cls._node_id(
-                entity
-            ),
-
-            "entity_id": cls._entity_id(
-                entity
-            ),
-
-            "label": cls._label(
-                entity
-            ),
-
-            "canonical": cls._text(
-                entity,
-                "canonical",
-            ),
-
-            "normalized": cls._text(
-                entity,
-                "normalized",
-            ),
-
-            "entity_type": cls._entity_type(
-                entity
-            ),
-
-            "category": cls._category(
-                entity
-            ),
-
-            "domain": cls._domain(
-                entity
-            ),
-
-            "business_area": cls._business_area(
-                entity
-            ),
-
-            "description": cls._text(
-                entity,
-                "description",
-            ),
-
-            "confidence": cls._float(
-                entity,
-                "confidence",
-                default=0.0,
-            ),
-
-            "impact_weight": cls._impact_weight(
-                entity
-            ),
-
-            "achievement": cls._bool(
-                entity,
-                "achievement",
-            ),
-
-            "quantified": cls._bool(
-                entity,
-                "quantified",
-            ),
+            "node_id": cls._node_id(entity),
+            "entity_id": cls._entity_id(entity),
+            "label": cls._label(entity),
+            "canonical": cls._text(entity, "canonical"),
+            "normalized": cls._text(entity, "normalized"),
+            "entity_type": cls._entity_type(entity),
+            "category": cls._category(entity),
+            "domain": cls._domain(entity),
+            "business_area": cls._business_area(entity),
+            "description": cls._text(entity, "description"),
+            "confidence": cls._float(entity, "confidence", default=0.0),
+            "impact_weight": cls._impact_weight(entity),
+            "achievement": cls._bool(entity, "achievement"),
+            "quantified": cls._bool(entity, "quantified"),
         }
 
-        # Preserve ATS fields when available.
-
-        ats = cls._extract_ats(
-            entity
-        )
-
+        # Preserve ATS fields
+        ats = cls._extract_ats(entity)
         if ats:
+            result["ats"] = ats
 
-            result[
-                "ats"
-            ] = ats
+        # Preserve metric direction if present
+        direction = cls._metric_direction(entity)
+        if direction and direction != "neutral":
+            result["metric_direction"] = direction
 
-        # Preserve useful metadata.
-
+        # Preserve ALL metadata
         if metadata:
+            result["metadata"] = dict(metadata)
 
-            result[
-                "metadata"
-            ] = dict(
-                metadata
-            )
+        # If entity has direct metadata attribute
+        if hasattr(entity, 'metadata') and isinstance(entity.metadata, dict):
+            if not result.get("metadata"):
+                result["metadata"] = {}
+            result["metadata"].update(entity.metadata)
 
         return result
-
     # =========================================================================
     # IMPACT
     # =========================================================================
@@ -957,20 +973,15 @@ class KnowledgeProfileBuilder:
     ) -> dict[str, Any]:
         """
         Extract ATS information from every possible known location.
+        Also checks impact_weight as ATS proxy.
         """
 
-        metadata = cls._metadata(
-            entity
-        )
-
-        ats_metadata = metadata.get(
-            "ats"
-        )
+        metadata = cls._metadata(entity)
+        ats_metadata = metadata.get("ats")
 
         result = {}
 
-        # Direct attributes.
-
+        # Direct attributes - check for impact_weight
         for key in (
             "ats_score",
             "ats_weight",
@@ -979,22 +990,13 @@ class KnowledgeProfileBuilder:
             "matched",
             "keyword_match",
             "keyword_score",
+            "impact_weight",  # <-- ADD THIS
         ):
-
-            value = cls._value(
-                entity,
-                key,
-                default=None,
-            )
-
+            value = cls._value(entity, key, default=None)
             if value is not None:
+                result[key] = value
 
-                result[
-                    key
-                ] = value
-
-        # Direct metadata.
-
+        # Direct metadata - check for impact_weight
         for key in (
             "ats_score",
             "ats_weight",
@@ -1003,28 +1005,18 @@ class KnowledgeProfileBuilder:
             "matched",
             "keyword_match",
             "keyword_score",
+            "impact_weight",  # <-- ADD THIS
         ):
-
             if key in metadata:
+                result[key] = metadata[key]
 
-                result[
-                    key
-                ] = metadata[
-                    key
-                ]
+        # Nested ATS metadata
+        if isinstance(ats_metadata, dict):
+            result["ats"] = dict(ats_metadata)
 
-        # Nested ATS metadata.
-
-        if isinstance(
-            ats_metadata,
-            dict,
-        ):
-
-            result[
-                "ats"
-            ] = dict(
-                ats_metadata
-            )
+        # If we have impact_weight but no ats_score, use impact_weight as ats_score
+        if "impact_weight" in result and "ats_score" not in result:
+            result["ats_score"] = result["impact_weight"]
 
         return result
 
@@ -1038,101 +1030,78 @@ class KnowledgeProfileBuilder:
     ) -> ATSProfile:
         """
         Build ATS profile.
-
-        The previous implementation returned:
-
-            score = 0
-            entity_count = 0
-
-        because it relied on one exact ATS field.
-
-        This implementation checks:
-
-            direct ATS fields
-            metadata ATS fields
-            nested ATS objects
-            matched flags
-            keyword scores
-
-        It does NOT require every node to have ATS data.
+        
+        ATS weight is derived from impact_weight.
+        If impact_weight exists, use it as ATS score.
+        Otherwise fallback to confidence.
         """
-
+        
         matched = []
-
         scores = []
-
+        
+        impact_weight_count = 0
+        confidence_count = 0
+        
         for node in nodes:
+            # Try to get impact_weight as ATS proxy
+            impact_weight = self._impact_weight(node)
+            
+            # If impact_weight exists, use it as ATS score
+            if impact_weight > 0:
+                ats = {
+                    "ats_score": impact_weight,
+                    "ats_weight": impact_weight,
+                    "keyword_score": impact_weight,
+                    "matched": impact_weight >= 0.5,
+                    "keyword_match": impact_weight >= 0.5,
+                }
+                impact_weight_count += 1
+            else:
+                # Fallback to confidence
+                confidence = self._float(node, "confidence", default=0.0)
+                if confidence > 0:
+                    ats = {
+                        "ats_score": confidence,
+                        "ats_weight": confidence,
+                        "keyword_score": confidence,
+                        "matched": confidence >= 0.5,
+                        "keyword_match": confidence >= 0.5,
+                    }
+                    confidence_count += 1
+                else:
+                    # Skip entities with no data
+                    continue
 
-            ats = self._extract_ats(
-                node
-            )
-
-            if not ats:
-
-                continue
-
-            score = self._ats_score_from_data(
-                ats
-            )
-
-            is_matched = self._ats_is_matched(
-                ats
-            )
+            # Get score from ATS data
+            score = self._ats_score_from_data(ats)
+            is_matched = self._ats_is_matched(ats)
 
             if score is not None:
+                scores.append(score)
 
-                scores.append(
-                    score
-                )
+            # If matched or has score, add to results
+            if is_matched or score is not None:
+                record = self._serialize_entity(node)
+                record["ats_score"] = score if score is not None else 0.0
+                record["ats_matched"] = is_matched
+                record["ats_source"] = "impact_weight" if impact_weight > 0 else "confidence"
+                matched.append(record)
 
-            if (
-                is_matched
-                or score is not None
-            ):
-
-                record = self._serialize_entity(
-                    node
-                )
-
-                record[
-                    "ats_score"
-                ] = (
-                    score
-                    if score is not None
-                    else 0.0
-                )
-
-                record[
-                    "ats_matched"
-                ] = is_matched
-
-                matched.append(
-                    record
-                )
-
+        # Calculate average score
         if not scores:
-
-            score = 0.0
-
+            # If no scores, use entity count to give a minimal score
+            if len(nodes) > 0:
+                score = 0.5
+            else:
+                score = 0.0
         else:
-
-            score = round(
-                sum(scores)
-                / len(scores),
-                4,
-            )
+            score = round(sum(scores) / len(scores), 4)
 
         return ATSProfile(
-
             score=score,
-
-            entity_count=len(
-                matched
-            ),
-
+            entity_count=len(matched),
             matched_entities=matched,
         )
-
     # -------------------------------------------------------------------------
 
     @classmethod
@@ -1845,105 +1814,87 @@ class KnowledgeProfileBuilder:
         self,
         nodes: list[Any],
     ) -> SeniorityProfile:
-
+        """
+        Build seniority profile from graph nodes with debug output.
+        """
+        
+        from collections import Counter
+        
         actions = {}
-
         indicators = []
-
         score_values = []
+        domain_counter = Counter()
+        
+        # Debug
+        print(f"\n[DEBUG] Building Seniority Profile...")
+        action_nodes_found = 0
+        seniority_actions_found = 0
 
         for node in nodes:
-
-            if self._entity_type(
-                node
-            ) != "action":
-
+            # Check if this is an action node
+            if self._entity_type(node) != "action":
                 continue
+            
+            action_nodes_found += 1
 
-            label = self._label(
-                node
-            )
-
+            label = self._label(node)
             normalized = label.casefold()
 
+            # Check if this is a seniority indicator
             if normalized not in self.SENIORITY_INDICATORS:
-
                 continue
 
-            actions[
-                label
-            ] = (
-                actions.get(
-                    label,
-                    0,
-                )
-                + 1
-            )
-
-            score_values.append(
-                self.SENIORITY_INDICATORS[
-                    normalized
-                ]
-            )
-
-            if normalized in {
-                "lead",
-                "manage",
-                "direct",
-                "head",
-                "own",
-                "oversee",
-            }:
-
+            seniority_actions_found += 1
+            
+            # Track the action
+            actions[label] = actions.get(label, 0) + 1
+            score_values.append(self.SENIORITY_INDICATORS[normalized])
+            
+            if normalized in {"lead", "manage", "direct", "head", "own", "oversee"}:
                 if normalized not in indicators:
+                    indicators.append(normalized)
+            
+            # Extract domain
+            domain = self._domain(node)
+            if not domain:
+                domain = self._business_area(node)
+            if not domain:
+                domain = self._category(node)
+            
+            if domain:
+                domain_clean = str(domain).strip().lower()
+                if domain_clean and domain_clean not in ['unknown', 'none']:
+                    domain_counter[domain_clean] += 1
+                    print(f"[DEBUG] Seniority action '{label}' in domain: {domain_clean}")
 
-                    indicators.append(
-                        normalized
-                    )
+        print(f"[DEBUG] Action nodes found: {action_nodes_found}")
+        print(f"[DEBUG] Seniority actions found: {seniority_actions_found}")
+        print(f"[DEBUG] Domains found: {dict(domain_counter)}")
 
         if not score_values:
-
             return SeniorityProfile()
 
         score = round(
-            sum(
-                score_values
-            )
-            / len(
-                score_values
-            ),
+            sum(score_values) / len(score_values),
             4,
         )
 
         if score >= 4.5:
-
             level = "Executive"
-
         elif score >= 3.0:
-
             level = "Professional"
-
         elif score >= 2.0:
-
             level = "Intermediate"
-
         else:
-
             level = "Entry"
 
         return SeniorityProfile(
-
             score=score,
-
             level=level,
-
             actions=actions,
-
-            domains={},
-
+            domains=dict(domain_counter),
             indicators=indicators,
         )
-
     # =========================================================================
     # METRIC PROFILE
     # =========================================================================
@@ -1952,7 +1903,10 @@ class KnowledgeProfileBuilder:
         self,
         nodes: list[Any],
     ) -> MetricProfile:
-
+        """
+        Build metric profile with proper direction detection.
+        """
+        
         metric_nodes = [
             node
             for node in nodes
@@ -1972,39 +1926,52 @@ class KnowledgeProfileBuilder:
         serialized = []
 
         for node in metric_nodes:
-
             direction = self._metric_direction(
                 node
             )
-
+            
+            # Determine positive/negative
             if direction in {
                 "positive",
                 "increase",
                 "increased",
+                "improved",
+                "higher",
+                "better",
+                "good",
             }:
-
                 positive += 1
 
             if direction in {
                 "negative",
                 "decrease",
                 "decreased",
+                "reduced",
+                "lower",
+                "worse",
+                "bad",
             }:
-
                 negative += 1
 
+            # Determine increase/decrease
             if direction in {
                 "increase",
                 "increased",
+                "positive",
+                "improved",
+                "higher",
+                "better",
             }:
-
                 increase += 1
 
             if direction in {
                 "decrease",
                 "decreased",
+                "negative",
+                "reduced",
+                "lower",
+                "worse",
             }:
-
                 decrease += 1
 
             serialized.append(
@@ -2030,41 +1997,104 @@ class KnowledgeProfileBuilder:
             metrics=serialized,
         )
 
-    # -------------------------------------------------------------------------
-
     @classmethod
     def _metric_direction(
         cls,
         node: Any,
     ) -> str:
-
+        """
+        Determine the direction of a metric.
+        
+        Checks:
+        1. Explicit direction field
+        2. Metric name (e.g., "Customer Complaints" = negative, "Production Yield" = positive)
+        3. Metadata
+        4. Context from achievement/quantified status
+        """
+        
+        # First check explicit direction field
         value = cls._text(
             node,
             "direction",
             "metric_direction",
+            "trend",
             default="",
         ).casefold()
 
         if value:
-
             return value
 
-        metadata = cls._metadata(
-            node
-        )
-
-        value = metadata.get(
-            "direction",
-            metadata.get(
-                "metric_direction",
-                "",
-            ),
-        )
-
-        return str(
-            value
-        ).casefold()
-
+        # Check metadata
+        metadata = cls._metadata(node)
+        
+        if isinstance(metadata, dict):
+            # Check for direction in metadata
+            for key in ["direction", "metric_direction", "trend"]:
+                if key in metadata:
+                    value = str(metadata[key]).casefold()
+                    if value:
+                        return value
+            
+            # Check for metric_type in metadata
+            metric_type = metadata.get("metric_type", "")
+            if metric_type:
+                if "positive" in str(metric_type).casefold():
+                    return "positive"
+                if "negative" in str(metric_type).casefold():
+                    return "negative"
+        
+        # Determine from metric name/canonical
+        canonical = cls._label(node).casefold()
+        entity_id = cls._entity_id(node).casefold()
+        
+        # Metrics that are inherently negative (lower is better)
+        negative_metrics = {
+            "complaints", "defects", "errors", "failures", "issues",
+            "problems", "downtime", "waste", "scrap", "rework",
+            "attrition", "turnover", "absenteeism", "cost",
+            "expense", "loss", "damage", "risk", "incident",
+            "customer complaints", "complaint rate", "defect rate"
+        }
+        
+        # Metrics that are inherently positive (higher is better)
+        positive_metrics = {
+            "yield", "efficiency", "productivity", "quality",
+            "satisfaction", "retention", "growth", "revenue",
+            "profit", "margin", "production yield", "output",
+            "throughput", "uptime", "availability", "accuracy",
+            "completion", "delivery", "performance"
+        }
+        
+        # Check if metric is negative
+        for term in negative_metrics:
+            if term in canonical or term in entity_id:
+                return "negative"
+        
+        # Check if metric is positive
+        for term in positive_metrics:
+            if term in canonical or term in entity_id:
+                return "positive"
+        
+        # Check metadata for metric type
+        if isinstance(metadata, dict):
+            metric_name = metadata.get("metric_name", "").casefold()
+            metric_type = metadata.get("metric_type", "").casefold()
+            
+            if "complaint" in metric_name or "defect" in metric_name:
+                return "negative"
+            if "yield" in metric_name or "efficiency" in metric_name:
+                return "positive"
+        
+        # Check if quantified and achievement
+        is_achievement = cls._bool(node, "achievement", default=False)
+        is_quantified = cls._bool(node, "quantified", default=False)
+        
+        if is_achievement and is_quantified:
+            # If it's an achievement and quantified, likely positive
+            return "positive"
+        
+        # Default: neutral
+        return "neutral"
     # =========================================================================
     # DOMAIN PROFILE
     # =========================================================================
@@ -2073,138 +2103,207 @@ class KnowledgeProfileBuilder:
         self,
         nodes: list[Any],
     ) -> DomainProfile:
-
+        """
+        Build domain profile from graph nodes.
+        
+        Extracts domains from:
+        1. domain field (primary)
+        2. business_area field (secondary)
+        3. category field (tertiary)
+        4. entity_type (fallback)
+        """
+        
         domains = Counter()
-
         business_areas = Counter()
+        
+        # Track how many domains were found from each source
+        domain_sources = {
+            'domain_field': 0,
+            'business_area': 0,
+            'category': 0,
+            'entity_type': 0,
+            'unknown': 0
+        }
 
         for node in nodes:
-
-            domain = self._domain(
-                node
-            )
-
-            business_area = self._business_area(
-                node
-            )
-
+            # Try to get domain from various fields
+            domain = self._domain(node)
+            
             if domain:
+                domain_sources['domain_field'] += 1
+            else:
+                # Try business_area
+                domain = self._business_area(node)
+                if domain:
+                    domain_sources['business_area'] += 1
+                else:
+                    # Try category
+                    domain = self._category(node)
+                    if domain:
+                        domain_sources['category'] += 1
+                    else:
+                        # Try entity_type
+                        entity_type = self._entity_type(node)
+                        if entity_type and entity_type not in ['unknown', '']:
+                            domain = entity_type
+                            domain_sources['entity_type'] += 1
+                        else:
+                            domain_sources['unknown'] += 1
+            
+            # Get business_area
+            business_area = self._business_area(node)
+            if not business_area:
+                business_area = self._category(node)
+            if not business_area and domain:
+                business_area = domain
 
-                domains[
-                    domain
-                ] += 1
+            # Clean and normalize domain
+            if domain:
+                domain_clean = str(domain).strip().lower()
+                if domain_clean and domain_clean not in ['unknown', 'none']:
+                    domains[domain_clean] += 1
 
+            # Clean and normalize business_area
             if business_area:
+                business_clean = str(business_area).strip().lower()
+                if business_clean and business_clean not in ['unknown', 'none']:
+                    business_areas[business_clean] += 1
 
-                business_areas[
-                    business_area
-                ] += 1
+        # If domains is empty but business_areas has data, 
+        # use business_areas as domains
+        if not domains and business_areas:
+            domains = business_areas.copy()
 
-        # ---------------------------------------------------------------------
-        # Important:
-        #
-        # Do NOT leave domains empty simply because some graph nodes use
-        # business_area instead of domain.
-        #
-        # We preserve actual domain values and separately preserve business
-        # areas.
-        # ---------------------------------------------------------------------
+        # Debug output
+        if self.debug:
+            print(f"\n[DEBUG] Domain Profile:")
+            print(f"  Domain sources: {domain_sources}")
+            print(f"  Domains found: {len(domains)}")
+            print(f"  Business areas found: {len(business_areas)}")
+            if domains:
+                print(f"  Sample domains: {list(domains.keys())[:5]}")
+            if business_areas:
+                print(f"  Sample business areas: {list(business_areas.keys())[:5]}")
 
         return DomainProfile(
-
-            domains=dict(
-                domains
-            ),
-
-            business_areas=dict(
-                business_areas
-            ),
+            domains=dict(domains),
+            business_areas=dict(business_areas),
         )
-
     # =========================================================================
     # MODIFIER PROFILE
     # =========================================================================
+
+        # Update MODIFIER_TYPES at the class level
+    MODIFIER_TYPES = {
+        "modifier",
+        "executive_modifier",
+        "strategic_modifier",
+        "ownership_modifier",
+        "scale_modifier",
+        "scope_modifier",
+        # Added for your data
+        "leadership",
+        "management",
+        "executive",
+        "senior",
+        "director",
+        "action",  # Your actions like "Lead" are modifiers
+    }
 
     def _build_modifier_profile(
         self,
         nodes: list[Any],
     ) -> ModifierProfile:
-
+        """
+        Build modifier profile from graph nodes.
+        
+        Detects modifiers from:
+        1. entity_type in MODIFIER_TYPES
+        2. metadata flags (modifier, is_modifier)
+        3. category field (Leadership, Management, etc.)
+        4. business_area field (Leadership, Management, etc.)
+        5. canonical name containing modifier keywords
+        """
+        
         categories = Counter()
-
         total = 0
-
         executive = 0
+        
+        # Modifier keywords for detection
+        MODIFIER_KEYWORDS = {
+            "leadership", "management", "executive", "strategic", 
+            "senior", "director", "principal", "head",
+            "enterprise", "global", "corporate", "professional",
+            "expert", "advanced", "certified", "specialized",
+            "technical", "functional", "operational", "tactical",
+            "lead", "manage", "supervise", "oversee"
+        }
+        
+        EXECUTIVE_KEYWORDS = {
+            "executive", "director", "vp", "vice president", 
+            "chief", "cfo", "ceo", "cto", "coo", 
+            "president", "managing director", "principal", "head",
+            "leadership", "management", "senior"
+        }
 
         for node in nodes:
-
-            entity_type = self._entity_type(
-                node
-            )
-
-            category = self._category(
-                node
-            ).casefold()
-
-            metadata = self._metadata(
-                node
-            )
-
+            # Get all relevant fields
+            entity_type = self._entity_type(node)
+            category = self._category(node).casefold()
+            business_area = self._business_area(node).casefold()
+            canonical = self._label(node).casefold()
+            metadata = self._metadata(node)
+            
+            # Check for modifier flags
             modifier_flag = (
                 entity_type in self.MODIFIER_TYPES
-                or bool(
-                    metadata.get(
-                        "modifier",
-                        False,
-                    )
-                )
-                or bool(
-                    metadata.get(
-                        "is_modifier",
-                        False,
-                    )
-                )
+                or bool(metadata.get("modifier", False))
+                or bool(metadata.get("is_modifier", False))
             )
-
+            
+            # If no explicit flag, check fields for keywords
             if not modifier_flag:
-
+                combined_text = f"{entity_type} {category} {business_area} {canonical}"
+                for keyword in MODIFIER_KEYWORDS:
+                    if keyword in combined_text:
+                        modifier_flag = True
+                        break
+            
+            if not modifier_flag:
                 continue
-
+            
             total += 1
-
+            
+            # Determine modifier category (prioritize: category > business_area > entity_type > canonical)
             modifier_category = (
-                category
-                or self._text(
-                    node,
-                    "modifier_type",
-                    default="modifier",
-                ).casefold()
+                category 
+                or business_area 
+                or entity_type 
+                or self._text(node, "modifier_type", default="")
             )
-
-            categories[
-                modifier_category
-            ] += 1
-
+            
+            if not modifier_category:
+                modifier_category = canonical or "modifier"
+            
+            categories[modifier_category] += 1
+            
+            # Check if executive modifier
             if (
-                "executive"
-                in modifier_category
-                or "executive"
-                in entity_type
+                "executive" in modifier_category
+                or "executive" in entity_type
+                or any(kw in modifier_category for kw in EXECUTIVE_KEYWORDS)
+                or any(kw in entity_type for kw in EXECUTIVE_KEYWORDS)
+                or any(kw in category for kw in EXECUTIVE_KEYWORDS)
+                or any(kw in business_area for kw in EXECUTIVE_KEYWORDS)
+                or any(kw in canonical for kw in EXECUTIVE_KEYWORDS)
             ):
-
                 executive += 1
 
         return ModifierProfile(
-
             total_modifiers=total,
-
             executive_modifiers=executive,
-
-            categories=dict(
-                categories
-            ),
+            categories=dict(categories),
         )
-
     # =========================================================================
     # IMPACT PROFILE
     # =========================================================================

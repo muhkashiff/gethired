@@ -645,7 +645,7 @@ class EnterpriseResumePipeline:
         result.statistics["graph_edges"] = len(edges)
         result.stages["knowledge_graph"] = True
 
-    # =================================================================
+        # =================================================================
     # STAGE 7: KNOWLEDGE PROFILE - FIXED
     # =================================================================
 
@@ -658,8 +658,8 @@ class EnterpriseResumePipeline:
         if graph is None:
             raise ValueError("KnowledgeGraph is missing.")
 
-        # Get business statements and semantic entities for the profile
-        business_statements = result.business_statements
+        # Get business statements - DEDUPLICATE to prevent double counting
+        business_statements = self._deduplicate_statements(result.business_statements)
         semantic_entities = result.semantic_entities
         semantic_relations = result.semantic_relations
         semantic_dependencies = result.semantic_dependencies
@@ -670,7 +670,7 @@ class EnterpriseResumePipeline:
 
         self._debug(f"Building KnowledgeProfile with:")
         self._debug(f"  graph: {graph is not None}")
-        self._debug(f"  business_statements: {len(business_statements) if business_statements else 0}")
+        self._debug(f"  business_statements (deduped): {len(business_statements) if business_statements else 0}")
         self._debug(f"  semantic_entities: {len(semantic_entities) if semantic_entities else 0}")
         self._debug(f"  semantic_relations: {len(semantic_relations) if semantic_relations else 0}")
         self._debug(f"  semantic_dependencies: {len(semantic_dependencies) if semantic_dependencies else 0}")
@@ -706,6 +706,36 @@ class EnterpriseResumePipeline:
         result.stages["knowledge_profile"] = True
         self._debug(f"KnowledgeProfile built successfully with confidence: {getattr(output, 'confidence', 0)}")
 
+    def _deduplicate_statements(self, statements):
+        """Remove duplicate business statements based on content."""
+        if not statements:
+            return []
+        
+        seen = set()
+        unique = []
+        
+        for stmt in statements:
+            # Get text or canonical for deduplication
+            text = ""
+            if hasattr(stmt, 'text'):
+                text = str(stmt.text or "").strip().lower()
+            elif hasattr(stmt, 'canonical'):
+                text = str(stmt.canonical or "").strip().lower()
+            elif isinstance(stmt, dict):
+                text = str(stmt.get('text', stmt.get('canonical', ''))).strip().lower()
+            else:
+                text = str(stmt).strip().lower()
+            
+            if not text:
+                continue
+            
+            # Use text as key for deduplication
+            if text not in seen:
+                seen.add(text)
+                unique.append(stmt)
+        
+        self._debug(f"Deduplicated statements: {len(statements)} → {len(unique)}")
+        return unique
     # =================================================================
     # HELPER METHODS
     # =================================================================
@@ -1079,6 +1109,67 @@ class EnterpriseResumePipeline:
                 return stage
         return "unknown"
 
+# In enterprise_resume_pipeline.py - _stage_knowledge_profile
+
+    def _stage_knowledge_profile(self, result):
+        builder = self.knowledge_profile_builder
+        if builder is None:
+            raise ImportError("KnowledgeProfileBuilder could not be created.")
+
+        graph = result.knowledge_graph
+        if graph is None:
+            raise ValueError("KnowledgeGraph is missing.")
+
+        # DEBUG: Check what's in the graph
+        nodes = self._graph_nodes(graph)
+        print(f"\n[DEBUG] Graph has {len(nodes)} nodes")
+        
+        # Print first few nodes
+        for i, node in enumerate(nodes[:5]):
+            print(f"  Node {i}: {type(node).__name__}")
+            if hasattr(node, '__dict__'):
+                attrs = {k: v for k, v in node.__dict__.items() if not k.startswith('_')}
+                print(f"    keys: {list(attrs.keys())}")
+            elif isinstance(node, dict):
+                print(f"    keys: {list(node.keys())}")
+
+        # Get business statements - DEDUPLICATE
+        business_statements = self._deduplicate_statements(result.business_statements)
+        semantic_entities = result.semantic_entities
+        extracted_entities = result.extracted_entities
+
+        print(f"\n[DEBUG] Profile Builder Data:")
+        print(f"  graph nodes: {len(nodes)}")
+        print(f"  semantic_entities: {len(semantic_entities) if semantic_entities else 0}")
+        print(f"  extracted_entities: {len(extracted_entities) if extracted_entities else 0}")
+        print(f"  business_statements: {len(business_statements) if business_statements else 0}")
+
+        # Build profile with all data
+        if hasattr(builder, "build"):
+            try:
+                output = builder.build(
+                    knowledge_graph=graph,
+                    business_statements=business_statements,
+                    semantic_entities=semantic_entities,
+                    extracted_entities=extracted_entities,
+                    result=result,
+                )
+            except TypeError as e:
+                print(f"build() failed with extended params: {e}")
+                try:
+                    output = builder.build(graph)
+                except TypeError:
+                    output = builder.build(knowledge_graph=graph)
+        elif callable(builder):
+            output = builder(graph)
+        else:
+            raise TypeError("KnowledgeProfileBuilder must expose build() or be callable.")
+
+        if output is None:
+            raise ValueError("KnowledgeProfileBuilder returned None.")
+
+        result.knowledge_profile = output
+        result.stages["knowledge_profile"] = True
 
 # =====================================================================
 # CONVENIENCE API
