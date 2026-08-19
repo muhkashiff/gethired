@@ -224,6 +224,10 @@ class KnowledgeProfileBuilder:
         knowledge_graph: Any = None,
         graph: Any = None,
         business_statements: Optional[Iterable[Any]] = None,
+        # NEW: Additional parameters for compatibility with pipeline
+        semantic_entities: list = None,
+        extracted_entities: list = None,
+        result: Any = None,
     ) -> KnowledgeProfile:
         """
         Build KnowledgeProfile.
@@ -242,6 +246,11 @@ class KnowledgeProfileBuilder:
 
         business_statements may optionally be supplied when the graph
         implementation does not expose statements directly.
+        
+        NEW: Additional parameters for pipeline compatibility:
+            semantic_entities: List of semantic entities from pipeline
+            extracted_entities: List of extracted entities from pipeline
+            result: Full pipeline result object
         """
 
         if knowledge_graph is None:
@@ -268,9 +277,14 @@ class KnowledgeProfileBuilder:
             knowledge_graph
         )
 
+        # ---------------------------------------------------------------------
+        # BUSINESS STATEMENTS - ENHANCED EXTRACTION
+        # ---------------------------------------------------------------------
+        
         statements = self._extract_business_statements(
             knowledge_graph=knowledge_graph,
             explicit_statements=business_statements,
+            result=result,  # Pass result for additional extraction
         )
 
         # ---------------------------------------------------------------------
@@ -2282,7 +2296,7 @@ class KnowledgeProfileBuilder:
         )
 
     # =========================================================================
-    # BUSINESS STATEMENT PROFILE
+    # BUSINESS STATEMENT PROFILE - ENHANCED
     # =========================================================================
 
     def _extract_business_statements(
@@ -2291,78 +2305,105 @@ class KnowledgeProfileBuilder:
         explicit_statements: Optional[
             Iterable[Any]
         ],
+        result: Any = None,  # NEW: extract from result
     ) -> list[Any]:
-
+        """
+        Extract business statements from multiple sources.
+        """
+        
+        statements = []
+        
+        # Source 1: Explicit statements parameter
         if explicit_statements is not None:
+            try:
+                statements.extend(list(explicit_statements))
+            except TypeError:
+                pass
+        
+        # Source 2: From result object
+        if result is not None:
+            # Try different attribute names
+            for attr in [
+                "business_statements",
+                "statements",
+                "business_statement",
+                "business_statement_list",
+            ]:
+                try:
+                    value = getattr(result, attr, None)
+                    if value is not None:
+                        try:
+                            statements.extend(list(value))
+                            break
+                        except TypeError:
+                            pass
+                except Exception:
+                    pass
+            
+            # If result is a dict
+            if isinstance(result, dict):
+                for key in [
+                    "business_statements",
+                    "statements",
+                    "business_statement",
+                ]:
+                    if key in result:
+                        try:
+                            statements.extend(list(result[key]))
+                            break
+                        except (TypeError, ValueError):
+                            pass
+        
+        # Source 3: From knowledge graph
+        if not statements:
+            for attribute in (
+                "business_statements",
+                "statements",
+            ):
+                value = getattr(
+                    knowledge_graph,
+                    attribute,
+                    None,
+                )
 
-            return list(
-                explicit_statements
-            )
+                if value is None:
+                    continue
 
-        for attribute in (
-            "business_statements",
-            "statements",
-        ):
+                if isinstance(
+                    value,
+                    dict,
+                ):
+                    statements.extend(list(value.values()))
+                    break
 
-            value = getattr(
+                try:
+                    statements.extend(list(value))
+                    break
+                except TypeError:
+                    continue
+
+        # Source 4: From knowledge graph metadata
+        if not statements:
+            metadata = getattr(
                 knowledge_graph,
-                attribute,
+                "metadata",
                 None,
             )
 
-            if value is None:
-
-                continue
-
             if isinstance(
-                value,
+                metadata,
                 dict,
             ):
-
-                return list(
-                    value.values()
+                value = metadata.get(
+                    "business_statements"
                 )
+                if value is not None:
+                    try:
+                        statements.extend(list(value))
+                    except TypeError:
+                        pass
 
-            try:
-
-                return list(
-                    value
-                )
-
-            except TypeError:
-
-                continue
-
-        # Some graph implementations store statements in metadata.
-
-        metadata = getattr(
-            knowledge_graph,
-            "metadata",
-            None,
-        )
-
-        if isinstance(
-            metadata,
-            dict,
-        ):
-
-            value = metadata.get(
-                "business_statements"
-            )
-
-            if value is not None:
-
-                try:
-
-                    return list(
-                        value
-                    )
-
-                except TypeError:
-
-                    pass
-
-        return []
+        return statements
 
     # -------------------------------------------------------------------------
 
@@ -2370,6 +2411,9 @@ class KnowledgeProfileBuilder:
         self,
         statements: list[Any],
     ) -> BusinessStatementProfile:
+        """
+        Build BusinessStatementProfile from extracted statements.
+        """
 
         records = []
 
@@ -2616,6 +2660,10 @@ def build_knowledge_profile(
         Iterable[Any]
     ] = None,
     top_n: int = 10,
+    # NEW: Additional parameters for pipeline compatibility
+    semantic_entities: list = None,
+    extracted_entities: list = None,
+    result: Any = None,
 ) -> KnowledgeProfile:
     """
     Convenience function.
@@ -2628,6 +2676,9 @@ def build_knowledge_profile(
     return builder.build(
         knowledge_graph=knowledge_graph,
         business_statements=business_statements,
+        semantic_entities=semantic_entities,
+        extracted_entities=extracted_entities,
+        result=result,
     )
 
 

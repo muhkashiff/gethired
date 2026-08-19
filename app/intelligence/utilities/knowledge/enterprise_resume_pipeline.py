@@ -7,6 +7,7 @@ FIXES:
 2. Relations and Dependencies are properly extracted and stored
 3. Clusters are properly extracted and stored
 4. All semantic data flow is preserved through the pipeline
+5. FIXED: KnowledgeProfileBuilder receives business_statements and semantic_entities
 """
 
 from __future__ import annotations
@@ -284,7 +285,7 @@ class EnterpriseResumePipeline:
             self._stage_knowledge_graph(result)
 
             self._debug("\n[STAGE 7] Graph profile")
-            self._stage_knowledge_profile(result)
+            self._stage_knowledge_profile(result)  # FIXED: Passes all data to profile builder
 
             result.confidence = self._calculate_confidence(result)
             result.success = True
@@ -406,7 +407,7 @@ class EnterpriseResumePipeline:
         result.stages["extraction"] = True
 
     # =================================================================
-    # STAGE 4: SEMANTIC RESOLUTION - FIXED
+    # STAGE 4: SEMANTIC RESOLUTION
     # =================================================================
 
     def _stage_semantic_resolution(self, result):
@@ -432,10 +433,7 @@ class EnterpriseResumePipeline:
         # Store the full SemanticResolution
         result.semantic_resolution = resolution
 
-        # =============================================================
-        # FIX: Extract ALL data from resolution
-        # =============================================================
-        
+        # Extract ALL data from resolution
         entities = []
         relations = []
         dependencies = []
@@ -447,23 +445,18 @@ class EnterpriseResumePipeline:
 
         # Handle SemanticResolution object
         if isinstance(resolution, SemanticResolution):
-            # Extract entities
             entities = list(resolution.entities) if resolution.entities else []
             self._debug(f"  Entities from resolution: {len(entities)}")
             
-            # Extract relations - FIXED: Now properly extracted
             relations = list(resolution.relations) if resolution.relations else []
             self._debug(f"  Relations from resolution: {len(relations)}")
             
-            # Extract dependencies - FIXED: Now properly extracted
             dependencies = list(resolution.dependencies) if resolution.dependencies else []
             self._debug(f"  Dependencies from resolution: {len(dependencies)}")
             
-            # Extract clusters - FIXED: Now properly extracted
             clusters = list(resolution.clusters) if resolution.clusters else []
             self._debug(f"  Clusters from resolution: {len(clusters)}")
             
-            # Get interpretations from facts
             for fact in document.facts:
                 interp = getattr(fact, "interpretation", None)
                 if interp:
@@ -472,9 +465,9 @@ class EnterpriseResumePipeline:
         # Handle dict response
         elif isinstance(resolution, dict):
             entities = resolution.get("entities", [])
-            relations = resolution.get("relations", [])  # FIXED: Extract relations
-            dependencies = resolution.get("dependencies", [])  # FIXED: Extract dependencies
-            clusters = resolution.get("clusters", [])  # FIXED: Extract clusters
+            relations = resolution.get("relations", [])
+            dependencies = resolution.get("dependencies", [])
+            clusters = resolution.get("clusters", [])
             interpretations = resolution.get("interpretations", resolution.get("results", []))
             
             self._debug(f"  Entities from dict: {len(entities)}")
@@ -498,21 +491,18 @@ class EnterpriseResumePipeline:
         entities.extend(embedded)
         entities.extend(result.extracted_entities)
 
-        # =============================================================
-        # FIX: Store ALL extracted data in result
-        # =============================================================
-        
+        # Store ALL extracted data in result
         result.interpretations = self._unique_objects(interpretations)
         result.semantic_entities = self._unique_objects(entities)
-        result.semantic_relations = self._unique_objects(relations)  # NEW: Store relations
+        result.semantic_relations = self._unique_objects(relations)
         result.semantic_dependencies = self._unique_objects(dependencies)
-        result.semantic_clusters = self._unique_objects(clusters)  # NEW: Store clusters
+        result.semantic_clusters = self._unique_objects(clusters)
 
-        # Update statistics - FIXED to show correct counts
+        # Update statistics
         result.statistics["semantic_entities"] = len(result.semantic_entities)
-        result.statistics["semantic_relations"] = len(result.semantic_relations)  # NEW
+        result.statistics["semantic_relations"] = len(result.semantic_relations)
         result.statistics["semantic_dependencies"] = len(result.semantic_dependencies)
-        result.statistics["semantic_clusters"] = len(result.semantic_clusters)  # NEW
+        result.statistics["semantic_clusters"] = len(result.semantic_clusters)
         result.statistics["interpretations"] = len(result.interpretations)
 
         self._debug(f"  Final - Entities: {len(result.semantic_entities)}")
@@ -533,7 +523,6 @@ class EnterpriseResumePipeline:
         if builder is None:
             raise ImportError("BusinessStatementBuilder could not be created.")
 
-        # Get the full SemanticResolution
         resolution = result.semantic_resolution
         
         if resolution is None:
@@ -542,14 +531,11 @@ class EnterpriseResumePipeline:
         else:
             self._debug(f"Using SemanticResolution with: {len(resolution.entities)} entities, {len(resolution.clusters)} clusters")
             
-            # Build statements using the resolution with clusters
             if hasattr(builder, "build"):
                 try:
-                    # Try passing the full resolution
                     output = builder.build(resolution)
                 except TypeError as e:
                     self._debug(f"build() failed with resolution: {e}")
-                    # Fallback: try passing components separately
                     output = builder.build(
                         semantic_resolution=resolution,
                         entities=resolution.entities,
@@ -559,7 +545,6 @@ class EnterpriseResumePipeline:
             else:
                 raise TypeError("BusinessStatementBuilder must expose build().")
 
-        # Handle output
         if output is None:
             output = []
 
@@ -573,7 +558,6 @@ class EnterpriseResumePipeline:
 
         self._debug(f"Generated {len(result.business_statements)} business statements")
         
-        # Log sample statements
         for i, stmt in enumerate(result.business_statements[:5], 1):
             text = getattr(stmt, "text", None) or getattr(stmt, "canonical", str(stmt))
             self._debug(f"  {i}. {text[:100]}")
@@ -634,20 +618,16 @@ class EnterpriseResumePipeline:
         if builder is None:
             raise ImportError("KnowledgeGraphBuilder could not be created.")
 
-        # Pass both statements AND the full resolution with relations
         statements = result.business_statements
         resolution = result.semantic_resolution
 
         if hasattr(builder, "build"):
             try:
-                # Try passing both statements and resolution
                 output = builder.build(statements, resolution=resolution)
             except TypeError:
                 try:
-                    # Try passing just statements
                     output = builder.build(statements)
                 except TypeError:
-                    # Fallback to keyword arguments
                     output = builder.build(statements=statements, resolution=resolution)
         elif hasattr(builder, "build_graph"):
             output = builder.build_graph(statements)
@@ -666,7 +646,7 @@ class EnterpriseResumePipeline:
         result.stages["knowledge_graph"] = True
 
     # =================================================================
-    # STAGE 7: KNOWLEDGE PROFILE
+    # STAGE 7: KNOWLEDGE PROFILE - FIXED
     # =================================================================
 
     def _stage_knowledge_profile(self, result):
@@ -678,14 +658,42 @@ class EnterpriseResumePipeline:
         if graph is None:
             raise ValueError("KnowledgeGraph is missing.")
 
-        # Pass the full resolution as well for better profile
+        # Get business statements and semantic entities for the profile
+        business_statements = result.business_statements
+        semantic_entities = result.semantic_entities
+        semantic_relations = result.semantic_relations
+        semantic_dependencies = result.semantic_dependencies
+        semantic_clusters = result.semantic_clusters
+        
+        # Get the full resolution as well
         resolution = result.semantic_resolution
 
+        self._debug(f"Building KnowledgeProfile with:")
+        self._debug(f"  graph: {graph is not None}")
+        self._debug(f"  business_statements: {len(business_statements) if business_statements else 0}")
+        self._debug(f"  semantic_entities: {len(semantic_entities) if semantic_entities else 0}")
+        self._debug(f"  semantic_relations: {len(semantic_relations) if semantic_relations else 0}")
+        self._debug(f"  semantic_dependencies: {len(semantic_dependencies) if semantic_dependencies else 0}")
+        self._debug(f"  semantic_clusters: {len(semantic_clusters) if semantic_clusters else 0}")
+
+        # Build profile with all data
         if hasattr(builder, "build"):
             try:
-                output = builder.build(graph, resolution=resolution)
-            except TypeError:
-                output = builder.build(graph)
+                # Try passing graph with all data
+                output = builder.build(
+                    knowledge_graph=graph,
+                    business_statements=business_statements,
+                    semantic_entities=semantic_entities,
+                    extracted_entities=result.extracted_entities,
+                    result=result,
+                )
+            except TypeError as e:
+                self._debug(f"build() failed with extended params: {e}")
+                # Fallback: try original signature
+                try:
+                    output = builder.build(graph, resolution=resolution)
+                except TypeError:
+                    output = builder.build(graph)
         elif callable(builder):
             output = builder(graph)
         else:
@@ -696,6 +704,7 @@ class EnterpriseResumePipeline:
 
         result.knowledge_profile = output
         result.stages["knowledge_profile"] = True
+        self._debug(f"KnowledgeProfile built successfully with confidence: {getattr(output, 'confidence', 0)}")
 
     # =================================================================
     # HELPER METHODS

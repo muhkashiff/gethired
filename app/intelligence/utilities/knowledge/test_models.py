@@ -58,7 +58,7 @@ from typing import Any
 from app.intelligence.utilities.knowledge.enterprise_resume_pipeline import (
     EnterpriseResumePipeline,
 )
-
+from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile.business_statement_profile_builder import (BusinessStatementProfileBuilder)
 
 # ============================================================================
 # TEST RESUME
@@ -1382,7 +1382,6 @@ def print_business_statements(
             indent=2,
             max_value_length=500,
         )
-
 
 # ============================================================================
 # KNOWLEDGE GRAPH
