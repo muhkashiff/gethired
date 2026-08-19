@@ -2752,17 +2752,60 @@ def print_entities_grouped_by_type(
         "10. ENTITIES GROUPED BY TYPE"
     )
 
-    interpretation = get_main_interpretation(
-        result
-    )
-
-    entities = as_list(
+    # ================================================================
+    # FIX: Get entities from multiple sources
+    # ================================================================
+    
+    entities = []
+    
+    # Try to get semantic entities from result
+    semantic_entities = as_list(
         safe_get(
-            interpretation,
-            "entities",
+            result,
+            "semantic_entities",
             [],
         )
     )
+    
+    if semantic_entities:
+        entities.extend(semantic_entities)
+    
+    # If no semantic_entities, try from interpretations
+    if not entities:
+        interpretations = as_list(
+            safe_get(
+                result,
+                "interpretations",
+                [],
+            )
+        )
+        for interp in interpretations:
+            interp_entities = as_list(
+                safe_get(
+                    interp,
+                    "entities",
+                    [],
+                )
+            )
+            if interp_entities:
+                entities.extend(interp_entities)
+    
+    # If still no entities, try the old way
+    if not entities:
+        interpretation = get_main_interpretation(result)
+        entities = as_list(
+            safe_get(
+                interpretation,
+                "entities",
+                [],
+            )
+        )
+
+    if not entities:
+        print(
+            "NO ENTITIES FOUND TO GROUP."
+        )
+        return
 
     groups = {}
 
@@ -2775,6 +2818,9 @@ def print_entities_grouped_by_type(
                 "unknown",
             )
         ).strip()
+
+        if not kind:
+            kind = "unknown"
 
         groups.setdefault(
             kind,
@@ -2799,17 +2845,35 @@ def print_entities_grouped_by_type(
             "-" * 70
         )
 
-        for entity in group:
+        # Show first 5 entities per type to avoid overwhelming output
+        for entity in group[:5]:
 
-            print(
-                f"  {safe_get(entity, 'entity_id', '')}"
-                f" | "
-                f"{safe_get(entity, 'canonical', '')}"
-                f" | confidence="
-                f"{safe_get(entity, 'confidence', None)}"
+            entity_id = safe_get(
+                entity,
+                "entity_id",
+                "",
             )
-
-
+            
+            canonical = safe_get(
+                entity,
+                "canonical",
+                "",
+            )
+            
+            confidence = safe_get(
+                entity,
+                "confidence",
+                None,
+            )
+            
+            print(
+                f"  {entity_id}"
+                f" | {canonical}"
+                f" | confidence={confidence}"
+            )
+        
+        if len(group) > 5:
+            print(f"  ... and {len(group) - 5} more")
 # ============================================================================
 # MAIN
 # ============================================================================
