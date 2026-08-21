@@ -34,6 +34,10 @@ from app.intelligence.utilities.knowledge.knowledge_extractor_models.interpretat
     KnowledgeInterpretation,
 )
 
+from app.intelligence.utilities.knowledge.knowledge_extractor_models.base_models import (
+    KnowledgeEntity,
+)
+
 
 # ============================================================================
 # KNOWLEDGE FACT
@@ -427,6 +431,92 @@ class KnowledgeDocument:
                 and fact.has_semantic_entities
             )
         )
+
+    @property
+    def semantic_entities(
+        self,
+    ) -> list[KnowledgeEntity]:
+        """
+        Compatibility alias for semantic entities.
+
+        `entities` is the canonical storage collection.
+
+        The Enterprise KnowledgeFact model exposes resolved
+        entities through the semantic_entities terminology.
+        This property provides that interface without creating
+        a second entity collection.
+        """
+
+        return self.entities
+
+    @property
+    def semantic_entity_count(
+        self,
+    ) -> int:
+        """
+        Number of semantic entities.
+        """
+
+        return len(
+            self.entities
+        )
+
+    @property
+    def has_semantic_entities(
+        self,
+    ) -> bool:
+        """
+        True when semantic entities are available.
+        """
+
+        return bool(
+            self.entities
+        )
+        # =========================================================================
+    # ENTITY ACCESS
+    # =========================================================================
+
+    @property
+    def entities(self) -> list:
+        """
+        Return all unique semantic entities contained
+        in the document.
+
+        Entity storage remains owned by KnowledgeInterpretation.
+        This property provides a document-level derived view.
+        """
+
+        entities = []
+
+        for fact in self.facts:
+
+            if fact is None:
+                continue
+
+            for entity in fact.semantic_entities:
+
+                if entity is None:
+                    continue
+
+                if entity not in entities:
+
+                    entities.append(
+                        entity
+                    )
+
+        return entities
+
+    @property
+    def entity_count(self) -> int:
+        """
+        Number of unique semantic entities
+        contained in the document.
+        """
+
+        return len(
+            self.entities
+        )
+    
 
     # =========================================================================
     # DIAGNOSTICS

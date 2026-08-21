@@ -1,490 +1,265 @@
-# Enterprise V5 — Resume Ingestion & Parser Pipeline Test
-
-
 """
-GetHired
-Enterprise V5
+Tests for DocumentKnowledgeProfile
+===================================
 
-COMPLETE RESUME INGESTION / PARSER PIPELINE TEST
-
-Architecture tested:
-
-DOCX
-  |
-  v
-ResumeReader
-  |
-  v
-SectionDetector
-  |
-  v
-ResumeParser
-  |
-  v
-ResumeBuilder
-  |
-  +------------------------------+
-  |                              |
-  v                              v
-Non-Ontology Extractors      Ontology Extractors
-  |                              |
-  +---------------+--------------+
-                  |
-                  v
-             Resume Object
-                  |
-                  v
-        Intelligence / Enrichment
-        --------------------------
-        SeniorityDetector
-        EducationEnricher
-        IndustryDetector
-
-IMPORTANT
----------
-This test intentionally does NOT require enrichment/detection
-components during ResumeBuilder construction.
-
-Those components operate AFTER the Resume object has been built.
+Milestone 1.4
 """
 
+import pytest
 
-from __future__ import annotations
+from app.intelligence.utilities.knowledge.documents.document_types import (
+    DocumentType,
+)
 
-import sys
-import traceback
-from pathlib import Path
+from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile import (
+    KnowledgeProfile,
+)
 
+from app.intelligence.utilities.knowledge.pipeline_request.knowledge_pipeline_response import (
+    KnowledgePipelineResponse,
+)
 
-# ================================================================
-# PROJECT ROOT
-# ================================================================
+from app.intelligence.utilities.knowledge.documents.document_knowledge_profile import (
+    DocumentKnowledgeProfile,
+)
 
-CURRENT_FILE = Path(__file__).resolve()
-
-# test_registry.py:
-#
-# gethired/
-#   app/
-#     intelligence/
-#       utilities/
-#         knowledge/
-#           test_registry.py
-#
-# parents[0] = knowledge
-# parents[1] = utilities
-# parents[2] = intelligence
-# parents[3] = app
-# parents[4] = gethired
-#
-PROJECT_ROOT = CURRENT_FILE.parents[4]
-
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-
-"""
-Enterprise V5 — Knowledge Entity / Extractor Traversal Test
-
-Validates the actual KnowledgeV5Pipeline API.
-
-Pipeline API:
-
-    run(ontology, sentence)
-    best(ontology, sentence)
-    build_parser_context(...)
-
-Architecture:
-
-    sentence
-        ↓
-    KnowledgeV5Pipeline
-        ↓
-    Tokenizer
-        ↓
-    Matcher
-        ↓
-    Confidence
-        ↓
-    OverlapResolver
-        ↓
-    Ranker
-        ↓
-    Knowledge entities
-"""
-
-
-
-
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
-    KnowledgeV5Pipeline,
+from app.intelligence.utilities.knowledge.documents.document_profile_builder import (
+    DocumentProfileBuilder,
 )
 
 
-# ======================================================================
-# TEST DATA
-# ======================================================================
+class TestDocumentKnowledgeProfile:
 
-TEST_SENTENCES = {
+    def test_resume_profile_is_document_aware(self):
 
-    "skills": (
-        "Experienced in Python, SQL, Tableau, Power BI, "
-        "pandas and scikit-learn."
-    ),
+        profile = KnowledgeProfile()
 
-    "actions": (
-        "Implemented FSSC 22000 requirements and improved "
-        "manufacturing yield through data based decision making."
-    ),
-
-    "metrics": (
-        "Increased yield from 70% to 99%."
-    ),
-
-    "domains": (
-        "Worked across quality assurance, food safety, "
-        "manufacturing and supply chain operations."
-    ),
-
-    "standards": (
-        "Maintained compliance with FSSC 22000, ISO 9001 "
-        "and BRCGS requirements."
-    ),
-
-    "targets": (
-        "Improved production yield from 70% to 99%."
-    ),
-}
-
-
-# ======================================================================
-# DISPLAY HELPERS
-# ======================================================================
-
-def print_result(
-    ontology: str,
-    sentence: str,
-    result,
-) -> None:
-
-    print()
-    print("-" * 70)
-    print(f"ONTOLOGY : {ontology}")
-    print(f"SENTENCE : {sentence}")
-    print(f"RESULT TYPE : {type(result).__name__}")
-
-    print("RESULT:")
-    print(result)
-
-    print("-" * 70)
-
-
-# ======================================================================
-# TEST 1
-# ======================================================================
-
-def test_pipeline_creation():
-
-    print("=" * 70)
-    print("TEST 1 — KNOWLEDGE V5 PIPELINE CREATION")
-    print("=" * 70)
-
-    pipeline = KnowledgeV5Pipeline()
-
-    assert pipeline is not None
-
-    print("PASS — KnowledgeV5Pipeline created.")
-
-    return pipeline
-
-
-# ======================================================================
-# TEST 2
-# ======================================================================
-
-def test_pipeline_api():
-
-    print()
-    print("=" * 70)
-    print("TEST 2 — KNOWLEDGE V5 PIPELINE API")
-    print("=" * 70)
-
-    pipeline = KnowledgeV5Pipeline()
-
-    assert callable(
-        getattr(
-            pipeline,
-            "run",
-            None,
-        )
-    )
-
-    assert callable(
-        getattr(
-            pipeline,
-            "best",
-            None,
-        )
-    )
-
-    assert callable(
-        getattr(
-            pipeline,
-            "build_parser_context",
-            None,
-        )
-    )
-
-    print("PASS — run(ontology, sentence) available.")
-    print("PASS — best(ontology, sentence) available.")
-    print(
-        "PASS — build_parser_context(...) available."
-    )
-
-    return pipeline
-
-
-# ======================================================================
-# TEST 3
-# ======================================================================
-
-def test_knowledge_entity_extraction():
-
-    print()
-    print("=" * 70)
-    print("TEST 3 — KNOWLEDGE ENTITY EXTRACTION")
-    print("=" * 70)
-
-    pipeline = KnowledgeV5Pipeline()
-
-    results = {}
-
-    for ontology, sentence in TEST_SENTENCES.items():
-
-        print()
-        print(
-            f"Running ontology: {ontology}"
+        document_profile = DocumentKnowledgeProfile(
+            document_type=DocumentType.RESUME,
+            profile=profile,
         )
 
-        result = pipeline.run(
-            ontology,
-            sentence,
+        assert (
+            document_profile.document_type
+            == DocumentType.RESUME
         )
 
-        results[ontology] = result
+        assert (
+            document_profile.profile
+            is profile
+        )
 
-        print_result(
-            ontology,
-            sentence,
+        assert (
+            document_profile.is_resume
+            is True
+        )
+
+        assert (
+            document_profile.is_jd
+            is False
+        )
+
+    def test_jd_profile_is_document_aware(self):
+
+        profile = KnowledgeProfile()
+
+        document_profile = DocumentKnowledgeProfile(
+            document_type=DocumentType.JD,
+            profile=profile,
+        )
+
+        assert (
+            document_profile.document_type
+            == DocumentType.JD
+        )
+
+        assert (
+            document_profile.profile
+            is profile
+        )
+
+        assert (
+            document_profile.is_resume
+            is False
+        )
+
+        assert (
+            document_profile.is_jd
+            is True
+        )
+
+    def test_existing_profile_is_preserved(self):
+
+        profile = KnowledgeProfile()
+
+        profile.summary.overall_score = 82.5
+        profile.entities.total_entities = 25
+        profile.confidence = 0.91
+
+        document_profile = DocumentKnowledgeProfile(
+            document_type=DocumentType.RESUME,
+            profile=profile,
+        )
+
+        assert (
+            document_profile.summary.overall_score
+            == 82.5
+        )
+
+        assert (
+            document_profile.entities.total_entities
+            == 25
+        )
+
+        assert (
+            document_profile.confidence
+            == 0.91
+        )
+
+    def test_invalid_document_type_is_rejected(self):
+
+        profile = KnowledgeProfile()
+
+        with pytest.raises(TypeError):
+
+            DocumentKnowledgeProfile(
+                document_type="resume",
+                profile=profile,
+            )
+
+    def test_invalid_profile_is_rejected(self):
+
+        with pytest.raises(TypeError):
+
+            DocumentKnowledgeProfile(
+                document_type=DocumentType.RESUME,
+                profile="not a KnowledgeProfile",
+            )
+
+
+class TestDocumentProfileBuilder:
+
+    def test_builder_creates_resume_profile(self):
+
+        profile = KnowledgeProfile()
+
+        response = KnowledgePipelineResponse(
+            success=True,
+            document_type=DocumentType.RESUME,
+            result="PIPELINE_RESULT",
+        )
+
+        # Replace the response's result with an object that
+        # exposes the KnowledgeProfile expected by the response.
+
+        class FakeResult:
+
+            knowledge_profile = profile
+
+        response = KnowledgePipelineResponse(
+            success=True,
+            document_type=DocumentType.RESUME,
+            result=FakeResult(),
+        )
+
+        builder = DocumentProfileBuilder()
+
+        result = builder.build(
+            response
+        )
+
+        assert isinstance(
             result,
+            DocumentKnowledgeProfile,
         )
 
-    print()
-    print(
-        "PASS — KnowledgeV5Pipeline.run() "
-        "executed for all test ontologies."
-    )
-
-    return results
-
-
-# ======================================================================
-# TEST 4
-# ======================================================================
-
-def test_best_entity_selection():
-
-    print()
-    print("=" * 70)
-    print("TEST 4 — BEST KNOWLEDGE ENTITY")
-    print("=" * 70)
-
-    pipeline = KnowledgeV5Pipeline()
-
-    successful = 0
-
-    for ontology, sentence in TEST_SENTENCES.items():
-
-        result = pipeline.best(
-            ontology,
-            sentence,
+        assert (
+            result.document_type
+            == DocumentType.RESUME
         )
 
-        print()
-        print(
-            f"Ontology: {ontology}"
+        assert (
+            result.profile
+            is profile
         )
 
-        print(
-            f"Best result: {result}"
+    def test_builder_creates_jd_profile(self):
+
+        profile = KnowledgeProfile()
+
+        class FakeResult:
+
+            knowledge_profile = profile
+
+        response = KnowledgePipelineResponse(
+            success=True,
+            document_type=DocumentType.JD,
+            result=FakeResult(),
         )
 
-        if result is not None:
+        builder = DocumentProfileBuilder()
 
-            successful += 1
-
-    print()
-
-    print(
-        f"Best results returned: "
-        f"{successful}/{len(TEST_SENTENCES)}"
-    )
-
-    print(
-        "PASS — KnowledgeV5Pipeline.best() "
-        "executed successfully."
-    )
-
-    return successful
-
-
-# ======================================================================
-# TEST 5
-# ======================================================================
-
-def test_parser_context():
-
-    print()
-    print("=" * 70)
-    print("TEST 5 — KNOWLEDGE PARSER CONTEXT")
-    print("=" * 70)
-
-    pipeline = KnowledgeV5Pipeline()
-
-    context = pipeline.build_parser_context(
-        verb=True,
-        obj=True,
-        metric=True,
-        modifier=True,
-        numeric=True,
-        domain=True,
-    )
-
-    assert context is not None
-
-    print(
-        "Parser context type:",
-        type(context).__name__,
-    )
-
-    print(
-        "Parser context:"
-    )
-
-    print(context)
-
-    print(
-        "PASS — Parser context created."
-    )
-
-    return context
-
-
-# ======================================================================
-# TEST 6
-# ======================================================================
-
-def test_multiple_ontology_traversal():
-
-    print()
-    print("=" * 70)
-    print("TEST 6 — MULTI-ONTOLOGY TRAVERSAL")
-    print("=" * 70)
-
-    pipeline = KnowledgeV5Pipeline()
-
-    total_results = 0
-
-    for ontology, sentence in TEST_SENTENCES.items():
-
-        result = pipeline.run(
-            ontology,
-            sentence,
+        result = builder.build(
+            response
         )
 
-        if result is not None:
-
-            total_results += 1
-
-        print(
-            f"{ontology:<15} -> "
-            f"{type(result).__name__}"
+        assert isinstance(
+            result,
+            DocumentKnowledgeProfile,
         )
 
-    print()
+        assert (
+            result.document_type
+            == DocumentType.JD
+        )
 
-    assert total_results > 0
+        assert (
+            result.profile
+            is profile
+        )
 
-    print(
-        f"PASS — {total_results} ontology "
-        "traversals returned results."
-    )
+    def test_builder_rejects_invalid_response(self):
 
-    return total_results
+        builder = DocumentProfileBuilder()
 
+        with pytest.raises(TypeError):
 
-# ======================================================================
-# MAIN TEST RUNNER
-# ======================================================================
+            builder.build(
+                "invalid response"
+            )
 
-def test_knowledge_pipeline_api():
+    def test_builder_rejects_failed_response(self):
 
-    print()
-    print("=" * 70)
-    print(
-        "ENTERPRISE V5 — "
-        "KNOWLEDGE PIPELINE TRAVERSAL TEST"
-    )
-    print("=" * 70)
+        response = KnowledgePipelineResponse(
+            success=False,
+            document_type=DocumentType.RESUME,
+            result=None,
+            error="Pipeline failed",
+        )
 
-    pipeline = test_pipeline_creation()
+        builder = DocumentProfileBuilder()
 
-    test_pipeline_api()
+        with pytest.raises(ValueError):
 
-    results = test_knowledge_entity_extraction()
+            builder.build(
+                response
+            )
 
-    test_best_entity_selection()
+    def test_builder_rejects_missing_profile(self):
 
-    test_parser_context()
+        class FakeResult:
+            knowledge_profile = None
 
-    test_multiple_ontology_traversal()
+        response = KnowledgePipelineResponse(
+            success=True,
+            document_type=DocumentType.RESUME,
+            result=FakeResult(),
+        )
 
-    print()
-    print("=" * 70)
-    print(
-        "ENTERPRISE V5 — "
-        "KNOWLEDGE PIPELINE TRAVERSAL PASSED"
-    )
-    print("=" * 70)
+        builder = DocumentProfileBuilder()
 
-    print()
-    print(
-        "KnowledgeV5Pipeline : PASS"
-    )
+        with pytest.raises(ValueError):
 
-    print(
-        "run() API           : PASS"
-    )
-
-    print(
-        "best() API          : PASS"
-    )
-
-    print(
-        "Parser context      : PASS"
-    )
-
-    print(
-        "Multi-ontology      : PASS"
-    )
-
-    print(
-        "Knowledge traversal : PASS"
-    )
-
-    return results
-
-
-if __name__ == "__main__":
-
-    test_knowledge_pipeline_api()
+            builder.build(
+                response
+            )

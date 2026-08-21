@@ -83,6 +83,17 @@ class KnowledgeInterpretation:
     BusinessStatementBuilder.
 
     Every KnowledgeFact should contain one interpretation.
+
+    Entity storage
+    --------------
+
+    `entities` is the canonical entity collection.
+
+    `semantic_entities` is provided as a compatibility alias
+    because the Enterprise KnowledgeFact model accesses resolved
+    entities using that terminology.
+
+    No second entity collection is maintained.
     """
 
     # ==========================================================
@@ -154,7 +165,9 @@ class KnowledgeInterpretation:
     # ==========================================================
 
     @property
-    def entity_count(self) -> int:
+    def entity_count(
+        self,
+    ) -> int:
         """
         Number of universal KnowledgeEntity objects.
         """
@@ -164,17 +177,77 @@ class KnowledgeInterpretation:
         )
 
     @property
-    def has_entities(self) -> bool:
+    def has_entities(
+        self,
+    ) -> bool:
         """
         True when at least one KnowledgeEntity exists.
+
+        This is the canonical entity-presence check.
         """
 
         return bool(
             self.entities
         )
 
+    # ==========================================================
+    # SEMANTIC ENTITY COMPATIBILITY
+    # ==========================================================
+
     @property
-    def has_action(self) -> bool:
+    def semantic_entities(
+        self,
+    ) -> list[KnowledgeEntity]:
+        """
+        Compatibility alias for semantic entities.
+
+        `entities` remains the canonical storage collection.
+
+        The Enterprise KnowledgeFact model expects:
+
+            interpretation.semantic_entities
+
+        Therefore this property exposes the same underlying
+        collection without creating a second source of truth.
+        """
+
+        return self.entities
+
+    @property
+    def semantic_entity_count(
+        self,
+    ) -> int:
+        """
+        Number of semantic entities.
+
+        This is intentionally derived from the canonical
+        `entities` collection.
+        """
+
+        return len(
+            self.entities
+        )
+
+    @property
+    def has_semantic_entities(
+        self,
+    ) -> bool:
+        """
+        True when semantic entities are available.
+        """
+
+        return bool(
+            self.entities
+        )
+
+    # ==========================================================
+    # TYPED KNOWLEDGE FLAGS
+    # ==========================================================
+
+    @property
+    def has_action(
+        self,
+    ) -> bool:
         """
         True when an action was detected.
         """
@@ -188,7 +261,9 @@ class KnowledgeInterpretation:
         )
 
     @property
-    def has_target(self) -> bool:
+    def has_target(
+        self,
+    ) -> bool:
         """
         True when a target was detected.
         """
@@ -202,7 +277,9 @@ class KnowledgeInterpretation:
         )
 
     @property
-    def has_domain(self) -> bool:
+    def has_domain(
+        self,
+    ) -> bool:
         """
         True when a domain was detected.
         """
@@ -216,7 +293,9 @@ class KnowledgeInterpretation:
         )
 
     @property
-    def has_metric(self) -> bool:
+    def has_metric(
+        self,
+    ) -> bool:
         """
         True when a metric was detected.
         """
@@ -230,7 +309,9 @@ class KnowledgeInterpretation:
         )
 
     @property
-    def has_measurement(self) -> bool:
+    def has_measurement(
+        self,
+    ) -> bool:
         """
         True when a measurement was detected.
         """
@@ -258,9 +339,11 @@ class KnowledgeInterpretation:
         """
 
         if entity is None:
+
             return
 
         if entity in self.entities:
+
             return
 
         self.entities.append(
@@ -280,10 +363,13 @@ class KnowledgeInterpretation:
         """
 
         if not entity_type:
+
             return []
 
         normalized_type = (
-            str(entity_type)
+            str(
+                entity_type
+            )
             .strip()
             .casefold()
         )

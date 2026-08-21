@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FVG Pro · Binance Futures</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+        }
+        body {
+            background: #0b0e14;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            color: #eef2f7;
+        }
+        .card {
+            max-width: 1150px;
+            width: 100%;
+            background: #181e28;
+            border-radius: 28px;
+            padding: 16px 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            border: 1px solid #2b3543;
+        }
+        h1 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #f0b90b;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+        h1 small {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #8899bb;
+            margin-left: 6px;
+        }
+        .sub {
+            color: #9aabbf;
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            border-left: 3px solid #f0b90b;
+            line-height: 1.4;
+            padding: 4px 12px;
+            background: #1f2835;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* NEW: Trend Banner Styles */
+        .trend-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #131a24;
+            border: 1px solid #283445;
+            border-radius: 12px;
+            padding: 8px 14px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+        .trend-banner.bullish {
+            border-color: #16c784;
+            background: rgba(22, 199, 132, 0.08);
+            color: #16c784;
+        }
+        .trend-banner.bearish {
+            border-color: #ea3943;
+            background: rgba(234, 57, 67, 0.08);
+            color: #ea3943;
+        }
+        .trend-banner.neutral {
+            border-color: #f0b90b;
+            background: rgba(240, 185, 11, 0.08);
+            color: #f0b90b;
+        }
+        .trend-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .top-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .candle-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            flex: 3;
+            min-width: 320px;
+        }
+        .field-group {
+            background: #131b24;
+            border-radius: 12px;
+            padding: 4px 8px 4px 10px;
+            border: 1px solid #28323f;
+            transition: border 0.15s;
+        }
+        .field-group:hover {
+            border-color: #f0b90b55;
+        }
+        .field-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #98adc9;
+            margin-bottom: 0px;
+        }
+        .field-group label span {
+            color: #f0b90b;
+            font-weight: 500;
+        }
+        .field-group input {
+            width: 100%;
+            background: #0e141c;
+            border: none;
+            color: #f0f4fc;
+            padding: 2px 0 2px 4px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            outline: none;
+        }
+        .field-group input:focus {
+            border-color: #f0b90b;
+            box-shadow: 0 0 0 2px #f0b90b30;
+        }
+        .field-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .field-group input[type="number"]::-webkit-outer-spin-button,
+        .field-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .params-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            flex: 3;
+            min-width: 320px;
+        }
+        .params-grid .field-group {
+            padding: 4px 8px;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .side-card {
+            background: #111b26;
+            border-radius: 18px;
+            padding: 10px 14px;
+            border: 1px solid #2a3545;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        .side-card.favored {
+            border-width: 2px;
+            box-shadow: 0 0 15px rgba(240, 185, 11, 0.15);
+        }
+        .side-card.favored.long-fav {
+            border-color: #16c784;
+        }
+        .side-card.favored.short-fav {
+            border-color: #ea3943;
+        }
+
+        .side-card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .side-card h3 .badge-long { color: #16c784; }
+        .side-card h3 .badge-short { color: #ea3943; }
+
+        .fvg-display {
+            background: #0d1622;
+            border-radius: 12px;
+            padding: 4px 10px;
+            margin-bottom: 6px;
+            border: 1px solid #2a3545;
+        }
+        .fvg-display .fvg-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+        }
+        .fvg-display .fvg-status {
+            font-size: 0.7rem;
+            color: #98adc9;
+        }
+        .fvg-display .fvg-status .status { font-weight: 600; }
+        .fvg-display .fvg-values {
+            font-size: 0.65rem;
+            color: #b7cbdf;
+        }
+        .fvg-display .fvg-values .gap { color: #f0b90b; }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+            border-bottom: 1px solid #1d2838;
+            font-size: 0.78rem;
+        }
+        .result-row .label { color: #98adc9; }
+        .result-row .value { font-weight: 600; }
+        .value.green { color: #16c784; }
+        .value.red { color: #ea3943; }
+        .value.gold { color: #f0b90b; }
+        .value.cyan { color: #00d4ff; }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #0a111c;
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid #2a3545;
+            margin-top: 6px;
+            font-size: 0.75rem;
+        }
+        .slider-row input[type="range"] {
+            flex: 1;
+            background: #1d2838;
+            height: 3px;
+            border-radius: 4px;
+            -webkit-appearance: none;
+        }
+        .slider-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #f0b90b;
+            cursor: pointer;
+        }
+
+        .fvg-examples {
+            display: flex;
+            gap: 12px;
+            margin: 6px 0;
+            flex-wrap: wrap;
+        }
+        .example-btn {
+            background: #1d2838;
+            border: 1px solid #2a3545;
+            color: #eef2f7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .example-btn:hover {
+            border-color: #f0b90b;
+            background: #283544;
+        }
+
+        .footnote {
+            margin-top: 8px;
+            color: #6d839e;
+            font-size: 0.6rem;
+            text-align: right;
+            border-top: 1px dashed #26303d;
+            padding-top: 8px;
+        }
+        @media (max-width: 780px) {
+            .candle-grid, .params-grid {
+                grid-template-columns: repeat(3, 1fr);
+                min-width: unset;
+            }
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+            .top-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📊 FVG Pro <small>Binance Futures · 3-candle</small></h1>
+        <div class="sub">⚡ Precise Binance Futures calculation engine · Entry, SL, Binance Liq, Dynamic RR, Fees & Sizing</div>
+
+        <!-- NEW: Dynamic Trend Analysis Banner -->
+        <div class="trend-banner neutral" id="trendBanner">
+            <span id="trendText">📈 Favorable Trend Bias: Evaluating structure...</span>
+            <span class="trend-badge" id="trendBadge">NEUTRAL</span>
+        </div>
+
+        <div class="top-row">
+            <div class="candle-grid">
+                <div class="field-group"><label>C1 <span>High</span></label><input type="number" id="c1h" value="89.50" step="0.01"></div>
+                <div class="field-group"><label>C1 <span>Low</span></label><input type="number" id="c1l" value="88.90" step="0.01"></div>
+                <div class="field-group"><label>C2 <span>High</span></label><input type="number" id="c2h" value="91.20" step="0.01"></div>
+                <div class="field-group"><label>C2 <span>Low</span></label><input type="number" id="c2l" value="89.10" step="0.01"></div>
+                <div class="field-group"><label>C3 <span>High</span></label><input type="number" id="c3h" value="91.80" step="0.01"></div>
+                <div class="field-group"><label>C3 <span>Low</span></label><input type="number" id="c3l" value="90.20" step="0.01"></div>
+            </div>
+            <div class="params-grid">
+                <div class="field-group"><label>💰 Wallet</label><input type="number" id="wallet" value="1000" step="10"></div>
+                <div class="field-group"><label>⚡ Leverage</label><input type="number" id="leverage" value="10" step="1" min="1"></div>
+                <div class="field-group"><label>📉 Maker %</label><input type="number" id="makerFee" value="0.020" step="0.001"></div>
+                <div class="field-group"><label>📊 Taker %</label><input type="number" id="takerFee" value="0.050" step="0.001"></div>
+                <div class="field-group"><label>🛡️ MMR %</label><input type="number" id="mmr" value="0.5" step="0.1"></div>
+                <div class="field-group"><label>📊 Risk %</label><input type="number" id="riskPct" value="1.0" step="0.1"></div>
+            </div>
+        </div>
+
+        <div class="fvg-examples">
+            <span style="font-size:0.7rem; color:#98adc9; display:flex; align-items:center;">Quick presets:</span>
+            <button class="example-btn" data-preset="bullish">Bullish FVG (Long)</button>
+            <button class="example-btn" data-preset="bearish">Bearish FVG (Short)</button>
+            <button class="example-btn" data-preset="none">No FVG</button>
+        </div>
+
+        <div class="compare-grid">
+            <!-- Long Card -->
+            <div class="side-card" id="longCard">
+                <h3>
+                    <span class="badge-long">🟢 LONG (Bullish FVG)</span>
+                    <span id="longFavTag" style="font-size:0.65rem; background:#16c78433; color:#16c784; padding:2px 6px; border-radius:6px; display:none;">FAVORED</span>
+                </h3>
+                <div class="fvg-display">
+                    <div class="fvg-row">
+                        <span class="fvg-status">FVG <span class="status" id="longFvgStatus">—</span></span>
+                        <span class="fvg-values">
+                            <span id="longFvgUpper">—</span> / <span id="longFvgLower">—</span> 
+                            <span class="gap">gap: <strong id="longFvgGap">0.00</strong></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="result-row"><span class="label">Entry Price</span><span class="value gold" id="lEntry">—</span></div>
+                <div class="result-row"><span class="label">Stop Loss</span><span class="value red" id="lSL">—</span></div>
+                <div class="result-row"><span class="label">Est. Liquidation Price</span><span class="value red" id="lLiq">—</span></div>
+                <div class="result-row"><span class="label">Take Profit 1:2</span><span class="value green" id="lTP2">—</span></div>
+                <div class="result-row"><span class="label">Take Profit Dynamic</span><span class="value green" id="lTPDyn">—</span></div>
+                <div class="result-row"><span class="label">Position Size ($)</span><span class="value gold" id="lSize">—</span></div>
+                <div class="result-row"><span class="label">Margin Required</span><span class="value cyan" id="lMargin">—</span></div>
+                <div class="result-row"><span class="label">Contract Qty</span><span class="value" id="lQty">—</span></div>
+                <div class="result-row"><span class="label">Risk Amount ($)</span><span class="value red" id="lRisk">—</span></div>
+                <div class="result-row"><span class="label">Net Reward (1:2)</span><span class="value green" id="lReward2">—</span></div>
+                <div class="result-row"><span class="label">Net Reward Dynamic</span><span class="value green" id="lRewardDyn">—</span></div>
+                <div class="result-row"><span class="label">Total Round-trip Fees</span><span class="value" id="lFee" style="color:#8899bb;">—</span></div>
+            </div>
+
+            <!-- Short Card -->
+            <div class="side-card" id="shortCard">
+                <h3>
+                    <span class="badge-short">🔴 SHORT (Bearish FVG)</span>
+                    <span id="shortFavTag" style="font-size:0.65rem; background:#ea394333; color:#ea3943; padding:2px 6px; border-radius:6px; display:none;">FAVORED</span>
+                </h3>
+                <div class="fvg-display">
+                    <div class="fvg-row">
+                        <span class="fvg-status">FVG <span class="status" id="shortFvgStatus">—</span></span>
+                        <span class="fvg-values">
+                            <span id="shortFvgUpper">—</span> / <span id="shortFvgLower">—</span> 
+                            <span class="gap">gap: <strong id="shortFvgGap">0.00</strong></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="result-row"><span class="label">Entry Price</span><span class="value gold" id="sEntry">—</span></div>
+                <div class="result-row"><span class="label">Stop Loss</span><span class="value red" id="sSL">—</span></div>
+                <div class="result-row"><span class="label">Est. Liquidation Price</span><span class="value red" id="sLiq">—</span></div>
+                <div class="result-row"><span class="label">Take Profit 1:2</span><span class="value green" id="sTP2">—</span></div>
+                <div class="result-row"><span class="label">Take Profit Dynamic</span><span class="value green" id="sTPDyn">—</span></div>
+                <div class="result-row"><span class="label">Position Size ($)</span><span class="value gold" id="sSize">—</span></div>
+                <div class="result-row"><span class="label">Margin Required</span><span class="value cyan" id="sMargin">—</span></div>
+                <div class="result-row"><span class="label">Contract Qty</span><span class="value" id="sQty">—</span></div>
+                <div class="result-row"><span class="label">Risk Amount ($)</span><span class="value red" id="sRisk">—</span></div>
+                <div class="result-row"><span class="label">Net Reward (1:2)</span><span class="value green" id="sReward2">—</span></div>
+                <div class="result-row"><span class="label">Net Reward Dynamic</span><span class="value green" id="sRewardDyn">—</span></div>
+                <div class="result-row"><span class="label">Total Round-trip Fees</span><span class="value" id="sFee" style="color:#8899bb;">—</span></div>
+            </div>
+        </div>
+
+        <div class="slider-row">
+            <span>🎯 Custom TP Ratio</span>
+            <input type="range" id="tpRatioSlider" min="1.0" max="5.0" step="0.1" value="3.0">
+            <span id="tpRatioLabel">1:3.0</span>
+        </div>
+
+        <div class="footnote">
+            * Long FVG: Candle 1 High &lt; Candle 3 Low. Short FVG: Candle 1 Low &gt; Candle 3 High. Liquidation uses Binance Isolated Margin math.
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            function getVal(id) {
+                return parseFloat(document.getElementById(id).value) || 0;
+            }
+
+            function setVal(id, val) {
+                document.getElementById(id).value = val;
+            }
+
+            // FVG Detectors
+            function computeLongFVG() {
+                const h1 = getVal('c1h');
+                const l3 = getVal('c3l');
+                if (l3 > h1) {
+                    return { upper: l3, lower: h1, gap: l3 - h1, exists: true };
+                }
+                return { upper: 0, lower: 0, gap: 0, exists: false };
+            }
+
+            function computeShortFVG() {
+                const l1 = getVal('c1l');
+                const h3 = getVal('c3h');
+                if (l1 > h3) {
+                    return { upper: l1, lower: h3, gap: l1 - h3, exists: true };
+                }
+                return { upper: 0, lower: 0, gap: 0, exists: false };
+            }
+
+            function updateTrendBias(longFvg, shortFvg) {
+                const banner = document.getElementById('trendBanner');
+                const text = document.getElementById('trendText');
+                const badge = document.getElementById('trendBadge');
+                const longCard = document.getElementById('longCard');
+                const shortCard = document.getElementById('shortCard');
+                const longFavTag = document.getElementById('longFavTag');
+                const shortFavTag = document.getElementById('shortFavTag');
+
+                // Reset classes & borders
+                banner.className = "trend-banner";
+                longCard.classList.remove('favored', 'long-fav');
+                shortCard.classList.remove('favored', 'short-fav');
+                longFavTag.style.display = 'none';
+                shortFavTag.style.display = 'none';
+
+                if (longFvg.exists && !shortFvg.exists) {
+                    banner.classList.add('bullish');
+                    text.textContent = '🚀 Bullish Trend Favorable — Valid Bullish FVG Imbalance detected';
+                    badge.textContent = 'BULLISH';
+                    longCard.classList.add('favored', 'long-fav');
+                    longFavTag.style.display = 'inline-block';
+                } else if (!longFvg.exists && shortFvg.exists) {
+                    banner.classList.add('bearish');
+                    text.textContent = '🔻 Bearish Trend Favorable — Valid Bearish FVG Imbalance detected';
+                    badge.textContent = 'BEARISH';
+                    shortCard.classList.add('favored', 'short-fav');
+                    shortFavTag.style.display = 'inline-block';
+                } else if (longFvg.exists && shortFvg.exists) {
+                    if (longFvg.gap > shortFvg.gap) {
+                        banner.classList.add('bullish');
+                        text.textContent = '🚀 Bullish Trend Favorable — Larger Bullish Gap Imbalance';
+                        badge.textContent = 'BULLISH BIAS';
+                        longCard.classList.add('favored', 'long-fav');
+                        longFavTag.style.display = 'inline-block';
+                    } else if (shortFvg.gap > longFvg.gap) {
+                        banner.classList.add('bearish');
+                        text.textContent = '🔻 Bearish Trend Favorable — Larger Bearish Gap Imbalance';
+                        badge.textContent = 'BEARISH BIAS';
+                        shortCard.classList.add('favored', 'short-fav');
+                        shortFavTag.style.display = 'inline-block';
+                    } else {
+                        banner.classList.add('neutral');
+                        text.textContent = '⚖️ Neutral Trend — Dual Gaps of equal size detected';
+                        badge.textContent = 'NEUTRAL';
+                    }
+                } else {
+                    banner.classList.add('neutral');
+                    text.textContent = '⚖️ Neutral Market — No active Fair Value Gap identified';
+                    badge.textContent = 'NO GAP';
+                }
+            }
+
+            function calculateSide(side) {
+                const balance = getVal('wallet');
+                const lev = getVal('leverage');
+                const riskPercent = getVal('riskPct') / 100;
+                const tpRatio = parseFloat(document.getElementById('tpRatioSlider').value) || 2.0;
+                const maker = getVal('makerFee') / 100;
+                const mmrRate = getVal('mmr') / 100;
+
+                const h1 = getVal('c1h'), l1 = getVal('c1l');
+                const h2 = getVal('c2h'), l2 = getVal('c2l');
+                const h3 = getVal('c3h'), l3 = getVal('c3l');
+
+                let isLong = (side === 'Long');
+                let entry, stopLoss, liqPrice;
+                let fvg = isLong ? computeLongFVG() : computeShortFVG();
+
+                if (isLong) {
+                    entry = fvg.exists ? fvg.upper : l3;
+                    stopLoss = Math.min(l1, l2, l3) - 0.01;
+                    liqPrice = entry * (1 - (1 / lev) + mmrRate);
+                } else {
+                    entry = fvg.exists ? fvg.lower : h3;
+                    stopLoss = Math.max(h1, h2, h3) + 0.01;
+                    liqPrice = entry * (1 + (1 / lev) - mmrRate);
+                }
+
+                const riskAmount = balance * riskPercent;
+                const priceDeltaSL = Math.abs(entry - stopLoss);
+                
+                let quantity = 0;
+                if (priceDeltaSL > 0) {
+                    quantity = riskAmount / priceDeltaSL;
+                }
+
+                const positionSize = quantity * entry;
+                const margin = positionSize / lev;
+
+                const tp2 = isLong ? entry + priceDeltaSL * 2 : entry - priceDeltaSL * 2;
+                const tpDyn = isLong ? entry + priceDeltaSL * tpRatio : entry - priceDeltaSL * tpRatio;
+
+                const entryFee = positionSize * maker;
+                const exitFee2 = (quantity * tp2) * maker;
+                const exitFeeDyn = (quantity * tpDyn) * maker;
+                const totalFees = entryFee + exitFeeDyn;
+
+                const grossReward2 = Math.abs(tp2 - entry) * quantity;
+                const grossRewardDyn = Math.abs(tpDyn - entry) * quantity;
+
+                const netReward2 = Math.max(0, grossReward2 - (entryFee + exitFee2));
+                const netRewardDyn = Math.max(0, grossRewardDyn - totalFees);
+
+                return {
+                    entry, stopLoss, liqPrice, tp2, tpDyn,
+                    positionSize, margin, quantity,
+                    riskAmount, netReward2, netRewardDyn,
+                    fvg, totalFees
+                };
+            }
+
+            function updateUI() {
+                const longFvg = computeLongFVG();
+                const shortFvg = computeShortFVG();
+
+                updateTrendBias(longFvg, shortFvg);
+
+                document.getElementById('longFvgStatus').textContent = longFvg.exists ? '✓ Bullish Gap' : '— No Gap';
+                document.getElementById('longFvgStatus').style.color = longFvg.exists ? '#16c784' : '#666';
+                document.getElementById('longFvgUpper').textContent = longFvg.exists ? longFvg.upper.toFixed(2) : '—';
+                document.getElementById('longFvgLower').textContent = longFvg.exists ? longFvg.lower.toFixed(2) : '—';
+                document.getElementById('longFvgGap').textContent = longFvg.gap.toFixed(2);
+
+                document.getElementById('shortFvgStatus').textContent = shortFvg.exists ? '✓ Bearish Gap' : '— No Gap';
+                document.getElementById('shortFvgStatus').style.color = shortFvg.exists ? '#ea3943' : '#666';
+                document.getElementById('shortFvgUpper').textContent = shortFvg.exists ? shortFvg.upper.toFixed(2) : '—';
+                document.getElementById('shortFvgLower').textContent = shortFvg.exists ? shortFvg.lower.toFixed(2) : '—';
+                document.getElementById('shortFvgGap').textContent = shortFvg.gap.toFixed(2);
+
+                const long = calculateSide('Long');
+                const short = calculateSide('Short');
+
+                // Render Long
+                document.getElementById('lEntry').textContent = long.entry.toFixed(2);
+                document.getElementById('lSL').textContent = long.stopLoss.toFixed(2);
+                document.getElementById('lLiq').textContent = long.liqPrice.toFixed(2);
+                document.getElementById('lTP2').textContent = long.tp2.toFixed(2);
+                document.getElementById('lTPDyn').textContent = long.tpDyn.toFixed(2);
+                document.getElementById('lSize').textContent = '$' + long.positionSize.toFixed(2);
+                document.getElementById('lMargin').textContent = '$' + long.margin.toFixed(2);
+                document.getElementById('lQty').textContent = long.quantity.toFixed(3);
+                document.getElementById('lRisk').textContent = '$' + long.riskAmount.toFixed(2);
+                document.getElementById('lReward2').textContent = '$' + long.netReward2.toFixed(2);
+                document.getElementById('lRewardDyn').textContent = '$' + long.netRewardDyn.toFixed(2);
+                document.getElementById('lFee').textContent = '$' + long.totalFees.toFixed(2);
+
+                // Render Short
+                document.getElementById('sEntry').textContent = short.entry.toFixed(2);
+                document.getElementById('sSL').textContent = short.stopLoss.toFixed(2);
+                document.getElementById('sLiq').textContent = short.liqPrice.toFixed(2);
+                document.getElementById('sTP2').textContent = short.tp2.toFixed(2);
+                document.getElementById('sTPDyn').textContent = short.tpDyn.toFixed(2);
+                document.getElementById('sSize').textContent = '$' + short.positionSize.toFixed(2);
+                document.getElementById('sMargin').textContent = '$' + short.margin.toFixed(2);
+                document.getElementById('sQty').textContent = short.quantity.toFixed(3);
+                document.getElementById('sRisk').textContent = '$' + short.riskAmount.toFixed(2);
+                document.getElementById('sReward2').textContent = '$' + short.netReward2.toFixed(2);
+                document.getElementById('sRewardDyn').textContent = '$' + short.netRewardDyn.toFixed(2);
+                document.getElementById('sFee').textContent = '$' + short.totalFees.toFixed(2);
+
+                const val = parseFloat(document.getElementById('tpRatioSlider').value);
+                document.getElementById('tpRatioLabel').textContent = '1:' + val.toFixed(1);
+            }
+
+            const presets = {
+                bullish: { c1h: 89.50, c1l: 88.90, c2h: 91.20, c2l: 89.10, c3h: 91.80, c3l: 90.20 },
+                bearish: { c1h: 92.50, c1l: 91.00, c2h: 90.50, c2l: 88.40, c3h: 89.80, c3l: 88.10 },
+                none:    { c1h: 90.00, c1l: 88.00, c2h: 91.00, c2l: 89.00, c3h: 90.50, c3l: 88.50 }
+            };
+
+            document.querySelectorAll('.example-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const data = presets[this.dataset.preset];
+                    if (data) {
+                        setVal('c1h', data.c1h); setVal('c1l', data.c1l);
+                        setVal('c2h', data.c2h); setVal('c2l', data.c2l);
+                        setVal('c3h', data.c3h); setVal('c3l', data.c3l);
+                        updateUI();
+                    }
+                });
+            });
+
+            document.getElementById('tpRatioSlider').addEventListener('input', updateUI);
+            document.querySelectorAll('input').forEach(inp => {
+                inp.addEventListener('input', updateUI);
+            });
+
+            window.addEventListener('load', updateUI);
+        })();
+    </script>
+</body>
+</html>
