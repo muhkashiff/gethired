@@ -64,7 +64,7 @@ import pytest
 # PROJECT PIPELINE IMPORTS
 # ============================================================================
 
-from app.project_pipeline import (
+from app.intelligence.utilities.knowledge.project_pipeline.project_pipeline import (
     ProjectPipeline,
     ProjectPipelineResult,
     DocumentInput,
