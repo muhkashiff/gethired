@@ -20,8 +20,8 @@ Current result boundaries:
 
     ProjectMatchResult
         One processed resume matched against one processed JD
-        through the complete Phase 3 pipeline and consolidated
-        into the Phase 4 KnowledgeMatchProfile.
+        through Phase 3, consolidated through Phase 4, and analyzed
+        through Phase 5 ATS analysis.
 
 
 Phase 3
@@ -45,52 +45,50 @@ Phase 3
         KnowledgeGapAnalysisResult
 
 
-    Complete Phase 3
-            ↓
-        ProjectMatchResult
-
-
 Phase 4
 -------
 
-    ProjectMatchResult
-            |
-            +-- KnowledgeMatchProfile
-
-
-Architecture
-------------
-
-Single document:
-
-    DocumentInput
+    KnowledgeMatchResult
+        +
+    EnrichedKnowledgeMatchResult
+        +
+    KnowledgeGapAnalysisResult
         ↓
-    ProjectPipeline
+    KnowledgeMatchProfile
+
+
+Phase 5
+-------
+
+    KnowledgeMatchProfile
+        +
+    Resume DocumentKnowledgeProfile
+        +
+    JDRequirementProfile
         ↓
-    ProjectPipelineResult
+    ATSResumeAnalysisRequest
+        ↓
+    ATSResumeAnalyzer
+        ↓
+    ATSResumeAnalysisResult
 
 
-Complete matching:
+Complete project match
+----------------------
 
-    ProjectPipelineResult [RESUME]
+    Resume ProjectPipelineResult
                 +
-    ProjectPipelineResult [JD]
+    JD ProjectPipelineResult
                 ↓
-          ProjectPipeline.match()
+        Phase 3.1 Matching
                 ↓
-        Phase 3.1 KnowledgeMatcher
+        Phase 3.2 Enrichment
                 ↓
-        KnowledgeMatchResult
-                ↓
-        Phase 3.2 KnowledgeMatchEnricher
-                ↓
-        EnrichedKnowledgeMatchResult
-                ↓
-        Phase 3.3 GapAnalyzer
-                ↓
-        KnowledgeGapAnalysisResult
+        Phase 3.3 Gap Analysis
                 ↓
         Phase 4 KnowledgeMatchProfile
+                ↓
+        Phase 5 ATS Analysis
                 ↓
         ProjectMatchResult
 
@@ -104,23 +102,25 @@ Design principles
 
 3. ProjectMatchResult preserves every major Phase 3 boundary.
 
-4. No Phase 3 result is silently discarded.
+4. ProjectMatchResult preserves the authoritative Phase 4 profile.
 
-5. Phase 4 can consume ProjectMatchResult without having to rerun
-   matching, enrichment, or gap analysis.
+5. ProjectMatchResult preserves the complete Phase 5 ATS result.
 
-6. The original KnowledgeMatchResult remains available for traceability.
+6. No intelligence phase is silently discarded.
 
-7. The original EnrichedKnowledgeMatchResult remains available for
-   evidence-level inspection.
+7. Phase 5 consumes the exact Phase 4 KnowledgeMatchProfile.
 
-8. Gap analysis remains a Phase 3.3 concern and is attached to the
-   complete ProjectMatchResult.
+8. Phase 5 does not reconstruct matching, enrichment, or gap analysis.
 
-9. KnowledgeMatchProfile remains the Phase 4 consolidated representation.
+9. Phase 5 retains the original resume and JD document-side objects through
+   its request contract (explicit fields `resume_profile` and
+   `jd_requirement_profile`).
 
-10. ProjectMatchResult exposes Phase 4 profile metrics through convenience
-    properties without recalculating them.
+10. Downstream phases can consume ProjectMatchResult without rerunning
+    Phases 3, 4, or 5.
+
+11. Convenience properties expose authoritative metrics only. They do not
+    recalculate intelligence.
 """
 
 from __future__ import annotations
@@ -210,6 +210,19 @@ from app.intelligence.utilities.knowledge.matching.knowledge_match_profile_model
 
 
 # ============================================================================
+# PHASE 5 ATS LAYER
+# ============================================================================
+
+from app.intelligence.utilities.knowledge.ats.ats_analysis_request import (
+    ATSResumeAnalysisRequest,
+)
+
+from app.intelligence.utilities.knowledge.ats.ats_analysis_models import (
+    ATSResumeAnalysisResult,
+)
+
+
+# ============================================================================
 # PROJECT PIPELINE RESULT
 # ============================================================================
 
@@ -221,9 +234,8 @@ class ProjectPipelineResult:
 
     This is the Phase 1 + Phase 2 application boundary.
 
-    ------------------------------------------------------------------------
     Resume
-    ------------------------------------------------------------------------
+    ------
 
         DocumentInput
             ↓
@@ -231,41 +243,14 @@ class ProjectPipelineResult:
             └── document_profile
 
 
-    ------------------------------------------------------------------------
     Job Description
-    ------------------------------------------------------------------------
+    ---------------
 
         DocumentInput
             ↓
         ProjectPipelineResult
             ├── document_profile
             └── jd_requirement_profile
-
-
-    Object In
-        DocumentInput
-
-
-    Object Out
-        ProjectPipelineResult
-
-
-    Important
-    ---------
-
-    Gap analysis does NOT belong here.
-
-    Gap analysis requires both:
-
-        Resume
-        +
-        JD
-        +
-        Phase 3.1 match
-        +
-        Phase 3.2 enrichment
-
-    Therefore Phase 3.3 belongs to ProjectMatchResult.
     """
 
     # ------------------------------------------------------------------
@@ -349,9 +334,6 @@ class ProjectMatchResult:
     """
     Complete application-level result for resume-to-JD matching.
 
-    This object preserves the complete Phase 3 chain and the Phase 4
-    KnowledgeMatchProfile.
-
     Complete structure:
 
         resume_result
@@ -367,6 +349,10 @@ class ProjectMatchResult:
         gap_analysis_result
                 ↓
         knowledge_match_profile
+                ↓
+        ats_analysis_request
+                ↓
+        ats_analysis_result
 
 
     The object deliberately retains every major boundary so downstream
@@ -407,10 +393,22 @@ class ProjectMatchResult:
 
     knowledge_match_profile: KnowledgeMatchProfile
 
+    # ------------------------------------------------------------------
+    # Phase 5 ATS boundary
+    # ------------------------------------------------------------------
+
+    ats_analysis_request: ATSResumeAnalysisRequest
+
+    ats_analysis_result: ATSResumeAnalysisResult
+
     def __post_init__(self) -> None:
         """
-        Validate the complete Phase 3 -> Phase 4 source chain.
+        Validate the complete Phase 3 -> Phase 4 -> Phase 5 source chain.
         """
+
+        # ------------------------------------------------------------------
+        # BASE RESULT VALIDATION
+        # ------------------------------------------------------------------
 
         if not isinstance(
             self.resume_result,
@@ -469,6 +467,24 @@ class ProjectMatchResult:
             raise TypeError(
                 "knowledge_match_profile must be "
                 "KnowledgeMatchProfile."
+            )
+
+        if not isinstance(
+            self.ats_analysis_request,
+            ATSResumeAnalysisRequest,
+        ):
+            raise TypeError(
+                "ats_analysis_request must be "
+                "ATSResumeAnalysisRequest."
+            )
+
+        if not isinstance(
+            self.ats_analysis_result,
+            ATSResumeAnalysisResult,
+        ):
+            raise TypeError(
+                "ats_analysis_result must be "
+                "ATSResumeAnalysisResult."
             )
 
         # ------------------------------------------------------------------
@@ -534,6 +550,71 @@ class ProjectMatchResult:
             raise ValueError(
                 "knowledge_match_profile must reference "
                 "the supplied gap_analysis_result."
+            )
+
+        # ------------------------------------------------------------------
+        # PHASE 5 REQUEST -> PHASE 4 IDENTITY
+        # ------------------------------------------------------------------
+
+        if (
+            self.ats_analysis_request.knowledge_match_profile
+            is not self.knowledge_match_profile
+        ):
+            raise ValueError(
+                "ats_analysis_request must reference "
+                "the supplied knowledge_match_profile."
+            )
+
+        # ------------------------------------------------------------------
+        # PHASE 5 REQUEST -> RESUME SOURCE IDENTITY
+        # ------------------------------------------------------------------
+
+        if (
+            self.ats_analysis_request.resume_profile
+            is not self.resume_result.document_profile
+        ):
+            raise ValueError(
+                "ats_analysis_request must reference "
+                "the resume_result.document_profile."
+            )
+
+        # ------------------------------------------------------------------
+        # PHASE 5 REQUEST -> JD REQUIREMENT IDENTITY
+        # ------------------------------------------------------------------
+
+        if (
+            self.ats_analysis_request.jd_requirement_profile
+            is not self.jd_result.jd_requirement_profile
+        ):
+            raise ValueError(
+                "ats_analysis_request must reference "
+                "the jd_result.jd_requirement_profile."
+            )
+
+        # ------------------------------------------------------------------
+        # PHASE 5 RESULT -> REQUEST IDENTITY
+        # ------------------------------------------------------------------
+
+        if (
+            self.ats_analysis_result.request
+            is not self.ats_analysis_request
+        ):
+            raise ValueError(
+                "ats_analysis_result must reference "
+                "the supplied ats_analysis_request."
+            )
+
+        # ------------------------------------------------------------------
+        # PHASE 5 RESULT -> PHASE 4 IDENTITY
+        # ------------------------------------------------------------------
+
+        if (
+            self.ats_analysis_result.knowledge_match_profile
+            is not self.knowledge_match_profile
+        ):
+            raise ValueError(
+                "ats_analysis_result must preserve "
+                "the exact Phase 4 KnowledgeMatchProfile."
             )
 
     # =========================================================================
@@ -620,14 +701,6 @@ class ProjectMatchResult:
     def gap_count(self) -> int:
         """
         Return the total number of requirements with a gap.
-
-        A gap is either:
-
-            PARTIAL
-            FULL
-
-        The authoritative Phase 3.3 counters remain owned by
-        KnowledgeGapAnalysisResult.
         """
 
         return (
@@ -683,18 +756,68 @@ class ProjectMatchResult:
     def knowledge_match_profile_confidence(self) -> float:
         """
         Return the Phase 4 KnowledgeMatchProfile confidence.
-
-        This is a direct exposure of the profile's public ``confidence``
-        contract. No confidence value is recalculated here.
         """
 
         return self.knowledge_match_profile.confidence
+
+    # =========================================================================
+    # PHASE 5 CONVENIENCE PROPERTIES
+    # =========================================================================
+
+    @property
+    def ats_analysis(self) -> ATSResumeAnalysisResult:
+        """
+        Convenience alias for ats_analysis_result.
+
+        This allows tests and downstream code to access the final ATS
+        result directly as `project_match.ats_analysis`.
+        """
+        return self.ats_analysis_result
+
+    @property
+    def ats_score(self) -> float:
+        """
+        Return the final normalized Phase 5 ATS score.
+        """
+
+        return self.ats_analysis_result.ats_score.score
+
+    @property
+    def ats_confidence(self) -> float:
+        """
+        Return Phase 5 ATS analysis confidence.
+        """
+
+        return self.ats_analysis_result.confidence
+
+    @property
+    def ats_keyword_coverage_score(self) -> float:
+        """
+        Return the Phase 5 keyword coverage score.
+        """
+
+        return (
+            self.ats_analysis_result
+            .keyword_analysis
+            .keyword_coverage_score
+        )
+
+    @property
+    def ats_parseability_score(self) -> float:
+        """
+        Return the Phase 5 parseability score.
+        """
+
+        return (
+            self.ats_analysis_result
+            .parseability_analysis
+            .parseability_score
+        )
 
 
 # ============================================================================
 # PUBLIC EXPORTS
 # ============================================================================
-
 
 __all__ = [
     "ProjectPipelineResult",

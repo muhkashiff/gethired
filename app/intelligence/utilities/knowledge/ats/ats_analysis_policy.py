@@ -8,6 +8,9 @@ The policy contains deterministic configuration for ATS analysis.
 
 The policy is owned by ATSResumeAnalyzer and is NOT part of
 ATSResumeAnalysisRequest.
+
+The policy therefore controls analysis behavior without becoming part
+of the immutable Phase 5 object-in contract.
 """
 
 from __future__ import annotations
@@ -23,6 +26,10 @@ class ATSAnalysisPolicy:
     Immutable configuration for Phase 5 ATS analysis.
     """
 
+    # ------------------------------------------------------------------
+    # Resume structure
+    # ------------------------------------------------------------------
+
     required_sections: tuple[str, ...] = (
         "Professional Summary",
         "Experience",
@@ -30,9 +37,21 @@ class ATSAnalysisPolicy:
         "Skills",
     )
 
+    # ------------------------------------------------------------------
+    # Formatting
+    # ------------------------------------------------------------------
+
     max_line_length: int = 180
 
+    # ------------------------------------------------------------------
+    # Quantification
+    # ------------------------------------------------------------------
+
     minimum_quantifications: int = 3
+
+    # ------------------------------------------------------------------
+    # ATS scoring
+    # ------------------------------------------------------------------
 
     score_weights: Mapping[str, float] = field(
         default_factory=lambda: {
@@ -47,6 +66,11 @@ class ATSAnalysisPolicy:
     )
 
     def __post_init__(self) -> None:
+
+        # ------------------------------------------------------------------
+        # REQUIRED SECTIONS
+        # ------------------------------------------------------------------
+
         sections = tuple(
             str(section).strip()
             for section in self.required_sections
@@ -59,15 +83,27 @@ class ATSAnalysisPolicy:
             sections,
         )
 
+        # ------------------------------------------------------------------
+        # LINE LENGTH
+        # ------------------------------------------------------------------
+
         if self.max_line_length <= 0:
             raise ValueError(
                 "max_line_length must be greater than zero."
             )
 
+        # ------------------------------------------------------------------
+        # QUANTIFICATION TARGET
+        # ------------------------------------------------------------------
+
         if self.minimum_quantifications < 0:
             raise ValueError(
                 "minimum_quantifications cannot be negative."
             )
+
+        # ------------------------------------------------------------------
+        # SCORE WEIGHTS
+        # ------------------------------------------------------------------
 
         raw_weights = dict(
             self.score_weights

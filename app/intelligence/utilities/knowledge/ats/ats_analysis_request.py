@@ -1,114 +1,66 @@
-"""
-ATS Resume Analysis Request
-============================
-
-Phase 5 input contract.
-
-Object In
----------
-
-    KnowledgeMatchProfile
-    +
-    Resume DocumentKnowledgeProfile
-    +
-    JDRequirementProfile
-
-Object Out
------------
-
-    ATSResumeAnalysisRequest
-
-The request is an immutable object-in contract.
-
-The request contains references to the authoritative Phase 4 and
-source document objects. Phase 5 must not reconstruct those objects.
-"""
-
 from __future__ import annotations
-
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Optional, TYPE_CHECKING
 
-from app.intelligence.utilities.knowledge.documents.document_knowledge_profile import (
-    DocumentKnowledgeProfile,
-)
-
-from app.intelligence.utilities.knowledge.jd_requirements.requirement_models import (
-    JDRequirementProfile,
-)
-
-from app.intelligence.utilities.knowledge.matching.knowledge_match_profile_models import (
-    KnowledgeMatchProfile,
-)
-
-
-@dataclass(frozen=True)
-class ATSResumeAnalysisRequest:
-    """
-    Immutable Phase 5 analysis request.
-
-    The exact Phase 4 KnowledgeMatchProfile is preserved for traceability.
-
-    The resume and JD profiles are retained separately because ATS analysis
-    may require document-side information that is not represented directly
-    by the consolidated Phase 4 profile.
-    """
-
-    knowledge_match_profile: KnowledgeMatchProfile
-
-    resume_profile: DocumentKnowledgeProfile
-
-    jd_requirement_profile: JDRequirementProfile
-
-    metadata: dict[str, Any] = field(
-        default_factory=dict
+if TYPE_CHECKING:
+    from app.intelligence.utilities.knowledge.matching.knowledge_match_profile_models import (
+        KnowledgeMatchProfile,
+    )
+    from app.intelligence.utilities.knowledge.documents.document_input import (
+        DocumentInput,
     )
 
+@dataclass
+class ATSResumeAnalysisRequest:
+    resume_text: str = ""
+    knowledge_match_profile: Optional["KnowledgeMatchProfile"] = None
+    resume_document: Optional["DocumentInput"] = None
+    resume_profile: Any = None
+    jd_requirement_profile: Any = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
     def __post_init__(self) -> None:
-        """
-        Validate the structural Phase 5 request boundary.
-
-        This layer validates object contracts only.
-
-        It intentionally does NOT validate whether resume_profile is actually
-        a RESUME. That semantic boundary belongs to ATSResumeAnalyzer, where
-        the request is consumed.
-        """
-
-        if not isinstance(
-            self.knowledge_match_profile,
-            KnowledgeMatchProfile,
-        ):
-            raise TypeError(
-                "knowledge_match_profile must be "
-                "KnowledgeMatchProfile."
+        if self.resume_document is not None:
+            text = getattr(self.resume_document, "text", "")
+            if text is None or not str(text).strip():
+                raise ValueError(
+                    "ATSResumeAnalysisRequest.resume_document must contain "
+                    "non-empty text."
+                )
+            self.resume_text = str(text)
+        elif not str(self.resume_text or "").strip():
+            raise ValueError(
+                "ATSResumeAnalysisRequest requires non-empty resume_text "
+                "or a resume_document with non-empty text."
             )
 
-        if not isinstance(
-            self.resume_profile,
-            DocumentKnowledgeProfile,
-        ):
-            raise TypeError(
-                "resume_profile must be "
-                "DocumentKnowledgeProfile."
+        if self.knowledge_match_profile is None:
+            raise ValueError(
+                "ATSResumeAnalysisRequest requires a KnowledgeMatchProfile."
             )
 
-        if not isinstance(
-            self.jd_requirement_profile,
-            JDRequirementProfile,
-        ):
-            raise TypeError(
-                "jd_requirement_profile must be "
-                "JDRequirementProfile."
+        if self.resume_profile is None:
+            self.resume_profile = getattr(
+                self.knowledge_match_profile, "resume_profile", None
+            )
+        if self.jd_requirement_profile is None:
+            self.jd_requirement_profile = getattr(
+                self.knowledge_match_profile, "jd_requirement_profile", None
             )
 
-        object.__setattr__(
-            self,
-            "metadata",
-            dict(self.metadata),
-        )
+    @property
+    def has_resume_source(self) -> bool:
+        return bool(str(self.resume_text or "").strip())
 
+    @property
+    def has_phase4_profile(self) -> bool:
+        return self.knowledge_match_profile is not None
 
-__all__ = [
-    "ATSResumeAnalysisRequest",
-]
+    @property
+    def source_text(self) -> str:
+        return self.resume_text
+
+    def validate(self) -> None:
+        self.__post_init__()
+
+__all__ = ["ATSResumeAnalysisRequest"]
