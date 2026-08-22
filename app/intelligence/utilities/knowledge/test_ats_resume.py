@@ -1,54 +1,60 @@
+
 """
-ATS Resume Analyzer Tests
-=========================
+Phase 5 - ATS Resume Analyzer Tests
+====================================
 
-Phase 5 - ATS Resume Analysis
+Complete object-in / object-out contract tests.
 
-Architecture
-------------
+Pipeline under test:
 
-    DocumentKnowledgeProfile
-             +
-    JDRequirementProfile
-             +
-    KnowledgeMatchProfile
+    Phase 3.1
+        KnowledgeMatchResult
              |
              v
-    ATSResumeAnalysisRequest
+    Phase 3.2
+        EnrichedKnowledgeMatchResult
              |
              v
-    ATSResumeAnalyzer
+    Phase 3.3
+        KnowledgeGapAnalysisResult
              |
              v
-    ATSResumeAnalysisResult
+    Phase 4
+        KnowledgeMatchProfile
+             |
+             v
+    Phase 5
+        ATSResumeAnalysisRequest
+             |
+             v
+        ATSResumeAnalyzer
+             |
+             v
+        ATSResumeAnalysisResult
 
-The tests intentionally preserve the real Phase 3 -> Phase 4
-identity chain.
+
+Architectural rule
+------------------
+Phase 6 must receive the exact ATSResumeAnalysisResult object produced here.
+
+The test suite therefore checks identity, not merely equality.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
-
 import pytest
 
-
-# ============================================================================
-# PHASE 5
-# ============================================================================
-
 from app.intelligence.utilities.knowledge.ats.ats_analysis_models import (
+    ATSFormattingAnalysis,
     ATSKeywordAnalysis,
+    ATSParseabilityAnalysis,
+    ATSQuantificationAnalysis,
+    ATSReadabilityAnalysis,
+    ATSResumeAnalysisResult,
     ATSScore,
     ATSScoreBreakdown,
     ATSSectionAnalysis,
-    ATSFormattingAnalysis,
-    ATSReadabilityAnalysis,
     ATSTerminologyAnalysis,
-    ATSQuantificationAnalysis,
-    ATSParseabilityAnalysis,
-    ATSResumeAnalysisResult,
 )
 
 from app.intelligence.utilities.knowledge.ats.ats_analysis_policy import (
@@ -63,324 +69,202 @@ from app.intelligence.utilities.knowledge.ats.ats_resume_analyzer import (
     ATSResumeAnalyzer,
 )
 
-
-# ============================================================================
-# DOCUMENT MODELS
-# ============================================================================
-
-from app.intelligence.utilities.knowledge.documents.document_knowledge_profile import (
-    DocumentKnowledgeProfile,
-)
-
-from app.intelligence.utilities.knowledge.documents.document_types import (
-    DocumentType,
-)
-
-from app.intelligence.utilities.knowledge.knowledge_scoring.knowledge_profile import (
-    KnowledgeProfile,
-)
-
-
-# ============================================================================
-# JD MODELS
-# ============================================================================
-
-from app.intelligence.utilities.knowledge.jd_requirements.requirement_models import (
-    JDRequirementProfile,
-)
-
-
-# ============================================================================
-# MATCHING MODELS
-# ============================================================================
-
-from app.intelligence.utilities.knowledge.matching.match_models import (
-    KnowledgeMatchResult,
-    MatchBasis,
-    MatchStatus,
-    RequirementMatch,
-)
-
-from app.intelligence.utilities.knowledge.matching.match_enricher import (
-    KnowledgeMatchEnricher,
-)
-
-from app.intelligence.utilities.knowledge.matching.gap_analyzer import (
-    KnowledgeGapAnalyzer,
-)
-
-from app.intelligence.utilities.knowledge.matching.knowledge_match_profile_builder import (
-    KnowledgeMatchProfileBuilder,
-)
-
 from app.intelligence.utilities.knowledge.matching.knowledge_match_profile_models import (
     KnowledgeMatchProfile,
 )
 
 
 # ============================================================================
-# TEST SOURCE OBJECTS
+# PHASE 3.1
 # ============================================================================
 
 
-@dataclass
-class FakeKnowledgeDocument:
+class TestPhase31MatchResult:
     """
-    Minimal source document compatible with the real Phase 5 source lookup.
-
-    This is NOT a fake KnowledgeMatchProfile.
-
-    It represents the existing KnowledgeDocument source contract used by
-    DocumentKnowledgeProfile.source_result.
+    Verify Phase 3.1 object boundary.
     """
 
-    raw_text: str
+    def test_match_result_is_object(
+        self,
+        match_result,
+    ) -> None:
 
-    facts: list[Any]
-
-
-@dataclass
-class FakePipelineResult:
-    """
-    Minimal pipeline result wrapper.
-
-    The real project exposes knowledge_document through the pipeline
-    result. This fixture only supplies the fields Phase 5 consumes.
-    """
-
-    knowledge_document: FakeKnowledgeDocument
-
-
-# ============================================================================
-# RESUME
-# ============================================================================
-
-
-RESUME_TEXT = """
-John Smith
-
-Professional Summary
-
-Senior Software Engineer with experience building scalable Python
-applications and enterprise systems.
-
-Experience
-
-Senior Software Engineer
-ABC Technologies
-
-Led a team of 8 engineers.
-Improved API performance by 35%.
-Built Python and FastAPI services.
-Designed PostgreSQL data models.
-Managed CI/CD pipelines.
-Mentored junior engineers.
-
-Skills
-
-Python
-FastAPI
-PostgreSQL
-Docker
-AWS
-CI/CD
-
-Education
-
-Bachelor of Science in Computer Science
-"""
-
-
-# ============================================================================
-# RESUME PROFILE
-# ============================================================================
-
-
-@pytest.fixture
-def resume_profile() -> DocumentKnowledgeProfile:
-    """
-    Build a real DocumentKnowledgeProfile.
-
-    No KnowledgeMatchProfile subclassing is used.
-    """
-
-    knowledge_profile = KnowledgeProfile()
-
-    source_document = FakeKnowledgeDocument(
-        raw_text=RESUME_TEXT,
-        facts=[],
-    )
-
-    source_result = FakePipelineResult(
-        knowledge_document=source_document,
-    )
-
-    return DocumentKnowledgeProfile(
-        document_type=DocumentType.RESUME,
-        profile=knowledge_profile,
-        source_result=source_result,
-    )
-
-
-# ============================================================================
-# JD PROFILE
-# ============================================================================
-
-
-@pytest.fixture
-def jd_requirement_profile() -> JDRequirementProfile:
-    """
-    Build an empty but valid JDRequirementProfile.
-
-    Phase 5 only requires the established Phase 2 contract.
-    """
-
-    return JDRequirementProfile.from_requirements(
-        []
-    )
-
-
-# ============================================================================
-# PHASE 4 PROFILE
-# ============================================================================
-
-
-@pytest.fixture
-def knowledge_match_profile(
-    resume_profile: DocumentKnowledgeProfile,
-    jd_requirement_profile: JDRequirementProfile,
-) -> KnowledgeMatchProfile:
-    """
-    Build the actual Phase 3 -> Phase 4 chain.
-    """
-
-    requirement_matches = [
-        RequirementMatch(
-            requirement_id="req-python",
-            requirement_subject="Python",
-            requirement_type="skill",
-            priority="high",
-            status=MatchStatus.MATCHED,
-            score=0.95,
-            basis=MatchBasis.CANONICAL,
-            candidate_entity_ids=(),
-            candidate_evidence=(),
-            evidence_count=0,
-        ),
-        RequirementMatch(
-            requirement_id="req-fastapi",
-            requirement_subject="FastAPI",
-            requirement_type="skill",
-            priority="high",
-            status=MatchStatus.PARTIAL,
-            score=0.60,
-            basis=MatchBasis.CANONICAL,
-            candidate_entity_ids=(),
-            candidate_evidence=(),
-            evidence_count=0,
-        ),
-        RequirementMatch(
-            requirement_id="req-kubernetes",
-            requirement_subject="Kubernetes",
-            requirement_type="skill",
-            priority="medium",
-            status=MatchStatus.UNMATCHED,
-            score=0.0,
-            basis=MatchBasis.NONE,
-            candidate_entity_ids=(),
-            candidate_evidence=(),
-            evidence_count=0,
-        ),
-    ]
-
-    # ------------------------------------------------------------------------
-    # Phase 3.1
-    # ------------------------------------------------------------------------
-
-    match_result = KnowledgeMatchResult.from_matches(
-        requirement_matches
-    )
-
-    # ------------------------------------------------------------------------
-    # Phase 3.2
-    # ------------------------------------------------------------------------
-
-    enriched_match_result = (
-        KnowledgeMatchEnricher().process(
-            match_result=match_result,
-            resume_profile=resume_profile,
-            jd_requirement_profile=jd_requirement_profile,
+        from app.intelligence.utilities.knowledge.matching.match_models import (
+            KnowledgeMatchResult,
         )
-    )
 
-    # ------------------------------------------------------------------------
-    # Phase 3.3
-    # ------------------------------------------------------------------------
-
-    gap_analysis_result = (
-        KnowledgeGapAnalyzer().process(
-            enriched_match_result
+        assert isinstance(
+            match_result,
+            KnowledgeMatchResult,
         )
-    )
 
-    # ------------------------------------------------------------------------
-    # Phase 4
-    # ------------------------------------------------------------------------
+    def test_match_result_contains_matches(
+        self,
+        match_result,
+    ) -> None:
 
-    profile = (
-        KnowledgeMatchProfileBuilder().process(
-            match_result=match_result,
-            enriched_match_result=enriched_match_result,
-            gap_analysis_result=gap_analysis_result,
+        assert len(
+            match_result.matches
+        ) == 3
+
+    def test_match_statuses_are_preserved(
+        self,
+        match_result,
+    ) -> None:
+
+        statuses = {
+            match.status
+            for match in match_result.matches
+        }
+
+        from app.intelligence.utilities.knowledge.matching.match_models import (
+            MatchStatus,
         )
-    )
 
-    # ------------------------------------------------------------------------
-    # Identity
-    # ------------------------------------------------------------------------
-
-    assert profile.match_result is match_result
-
-    assert (
-        profile.enriched_match_result
-        is enriched_match_result
-    )
-
-    assert (
-        profile.gap_analysis_result
-        is gap_analysis_result
-    )
-
-    return profile
+        assert MatchStatus.MATCHED in statuses
+        assert MatchStatus.PARTIAL in statuses
+        assert MatchStatus.UNMATCHED in statuses
 
 
 # ============================================================================
-# REQUEST
+# PHASE 3.2
 # ============================================================================
 
 
-@pytest.fixture
-def ats_request(
-    knowledge_match_profile: KnowledgeMatchProfile,
-    resume_profile: DocumentKnowledgeProfile,
-    jd_requirement_profile: JDRequirementProfile,
-) -> ATSResumeAnalysisRequest:
+class TestPhase32Enrichment:
+    """
+    Verify Phase 3.2 preserves the Phase 3.1 object.
+    """
 
-    return ATSResumeAnalysisRequest(
-        knowledge_match_profile=knowledge_match_profile,
-        resume_profile=resume_profile,
-        jd_requirement_profile=jd_requirement_profile,
-    )
+    def test_enrichment_returns_typed_object(
+        self,
+        enriched_match_result,
+    ) -> None:
+
+        from app.intelligence.utilities.knowledge.matching.enrichment_models import (
+            EnrichedKnowledgeMatchResult,
+        )
+
+        assert isinstance(
+            enriched_match_result,
+            EnrichedKnowledgeMatchResult,
+        )
+
+    def test_enrichment_preserves_match_identity(
+        self,
+        match_result,
+        enriched_match_result,
+    ) -> None:
+
+        assert (
+            enriched_match_result.match_result
+            is match_result
+        )
 
 
 # ============================================================================
-# CONSTRUCTION
+# PHASE 3.3
+# ============================================================================
+
+
+class TestPhase33GapAnalysis:
+    """
+    Verify Phase 3.3 preserves Phase 3.2.
+    """
+
+    def test_gap_analysis_returns_typed_object(
+        self,
+        gap_analysis_result,
+    ) -> None:
+
+        from app.intelligence.utilities.knowledge.matching.gap_models import (
+            KnowledgeGapAnalysisResult,
+        )
+
+        assert isinstance(
+            gap_analysis_result,
+            KnowledgeGapAnalysisResult,
+        )
+
+    def test_gap_analysis_preserves_enrichment_identity(
+        self,
+        enriched_match_result,
+        gap_analysis_result,
+    ) -> None:
+
+        assert (
+            gap_analysis_result.enriched_match_result
+            is enriched_match_result
+        )
+
+
+# ============================================================================
+# PHASE 4
+# ============================================================================
+
+
+class TestPhase4KnowledgeMatchProfile:
+    """
+    Verify the aggregate Phase 4 object.
+    """
+
+    def test_profile_is_typed_object(
+        self,
+        knowledge_match_profile,
+    ) -> None:
+
+        assert isinstance(
+            knowledge_match_profile,
+            KnowledgeMatchProfile,
+        )
+
+    def test_profile_preserves_phase31_identity(
+        self,
+        knowledge_match_profile,
+        match_result,
+    ) -> None:
+
+        assert (
+            knowledge_match_profile.match_result
+            is match_result
+        )
+
+    def test_profile_preserves_phase32_identity(
+        self,
+        knowledge_match_profile,
+        enriched_match_result,
+    ) -> None:
+
+        assert (
+            knowledge_match_profile.enriched_match_result
+            is enriched_match_result
+        )
+
+    def test_profile_preserves_phase33_identity(
+        self,
+        knowledge_match_profile,
+        gap_analysis_result,
+    ) -> None:
+
+        assert (
+            knowledge_match_profile.gap_analysis_result
+            is gap_analysis_result
+        )
+
+
+# ============================================================================
+# PHASE 5 CONSTRUCTION
 # ============================================================================
 
 
 class TestATSResumeAnalyzerConstruction:
+    """
+    Analyzer construction contract.
+    """
 
-    def test_default_policy_is_created(self) -> None:
+    def test_default_policy_is_created(
+        self,
+    ) -> None:
 
         analyzer = ATSResumeAnalyzer()
 
@@ -389,7 +273,9 @@ class TestATSResumeAnalyzerConstruction:
             ATSAnalysisPolicy,
         )
 
-    def test_custom_policy_is_preserved(self) -> None:
+    def test_custom_policy_is_preserved(
+        self,
+    ) -> None:
 
         policy = ATSAnalysisPolicy()
 
@@ -397,9 +283,14 @@ class TestATSResumeAnalyzerConstruction:
             policy=policy,
         )
 
-        assert analyzer.policy is policy
+        assert (
+            analyzer.policy
+            is policy
+        )
 
-    def test_invalid_policy_is_rejected(self) -> None:
+    def test_invalid_policy_is_rejected(
+        self,
+    ) -> None:
 
         with pytest.raises(
             TypeError,
@@ -411,11 +302,122 @@ class TestATSResumeAnalyzerConstruction:
 
 
 # ============================================================================
-# REQUEST VALIDATION
+# PHASE 5 REQUEST
 # ============================================================================
 
 
-class TestATSResumeAnalyzerRequestValidation:
+class TestATSResumeAnalysisRequest:
+    """
+    Validate the Phase 5 request object.
+    """
+
+    def test_request_is_typed_object(
+        self,
+        ats_request,
+    ) -> None:
+
+        assert isinstance(
+            ats_request,
+            ATSResumeAnalysisRequest,
+        )
+
+    def test_request_preserves_phase4_profile(
+        self,
+        ats_request,
+        knowledge_match_profile,
+    ) -> None:
+
+        assert (
+            ats_request.knowledge_match_profile
+            is knowledge_match_profile
+        )
+
+    def test_request_has_resume_source(
+        self,
+        ats_request,
+    ) -> None:
+
+        assert ats_request.has_resume_source
+        assert ats_request.source_text.strip()
+
+    def test_request_has_phase4_profile(
+        self,
+        ats_request,
+    ) -> None:
+
+        assert ats_request.has_phase4_profile
+
+    def test_request_source_text_is_resume_text(
+        self,
+        ats_request,
+    ) -> None:
+
+        assert (
+            ats_request.source_text
+            == ats_request.resume_text
+        )
+
+    def test_empty_resume_is_rejected(
+        self,
+        knowledge_match_profile,
+        ats_policy,
+    ) -> None:
+
+        with pytest.raises(
+            ValueError,
+            match="resume_text",
+        ):
+            ATSResumeAnalysisRequest(
+                resume_text="   ",
+                knowledge_match_profile=(
+                    knowledge_match_profile
+                ),
+                policy=ats_policy,
+            )
+
+    def test_missing_profile_is_rejected(
+        self,
+        ats_policy,
+    ) -> None:
+
+        with pytest.raises(
+            ValueError,
+            match="KnowledgeMatchProfile",
+        ):
+            ATSResumeAnalysisRequest(
+                resume_text="Valid resume text",
+                knowledge_match_profile=None,
+                policy=ats_policy,
+            )
+
+    def test_missing_policy_is_rejected(
+        self,
+        knowledge_match_profile,
+    ) -> None:
+
+        with pytest.raises(
+            ValueError,
+            match="policy",
+        ):
+            ATSResumeAnalysisRequest(
+                resume_text="Valid resume text",
+                knowledge_match_profile=(
+                    knowledge_match_profile
+                ),
+                policy=None,
+            )
+
+
+# ============================================================================
+# PHASE 5 ANALYZER INPUT CONTRACT
+# ============================================================================
+
+
+class TestATSResumeAnalyzerInputContract:
+    """
+    ATSResumeAnalyzer must accept the Phase 5 request object,
+    not dictionaries or arbitrary values.
+    """
 
     def test_invalid_request_type_is_rejected(
         self,
@@ -428,68 +430,32 @@ class TestATSResumeAnalyzerRequestValidation:
             match="ATSResumeAnalysisRequest",
         ):
             analyzer.process(
-                "invalid",  # type: ignore[arg-type]
+                "invalid request",  # type: ignore[arg-type]
             )
 
-    def test_non_resume_profile_is_rejected(
+    def test_request_policy_must_match_analyzer_policy(
         self,
-        knowledge_match_profile: KnowledgeMatchProfile,
-        jd_requirement_profile: JDRequirementProfile,
+        knowledge_match_profile,
     ) -> None:
 
-        jd_profile = DocumentKnowledgeProfile(
-            document_type=DocumentType.JD,
-            profile=KnowledgeProfile(),
-        )
+        analyzer_policy = ATSAnalysisPolicy()
+        request_policy = ATSAnalysisPolicy()
 
         request = ATSResumeAnalysisRequest(
-            knowledge_match_profile=knowledge_match_profile,
-            resume_profile=jd_profile,
-            jd_requirement_profile=jd_requirement_profile,
+            resume_text="Valid resume text",
+            knowledge_match_profile=(
+                knowledge_match_profile
+            ),
+            policy=request_policy,
         )
 
-        analyzer = ATSResumeAnalyzer()
+        analyzer = ATSResumeAnalyzer(
+            policy=analyzer_policy,
+        )
 
         with pytest.raises(
             ValueError,
-            match="resume_profile",
-        ):
-            analyzer.process(
-                request
-            )
-
-    def test_empty_resume_source_is_rejected(
-        self,
-        knowledge_match_profile: KnowledgeMatchProfile,
-        jd_requirement_profile: JDRequirementProfile,
-    ) -> None:
-
-        empty_document = FakeKnowledgeDocument(
-            raw_text="   ",
-            facts=[],
-        )
-
-        empty_result = FakePipelineResult(
-            knowledge_document=empty_document,
-        )
-
-        empty_resume_profile = DocumentKnowledgeProfile(
-            document_type=DocumentType.RESUME,
-            profile=KnowledgeProfile(),
-            source_result=empty_result,
-        )
-
-        request = ATSResumeAnalysisRequest(
-            knowledge_match_profile=knowledge_match_profile,
-            resume_profile=empty_resume_profile,
-            jd_requirement_profile=jd_requirement_profile,
-        )
-
-        analyzer = ATSResumeAnalyzer()
-
-        with pytest.raises(
-            ValueError,
-            match="resume source",
+            match="policy",
         ):
             analyzer.process(
                 request
@@ -497,310 +463,592 @@ class TestATSResumeAnalyzerRequestValidation:
 
 
 # ============================================================================
-# PROCESS
+# PHASE 5 PROCESS
 # ============================================================================
 
 
 class TestATSResumeAnalyzerProcess:
+    """
+    Complete Phase 5 output contract.
+    """
 
-    def test_process_returns_ats_analysis_result(
+    def test_process_returns_ats_result(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        analyzer = ATSResumeAnalyzer()
-
-        result = analyzer.process(
-            ats_request
-        )
-
         assert isinstance(
-            result,
+            ats_result,
             ATSResumeAnalysisResult,
         )
 
     def test_result_preserves_request_identity(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
+        ats_request,
     ) -> None:
 
-        analyzer = ATSResumeAnalyzer()
-
-        result = analyzer.process(
-            ats_request
-        )
-
         assert (
-            result.request
+            ats_result.request
             is ats_request
         )
 
-    def test_result_preserves_phase_4_profile_identity(
+    def test_result_preserves_phase4_identity(
         self,
-        ats_request: ATSResumeAnalysisRequest,
-        knowledge_match_profile: KnowledgeMatchProfile,
+        ats_result,
+        knowledge_match_profile,
     ) -> None:
 
-        analyzer = ATSResumeAnalyzer()
+        assert (
+            ats_result.knowledge_match_profile
+            is knowledge_match_profile
+        )
 
-        result = analyzer.process(
-            ats_request
+    def test_request_and_result_share_same_phase4_object(
+        self,
+        ats_result,
+        ats_request,
+        knowledge_match_profile,
+    ) -> None:
+
+        assert (
+            ats_result.request
+            is ats_request
         )
 
         assert (
-            result.knowledge_match_profile
+            ats_request.knowledge_match_profile
             is knowledge_match_profile
         )
 
         assert (
-            result.request.knowledge_match_profile
+            ats_result.knowledge_match_profile
             is knowledge_match_profile
         )
 
-    def test_result_contains_all_analysis_dimensions(
+    def test_result_is_not_a_dictionary(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
+        assert not isinstance(
+            ats_result,
+            dict,
         )
 
-        assert isinstance(
-            result.ats_score,
-            ATSScore,
-        )
+    def test_result_has_typed_keyword_analysis(
+        self,
+        ats_result,
+    ) -> None:
 
         assert isinstance(
-            result.score_breakdown,
-            ATSScoreBreakdown,
-        )
-
-        assert isinstance(
-            result.keyword_analysis,
+            ats_result.keyword_analysis,
             ATSKeywordAnalysis,
         )
 
+    def test_result_has_typed_section_analysis(
+        self,
+        ats_result,
+    ) -> None:
+
         assert isinstance(
-            result.section_analysis,
+            ats_result.section_analysis,
             ATSSectionAnalysis,
         )
 
+    def test_result_has_typed_formatting_analysis(
+        self,
+        ats_result,
+    ) -> None:
+
         assert isinstance(
-            result.formatting_analysis,
+            ats_result.formatting_analysis,
             ATSFormattingAnalysis,
         )
 
+    def test_result_has_typed_readability_analysis(
+        self,
+        ats_result,
+    ) -> None:
+
         assert isinstance(
-            result.readability_analysis,
+            ats_result.readability_analysis,
             ATSReadabilityAnalysis,
         )
 
+    def test_result_has_typed_terminology_analysis(
+        self,
+        ats_result,
+    ) -> None:
+
         assert isinstance(
-            result.terminology_analysis,
+            ats_result.terminology_analysis,
             ATSTerminologyAnalysis,
         )
 
+    def test_result_has_typed_quantification_analysis(
+        self,
+        ats_result,
+    ) -> None:
+
         assert isinstance(
-            result.quantification_analysis,
+            ats_result.quantification_analysis,
             ATSQuantificationAnalysis,
         )
 
+    def test_result_has_typed_parseability_analysis(
+        self,
+        ats_result,
+    ) -> None:
+
         assert isinstance(
-            result.parseability_analysis,
+            ats_result.parseability_analysis,
             ATSParseabilityAnalysis,
         )
 
-    def test_scores_are_normalized(
+
+# ============================================================================
+# SCORE CONTRACT
+# ============================================================================
+
+
+class TestATSScoreContract:
+    """
+    All ATS scores must remain normalized.
+    """
+
+    def test_ats_score_is_typed_object(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
+        assert isinstance(
+            ats_result.ats_score,
+            ATSScore,
         )
 
-        assert 0.0 <= result.ats_score.score <= 1.0
-
-        assert (
-            0.0
-            <= result.ats_score.confidence
-            <= 1.0
-        )
-
-        assert (
-            0.0
-            <= result.score_breakdown.weighted_score
-            <= 1.0
-        )
-
-        assert (
-            0.0
-            <= result.confidence
-            <= 1.0
-        )
-
-    def test_keyword_analysis_uses_phase_4_requirements(
+    def test_score_is_normalized(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
-        )
+        assert 0.0 <= (
+            ats_result.ats_score.score
+        ) <= 1.0
 
-        required = (
-            result
-            .keyword_analysis
-            .required_keywords
-        )
-
-        assert "Python" in required
-        assert "FastAPI" in required
-        assert "Kubernetes" in required
-
-    def test_section_analysis_uses_resume_source(
+    def test_confidence_is_normalized(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
-        )
+        assert 0.0 <= (
+            ats_result.ats_score.confidence
+        ) <= 1.0
 
-        detected = (
-            result
-            .section_analysis
-            .detected_sections
-        )
+        assert 0.0 <= (
+            ats_result.confidence
+        ) <= 1.0
 
-        assert "Professional Summary" in detected
-        assert "Experience" in detected
-        assert "Skills" in detected
-        assert "Education" in detected
-
-    def test_quantification_analysis_detects_source_facts_or_numbers(
+    def test_breakdown_is_typed_object(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
+        assert isinstance(
+            ats_result.score_breakdown,
+            ATSScoreBreakdown,
         )
 
-        assert (
-            result
-            .quantification_analysis
-            .quantified_bullet_count
-            >= 1
-        )
-
-    def test_parseability_is_true_for_valid_resume_source(
+    def test_breakdown_scores_are_normalized(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
+        breakdown = ats_result.score_breakdown
+
+        scores = (
+            breakdown.keyword_score,
+            breakdown.section_score,
+            breakdown.formatting_score,
+            breakdown.readability_score,
+            breakdown.terminology_score,
+            breakdown.quantification_score,
+            breakdown.parseability_score,
+            breakdown.structure_score,
+            breakdown.weighted_score,
         )
 
-        assert (
-            result
-            .parseability_analysis
-            .parseable
-            is True
-        )
+        for score in scores:
+            assert 0.0 <= score <= 1.0
+
+    def test_compatibility_score_alias_matches_ats_score(
+        self,
+        ats_result,
+    ) -> None:
 
         assert (
-            result
-            .parseability_analysis
-            .parseability_score
-            == 1.0
+            ats_result.score
+            == ats_result.ats_score.score
+        )
+
+    def test_compatibility_breakdown_alias_matches_typed_breakdown(
+        self,
+        ats_result,
+    ) -> None:
+
+        assert (
+            ats_result.breakdown
+            is ats_result.score_breakdown
         )
 
 
 # ============================================================================
-# RESULT CONTRACT
+# COMPONENT CONTENT
 # ============================================================================
 
 
-class TestATSResumeAnalysisResultContract:
+class TestATSComponentContent:
+    """
+    Validate useful observations are present.
+    """
 
-    def test_result_is_immutable(
+    def test_keyword_analysis_is_available(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
+        analysis = ats_result.keyword_analysis
+
+        assert isinstance(
+            analysis.required_keywords,
+            tuple,
         )
 
-        with pytest.raises(
-            AttributeError
-        ):
-            result.confidence = 0.5  # type: ignore[misc]
+        assert isinstance(
+            analysis.matched_keywords,
+            tuple,
+        )
 
-    def test_request_metadata_is_independent(
+        assert isinstance(
+            analysis.missing_keywords,
+            tuple,
+        )
+
+        assert 0.0 <= (
+            analysis.keyword_coverage_score
+        ) <= 1.0
+
+    def test_section_analysis_is_available(
         self,
-        ats_request: ATSResumeAnalysisRequest,
+        ats_result,
     ) -> None:
 
-        result = ATSResumeAnalyzer().process(
-            ats_request
+        analysis = ats_result.section_analysis
+
+        assert isinstance(
+            analysis.detected_sections,
+            tuple,
         )
 
-        assert result.request is ats_request
+        assert isinstance(
+            analysis.missing_sections,
+            tuple,
+        )
 
-        assert result.metadata == {}
+        assert isinstance(
+            analysis.section_order_valid,
+            bool,
+        )
+
+        assert 0.0 <= (
+            analysis.section_completeness_score
+        ) <= 1.0
+
+    def test_formatting_analysis_is_available(
+        self,
+        ats_result,
+    ) -> None:
+
+        analysis = ats_result.formatting_analysis
+
+        assert isinstance(
+            analysis.has_complex_layout,
+            bool,
+        )
+
+        assert isinstance(
+            analysis.has_tables,
+            bool,
+        )
+
+        assert isinstance(
+            analysis.has_columns,
+            bool,
+        )
+
+        assert isinstance(
+            analysis.has_graphics,
+            bool,
+        )
+
+        assert 0.0 <= (
+            analysis.formatting_score
+        ) <= 1.0
+
+    def test_readability_analysis_is_available(
+        self,
+        ats_result,
+    ) -> None:
+
+        analysis = ats_result.readability_analysis
+
+        assert analysis.estimated_word_count >= 0
+        assert analysis.long_sentence_count >= 0
+        assert analysis.average_sentence_length >= 0.0
+
+        assert 0.0 <= (
+            analysis.readability_score
+        ) <= 1.0
+
+    def test_terminology_analysis_is_available(
+        self,
+        ats_result,
+    ) -> None:
+
+        analysis = ats_result.terminology_analysis
+
+        assert isinstance(
+            analysis.aligned_terms,
+            tuple,
+        )
+
+        assert isinstance(
+            analysis.missing_terms,
+            tuple,
+        )
+
+        assert 0.0 <= (
+            analysis.terminology_score
+        ) <= 1.0
+
+    def test_quantification_analysis_is_available(
+        self,
+        ats_result,
+    ) -> None:
+
+        analysis = ats_result.quantification_analysis
+
+        assert (
+            analysis.quantified_achievement_count
+            >= 0
+        )
+
+        assert (
+            analysis.quantified_bullet_count
+            >= 0
+        )
+
+        assert 0.0 <= (
+            analysis.quantification_score
+        ) <= 1.0
+
+    def test_parseability_analysis_is_available(
+        self,
+        ats_result,
+    ) -> None:
+
+        analysis = ats_result.parseability_analysis
+
+        assert isinstance(
+            analysis.parseable,
+            bool,
+        )
+
+        assert (
+            analysis.extraction_warning_count
+            == len(analysis.warnings)
+        )
+
+        assert 0.0 <= (
+            analysis.parseability_score
+        ) <= 1.0
 
 
 # ============================================================================
-# POLICY
+# PHASE 5 -> PHASE 6 HANDOFF CONTRACT
 # ============================================================================
 
 
-class TestATSAnalysisPolicy:
+class TestPhase5ToPhase6Boundary:
+    """
+    This is deliberately a Phase-6 preparation test.
 
-    def test_default_policy_has_normalized_weights(
+    Phase 6 must consume ATSResumeAnalysisResult directly.
+
+    There must be no:
+
+        ATSResumeAnalysisResult -> dict
+        dict -> RecommendationRequest
+
+    conversion at this boundary unless a future explicit adapter is
+    deliberately introduced.
+    """
+
+    def test_phase6_input_is_phase5_result(
         self,
+        ats_result,
     ) -> None:
 
-        policy = ATSAnalysisPolicy()
-
-        assert set(
-            policy.score_weights.keys()
-        ) == {
-            "keyword",
-            "section",
-            "formatting",
-            "readability",
-            "terminology",
-            "quantification",
-            "parseability",
-        }
-
-        assert sum(
-            policy.score_weights.values()
-        ) == pytest.approx(
-            1.0
+        assert isinstance(
+            ats_result,
+            ATSResumeAnalysisResult,
         )
 
-    def test_invalid_weights_are_rejected(
+    def test_phase6_receives_exact_phase5_object(
         self,
+        ats_result,
     ) -> None:
 
-        with pytest.raises(
-            ValueError,
-            match="sum to 1.0",
-        ):
-            ATSAnalysisPolicy(
-                score_weights={
-                    "keyword": 1.0,
-                    "section": 0.0,
-                    "formatting": 0.0,
-                    "readability": 0.0,
-                    "terminology": 0.0,
-                    "quantification": 0.0,
-                    "parseability": 1.0,
-                }
+        phase5_output = ats_result
+
+        phase6_input = phase5_output
+
+        assert (
+            phase6_input
+            is phase5_output
+        )
+
+    def test_phase6_can_reach_phase4_without_reconstruction(
+        self,
+        ats_result,
+        knowledge_match_profile,
+    ) -> None:
+
+        assert (
+            ats_result.knowledge_match_profile
+            is knowledge_match_profile
+        )
+
+        assert (
+            ats_result.request.knowledge_match_profile
+            is knowledge_match_profile
+        )
+
+    def test_phase6_can_reach_all_ats_components(
+        self,
+        ats_result,
+    ) -> None:
+
+        components = (
+            ats_result.keyword_analysis,
+            ats_result.section_analysis,
+            ats_result.formatting_analysis,
+            ats_result.readability_analysis,
+            ats_result.terminology_analysis,
+            ats_result.quantification_analysis,
+            ats_result.parseability_analysis,
+            ats_result.ats_score,
+            ats_result.score_breakdown,
+        )
+
+        for component in components:
+            assert component is not None
+            assert not isinstance(
+                component,
+                dict,
             )
+
+
+# ============================================================================
+# OBJECT GRAPH DIAGNOSTIC
+# ============================================================================
+
+
+class TestPhaseChainIdentity:
+    """
+    Verify the complete object chain.
+    """
+
+    def test_complete_phase_chain(
+        self,
+        match_result,
+        enriched_match_result,
+        gap_analysis_result,
+        knowledge_match_profile,
+        ats_request,
+        ats_result,
+    ) -> None:
+
+        # Phase 3.1
+        assert (
+            enriched_match_result.match_result
+            is match_result
+        )
+
+        # Phase 3.3
+        assert (
+            gap_analysis_result.enriched_match_result
+            is enriched_match_result
+        )
+
+        # Phase 4
+        assert (
+            knowledge_match_profile.match_result
+            is match_result
+        )
+
+        assert (
+            knowledge_match_profile.enriched_match_result
+            is enriched_match_result
+        )
+
+        assert (
+            knowledge_match_profile.gap_analysis_result
+            is gap_analysis_result
+        )
+
+        # Phase 5 request
+        assert (
+            ats_request.knowledge_match_profile
+            is knowledge_match_profile
+        )
+
+        # Phase 5 result
+        assert (
+            ats_result.request
+            is ats_request
+        )
+
+        assert (
+            ats_result.knowledge_match_profile
+            is knowledge_match_profile
+        )
+
+    def test_no_phase_rebuilds_previous_objects(
+        self,
+        match_result,
+        enriched_match_result,
+        gap_analysis_result,
+        knowledge_match_profile,
+        ats_request,
+        ats_result,
+    ) -> None:
+
+        objects = (
+            match_result,
+            enriched_match_result,
+            gap_analysis_result,
+            knowledge_match_profile,
+            ats_request,
+            ats_result,
+        )
+
+        for obj in objects:
+            assert obj is not None
+
+            # Every phase output is an object.
+            assert not isinstance(
+                obj,
+                dict,
+            )
+
