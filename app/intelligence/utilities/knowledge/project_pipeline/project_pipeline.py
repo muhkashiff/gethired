@@ -51,6 +51,11 @@ Current phases:
             ->
         ATSResumeAnalysisResult
 
+    Phase 6
+        ATSResumeAnalysisResult
+            ->
+        RecommendationResult
+
 ProjectPipeline remains the single application orchestration boundary.
 
 Individual intelligence modules remain responsible for their own work.
@@ -69,7 +74,7 @@ ATSResumeAnalysisRequest now exposes exactly these constructor fields:
     metadata
 
 The policy is owned by the analyzer and the pipeline, but it is NOT part
-of the request object.  The request carries the source text and the
+of the request object. The request carries the source text and the
 Phase 4 profile; the policy is supplied separately to the analyzer.
 
 The Phase 1 resume DocumentKnowledgeProfile and Phase 2
@@ -210,6 +215,19 @@ from app.intelligence.utilities.knowledge.ats.ats_analysis_policy import (
 
 
 # ============================================================================
+# PHASE 6
+# ============================================================================
+
+from app.intelligence.utilities.knowledge.recommendations.recommendation_analyzer import (
+    RecommendationAnalyzer,
+)
+
+from app.intelligence.utilities.knowledge.recommendations.recommendation_models import (
+    RecommendationResult,
+)
+
+
+# ============================================================================
 # PROJECT RESULT LAYER
 # ============================================================================
 
@@ -248,6 +266,8 @@ class ProjectPipeline:
             ->
         Phase 5
             ->
+        Phase 6
+            ->
         ProjectMatchResult
     """
 
@@ -279,6 +299,9 @@ class ProjectPipeline:
         ] = None,
         ats_analysis_policy: Optional[
             ATSAnalysisPolicy
+        ] = None,
+        recommendation_analyzer: Optional[
+            RecommendationAnalyzer
         ] = None,
     ) -> None:
 
@@ -352,12 +375,19 @@ class ProjectPipeline:
         # PHASE 5
         # =====================================================================
         #
-        # The policy is owned by the pipeline and analyzer.  It is NOT part of
-        # the ATSResumeAnalysisRequest.  The request only carries the source
-        # text and the Phase 4 profile.  The policy is used by the analyzer.
+        # The policy is owned by the pipeline and analyzer. It is NOT part of
+        # the ATSResumeAnalysisRequest.
         #
-        # If an ATSResumeAnalyzer is injected, we use its policy.  Otherwise,
-        # we create a default policy and a corresponding analyzer.
+        # The request only carries:
+        #
+        #     resume_text
+        #     knowledge_match_profile
+        #     resume_profile
+        #     jd_requirement_profile
+        #     metadata
+        #
+        # If an ATSResumeAnalyzer is injected, we use its policy.
+        # Otherwise, we create a default policy and a corresponding analyzer.
         # =====================================================================
 
         if (
@@ -421,6 +451,25 @@ class ProjectPipeline:
             raise TypeError(
                 "ProjectPipeline requires a valid "
                 "ATSAnalysisPolicy for Phase 5."
+            )
+
+        # =====================================================================
+        # PHASE 6
+        # =====================================================================
+
+        self.recommendation_analyzer = (
+            recommendation_analyzer
+            if recommendation_analyzer is not None
+            else RecommendationAnalyzer()
+        )
+
+        if not isinstance(
+            self.recommendation_analyzer,
+            RecommendationAnalyzer,
+        ):
+            raise TypeError(
+                "ProjectPipeline requires a valid "
+                "RecommendationAnalyzer for Phase 6."
             )
 
     # =========================================================================
@@ -537,7 +586,7 @@ class ProjectPipeline:
         )
 
     # =========================================================================
-    # PHASE 3 + PHASE 4 + PHASE 5
+    # PHASE 3 + PHASE 4 + PHASE 5 + PHASE 6
     # =========================================================================
 
     def match(
@@ -565,15 +614,22 @@ class ProjectPipeline:
                 ->
             ATSResumeAnalysisResult
 
+        Phase 6
+            ATSResumeAnalysisResult
+                ->
+            RecommendationResult
+
         Phase 5 receives:
 
             1. Exact original resume source text
             2. Exact Phase 4 KnowledgeMatchProfile
-            3. Exact Phase 1 resume profile through metadata
-            4. Exact Phase 2 JDRequirementProfile through metadata
+            3. Exact Phase 1 resume profile through the explicit request field
+               and metadata
+            4. Exact Phase 2 JDRequirementProfile through the explicit
+               request field and metadata
 
         The ATSAnalysisPolicy is owned by the pipeline and analyzer, but it is
-        NOT part of the request.  The analyzer uses its own policy.
+        NOT part of the request. The analyzer uses its own policy.
 
         No Phase 3 or Phase 4 object is reconstructed.
         """
@@ -970,23 +1026,24 @@ class ProjectPipeline:
         # CONSTRUCT ACTUAL PHASE 5 REQUEST
         # =====================================================================
         #
-        # ATSResumeAnalysisRequest now defines:
+        # ATSResumeAnalysisRequest defines exactly:
         #
         #     resume_text
         #     knowledge_match_profile
-        #     resume_profile          # Phase 1 profile
-        #     jd_requirement_profile   # Phase 2 profile
+        #     resume_profile
+        #     jd_requirement_profile
         #     metadata
         #
-        # The policy is NOT a constructor argument.  It is used by the
-        # analyzer (which already has it) and optionally included in metadata.
+        # The policy is NOT a constructor argument.
+        #
+        # The analyzer already owns the policy and uses it during processing.
         # =====================================================================
 
         ats_analysis_request = ATSResumeAnalysisRequest(
             resume_text=resume_text,
             knowledge_match_profile=knowledge_match_profile,
-            resume_profile=resume_profile,          # explicit Phase 1 profile
-            jd_requirement_profile=jd_requirement_profile,  # explicit Phase 2 profile
+            resume_profile=resume_profile,
+            jd_requirement_profile=jd_requirement_profile,
             metadata=ats_metadata,
         )
 
@@ -1023,6 +1080,28 @@ class ProjectPipeline:
             raise ValueError(
                 "Phase 5 request must preserve the exact "
                 "Phase 4 KnowledgeMatchProfile."
+            )
+
+        # =====================================================================
+        # PHASE 5 REQUEST EXPLICIT PROFILE VALIDATION
+        # =====================================================================
+
+        if (
+            ats_analysis_request.resume_profile
+            is not resume_profile
+        ):
+            raise ValueError(
+                "Phase 5 request must preserve the exact "
+                "Phase 1 resume DocumentKnowledgeProfile."
+            )
+
+        if (
+            ats_analysis_request.jd_requirement_profile
+            is not jd_requirement_profile
+        ):
+            raise ValueError(
+                "Phase 5 request must preserve the exact "
+                "Phase 2 JDRequirementProfile."
             )
 
         # =====================================================================
@@ -1129,6 +1208,25 @@ class ProjectPipeline:
             )
 
         # =====================================================================
+        # PHASE 6 RECOMMENDATIONS
+        # =====================================================================
+
+        recommendation_result = (
+            self.recommendation_analyzer.process(
+                ats_analysis_result
+            )
+        )
+
+        if not isinstance(
+            recommendation_result,
+            RecommendationResult,
+        ):
+            raise TypeError(
+                "RecommendationAnalyzer.process() "
+                "must return a RecommendationResult."
+            )
+
+        # =====================================================================
         # FINAL PROJECT RESULT
         # =====================================================================
 
@@ -1142,6 +1240,7 @@ class ProjectPipeline:
             knowledge_match_profile=knowledge_match_profile,
             ats_analysis_request=ats_analysis_request,
             ats_analysis_result=ats_analysis_result,
+            recommendation_result=recommendation_result,
         )
 
 

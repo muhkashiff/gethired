@@ -20,8 +20,9 @@ Current result boundaries:
 
     ProjectMatchResult
         One processed resume matched against one processed JD
-        through Phase 3, consolidated through Phase 4, and analyzed
-        through Phase 5 ATS analysis.
+        through Phase 3, consolidated through Phase 4, analyzed
+        through Phase 5 ATS analysis, and processed through Phase 6
+        recommendation analysis.
 
 
 Phase 3
@@ -73,6 +74,16 @@ Phase 5
     ATSResumeAnalysisResult
 
 
+Phase 6
+-------
+
+    ATSResumeAnalysisResult
+        ↓
+    RecommendationAnalyzer
+        ↓
+    RecommendationResult
+
+
 Complete project match
 ----------------------
 
@@ -90,6 +101,8 @@ Complete project match
                 ↓
         Phase 5 ATS Analysis
                 ↓
+        Phase 6 Recommendations
+                ↓
         ProjectMatchResult
 
 
@@ -106,20 +119,25 @@ Design principles
 
 5. ProjectMatchResult preserves the complete Phase 5 ATS result.
 
-6. No intelligence phase is silently discarded.
+6. ProjectMatchResult preserves the complete Phase 6 recommendation result.
 
-7. Phase 5 consumes the exact Phase 4 KnowledgeMatchProfile.
+7. No intelligence phase is silently discarded.
 
-8. Phase 5 does not reconstruct matching, enrichment, or gap analysis.
+8. Phase 5 consumes the exact Phase 4 KnowledgeMatchProfile.
 
-9. Phase 5 retains the original resume and JD document-side objects through
-   its request contract (explicit fields `resume_profile` and
-   `jd_requirement_profile`).
+9. Phase 5 does not reconstruct matching, enrichment, or gap analysis.
 
-10. Downstream phases can consume ProjectMatchResult without rerunning
-    Phases 3, 4, or 5.
+10. Phase 6 consumes the exact Phase 5 ATSResumeAnalysisResult.
 
-11. Convenience properties expose authoritative metrics only. They do not
+11. Phase 6 preserves the exact Phase 5 ATSResumeAnalysisResult identity.
+
+12. Phase 6 preserves the exact Phase 4 KnowledgeMatchProfile identity through
+    the Phase 5 result.
+
+13. Downstream phases can consume ProjectMatchResult without rerunning
+    Phases 3, 4, 5, or 6.
+
+14. Convenience properties expose authoritative metrics only. They do not
     recalculate intelligence.
 """
 
@@ -223,6 +241,15 @@ from app.intelligence.utilities.knowledge.ats.ats_analysis_models import (
 
 
 # ============================================================================
+# PHASE 6 RECOMMENDATION LAYER
+# ============================================================================
+
+from app.intelligence.utilities.knowledge.recommendations.recommendation_models import (
+    RecommendationResult,
+)
+
+
+# ============================================================================
 # PROJECT PIPELINE RESULT
 # ============================================================================
 
@@ -233,24 +260,6 @@ class ProjectPipelineResult:
     Complete result of processing one document.
 
     This is the Phase 1 + Phase 2 application boundary.
-
-    Resume
-    ------
-
-        DocumentInput
-            ↓
-        ProjectPipelineResult
-            └── document_profile
-
-
-    Job Description
-    ---------------
-
-        DocumentInput
-            ↓
-        ProjectPipelineResult
-            ├── document_profile
-            └── jd_requirement_profile
     """
 
     # ------------------------------------------------------------------
@@ -293,9 +302,7 @@ class ProjectPipelineResult:
 
     @property
     def is_resume(self) -> bool:
-        """
-        Return True when this result represents a resume.
-        """
+        """Return True when this result represents a resume."""
 
         return (
             self.document_input.document_type
@@ -304,9 +311,7 @@ class ProjectPipelineResult:
 
     @property
     def is_jd(self) -> bool:
-        """
-        Return True when this result represents a job description.
-        """
+        """Return True when this result represents a job description."""
 
         return (
             self.document_input.document_type
@@ -353,6 +358,8 @@ class ProjectMatchResult:
         ats_analysis_request
                 ↓
         ats_analysis_result
+                ↓
+        recommendation_result
 
 
     The object deliberately retains every major boundary so downstream
@@ -401,9 +408,16 @@ class ProjectMatchResult:
 
     ats_analysis_result: ATSResumeAnalysisResult
 
+    # ------------------------------------------------------------------
+    # Phase 6 recommendation boundary
+    # ------------------------------------------------------------------
+
+    recommendation_result: RecommendationResult
+
     def __post_init__(self) -> None:
         """
-        Validate the complete Phase 3 -> Phase 4 -> Phase 5 source chain.
+        Validate the complete Phase 3 -> Phase 4 -> Phase 5 -> Phase 6
+        source chain.
         """
 
         # ------------------------------------------------------------------
@@ -485,6 +499,15 @@ class ProjectMatchResult:
             raise TypeError(
                 "ats_analysis_result must be "
                 "ATSResumeAnalysisResult."
+            )
+
+        if not isinstance(
+            self.recommendation_result,
+            RecommendationResult,
+        ):
+            raise TypeError(
+                "recommendation_result must be "
+                "RecommendationResult."
             )
 
         # ------------------------------------------------------------------
@@ -617,55 +640,75 @@ class ProjectMatchResult:
                 "the exact Phase 4 KnowledgeMatchProfile."
             )
 
+        # ------------------------------------------------------------------
+        # PHASE 6 RESULT -> PHASE 5 IDENTITY
+        # ------------------------------------------------------------------
+
+        if (
+            self.recommendation_result.ats_result
+            is not self.ats_analysis_result
+        ):
+            raise ValueError(
+                "recommendation_result must preserve "
+                "the exact Phase 5 ATSResumeAnalysisResult."
+            )
+
+        # ------------------------------------------------------------------
+        # PHASE 6 RESULT -> PHASE 4 IDENTITY
+        # ------------------------------------------------------------------
+
+        if (
+            self.recommendation_result.knowledge_match_profile
+            is not self.knowledge_match_profile
+        ):
+            raise ValueError(
+                "recommendation_result must preserve "
+                "the exact Phase 4 KnowledgeMatchProfile."
+            )
+
+        # ------------------------------------------------------------------
+        # PHASE 6 INTERNAL VALIDATION
+        # ------------------------------------------------------------------
+
+        self.recommendation_result.validate()
+
     # =========================================================================
     # PHASE 3.1 CONVENIENCE PROPERTIES
     # =========================================================================
 
     @property
     def total_requirements(self) -> int:
-        """
-        Return total JD requirements evaluated by Phase 3.1.
-        """
+        """Return total JD requirements evaluated by Phase 3.1."""
 
         return self.match_result.total_requirements
 
     @property
     def matched_count(self) -> int:
-        """
-        Return fully matched requirement count.
-        """
+        """Return fully matched requirement count."""
 
         return self.match_result.matched_count
 
     @property
     def partial_count(self) -> int:
-        """
-        Return partially matched requirement count.
-        """
+        """Return partially matched requirement count."""
 
         return self.match_result.partial_count
 
     @property
     def unmatched_count(self) -> int:
-        """
-        Return unmatched requirement count.
-        """
+        """Return unmatched requirement count."""
 
         return self.match_result.unmatched_count
 
     @property
     def overall_score(self) -> float:
-        """
-        Return overall requirement matching score.
-        """
+        """Return overall requirement matching score."""
 
         return self.match_result.overall_score
 
     @property
     def confidence(self) -> float:
-        """
-        Return Phase 3.1 matching confidence.
-        """
+        """Return Phase 3.1 matching confidence."""
 
         return self.match_result.confidence
 
@@ -675,23 +718,15 @@ class ProjectMatchResult:
 
     @property
     def evidence_backed_count(self) -> int:
-        """
-        Return the number of requirement matches supported by evidence.
-        """
+        """Return the number of requirement matches supported by evidence."""
 
-        return (
-            self.enriched_match_result.evidence_backed_count
-        )
+        return self.enriched_match_result.evidence_backed_count
 
     @property
     def enrichment_confidence(self) -> float:
-        """
-        Return Phase 3.2 enrichment confidence.
-        """
+        """Return Phase 3.2 enrichment confidence."""
 
-        return (
-            self.enriched_match_result.enrichment_confidence
-        )
+        return self.enriched_match_result.enrichment_confidence
 
     # =========================================================================
     # PHASE 3.3 CONVENIENCE PROPERTIES
@@ -699,9 +734,7 @@ class ProjectMatchResult:
 
     @property
     def gap_count(self) -> int:
-        """
-        Return the total number of requirements with a gap.
-        """
+        """Return the total number of requirements with a gap."""
 
         return (
             self.gap_analysis_result.partial_gap_count
@@ -710,41 +743,31 @@ class ProjectMatchResult:
 
     @property
     def no_gap_count(self) -> int:
-        """
-        Return the number of requirements without a gap.
-        """
+        """Return the number of requirements without a gap."""
 
         return self.gap_analysis_result.no_gap_count
 
     @property
     def partial_gap_count(self) -> int:
-        """
-        Return the number of partially covered requirements.
-        """
+        """Return the number of partially covered requirements."""
 
         return self.gap_analysis_result.partial_gap_count
 
     @property
     def full_gap_count(self) -> int:
-        """
-        Return the number of fully uncovered requirements.
-        """
+        """Return the number of fully uncovered requirements."""
 
         return self.gap_analysis_result.full_gap_count
 
     @property
     def gap_coverage_score(self) -> float:
-        """
-        Return the Phase 3.3 requirement coverage score.
-        """
+        """Return the Phase 3.3 requirement coverage score."""
 
         return self.gap_analysis_result.gap_coverage_score
 
     @property
     def gap_analysis_confidence(self) -> float:
-        """
-        Return Phase 3.3 gap analysis confidence.
-        """
+        """Return Phase 3.3 gap analysis confidence."""
 
         return self.gap_analysis_result.confidence
 
@@ -754,9 +777,7 @@ class ProjectMatchResult:
 
     @property
     def knowledge_match_profile_confidence(self) -> float:
-        """
-        Return the Phase 4 KnowledgeMatchProfile confidence.
-        """
+        """Return the Phase 4 KnowledgeMatchProfile confidence."""
 
         return self.knowledge_match_profile.confidence
 
@@ -768,33 +789,25 @@ class ProjectMatchResult:
     def ats_analysis(self) -> ATSResumeAnalysisResult:
         """
         Convenience alias for ats_analysis_result.
-
-        This allows tests and downstream code to access the final ATS
-        result directly as `project_match.ats_analysis`.
         """
+
         return self.ats_analysis_result
 
     @property
     def ats_score(self) -> float:
-        """
-        Return the final normalized Phase 5 ATS score.
-        """
+        """Return the final normalized Phase 5 ATS score."""
 
         return self.ats_analysis_result.ats_score.score
 
     @property
     def ats_confidence(self) -> float:
-        """
-        Return Phase 5 ATS analysis confidence.
-        """
+        """Return Phase 5 ATS analysis confidence."""
 
         return self.ats_analysis_result.confidence
 
     @property
     def ats_keyword_coverage_score(self) -> float:
-        """
-        Return the Phase 5 keyword coverage score.
-        """
+        """Return the Phase 5 keyword coverage score."""
 
         return (
             self.ats_analysis_result
@@ -804,15 +817,67 @@ class ProjectMatchResult:
 
     @property
     def ats_parseability_score(self) -> float:
-        """
-        Return the Phase 5 parseability score.
-        """
+        """Return the Phase 5 parseability score."""
 
         return (
             self.ats_analysis_result
             .parseability_analysis
             .parseability_score
         )
+
+    # =========================================================================
+    # PHASE 6 CONVENIENCE PROPERTIES
+    # =========================================================================
+
+    @property
+    def recommendations(self):
+        """
+        Return the typed Phase 6 recommendations.
+
+        The RecommendationResult remains the authoritative owner of
+        recommendation state.
+        """
+
+        return self.recommendation_result.recommendations
+
+    @property
+    def recommendation_summary(self):
+        """
+        Return the authoritative Phase 6 recommendation summary.
+        """
+
+        return self.recommendation_result.summary
+
+    @property
+    def has_recommendations(self) -> bool:
+        """
+        Return True when Phase 6 produced one or more recommendations.
+        """
+
+        return self.recommendation_result.has_recommendations
+
+    @property
+    def high_priority_recommendations(self):
+        """
+        Return the Phase 6 high-priority recommendations.
+        """
+
+        return (
+            self.recommendation_result
+            .high_priority_recommendations()
+        )
+
+    @property
+    def recommendation_confidence(self) -> float:
+        """
+        Return the authoritative Phase 6 confidence.
+
+        Phase 6 does not invent a new independent confidence value;
+        RecommendationResult delegates confidence to the exact Phase 5
+        ATS result.
+        """
+
+        return self.recommendation_result.confidence
 
 
 # ============================================================================

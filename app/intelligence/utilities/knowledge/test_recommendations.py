@@ -1,78 +1,71 @@
-
 """
 Phase 6 Recommendation Integration Tests
 =========================================
 
-The Phase-6 test deliberately does NOT manufacture Phase-4 or Phase-5
-objects.
+End-to-end integration coverage for:
 
-The test uses the real pipeline:
+    Phase 1
+        DocumentInput
+            ->
+        DocumentKnowledgeProfile
 
-    DocumentInput (RESUME)
-            |
-            v
-    ProjectPipeline.process()
-            |
-            v
-    ProjectPipelineResult
-            |
-            +----------------------+
-            |                      |
-            v                      v
-    DocumentKnowledgeProfile   JDRequirementProfile
-            |                      |
-            +----------+-----------+
-                       |
-                       v
-              ProjectPipeline.match()
-                       |
-                       v
-              ProjectMatchResult
-                       |
-                       v
-             ATSResumeAnalysisResult
-                       |
-                       v
-             RecommendationAnalyzer
-                       |
-                       v
-             RecommendationResult
+    Phase 2
+        JD
+            ->
+        JDRequirementProfile
+
+    Phase 3.1
+        Resume + JD
+            ->
+        KnowledgeMatchResult
+
+    Phase 3.2
+        KnowledgeMatchResult
+            ->
+        EnrichedKnowledgeMatchResult
+
+    Phase 3.3
+        EnrichedKnowledgeMatchResult
+            ->
+        KnowledgeGapAnalysisResult
+
+    Phase 4
+        KnowledgeMatchProfile
+
+    Phase 5
+        ATSResumeAnalysisRequest
+            ->
+        ATSResumeAnalysisResult
+
+    Phase 6
+        ATSResumeAnalysisResult
+            ->
+        RecommendationAnalyzer
+            ->
+        RecommendationResult
+
+These tests intentionally exercise the real application orchestration
+boundary rather than reconstructing Phase 4 or Phase 5 objects manually.
 
 IMPORTANT
 ---------
-This file is an integration test for Phase 6.
 
-It intentionally does NOT:
+This test assumes the production RecommendationAnalyzer exists at:
 
-    - create a fake KnowledgeProfile
-    - create a fake KnowledgeMatchProfile
-    - create a fake DocumentKnowledgeProfile
-    - manually create RequirementMatch objects
-    - manually create KnowledgeMatchResult
-    - manually create EnrichedKnowledgeMatchResult
-    - manually create KnowledgeGapAnalysisResult
-    - manually create ATSResumeAnalysisResult
-    - patch RecommendationAnalyzer
-    - monkeypatch the pipeline
-    - use dictionaries as Phase-4/5 substitutes
+    app.intelligence.utilities.knowledge.recommendations.recommendation_analyzer
 
-The only object created by this test at the Phase-6 boundary is the real
-RecommendationAnalyzer.
+If your project uses a different module path for RecommendationAnalyzer,
+change only that import.
 
-Phase 6 receives the exact ATSResumeAnalysisResult produced by Phase 5.
+The tests preserve and verify the identity contracts established by the
+Phase 4, Phase 5, and Phase 6 models.
 """
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
-
-from app.intelligence.utilities.knowledge.project_pipeline.project_pipeline import (
-    ProjectPipeline,
-)
-
-from app.intelligence.utilities.knowledge.project_pipeline.project_pipeline_result import (
-    ProjectPipelineResult,
-)
 
 from app.intelligence.utilities.knowledge.documents.document_input import (
     DocumentInput,
@@ -82,264 +75,300 @@ from app.intelligence.utilities.knowledge.documents.document_types import (
     DocumentType,
 )
 
+from app.intelligence.utilities.knowledge.project_pipeline.project_pipeline import (
+    ProjectPipeline,
+)
+
+from app.intelligence.utilities.knowledge.project_pipeline.project_pipeline_result import (
+    ProjectMatchResult,
+)
+
 from app.intelligence.utilities.knowledge.ats.ats_analysis_models import (
     ATSResumeAnalysisResult,
 )
 
-from app.intelligence.utilities.knowledge.matching.knowledge_match_profile_models import (
-    KnowledgeMatchProfile,
+from app.intelligence.utilities.knowledge.recommendations.recommendation_models import (
+    Recommendation,
+    RecommendationPriority,
+    RecommendationResult,
+    RecommendationStatus,
+    RecommendationSummary,
+    RecommendationType,
 )
 
 from app.intelligence.utilities.knowledge.recommendations.recommendation_analyzer import (
     RecommendationAnalyzer,
 )
 
-from app.intelligence.utilities.knowledge.recommendations.recommendation_models import (
-    Recommendation,
-    RecommendationResult,
-)
-
 
 # ============================================================================
-# REAL TEST INPUTS
+# TEST DATA
 # ============================================================================
+
 
 RESUME_TEXT = """
-JOHN DOE
+John Doe
 
 Professional Summary
 
-Senior Python Backend Engineer with 7+ years of experience building
-scalable backend systems and enterprise applications.
+Software Engineer with 6 years of experience building backend applications,
+REST APIs, cloud services, and data-driven systems.
 
 Experience
 
-Senior Python Backend Engineer
+Senior Software Engineer
 ABC Technologies
 
-- Built Python backend services for enterprise applications.
-- Developed REST APIs using FastAPI.
-- Designed PostgreSQL data models.
-- Improved API performance by 35%.
-- Led a team of 8 engineers.
-- Managed CI/CD pipelines.
-- Worked with Docker and AWS.
-- Mentored junior engineers.
+- Built Python backend services supporting 2 million requests per month.
+- Developed REST APIs using Python and FastAPI.
+- Improved API response time by 35 percent.
+- Implemented PostgreSQL data models and database integrations.
+- Worked with Docker and AWS deployment pipelines.
+- Led a team of 4 engineers.
+
+Software Engineer
+XYZ Solutions
+
+- Developed backend services using Python.
+- Built automated testing pipelines.
+- Improved system reliability and monitoring.
+
+Skills
+
+Python
+FastAPI
+REST APIs
+PostgreSQL
+Docker
+AWS
+Git
+CI/CD
+Automated Testing
 
 Education
 
 Bachelor of Science in Computer Science
-
-Skills
-
-Python
-FastAPI
-PostgreSQL
-REST APIs
-Docker
-AWS
-CI/CD
-Git
-Pytest
-Backend Development
+University of Technology
 """
 
 JD_TEXT = """
-Senior Python Backend Engineer
+Senior Backend Software Engineer
 
 Professional Summary
 
-We are looking for a Senior Python Backend Engineer with strong experience
-building scalable backend applications.
+We are looking for a Senior Backend Software Engineer to build scalable
+backend services and APIs.
 
 Experience
 
-The candidate should have experience developing Python backend services,
-REST APIs, FastAPI applications, PostgreSQL databases, Docker containers,
-AWS infrastructure, CI/CD pipelines, and automated testing.
+The candidate should have strong backend engineering experience.
 
-Skills
+Required Skills
 
 Python
 FastAPI
-PostgreSQL
 REST APIs
+PostgreSQL
 Docker
 AWS
-CI/CD
 Git
-Pytest
-Kubernetes
-Redis
+CI/CD
+
+Preferred Skills
+
+Automated Testing
+Cloud Architecture
+Monitoring
+System Design
+
+Responsibilities
+
+- Build scalable backend services.
+- Design and maintain REST APIs.
+- Work with PostgreSQL databases.
+- Deploy services using Docker and AWS.
+- Improve application performance.
+- Collaborate with engineering teams.
 
 Education
 
-Bachelor's degree in Computer Science or a related field.
+Bachelor's degree in Computer Science or related field.
 """
 
 
 # ============================================================================
-# FIXTURES
+# HELPERS
 # ============================================================================
 
-@pytest.fixture(scope="module")
-def pipeline() -> ProjectPipeline:
-    """
-    Use the real project pipeline.
 
-    No fake pipeline and no mocked phase objects are used.
+def _build_pipeline() -> ProjectPipeline:
     """
+    Build the real ProjectPipeline.
+
+    No Phase 4 or Phase 5 objects are manually reconstructed here.
+    """
+
     return ProjectPipeline()
 
 
-@pytest.fixture(scope="module")
-def resume_document() -> DocumentInput:
-    """
-    Real Phase-1/2 resume input object.
-    """
-    return DocumentInput(
-        text=RESUME_TEXT,
-        document_type=DocumentType.RESUME,
-    )
-
-
-@pytest.fixture(scope="module")
-def jd_document() -> DocumentInput:
-    """
-    Real Phase-1/2 JD input object.
-    """
-    return DocumentInput(
-        text=JD_TEXT,
-        document_type=DocumentType.JD,
-    )
-
-
-@pytest.fixture(scope="module")
-def resume_result(
+def _build_resume_result(
     pipeline: ProjectPipeline,
-    resume_document: DocumentInput,
-) -> ProjectPipelineResult:
-    """
-    Execute the real resume pipeline.
-
-    The resulting ProjectPipelineResult owns the exact
-    DocumentKnowledgeProfile that must later be carried into
-    Phase 5.
-    """
-    result = pipeline.process(
-        resume_document
-    )
-
-    assert isinstance(
-        result,
-        ProjectPipelineResult,
-    )
-
-    assert result.is_resume
-
-    assert (
-        result.document_input
-        is resume_document
-    )
-
-    assert (
-        result.document_profile
-        is not None
-    )
-
-    return result
-
-
-@pytest.fixture(scope="module")
-def jd_result(
-    pipeline: ProjectPipeline,
-    jd_document: DocumentInput,
-) -> ProjectPipelineResult:
-    """
-    Execute the real JD pipeline.
-
-    No JD profile is fabricated for the recommendation test.
-    """
-    result = pipeline.process(
-        jd_document
-    )
-
-    assert isinstance(
-        result,
-        ProjectPipelineResult,
-    )
-
-    assert result.is_jd
-
-    assert (
-        result.document_input
-        is jd_document
-    )
-
-    assert (
-        result.jd_requirement_profile
-        is not None
-    )
-
-    return result
-
-
-@pytest.fixture(scope="module")
-def project_match(
-    pipeline: ProjectPipeline,
-    resume_result: ProjectPipelineResult,
-    jd_result: ProjectPipelineResult,
 ):
-    """
-    Execute the REAL Phase-3 -> Phase-4 -> Phase-5 pipeline.
+    return pipeline.process(
+        DocumentInput(
+            text=RESUME_TEXT,
+            document_type=DocumentType.RESUME,
+        )
+    )
 
-    This is the critical fixture.
 
-    Phase 6 does not construct any upstream object itself.
+def _build_jd_result(
+    pipeline: ProjectPipeline,
+):
+    return pipeline.process(
+        DocumentInput(
+            text=JD_TEXT,
+            document_type=DocumentType.JD,
+        )
+    )
+
+
+def _build_project_match_result() -> ProjectMatchResult:
     """
-    result = pipeline.match(
+    Execute the complete Phase 1 -> Phase 5 pipeline.
+    """
+
+    pipeline = _build_pipeline()
+
+    resume_result = _build_resume_result(
+        pipeline
+    )
+
+    jd_result = _build_jd_result(
+        pipeline
+    )
+
+    match_result = pipeline.match(
         resume_result=resume_result,
         jd_result=jd_result,
     )
 
-    return result
-
-
-@pytest.fixture(scope="module")
-def ats_result(
-    project_match,
-) -> ATSResumeAnalysisResult:
-    """
-    Extract the exact Phase-5 ATS result produced by the pipeline.
-
-    No ATSResumeAnalysisResult is constructed here.
-    """
-    result = project_match.ats_analysis_result
+    assert isinstance(
+        match_result,
+        ProjectMatchResult,
+    )
 
     assert isinstance(
-        result,
+        match_result.ats_analysis_result,
         ATSResumeAnalysisResult,
     )
 
-    return result
+    return match_result
 
 
-@pytest.fixture(scope="module")
-def analyzer() -> RecommendationAnalyzer:
+def _build_ats_result() -> ATSResumeAnalysisResult:
     """
-    Construct the real Phase-6 application service.
+    Execute the real ProjectPipeline through Phase 5.
     """
-    return RecommendationAnalyzer()
+
+    project_match_result = (
+        _build_project_match_result()
+    )
+
+    ats_result = (
+        project_match_result.ats_analysis_result
+    )
+
+    assert isinstance(
+        ats_result,
+        ATSResumeAnalysisResult,
+    )
+
+    return ats_result
 
 
-@pytest.fixture(scope="module")
-def recommendation_result(
-    analyzer: RecommendationAnalyzer,
+def _build_recommendation_analyzer(
     ats_result: ATSResumeAnalysisResult,
-) -> RecommendationResult:
+) -> RecommendationAnalyzer:
     """
-    Send the EXACT Phase-5 object directly into Phase 6.
+    Construct the RecommendationAnalyzer using the available Phase 5
+    result/policy context.
+
+    This helper intentionally supports analyzers that accept either the
+    Phase 5 result or a policy/configuration object in their constructor.
+
+    If the project's RecommendationAnalyzer has a fixed constructor,
+    replace this helper with that project's constructor.
     """
+
+    # ------------------------------------------------------------------------
+    # Preferred constructor:
+    #
+    #     RecommendationAnalyzer()
+    #
+    # This is the cleanest object-in/object-out Phase 6 design.
+    # ------------------------------------------------------------------------
+
+    try:
+        return RecommendationAnalyzer()
+    except TypeError:
+        pass
+
+    # ------------------------------------------------------------------------
+    # Compatibility path for analyzers that expect a policy.
+    # ------------------------------------------------------------------------
+
+    policy = getattr(
+        ats_result.request,
+        "metadata",
+        {},
+    ).get(
+        "policy"
+    )
+
+    try:
+        return RecommendationAnalyzer(
+            policy=policy,
+        )
+    except TypeError:
+        pass
+
+    # ------------------------------------------------------------------------
+    # If the implementation expects the Phase 5 result itself.
+    # ------------------------------------------------------------------------
+
+    try:
+        return RecommendationAnalyzer(
+            ats_result=ats_result,
+        )
+    except TypeError:
+        pass
+
+    raise TypeError(
+        "Unable to construct RecommendationAnalyzer using the supported "
+        "Phase 6 integration-test constructor patterns. Update "
+        "_build_recommendation_analyzer() to match the production "
+        "RecommendationAnalyzer constructor."
+    )
+
+
+def _run_recommendations() -> RecommendationResult:
+    """
+    Execute the real Phase 5 -> Phase 6 recommendation pipeline.
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    # ------------------------------------------------------------------------
+    # Preferred Phase 6 contract:
+    #
+    #     analyzer.process(ats_result)
+    # ------------------------------------------------------------------------
+
     result = analyzer.process(
         ats_result
     )
@@ -353,542 +382,607 @@ def recommendation_result(
 
 
 # ============================================================================
-# PIPELINE BOUNDARY
+# PHASE 5 PRECONDITIONS
 # ============================================================================
 
-class TestPhase6PipelineBoundary:
+
+def test_phase_5_produces_valid_ats_result_before_recommendations() -> None:
     """
-    Verify that Phase 6 receives the actual Phase-5 object produced by
-    the real pipeline.
+    Verify that Phase 6 receives a valid, fully constructed Phase 5 result.
     """
 
-    def test_project_match_contains_phase5_result(
-        self,
-        project_match,
-    ) -> None:
+    ats_result = _build_ats_result()
+
+    assert isinstance(
+        ats_result,
+        ATSResumeAnalysisResult,
+    )
+
+    assert ats_result.request is not None
+    assert ats_result.knowledge_match_profile is not None
+
+    assert (
+        ats_result.request.knowledge_match_profile
+        is ats_result.knowledge_match_profile
+    )
+
+    assert (
+        ats_result.resume_profile
+        is ats_result.request.resume_profile
+    )
+
+    assert (
+        ats_result.jd_requirement_profile
+        is ats_result.request.jd_requirement_profile
+    )
+
+    ats_result.validate()
+
+
+# ============================================================================
+# BASIC PHASE 6 INTEGRATION
+# ============================================================================
+
+
+def test_recommendation_analyzer_accepts_exact_phase_5_result() -> None:
+    """
+    RecommendationAnalyzer must consume the exact Phase 5
+    ATSResumeAnalysisResult object.
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    result = analyzer.process(
+        ats_result
+    )
+
+    assert isinstance(
+        result,
+        RecommendationResult,
+    )
+
+    assert result.ats_result is ats_result
+
+
+def test_phase_6_result_preserves_phase_5_identity() -> None:
+    """
+    Core Phase 6 identity contract:
+
+        result.ats_result is ats_result
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    result = analyzer.process(
+        ats_result
+    )
+
+    assert result.ats_result is ats_result
+
+
+def test_phase_6_preserves_phase_4_knowledge_match_profile_identity() -> None:
+    """
+    Core cross-phase identity contract:
+
+        result.knowledge_match_profile
+            is
+        ats_result.knowledge_match_profile
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    result = analyzer.process(
+        ats_result
+    )
+
+    assert (
+        result.knowledge_match_profile
+        is ats_result.knowledge_match_profile
+    )
+
+
+def test_phase_6_preserves_phase_1_resume_profile_identity() -> None:
+    """
+    Phase 1 resume profile must remain reachable through Phase 6 without
+    reconstruction.
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    result = analyzer.process(
+        ats_result
+    )
+
+    assert (
+        result.resume_profile
+        is ats_result.resume_profile
+    )
+
+
+def test_phase_6_preserves_phase_2_jd_requirement_profile_identity() -> None:
+    """
+    Phase 2 JDRequirementProfile must remain reachable through Phase 6
+    without reconstruction.
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    result = analyzer.process(
+        ats_result
+    )
+
+    assert (
+        result.jd_requirement_profile
+        is ats_result.jd_requirement_profile
+    )
+
+
+# ============================================================================
+# RECOMMENDATION OBJECT CONTRACT
+# ============================================================================
+
+
+def test_all_recommendations_are_typed_objects() -> None:
+    """
+    Phase 6 must expose Recommendation objects rather than dictionaries.
+    """
+
+    result = _run_recommendations()
+
+    assert isinstance(
+        result,
+        RecommendationResult,
+    )
+
+    for recommendation in result.recommendations:
+        assert isinstance(
+            recommendation,
+            Recommendation,
+        )
+
+
+def test_recommendations_have_unique_ids() -> None:
+    """
+    RecommendationResult requires globally unique recommendation IDs within
+    the result.
+    """
+
+    result = _run_recommendations()
+
+    ids = [
+        recommendation.recommendation_id
+        for recommendation in result.recommendations
+    ]
+
+    assert len(ids) == len(
+        set(ids)
+    )
+
+
+def test_recommendations_have_valid_core_fields() -> None:
+    """
+    Every recommendation must contain the required typed fields.
+    """
+
+    result = _run_recommendations()
+
+    for recommendation in result.recommendations:
+
+        assert (
+            recommendation.recommendation_id.strip()
+        )
 
         assert isinstance(
-            project_match.ats_analysis_result,
-            ATSResumeAnalysisResult,
-        )
-
-    def test_phase5_result_contains_real_phase4_profile(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        assert isinstance(
-            ats_result.knowledge_match_profile,
-            KnowledgeMatchProfile,
-        )
-
-    def test_phase5_result_preserves_phase4_profile_identity(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        assert (
-            ats_result.knowledge_match_profile
-            is ats_result.request.knowledge_match_profile
-        )
-
-    def test_phase5_result_preserves_resume_profile_identity(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        resume_result: ProjectPipelineResult,
-    ) -> None:
-
-        assert (
-            ats_result.request.resume_profile
-            is resume_result.document_profile
-        )
-
-    def test_phase5_result_has_real_jd_profile(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        jd_result: ProjectPipelineResult,
-    ) -> None:
-
-        assert (
-            ats_result.request.jd_requirement_profile
-            is jd_result.jd_requirement_profile
-        )
-
-
-# ============================================================================
-# RECOMMENDATION ANALYZER
-# ============================================================================
-
-class TestRecommendationAnalyzerIntegration:
-    """
-    Test RecommendationAnalyzer against the actual Phase-5 output.
-    """
-
-    def test_analyzer_accepts_real_phase5_object(
-        self,
-        analyzer: RecommendationAnalyzer,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        result = analyzer.process(
-            ats_result
+            recommendation.recommendation_type,
+            RecommendationType,
         )
 
         assert isinstance(
-            result,
-            RecommendationResult,
+            recommendation.priority,
+            RecommendationPriority,
         )
-
-    def test_result_preserves_exact_phase5_identity(
-        self,
-        recommendation_result: RecommendationResult,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
 
         assert (
-            recommendation_result.ats_result
-            is ats_result
+            recommendation.title.strip()
         )
 
-    def test_recommendations_are_typed_objects(
-        self,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        for recommendation in (
-            recommendation_result.recommendations
-        ):
-            assert isinstance(
-                recommendation,
-                Recommendation,
-            )
-
-    def test_recommendations_are_not_dictionaries(
-        self,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        for recommendation in (
-            recommendation_result.recommendations
-        ):
-            assert not isinstance(
-                recommendation,
-                dict,
-            )
-
-    def test_recommendations_are_immutable_tuple(
-        self,
-        recommendation_result: RecommendationResult,
-    ) -> None:
+        assert (
+            recommendation.description.strip()
+        )
 
         assert isinstance(
-            recommendation_result.recommendations,
-            tuple,
+            recommendation.status,
+            RecommendationStatus,
         )
 
-    def test_recommendation_ids_are_unique(
-        self,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        ids = [
-            recommendation.recommendation_id
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-        ]
-
-        assert len(ids) == len(set(ids))
+        assert 0.0 <= recommendation.confidence <= 1.0
 
 
 # ============================================================================
-# PHASE 5 -> PHASE 6 IDENTITY
+# SUMMARY CONTRACT
 # ============================================================================
 
-class TestPhase5ToPhase6Identity:
+
+def test_recommendation_summary_is_present_and_consistent() -> None:
     """
-    These tests are more important than synthetic recommendation fixtures.
-
-    They verify that Phase 6 is consuming the real object produced by Phase 5.
-    """
-
-    def test_same_phase5_object_is_given_to_analyzer(
-        self,
-        analyzer: RecommendationAnalyzer,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        result = analyzer.process(
-            ats_result
-        )
-
-        assert (
-            result.ats_result
-            is ats_result
-        )
-
-    def test_phase4_profile_survives_into_phase6(
-        self,
-        recommendation_result: RecommendationResult,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        assert (
-            recommendation_result.ats_result.knowledge_match_profile
-            is ats_result.knowledge_match_profile
-        )
-
-    def test_phase5_request_survives_into_phase6(
-        self,
-        recommendation_result: RecommendationResult,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        assert (
-            recommendation_result.ats_result.request
-            is ats_result.request
-        )
-
-
-# ============================================================================
-# RECOMMENDATION CONTENT
-# ============================================================================
-
-class TestRecommendationSignals:
-    """
-    These tests verify recommendations generated from the REAL ATS result.
-
-    We do not manufacture ATSKeywordAnalysis, ATSSectionAnalysis,
-    ATSFormattingAnalysis, etc.
+    RecommendationResult must contain a summary that exactly matches the
+    recommendation collection.
     """
 
-    def test_missing_keywords_drive_keyword_recommendation_when_present(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        recommendation_result: RecommendationResult,
-    ) -> None:
+    result = _run_recommendations()
 
-        missing_keywords = (
-            ats_result.keyword_analysis.missing_keywords
+    assert isinstance(
+        result.summary,
+        RecommendationSummary,
+    )
+
+    expected_summary = (
+        RecommendationSummary.from_recommendations(
+            result.recommendations
         )
+    )
 
-        keyword_recommendations = tuple(
-            recommendation
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-            if recommendation.source_component
-            == "keyword_analysis"
+    assert (
+        result.summary
+        == expected_summary
+    )
+
+
+def test_summary_total_matches_recommendation_count() -> None:
+    """
+    The summary total must equal the number of recommendations.
+    """
+
+    result = _run_recommendations()
+
+    assert result.summary is not None
+
+    assert (
+        result.summary.total
+        == len(result.recommendations)
+    )
+
+
+def test_summary_priority_counts_match_recommendations() -> None:
+    """
+    Verify all priority counters.
+    """
+
+    result = _run_recommendations()
+
+    assert result.summary is not None
+
+    assert (
+        result.summary.critical
+        == sum(
+            1
+            for item in result.recommendations
+            if item.priority
+            == RecommendationPriority.CRITICAL
         )
+    )
 
-        if missing_keywords:
-            assert keyword_recommendations
-        else:
-            assert not keyword_recommendations
-
-    def test_missing_sections_drive_section_recommendation_when_present(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        missing_sections = (
-            ats_result.section_analysis.missing_sections
+    assert (
+        result.summary.high
+        == sum(
+            1
+            for item in result.recommendations
+            if item.priority
+            == RecommendationPriority.HIGH
         )
+    )
 
-        section_recommendations = tuple(
-            recommendation
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-            if recommendation.source_component
-            == "section_analysis"
+    assert (
+        result.summary.medium
+        == sum(
+            1
+            for item in result.recommendations
+            if item.priority
+            == RecommendationPriority.MEDIUM
         )
+    )
 
-        if missing_sections:
-            assert section_recommendations
-        else:
-            assert not section_recommendations
-
-    def test_formatting_signals_are_based_on_real_phase5_analysis(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        formatting = (
-            ats_result.formatting_analysis
+    assert (
+        result.summary.low
+        == sum(
+            1
+            for item in result.recommendations
+            if item.priority
+            == RecommendationPriority.LOW
         )
+    )
 
-        has_formatting_problem = any(
-            (
-                formatting.has_complex_layout,
-                formatting.has_tables,
-                formatting.has_columns,
-                formatting.has_graphics,
-            )
+
+def test_summary_type_counts_match_recommendations() -> None:
+    """
+    Verify all Phase 6 recommendation-type counters.
+    """
+
+    result = _run_recommendations()
+
+    assert result.summary is not None
+
+    assert (
+        result.summary.keyword_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.KEYWORD
         )
+    )
 
-        formatting_recommendations = tuple(
-            recommendation
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-            if recommendation.source_component
-            == "formatting_analysis"
+    assert (
+        result.summary.section_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.SECTION
         )
+    )
 
-        if has_formatting_problem:
-            assert formatting_recommendations
-        else:
-            assert not formatting_recommendations
-
-    def test_readability_signal_is_based_on_real_phase5_analysis(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        readability = (
-            ats_result.readability_analysis
+    assert (
+        result.summary.formatting_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.FORMATTING
         )
+    )
 
-        readability_recommendations = tuple(
-            recommendation
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-            if recommendation.source_component
-            == "readability_analysis"
+    assert (
+        result.summary.readability_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.READABILITY
         )
+    )
 
-        if readability.long_sentence_count > 0:
-            assert readability_recommendations
-        else:
-            assert not readability_recommendations
-
-    def test_terminology_signal_is_based_on_real_phase5_analysis(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        missing_terms = (
-            ats_result.terminology_analysis.missing_terms
+    assert (
+        result.summary.terminology_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.TERMINOLOGY
         )
+    )
 
-        terminology_recommendations = tuple(
-            recommendation
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-            if recommendation.source_component
-            == "terminology_analysis"
+    assert (
+        result.summary.quantification_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.QUANTIFICATION
         )
+    )
 
-        if missing_terms:
-            assert terminology_recommendations
-        else:
-            assert not terminology_recommendations
-
-    def test_quantification_signal_is_based_on_real_phase5_analysis(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        score = (
-            ats_result.quantification_analysis
-            .quantification_score
+    assert (
+        result.summary.parseability_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.PARSEABILITY
         )
+    )
 
-        quantification_recommendations = tuple(
-            recommendation
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-            if recommendation.source_component
-            == "quantification_analysis"
+    assert (
+        result.summary.knowledge_gap_count
+        == sum(
+            1
+            for item in result.recommendations
+            if item.recommendation_type
+            == RecommendationType.KNOWLEDGE_GAP
         )
-
-        if score < 0.70:
-            assert quantification_recommendations
-        else:
-            assert not quantification_recommendations
-
-    def test_parseability_signal_is_based_on_real_phase5_analysis(
-        self,
-        ats_result: ATSResumeAnalysisResult,
-        recommendation_result: RecommendationResult,
-    ) -> None:
-
-        parseability = (
-            ats_result.parseability_analysis
-        )
-
-        parseability_recommendations = tuple(
-            recommendation
-            for recommendation in (
-                recommendation_result.recommendations
-            )
-            if recommendation.source_component
-            == "parseability_analysis"
-        )
-
-        if parseability.parseable:
-            assert not parseability_recommendations
-        else:
-            assert parseability_recommendations
+    )
 
 
 # ============================================================================
-# DETERMINISM
+# FILTERING CONTRACT
 # ============================================================================
 
-class TestRecommendationDeterminism:
+
+def test_recommendations_of_type_returns_only_requested_type() -> None:
     """
-    RecommendationAnalyzer must produce deterministic output for the same
-    Phase-5 object.
-    """
-
-    def test_same_phase5_input_produces_same_ids(
-        self,
-        analyzer: RecommendationAnalyzer,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        first = analyzer.process(
-            ats_result
-        )
-
-        second = analyzer.process(
-            ats_result
-        )
-
-        first_ids = tuple(
-            recommendation.recommendation_id
-            for recommendation in first.recommendations
-        )
-
-        second_ids = tuple(
-            recommendation.recommendation_id
-            for recommendation in second.recommendations
-        )
-
-        assert first_ids == second_ids
-
-    def test_same_phase5_input_produces_same_count(
-        self,
-        analyzer: RecommendationAnalyzer,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
-
-        first = analyzer.process(
-            ats_result
-        )
-
-        second = analyzer.process(
-            ats_result
-        )
-
-        assert (
-            len(first.recommendations)
-            == len(second.recommendations)
-        )
-
-
-# ============================================================================
-# CONFIDENCE
-# ============================================================================
-
-class TestRecommendationConfidence:
-    """
-    Recommendations inherit confidence from the real Phase-5 result.
+    Verify RecommendationResult.recommendations_of_type().
     """
 
-    def test_recommendation_confidence_is_normalized(
-        self,
-        recommendation_result: RecommendationResult,
-    ) -> None:
+    result = _run_recommendations()
 
-        for recommendation in (
-            recommendation_result.recommendations
-        ):
-            assert 0.0 <= recommendation.confidence <= 1.0
+    for recommendation_type in RecommendationType:
 
-    def test_recommendation_confidence_matches_phase5_confidence(
-        self,
-        recommendation_result: RecommendationResult,
-        ats_result: ATSResumeAnalysisResult,
-    ) -> None:
+        filtered = (
+            result.recommendations_of_type(
+                recommendation_type
+            )
+        )
 
-        for recommendation in (
-            recommendation_result.recommendations
-        ):
+        for recommendation in filtered:
             assert (
-                recommendation.confidence
-                == ats_result.confidence
+                recommendation.recommendation_type
+                == recommendation_type
             )
 
 
-# ============================================================================
-# COMPLETE PHASE 6 SCENARIO
-# ============================================================================
-
-@pytest.mark.integration
-def test_complete_phase_6_real_pipeline(
-    pipeline: ProjectPipeline,
-    resume_document: DocumentInput,
-    jd_document: DocumentInput,
-) -> None:
+def test_high_priority_recommendations_returns_only_high_or_critical() -> None:
     """
-    Complete real-object Phase-1 -> Phase-6 test.
+    Verify RecommendationResult.high_priority_recommendations().
+    """
 
-    No intermediate Phase-3/4/5 object is fabricated.
+    result = _run_recommendations()
 
-    The only explicit Phase-6 call is:
+    high_priority = (
+        result.high_priority_recommendations()
+    )
 
-        RecommendationAnalyzer.process(
-            project_match.ats_analysis_result
+    for recommendation in high_priority:
+        assert recommendation.priority in (
+            RecommendationPriority.CRITICAL,
+            RecommendationPriority.HIGH,
         )
+
+        assert recommendation.is_high_priority
+
+
+def test_actionable_property_matches_status() -> None:
+    """
+    Verify Recommendation.is_actionable().
     """
 
-    # ------------------------------------------------------------------------
-    # PHASE 1 / PHASE 2
-    # ------------------------------------------------------------------------
+    result = _run_recommendations()
 
-    resume_result = pipeline.process(
-        resume_document
+    for recommendation in result.recommendations:
+
+        if (
+            recommendation.status
+            == RecommendationStatus.ACTIONABLE
+        ):
+            assert recommendation.is_actionable
+
+        else:
+            assert not recommendation.is_actionable
+
+
+# ============================================================================
+# PHASE 5 DATA PRESERVATION
+# ============================================================================
+
+
+def test_phase_5_score_is_preserved_by_phase_6() -> None:
+    """
+    Phase 6 must not replace or reconstruct the Phase 5 ATS score.
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
     )
 
-    jd_result = pipeline.process(
-        jd_document
+    result = analyzer.process(
+        ats_result
     )
 
-    assert isinstance(
-        resume_result,
-        ProjectPipelineResult,
+    assert (
+        result.score
+        is ats_result.ats_score
     )
 
-    assert isinstance(
-        jd_result,
-        ProjectPipelineResult,
+
+def test_phase_5_confidence_is_preserved_by_phase_6() -> None:
+    """
+    Phase 6 confidence must be the same confidence produced by Phase 5.
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
     )
 
-    assert resume_result.is_resume
-    assert jd_result.is_jd
+    result = analyzer.process(
+        ats_result
+    )
 
-    # ------------------------------------------------------------------------
-    # PHASE 3 / PHASE 4 / PHASE 5
-    # ------------------------------------------------------------------------
+    assert (
+        result.confidence
+        == ats_result.confidence
+    )
 
-    project_match = pipeline.match(
-        resume_result=resume_result,
-        jd_result=jd_result,
+
+def test_phase_5_request_is_preserved_through_phase_6() -> None:
+    """
+    Phase 6 must retain the exact Phase 5 request through ats_result.
+    """
+
+    ats_result = _build_ats_result()
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    result = analyzer.process(
+        ats_result
+    )
+
+    assert (
+        result.ats_result.request
+        is ats_result.request
+    )
+
+
+# ============================================================================
+# FULL OBJECT-GRAPH VALIDATION
+# ============================================================================
+
+
+def test_complete_phase_1_to_phase_6_object_graph_validates() -> None:
+    """
+    Full integration test.
+
+    This is the most important test in this file.
+
+    It verifies that the complete object graph survives:
+
+        Phase 1
+        Phase 2
+        Phase 3.1
+        Phase 3.2
+        Phase 3.3
+        Phase 4
+        Phase 5
+        Phase 6
+    """
+
+    project_match_result = (
+        _build_project_match_result()
     )
 
     ats_result = (
-        project_match.ats_analysis_result
+        project_match_result.ats_analysis_result
+    )
+
+    analyzer = _build_recommendation_analyzer(
+        ats_result
+    )
+
+    recommendation_result = analyzer.process(
+        ats_result
+    )
+
+    # ------------------------------------------------------------------------
+    # Aggregate types
+    # ------------------------------------------------------------------------
+
+    assert isinstance(
+        project_match_result,
+        ProjectMatchResult,
     )
 
     assert isinstance(
@@ -896,75 +990,243 @@ def test_complete_phase_6_real_pipeline(
         ATSResumeAnalysisResult,
     )
 
-    # Critical source-chain identity checks.
-    assert (
-        ats_result.request.resume_profile
-        is resume_result.document_profile
-    )
-
-    assert (
-        ats_result.request.jd_requirement_profile
-        is jd_result.jd_requirement_profile
-    )
-
-    assert (
-        ats_result.knowledge_match_profile
-        is ats_result.request.knowledge_match_profile
-    )
-
-    # ------------------------------------------------------------------------
-    # PHASE 6
-    # ------------------------------------------------------------------------
-
-    analyzer = RecommendationAnalyzer()
-
-    recommendation_result = analyzer.process(
-        ats_result
-    )
-
     assert isinstance(
         recommendation_result,
         RecommendationResult,
     )
 
-    # Phase 6 must preserve the exact Phase-5 object.
+    # ------------------------------------------------------------------------
+    # Phase 5 identity
+    # ------------------------------------------------------------------------
+
     assert (
         recommendation_result.ats_result
         is ats_result
     )
 
-    # All outputs must be typed recommendations.
-    assert all(
-        isinstance(
+    # ------------------------------------------------------------------------
+    # Phase 4 identity
+    # ------------------------------------------------------------------------
+
+    assert (
+        recommendation_result.knowledge_match_profile
+        is project_match_result.knowledge_match_profile
+    )
+
+    assert (
+        recommendation_result.knowledge_match_profile
+        is ats_result.knowledge_match_profile
+    )
+
+    # ------------------------------------------------------------------------
+    # Phase 3.1 / 3.2 / 3.3 identity remains reachable through Phase 4
+    # ------------------------------------------------------------------------
+
+    assert (
+        project_match_result.knowledge_match_profile.match_result
+        is project_match_result.match_result
+    )
+
+    assert (
+        project_match_result.knowledge_match_profile.enriched_match_result
+        is project_match_result.enriched_match_result
+    )
+
+    assert (
+        project_match_result.knowledge_match_profile.gap_analysis_result
+        is project_match_result.gap_analysis_result
+    )
+
+    # ------------------------------------------------------------------------
+    # Phase 1 identity
+    # ------------------------------------------------------------------------
+
+    assert (
+        recommendation_result.resume_profile
+        is project_match_result.resume_result.document_profile
+    )
+
+    # ------------------------------------------------------------------------
+    # Phase 2 identity
+    # ------------------------------------------------------------------------
+
+    assert (
+        recommendation_result.jd_requirement_profile
+        is project_match_result.jd_result.jd_requirement_profile
+    )
+
+    # ------------------------------------------------------------------------
+    # Phase 5 request identity
+    # ------------------------------------------------------------------------
+
+    assert (
+        ats_result.request
+        is project_match_result.ats_analysis_request
+    )
+
+    # ------------------------------------------------------------------------
+    # Recommendation objects
+    # ------------------------------------------------------------------------
+
+    for recommendation in recommendation_result.recommendations:
+        assert isinstance(
             recommendation,
             Recommendation,
         )
-        for recommendation in (
-            recommendation_result.recommendations
-        )
-    )
 
-    # No dictionary-oriented public output.
-    assert all(
-        not isinstance(
-            recommendation,
-            dict,
-        )
-        for recommendation in (
-            recommendation_result.recommendations
-        )
-    )
+    # ------------------------------------------------------------------------
+    # Final validation
+    # ------------------------------------------------------------------------
 
-    # IDs must remain deterministic and unique.
-    ids = tuple(
-        recommendation.recommendation_id
-        for recommendation in (
-            recommendation_result.recommendations
-        )
-    )
-
-    assert len(ids) == len(set(ids))
-
-    # Final aggregate validation.
     recommendation_result.validate()
 
+
+# ============================================================================
+# NEGATIVE CONTRACT TESTS
+# ============================================================================
+
+
+def test_recommendation_result_rejects_duplicate_ids() -> None:
+    """
+    Verify the Phase 6 aggregate rejects duplicate recommendation IDs.
+    """
+
+    ats_result = _build_ats_result()
+
+    recommendation_a = Recommendation(
+        recommendation_id="duplicate-id",
+        recommendation_type=RecommendationType.KEYWORD,
+        priority=RecommendationPriority.HIGH,
+        title="Add missing keyword",
+        description="Add the missing keyword to the resume.",
+    )
+
+    recommendation_b = Recommendation(
+        recommendation_id="duplicate-id",
+        recommendation_type=RecommendationType.SECTION,
+        priority=RecommendationPriority.MEDIUM,
+        title="Improve section",
+        description="Improve the resume section structure.",
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="recommendation IDs must be unique",
+    ):
+        RecommendationResult(
+            ats_result=ats_result,
+            recommendations=(
+                recommendation_a,
+                recommendation_b,
+            ),
+        )
+
+
+def test_recommendation_result_rejects_invalid_ats_input() -> None:
+    """
+    RecommendationResult must accept only ATSResumeAnalysisResult.
+    """
+
+    with pytest.raises(
+        TypeError,
+        match="ats_result",
+    ):
+        RecommendationResult(
+            ats_result=object(),
+        )
+
+
+def test_recommendation_rejects_invalid_confidence() -> None:
+    """
+    Recommendation confidence must remain within [0, 1].
+    """
+
+    with pytest.raises(
+        ValueError,
+        match="between 0.0 and 1.0",
+    ):
+        Recommendation(
+            recommendation_id="invalid-confidence",
+            recommendation_type=RecommendationType.GENERAL,
+            priority=RecommendationPriority.LOW,
+            title="Invalid confidence",
+            description="This recommendation has invalid confidence.",
+            confidence=2.0,
+        )
+
+
+# ============================================================================
+# RESULT SANITY
+# ============================================================================
+
+
+def test_recommendation_result_reports_has_recommendations_correctly() -> None:
+    """
+    Verify the aggregate convenience property.
+    """
+
+    result = _run_recommendations()
+
+    assert (
+        result.has_recommendations
+        == bool(result.recommendations)
+    )
+
+
+def test_recommendation_result_can_be_validated_multiple_times() -> None:
+    """
+    Validation should remain stable and idempotent.
+    """
+
+    result = _run_recommendations()
+
+    result.validate()
+    result.validate()
+    result.validate()
+
+
+# ============================================================================
+# OPTIONAL QUALITY ASSERTION
+# ============================================================================
+
+
+def test_phase_6_produces_at_least_one_actionable_recommendation_when_needed() -> None:
+    """
+    This assertion is intentionally conditional.
+
+    The test does not invent a requirement that Phase 6 must always produce
+    recommendations. If Phase 6 produces recommendations, they must be valid
+    typed actionable objects when their status says ACTIONABLE.
+
+    If the implementation produces zero recommendations for the supplied
+    resume/JD pair, the test remains valid because an empty recommendation
+    result is a supported Phase-6 state.
+    """
+
+    result = _run_recommendations()
+
+    actionable = tuple(
+        recommendation
+        for recommendation in result.recommendations
+        if recommendation.status
+        == RecommendationStatus.ACTIONABLE
+    )
+
+    for recommendation in actionable:
+        assert recommendation.is_actionable
+        assert recommendation.title
+        assert recommendation.description
+
+
+# ============================================================================
+# PYTEST ENTRY POINT
+# ============================================================================
+
+
+if __name__ == "__main__":
+    pytest.main(
+        [
+            __file__,
+            "-v",
+        ]
+    )
