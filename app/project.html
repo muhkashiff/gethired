@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-3 project-page">
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                <div>
+                    <h2 class="fw-bold mb-1">{{ project.project_name }}</h2>
+                    <div class="small text-muted">Project ID: {{ project.id }}</div>
+                </div>
+                <a href="{{ url_for('dashboard.home') }}" class="btn btn-outline-secondary btn-sm">
+                    ← Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Analysis Progress</h6>
+                <span class="small text-muted">{{ progress }}%</span>
+            </div>
+            <div class="progress" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{ progress }}%;">{{ progress }}%</div>
+            </div>
+            <div class="small text-muted mt-2">
+                {% if project.ats_completed %}
+                    Analysis complete. Results are shown below.
+                {% elif project.resume_uploaded and project.jd_uploaded %}
+                    Both documents are uploaded. Run analysis when ready.
+                {% else %}
+                    Upload both documents before running analysis.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Resume</h5>
+                        {% if project.resume_uploaded %}
+                            <span class="badge bg-success">Uploaded</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Not uploaded</span>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    {% if project.resume_uploaded %}
+                        <div class="file-display mb-3">
+                            <strong>File:</strong> {{ project.resume_filename }}
+                        </div>
+                    {% endif %}
+                    <form action="{{ url_for('upload.upload_resume', project_id=project.id) }}" method="POST" enctype="multipart/form-data">
+                        <label class="form-label small">Resume DOCX</label>
+                        <input type="file" class="form-control form-control-sm mb-2" name="resume" accept=".docx" required>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            {% if project.resume_uploaded %}Replace Resume{% else %}Upload Resume{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Job Description</h5>
+                        {% if project.jd_uploaded %}
+                            <span class="badge bg-success">Uploaded</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Not uploaded</span>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    {% if project.jd_uploaded %}
+                        <div class="file-display mb-3">
+                            <strong>File:</strong> {{ project.job_filename }}
+                        </div>
+                    {% endif %}
+                    <form action="{{ url_for('upload.upload_jd', project_id=project.id) }}" method="POST" enctype="multipart/form-data">
+                        <label class="form-label small">Job Description DOCX</label>
+                        <input type="file" class="form-control form-control-sm mb-2" name="jd" accept=".docx" required>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            {% if project.jd_uploaded %}Replace Job Description{% else %}Upload Job Description{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-3">
+        <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                <div>
+                    <h5 class="mb-1">Candidate Analysis</h5>
+                    <div class="small text-muted">
+                        Compares resume evidence against the Job Description and produces matches, gaps, ATS analysis and recommendations.
+                    </div>
+                </div>
+                <form action="{{ url_for('project.analyze', project_id=project.id) }}" method="POST">
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-sm"
+                        {% if not (project.resume_uploaded and project.jd_uploaded) or project.status == 'Analysis Running' %}disabled{% endif %}>
+                        {% if project.status == 'Analysis Running' %}Running...{% else %}Run Analysis{% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-3">
+        <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Project Status</h5>
+                <span class="small text-muted">{{ project.status }}</span>
+            </div>
+            <div class="mt-2">
+                {% if project.ats_completed %}
+                    <span class="badge bg-success">Analysis Complete</span>
+                {% elif project.resume_uploaded and project.jd_uploaded %}
+                    <span class="badge bg-info text-dark">Ready for Analysis</span>
+                {% else %}
+                    <span class="badge bg-secondary">Waiting for Documents</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if analysis %}
+    <div class="card shadow-sm mt-3">
+        <div class="card-body">
+            <h4 class="mb-3">Analysis Results</h4>
+
+            <div class="row g-2 mb-3">
+                <div class="col-md-4">
+                    <div class="score-card">
+                        <div class="score-label">Overall Match</div>
+                        <div class="score-value">{{ analysis.scores.overall_match }}%</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="score-card">
+                        <div class="score-label">ATS Compatibility</div>
+                        <div class="score-value">{{ analysis.scores.ats_compatibility }}%</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="score-card">
+                        <div class="score-label">Evidence Strength</div>
+                        <div class="score-value">{{ analysis.scores.evidence_strength }}%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="result-panel strong-panel h-100">
+                        <h6>Strong Matches</h6>
+                        {% if analysis.matches.strong %}
+                            {% for item in analysis.matches.strong %}
+                                <div class="result-item">
+                                    <strong>✓ {{ item.subject }}</strong>
+                                    <div class="small text-muted">{{ item.requirement_type|title }}</div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="small text-muted">No strong matches recorded.</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="result-panel partial-panel h-100">
+                        <h6>Partial Matches</h6>
+                        {% if analysis.matches.partial %}
+                            {% for item in analysis.matches.partial %}
+                                <div class="result-item">
+                                    <strong>△ {{ item.subject }}</strong>
+                                    <div class="small text-muted">{{ item.requirement_type|title }}</div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="small text-muted">No partial matches recorded.</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="result-panel missing-panel h-100">
+                        <h6>Missing / Weak</h6>
+                        {% if analysis.matches.missing %}
+                            {% for item in analysis.matches.missing %}
+                                <div class="result-item">
+                                    <strong>✗ {{ item.subject }}</strong>
+                                    <div class="small text-muted">{{ item.requirement_type|title }}</div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="small text-muted">No missing requirements recorded.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if analysis.experience_gap %}
+            <div class="result-section mt-3">
+                <h6>Experience Gap</h6>
+                {% for item in analysis.experience_gap %}
+                    <div class="border rounded p-2 mb-2">
+                        <strong>JD asks:</strong> {{ item.jd_requirement }}{% if item.minimum_years %} — {{ item.minimum_years }}+ years{% endif %}<br>
+                        <strong>Status:</strong> {{ item.status|title }}<br>
+                        {% if item.evidence %}
+                            <strong>Evidence:</strong> {{ item.evidence|join('; ') }}
+                        {% else %}
+                            <span class="text-muted">No direct resume evidence found.</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="result-section mt-3">
+                <h6>Recommendations</h6>
+                <ol class="mb-0">
+                    {% for recommendation in analysis.recommendations %}
+                        <li class="mb-1">{{ recommendation }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+
+            <div class="accordion mt-3" id="analysisDetails">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#skillsDetails">
+                            Skills, Standards, Technologies & Methodologies
+                        </button>
+                    </h2>
+                    <div id="skillsDetails" class="accordion-collapse collapse" data-bs-parent="#analysisDetails">
+                        <div class="accordion-body">
+                            {% for group, title in [('skills','Skills'),('standards','Standards'),('certifications','Certifications'),('methodologies','Methodologies'),('technologies','Technologies'),('actions','Actions'),('domains','Domains'),('metrics','Metrics')] %}
+                                <div class="mb-2">
+                                    <strong>{{ title }}</strong>
+                                    <div class="tag-list mt-1">
+                                        {% for item in analysis.categories[group] %}
+                                            <span class="tag">{{ item }}</span>
+                                        {% else %}
+                                            <span class="small text-muted">None detected.</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#atsDetails">
+                            ATS Details
+                        </button>
+                    </h2>
+                    <div id="atsDetails" class="accordion-collapse collapse" data-bs-parent="#analysisDetails">
+                        <div class="accordion-body small">
+                            <pre class="result-json">{{ analysis.ats|tojson(indent=2) }}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pipelineDetails">
+                            Pipeline Summary
+                        </button>
+                    </h2>
+                    <div id="pipelineDetails" class="accordion-collapse collapse" data-bs-parent="#analysisDetails">
+                        <div class="accordion-body">
+                            <div class="row g-2 small">
+                                <div class="col-md-4">Resume entities: <strong>{{ analysis.pipeline.resume_entities }}</strong></div>
+                                <div class="col-md-4">JD entities: <strong>{{ analysis.pipeline.jd_entities }}</strong></div>
+                                <div class="col-md-4">Resume semantic entities: <strong>{{ analysis.pipeline.resume_semantic_entities }}</strong></div>
+                                <div class="col-md-4">JD semantic entities: <strong>{{ analysis.pipeline.jd_semantic_entities }}</strong></div>
+                                <div class="col-md-4">Resume statements: <strong>{{ analysis.pipeline.resume_business_statements }}</strong></div>
+                                <div class="col-md-4">JD statements: <strong>{{ analysis.pipeline.jd_business_statements }}</strong></div>
+                                <div class="col-md-4">Typed Phase 4 profile: <strong>{{ 'Yes' if analysis.pipeline.typed_phase4_profile else 'Bridge' }}</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card shadow-sm mt-3 mb-3">
+        <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                <div>
+                    <h5 class="mb-1">Cover Letter</h5>
+                    <div class="small text-muted">Generate a separate DOCX cover letter from the candidate's resume and Job Description.</div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary btn-sm" disabled>
+                    Generate Cover Letter
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

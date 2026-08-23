@@ -1,46 +1,37 @@
+
 {% extends "base.html" %}
 
 {% block content %}
 
-<div class="container-fluid mt-4">
+<div class="container-fluid py-3">
 
-    <!-- ========================= -->
-    <!-- Project Header            -->
-    <!-- ========================= -->
+    <!-- ========================================================= -->
+    <!-- PROJECT HEADER                                            -->
+    <!-- ========================================================= -->
 
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm mb-3">
 
-        <div class="card-body">
+        <div class="card-body py-3">
 
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
                 <div>
-
-                    <h2 class="fw-bold">
-
+                    <h2 class="fw-bold mb-1">
                         {{ project.project_name }}
-
                     </h2>
 
-                    <p class="text-muted mb-0">
-
-                        Project ID : {{ project.id }}
-
-                    </p>
-
+                    <div class="text-muted small">
+                        Project ID: {{ project.id }}
+                    </div>
                 </div>
 
-                <div>
+                <a
+                    href="{{ url_for('dashboard.home') }}"
+                    class="btn btn-outline-secondary btn-sm">
 
-                    <a
-                        href="{{ url_for('dashboard.home') }}"
-                        class="btn btn-outline-secondary">
+                    ← Dashboard
 
-                        ← Dashboard
-
-                    </a>
-
-                </div>
+                </a>
 
             </div>
 
@@ -49,33 +40,58 @@
     </div>
 
 
-    <!-- ========================= -->
-    <!-- Progress                  -->
-    <!-- ========================= -->
+    <!-- ========================================================= -->
+    <!-- PROGRESS                                                   -->
+    <!-- ========================================================= -->
 
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm mb-3">
 
         <div class="card-body">
 
-            <h5>
+            <div class="d-flex justify-content-between align-items-center mb-2">
 
-                Project Progress
+                <h5 class="mb-0">
+                    Analysis Progress
+                </h5>
 
-            </h5>
+                <span class="small text-muted">
+                    {{ progress }}%
+                </span>
 
-            <div class="progress mt-3"
-                style="height:28px;">
+            </div>
+
+            <div
+                class="progress"
+                style="height: 22px;">
 
                 <div
-                    class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-
+                    class="progress-bar bg-success"
                     role="progressbar"
-
-                    style="width: {{ progress }}%;">
+                    style="width: {{ progress }}%;"
+                    aria-valuenow="{{ progress }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
 
                     {{ progress }}%
 
                 </div>
+
+            </div>
+
+            <div class="small text-muted mt-2">
+
+                {% if project.ats_completed %}
+                    Analysis completed successfully.
+                {% elif project.resume_uploaded and project.jd_uploaded %}
+                    Both documents are uploaded. Run analysis when ready.
+                {% elif project.resume_uploaded %}
+                    Upload the Job Description before running analysis.
+                {% elif project.jd_uploaded %}
+                    Upload the Resume before running analysis.
+                {% else %}
+                    Upload both documents before running analysis.
+                {% endif %}
+
             </div>
 
         </div>
@@ -83,71 +99,91 @@
     </div>
 
 
-    <!-- ========================= -->
-    <!-- Status Cards              -->
-    <!-- ========================= -->
+    <!-- ========================================================= -->
+    <!-- DOCUMENT UPLOADS                                          -->
+    <!-- ========================================================= -->
 
-    <div class="row">
+    <div class="row g-3 mb-3">
 
-        <!-- Resume -->
+        <!-- ========================= -->
+        <!-- RESUME                    -->
+        <!-- ========================= -->
 
-        <div class="col-lg-4 mb-4">
+        <div class="col-lg-6">
 
-            <div class="card shadow h-100">
+            <div class="card shadow-sm h-100">
 
                 <div class="card-body">
 
-                    <h4>
+                    <div class="d-flex justify-content-between align-items-center">
 
-                        Resume
+                        <h4 class="mb-0">
+                            Resume
+                        </h4>
 
-                    </h4>
+                        {% if project.resume_uploaded %}
+
+                            <span class="badge bg-success">
+                                Uploaded
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+                                Not Uploaded
+                            </span>
+
+                        {% endif %}
+
+                    </div>
 
                     <hr>
 
                     {% if project.resume_uploaded %}
 
-                    <span class="badge bg-success">
+                        <div class="alert alert-success py-2 mb-3">
 
-                        Uploaded
+                            <strong>File:</strong>
+                            {{ project.resume_filename }}
 
-                    </span>
-
-                    <p class="mt-3">
-
-                        {{ project.resume_filename }}
-
-                    </p>
+                        </div>
 
                     {% else %}
 
-                    <span class="badge bg-danger">
+                        <div class="alert alert-warning py-2 mb-3">
 
-                        Not Uploaded
+                            No resume uploaded yet.
 
-                    </span>
+                        </div>
 
                     {% endif %}
 
-                    <hr>
 
                     <form
                         action="{{ url_for('upload.upload_resume', project_id=project.id) }}"
                         method="POST"
                         enctype="multipart/form-data">
 
+                        <label class="form-label small fw-semibold">
+                            Resume DOCX
+                        </label>
+
                         <input
                             type="file"
-                            class="form-control mb-3"
+                            class="form-control form-control-sm mb-2"
                             name="resume"
                             accept=".docx"
                             required>
 
                         <button
                             type="submit"
-                            class="btn btn-primary w-100">
+                            class="btn btn-primary btn-sm">
 
-                            Upload Resume
+                            {% if project.resume_uploaded %}
+                                Replace Resume
+                            {% else %}
+                                Upload Resume
+                            {% endif %}
 
                         </button>
 
@@ -160,91 +196,89 @@
         </div>
 
 
+        <!-- ========================= -->
+        <!-- JOB DESCRIPTION           -->
+        <!-- ========================= -->
 
-        <!-- Job Description -->
+        <div class="col-lg-6">
 
-        <div class="col-lg-4 mb-4">
-
-            <div class="card shadow h-100">
+            <div class="card shadow-sm h-100">
 
                 <div class="card-body">
 
-                    <h4>
+                    <div class="d-flex justify-content-between align-items-center">
 
-                        Job Description
+                        <h4 class="mb-0">
+                            Job Description
+                        </h4>
 
-                    </h4>
+                        {% if project.jd_uploaded %}
+
+                            <span class="badge bg-success">
+                                Uploaded
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+                                Not Uploaded
+                            </span>
+
+                        {% endif %}
+
+                    </div>
 
                     <hr>
 
                     {% if project.jd_uploaded %}
 
-                    <span class="badge bg-success">
+                        <div class="alert alert-success py-2 mb-3">
 
-                        Uploaded
+                            <strong>File:</strong>
+                            {{ project.job_filename }}
 
-                    </span>
+                        </div>
 
                     {% else %}
 
-                    <span class="badge bg-danger">
+                        <div class="alert alert-warning py-2 mb-3">
 
-                        Not Uploaded
+                            No Job Description uploaded yet.
 
-                    </span>
+                        </div>
 
                     {% endif %}
 
-                    <hr>
 
-                    <button
-                        class="btn btn-primary w-100">
+                    <form
+                        action="{{ url_for('upload.upload_jd', project_id=project.id) }}"
+                        method="POST"
+                        enctype="multipart/form-data">
 
-                        Upload Job Description
+                        <label class="form-label small fw-semibold">
+                            Job Description DOCX
+                        </label>
 
-                    </button>
+                        <input
+                            type="file"
+                            class="form-control form-control-sm mb-2"
+                            name="jd"
+                            accept=".docx"
+                            required>
 
-                </div>
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm">
 
-            </div>
+                            {% if project.jd_uploaded %}
+                                Replace Job Description
+                            {% else %}
+                                Upload Job Description
+                            {% endif %}
 
-        </div>
+                        </button>
 
-
-
-        <!-- ATS -->
-
-        <div class="col-lg-4 mb-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body">
-
-                    <h4>
-
-                        ATS Score
-
-                    </h4>
-
-                    <hr>
-
-                    <h1 class="display-4 text-success">
-
-                        {{ project.ats_score }}%
-
-                    </h1>
-
-                    <p>
-
-                        Status
-
-                    </p>
-
-                    <span class="badge bg-info">
-
-                        {{ project.status }}
-
-                    </span>
+                    </form>
 
                 </div>
 
@@ -255,50 +289,1490 @@
     </div>
 
 
+    <!-- ========================================================= -->
+    <!-- CANDIDATE ANALYSIS                                        -->
+    <!-- ========================================================= -->
 
-    <!-- ========================= -->
-    <!-- Generate Section          -->
-    <!-- ========================= -->
-
-    <div class="card shadow mb-4">
+    <div class="card shadow-sm mb-3">
 
         <div class="card-body">
 
-            <h4>
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-                Resume Optimization
+                <div>
 
-            </h4>
+                    <h4 class="mb-1">
+                        Candidate Analysis
+                    </h4>
 
-            <hr>
+                    <div class="small text-muted">
 
-            <div class="row">
+                        Compares resume evidence against the Job Description
+                        and produces matching evidence, gaps, ATS analysis
+                        and recommendations.
 
-                <div class="col-md-6">
-
-                    <button
-                        class="btn btn-success w-100 btn-lg"
-
-                        disabled>
-
-                        Generate Optimized Resume
-
-                    </button>
+                    </div>
 
                 </div>
 
-                <div class="col-md-6">
+
+                <div>
+
+                    {% if project.resume_uploaded and project.jd_uploaded %}
+
+                        <form
+                            action="{{ url_for('project.analyze', project_id=project.id) }}"
+                            method="POST"
+                            class="d-inline">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-sm">
+
+                                Run Analysis
+
+                            </button>
+
+                        </form>
+
+                    {% else %}
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary btn-sm"
+                            disabled>
+
+                            Run Analysis
+
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- PROJECT STATUS                                            -->
+    <!-- ========================================================= -->
+
+    <div class="card shadow-sm mb-3">
+
+        <div class="card-body py-3">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="mb-1">
+                        Project Status
+                    </h5>
+
+                    {% if project.ats_completed %}
+
+                        <span class="badge bg-success">
+                            Analysis Complete
+                        </span>
+
+                    {% elif project.resume_uploaded and project.jd_uploaded %}
+
+                        <span class="badge bg-info text-dark">
+                            Ready for Analysis
+                        </span>
+
+                    {% elif project.resume_uploaded or project.jd_uploaded %}
+
+                        <span class="badge bg-warning text-dark">
+                            Waiting for Documents
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-secondary">
+                            Waiting for Documents
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="small text-muted">
+
+                    {% if project.ats_completed %}
+                        Analysis Complete
+                    {% elif project.status %}
+                        {{ project.status }}
+                    {% else %}
+                        Analysis not completed
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- ANALYSIS RESULTS                                          -->
+    <!-- ========================================================= -->
+
+    {% if analysis %}
+
+    <div class="card shadow-sm mb-3">
+
+        <div class="card-body">
+
+            <h3 class="mb-3">
+                Analysis Results
+            </h3>
+
+
+            <!-- ========================= -->
+            <!-- SCORE CARDS                -->
+            <!-- ========================= -->
+
+            <div class="row g-3 mb-4">
+
+                <div class="col-md-4">
+
+                    <div class="card border h-100">
+
+                        <div class="card-body text-center py-3">
+
+                            <div class="small text-muted">
+                                Overall Match
+                            </div>
+
+                            <div class="display-6 fw-bold">
+                                {{ analysis.scores.overall_match }}%
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="card border h-100">
+
+                        <div class="card-body text-center py-3">
+
+                            <div class="small text-muted">
+                                ATS Compatibility
+                            </div>
+
+                            <div class="display-6 fw-bold">
+                                {{ analysis.scores.ats_compatibility }}%
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="card border h-100">
+
+                        <div class="card-body text-center py-3">
+
+                            <div class="small text-muted">
+                                Evidence Strength
+                            </div>
+
+                            <div class="display-6 fw-bold">
+                                {{ analysis.scores.evidence_strength }}%
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- STRONG MATCHES                                    -->
+            <!-- ================================================= -->
+
+            <div class="card shadow-sm border-success mb-3">
+
+                <div class="card-header bg-success text-white py-2">
+
+                    <strong>
+                        Strong Matches
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if analysis.matches.strong %}
+
+                        <div class="row g-2">
+
+                            {% for item in analysis.matches.strong %}
+
+                                <div class="col-md-6 col-lg-4">
+
+                                    <div class="border rounded p-2 h-100">
+
+                                        <div class="fw-semibold">
+
+                                            ✓ {{ item.subject }}
+
+                                        </div>
+
+                                        <div class="small text-muted mt-1">
+
+                                            {{ item.requirement_type|title }}
+
+                                        </div>
+
+                                        {% if item.evidence %}
+
+                                            <div class="small mt-2">
+
+                                                <strong>Evidence:</strong>
+
+                                                {{ item.evidence|join("; ") }}
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-muted small">
+                            No strong matches identified.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PARTIAL MATCHES                                   -->
+            <!-- ================================================= -->
+
+            <div class="card shadow-sm border-warning mb-3">
+
+                <div class="card-header bg-warning py-2">
+
+                    <strong>
+                        Partial Matches
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if analysis.matches.partial %}
+
+                        <div class="row g-2">
+
+                            {% for item in analysis.matches.partial %}
+
+                                <div class="col-md-6 col-lg-4">
+
+                                    <div class="border rounded p-2 h-100">
+
+                                        <div class="fw-semibold">
+
+                                            △ {{ item.subject }}
+
+                                        </div>
+
+                                        <div class="small text-muted mt-1">
+
+                                            {{ item.requirement_type|title }}
+
+                                        </div>
+
+                                        {% if item.evidence %}
+
+                                            <div class="small mt-2">
+
+                                                <strong>Evidence:</strong>
+
+                                                {{ item.evidence|join("; ") }}
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-muted small">
+                            No partial matches identified.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- MISSING / WEAK                                    -->
+            <!-- ================================================= -->
+
+            <div class="card shadow-sm border-danger mb-3">
+
+                <div class="card-header bg-danger text-white py-2">
+
+                    <strong>
+                        Missing / Weak
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if analysis.matches.missing %}
+
+                        <div class="row g-2">
+
+                            {% for item in analysis.matches.missing %}
+
+                                <div class="col-md-6 col-lg-4">
+
+                                    <div class="border rounded p-2 h-100">
+
+                                        <div class="fw-semibold">
+
+                                            ✗ {{ item.subject }}
+
+                                        </div>
+
+                                        <div class="small text-muted mt-1">
+
+                                            {{ item.requirement_type|title }}
+
+                                        </div>
+
+                                        <div class="small text-danger mt-2">
+
+                                            Not supported by sufficient
+                                            resume evidence.
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-muted small">
+                            No missing requirements identified.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- EXPERIENCE GAP                                    -->
+            <!-- ================================================= -->
+
+            {% if analysis.experience_gap %}
+
+            <div class="card shadow-sm mb-3">
+
+                <div class="card-header py-2">
+
+                    <strong>
+                        Experience Gap
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% for item in analysis.experience_gap %}
+
+                        <div class="border-bottom pb-2 mb-2">
+
+                            <div class="fw-semibold">
+
+                                JD Requirement:
+                                {{ item.jd_requirement }}
+
+                            </div>
+
+                            {% if item.minimum_years %}
+
+                                <div class="small text-muted">
+
+                                    Minimum requested:
+                                    {{ item.minimum_years }}+ years
+
+                                </div>
+
+                            {% endif %}
+
+                            <div class="small mt-1">
+
+                                <strong>Status:</strong>
+                                {{ item.status|title }}
+
+                            </div>
+
+                            {% if item.evidence %}
+
+                                <div class="small mt-1">
+
+                                    <strong>Evidence:</strong>
+                                    {{ item.evidence|join("; ") }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- RECOMMENDATIONS                                   -->
+            <!-- ================================================= -->
+
+            <div class="card shadow-sm mb-3">
+
+                <div class="card-header py-2">
+
+                    <strong>
+                        Recommendations
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if analysis.recommendations %}
+
+                        <ol class="mb-0">
+
+                            {% for recommendation in analysis.recommendations %}
+
+                                <li class="mb-2">
+
+                                    {{ recommendation }}
+
+                                </li>
+
+                            {% endfor %}
+
+                        </ol>
+
+                    {% else %}
+
+                        <div class="text-muted small">
+                            No recommendations available.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- CATEGORIES                                        -->
+            <!-- ================================================= -->
+
+            {% if analysis.categories %}
+
+            <div class="card shadow-sm mb-3">
+
+                <div class="card-header py-2">
+
+                    <strong>
+                        Candidate Knowledge & Capabilities
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+                        {% for category, values in analysis.categories.items() %}
+
+                            {% if category != "jd_requirements" and values %}
+
+                                <div class="col-md-6 col-lg-4">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <div class="fw-semibold mb-2">
+
+                                            {{ category|replace("_", " ")|title }}
+
+                                        </div>
+
+                                        <div>
+
+                                            {% for value in values %}
+
+                                                <span class="badge bg-light text-dark border me-1 mb-1">
+
+                                                    {{ value }}
+
+                                                </span>
+
+                                            {% endfor %}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- ATS DETAILS                                      -->
+            <!-- ================================================= -->
+
+            <div class="card shadow-sm mb-3">
+
+                <div class="card-header py-2">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <strong>
+                            ATS Details
+                        </strong>
+
+                        {% if analysis.ats.available %}
+
+                            <span class="badge bg-success">
+                                Full ATS Analyzer
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                Fallback ATS Analysis
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <!-- ATS SUMMARY -->
+
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 text-center h-100">
+
+                                <div class="small text-muted">
+                                    ATS Score
+                                </div>
+
+                                <div class="h3 fw-bold mb-0">
+
+                                    {{ analysis.ats.score }}%
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 text-center h-100">
+
+                                <div class="small text-muted">
+                                    Confidence
+                                </div>
+
+                                <div class="h3 fw-bold mb-0">
+
+                                    {{ analysis.ats.confidence }}%
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 text-center h-100">
+
+                                <div class="small text-muted">
+                                    Analyzer
+                                </div>
+
+                                <div class="fw-semibold mt-2">
+
+                                    {% if analysis.ats.available %}
+                                        Advanced ATS Analyzer
+                                    {% else %}
+                                        Application ATS Bridge
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- KEYWORD ANALYSIS -->
+
+                    {% if analysis.ats.keyword_analysis %}
+
+                    <div class="card shadow-sm mb-3">
+
+                        <div class="card-header py-2">
+
+                            <strong>
+                                Keyword Analysis
+                            </strong>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set keyword = analysis.ats.keyword_analysis %}
+
+                            {% if keyword.keyword_coverage_score is defined %}
+
+                                <div class="mb-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <span class="small fw-semibold">
+                                            Keyword Coverage
+                                        </span>
+
+                                        <span class="small">
+
+                                            {{ keyword.keyword_coverage_score }}%
+
+                                        </span>
+
+                                    </div>
+
+                                    <div
+                                        class="progress mt-1"
+                                        style="height: 10px;">
+
+                                        <div
+                                            class="progress-bar bg-success"
+                                            style="width: {{ keyword.keyword_coverage_score }}%;">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="row g-3">
+
+                                {% if keyword.matched_keywords %}
+
+                                <div class="col-md-6">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <div class="fw-semibold text-success mb-2">
+
+                                            ✓ Matched Keywords
+
+                                        </div>
+
+                                        {% for value in keyword.matched_keywords %}
+
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle me-1 mb-1">
+
+                                                {{ value }}
+
+                                            </span>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+
+
+                                {% if keyword.missing_keywords %}
+
+                                <div class="col-md-6">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <div class="fw-semibold text-danger mb-2">
+
+                                            ✗ Missing Keywords
+
+                                        </div>
+
+                                        {% for value in keyword.missing_keywords %}
+
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle me-1 mb-1">
+
+                                                {{ value }}
+
+                                            </span>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if keyword.required_keywords %}
+
+                                <div class="mt-3">
+
+                                    <div class="small fw-semibold mb-2">
+
+                                        Required Keywords
+
+                                    </div>
+
+                                    {% for value in keyword.required_keywords %}
+
+                                        <span class="badge bg-light text-dark border me-1 mb-1">
+
+                                            {{ value }}
+
+                                        </span>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- SECTION ANALYSIS -->
+
+                    {% if analysis.ats.section_analysis %}
+
+                    <div class="card shadow-sm mb-3">
+
+                        <div class="card-header py-2">
+
+                            <strong>
+                                Resume Section Analysis
+                            </strong>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set sections = analysis.ats.section_analysis %}
+
+                            {% if sections.section_completeness_score is defined %}
+
+                                <div class="mb-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <span class="small fw-semibold">
+                                            Section Completeness
+                                        </span>
+
+                                        <span class="small">
+                                            {{ sections.section_completeness_score }}%
+                                        </span>
+
+                                    </div>
+
+                                    <div
+                                        class="progress mt-1"
+                                        style="height: 10px;">
+
+                                        <div
+                                            class="progress-bar"
+                                            style="width: {{ sections.section_completeness_score }}%;">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="row g-3">
+
+                                {% if sections.detected_sections %}
+
+                                <div class="col-md-6">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <div class="fw-semibold text-success mb-2">
+
+                                            ✓ Detected Sections
+
+                                        </div>
+
+                                        {% for value in sections.detected_sections %}
+
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle me-1 mb-1">
+
+                                                {{ value|title }}
+
+                                            </span>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+
+
+                                {% if sections.missing_sections %}
+
+                                <div class="col-md-6">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <div class="fw-semibold text-warning mb-2">
+
+                                            △ Missing Sections
+
+                                        </div>
+
+                                        {% for value in sections.missing_sections %}
+
+                                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle me-1 mb-1">
+
+                                                {{ value|title }}
+
+                                            </span>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- QUANTIFICATION ANALYSIS -->
+
+                    {% if analysis.ats.quantification_analysis %}
+
+                    <div class="card shadow-sm mb-3">
+
+                        <div class="card-header py-2">
+
+                            <strong>
+                                Achievement Quantification
+                            </strong>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set quant = analysis.ats.quantification_analysis %}
+
+                            <div class="row g-3">
+
+                                {% if quant.quantified_achievement_count is defined %}
+
+                                <div class="col-md-6">
+
+                                    <div class="border rounded p-3">
+
+                                        <div class="small text-muted">
+
+                                            Quantified Achievements
+
+                                        </div>
+
+                                        <div class="h4 fw-bold mb-0">
+
+                                            {{ quant.quantified_achievement_count }}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+
+
+                                {% if quant.quantification_score is defined %}
+
+                                <div class="col-md-6">
+
+                                    <div class="border rounded p-3">
+
+                                        <div class="small text-muted">
+
+                                            Quantification Score
+
+                                        </div>
+
+                                        <div class="h4 fw-bold mb-0">
+
+                                            {{ quant.quantification_score }}%
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- PARSEABILITY -->
+
+                    {% if analysis.ats.parseability_analysis %}
+
+                    <div class="card shadow-sm mb-3">
+
+                        <div class="card-header py-2">
+
+                            <strong>
+                                ATS Parseability
+                            </strong>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set parseability = analysis.ats.parseability_analysis %}
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                {% if parseability.parseable %}
+
+                                    <span class="badge bg-success">
+                                        Parseable
+                                    </span>
+
+                                    <span class="small text-muted">
+                                        Resume can be processed by the ATS pipeline.
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-danger">
+                                        Not Parseable
+                                    </span>
+
+                                    <span class="small text-muted">
+                                        Resume parsing requires attention.
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if parseability.parseability_score is defined %}
+
+                                <div class="mt-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <span class="small fw-semibold">
+                                            Parseability Score
+                                        </span>
+
+                                        <span class="small">
+                                            {{ parseability.parseability_score }}%
+                                        </span>
+
+                                    </div>
+
+                                    <div
+                                        class="progress mt-1"
+                                        style="height: 10px;">
+
+                                        <div
+                                            class="progress-bar bg-success"
+                                            style="width: {{ parseability.parseability_score }}%;">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- FORMATTING ANALYSIS -->
+
+                    {% if analysis.ats.formatting_analysis %}
+
+                    <div class="card shadow-sm mb-3">
+
+                        <div class="card-header py-2">
+
+                            <strong>
+                                Formatting Analysis
+                            </strong>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set formatting = analysis.ats.formatting_analysis %}
+
+                            {% if formatting is mapping %}
+
+                                {% for key, value in formatting.items() %}
+
+                                    {% if value is not mapping and value is not sequence or value is string %}
+
+                                        <div class="d-flex justify-content-between border-bottom py-2">
+
+                                            <span class="small">
+
+                                                {{ key|replace("_", " ")|title }}
+
+                                            </span>
+
+                                            <span class="small fw-semibold">
+
+                                                {{ value }}
+
+                                            </span>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <div class="small text-muted">
+
+                                    Formatting analysis is available in the ATS engine.
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- READABILITY ANALYSIS -->
+
+                    {% if analysis.ats.readability_analysis %}
+
+                    <div class="card shadow-sm mb-3">
+
+                        <div class="card-header py-2">
+
+                            <strong>
+                                Readability Analysis
+                            </strong>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set readability = analysis.ats.readability_analysis %}
+
+                            {% if readability is mapping %}
+
+                                {% for key, value in readability.items() %}
+
+                                    {% if value is not mapping and value is not sequence or value is string %}
+
+                                        <div class="d-flex justify-content-between border-bottom py-2">
+
+                                            <span class="small">
+
+                                                {{ key|replace("_", " ")|title }}
+
+                                            </span>
+
+                                            <span class="small fw-semibold">
+
+                                                {{ value }}
+
+                                            </span>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <div class="small text-muted">
+
+                                    Readability analysis is available in the ATS engine.
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- REQUIREMENTS SUMMARY                              -->
+            <!-- ================================================= -->
+
+            {% if analysis.requirements_summary %}
+
+            <div class="card shadow-sm mb-3">
+
+                <div class="card-header py-2">
+
+                    <strong>
+                        Job Requirement Summary
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-3">
+
+                            <div class="border rounded p-3 text-center">
+
+                                <div class="small text-muted">
+                                    Total
+                                </div>
+
+                                <div class="h4 mb-0">
+
+                                    {{ analysis.requirements_summary.total }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="border rounded p-3 text-center">
+
+                                <div class="small text-muted">
+                                    Required
+                                </div>
+
+                                <div class="h4 mb-0">
+
+                                    {{ analysis.requirements_summary.required }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="border rounded p-3 text-center">
+
+                                <div class="small text-muted">
+                                    Preferred
+                                </div>
+
+                                <div class="h4 mb-0">
+
+                                    {{ analysis.requirements_summary.preferred }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="border rounded p-3 text-center">
+
+                                <div class="small text-muted">
+                                    Contextual
+                                </div>
+
+                                <div class="h4 mb-0">
+
+                                    {{ analysis.requirements_summary.contextual }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- PIPELINE SUMMARY                                  -->
+            <!-- ================================================= -->
+
+            {% if analysis.pipeline %}
+
+            <div class="card shadow-sm">
+
+                <div class="card-header py-2">
+
+                    <strong>
+                        Analysis Pipeline Summary
+                    </strong>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+                        {% for key, value in analysis.pipeline.items() %}
+
+                            <div class="col-md-4">
+
+                                <div class="border rounded p-2">
+
+                                    <div class="small text-muted">
+
+                                        {{ key|replace("_", " ")|title }}
+
+                                    </div>
+
+                                    <div class="fw-semibold">
+
+                                        {% if value is sameas true %}
+
+                                            Yes
+
+                                        {% elif value is sameas false %}
+
+                                            No
+
+                                        {% else %}
+
+                                            {{ value }}
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ========================================================= -->
+    <!-- COVER LETTER                                              -->
+    <!-- ========================================================= -->
+
+    <div class="card shadow-sm mb-3">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+
+                    <h4 class="mb-1">
+                        Cover Letter
+                    </h4>
+
+                    <div class="small text-muted">
+
+                        Generate a separate DOCX cover letter using
+                        the candidate's resume and Job Description.
+
+                    </div>
+
+                </div>
+
+
+                {% if project.resume_uploaded and project.jd_uploaded %}
+
+                    <a
+                        href="{{ url_for('coverletter.generate', project_id=project.id) }}"
+                        class="btn btn-outline-dark btn-sm">
+
+                        Generate Cover Letter
+
+                    </a>
+
+                {% else %}
 
                     <button
-                        class="btn btn-dark w-100 btn-lg"
-
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm"
                         disabled>
 
                         Generate Cover Letter
 
                     </button>
 
-                </div>
+                {% endif %}
 
             </div>
 
@@ -307,45 +1781,7 @@
     </div>
 
 
-
-    <!-- ========================= -->
-    <!-- Downloads                 -->
-    <!-- ========================= -->
-
-    <div class="card shadow">
-
-        <div class="card-body">
-
-            <h4>
-
-                Downloads
-
-            </h4>
-
-            <hr>
-
-            <button
-                class="btn btn-outline-primary me-2"
-
-                disabled>
-
-                Resume
-
-            </button>
-
-            <button
-                class="btn btn-outline-success"
-
-                disabled>
-
-                Cover Letter
-
-            </button>
-
-        </div>
-
-    </div>
-
 </div>
 
 {% endblock %}
+

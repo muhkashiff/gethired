@@ -1,107 +1,217 @@
 {% extends "base.html" %}
 
+{% block title %}
+GetHired - Projects
+{% endblock %}
+
+
 {% block content %}
 
-<div class="container mt-4">
+<div class="page-header">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
 
-        <h2>My Projects</h2>
+        <h1 class="page-title">
+            My Projects
+        </h1>
 
-        <button
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#projectModal">
-
-            + New Project
-
-        </button>
+        <p class="page-subtitle">
+            Compare resumes with job descriptions and identify evidence, gaps and opportunities.
+        </p>
 
     </div>
 
-    <div class="row">
+    <button
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#projectModal">
 
-        {% if projects %}
+        + New Project
 
-            {% for project in projects %}
+    </button>
 
-            <div class="col-md-4 mb-4">
+</div>
 
-                <div class="card shadow h-100">
 
-                    <div class="card-body">
+{% if projects %}
 
-                        <h5 class="card-title">
+<div class="row g-3">
 
-                            {{ project.project_name }}
+    {% for project in projects %}
 
-                        </h5>
+    <div class="col-xl-4 col-lg-6">
 
-                        <hr>
+        <div class="project-card">
 
-                        <p>
+            <div class="project-card-header">
 
-                            <strong>Status:</strong>
+                <div>
 
-                            {{ project.status }}
+                    <h5 class="project-title">
 
-                        </p>
+                        {{ project.project_name }}
 
-                        <p>
+                    </h5>
 
-                            <strong>ATS Score:</strong>
+                    <div class="text-muted small">
 
-                            {{ project.ats_score }}%
-
-                        </p>
-
-                        <hr>
-
-                        <a
-                            href="{{ url_for('project.workspace', project_id=project.id) }}"
-                            class="btn btn-primary w-100">
-
-                            Open Project
-
-                        </a>
+                        Project #{{ project.id }}
 
                     </div>
 
                 </div>
 
+                <span
+                    class="status-badge
+                    {% if project.status == 'Analysis Complete' %}
+                        status-success
+                    {% elif project.status == 'Analyzing' %}
+                        status-warning
+                    {% else %}
+                        status-neutral
+                    {% endif %}">
+
+                    {{ project.status or "Not Started" }}
+
+                </span>
+
             </div>
 
-            {% endfor %}
 
-        {% else %}
+            <div class="project-card-body">
 
-            <div class="col-12">
+                <div class="project-stat-row">
 
-                <div class="alert alert-info">
+                    <span>
+                        Resume
+                    </span>
 
-                    No projects found.
-                    Click <strong>New Project</strong> to create your first project.
+                    {% if project.resume_uploaded %}
+
+                        <span class="text-success fw-semibold">
+                            Uploaded
+                        </span>
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            Not uploaded
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="project-stat-row">
+
+                    <span>
+                        Job Description
+                    </span>
+
+                    {% if project.jd_uploaded %}
+
+                        <span class="text-success fw-semibold">
+                            Uploaded
+                        </span>
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            Not uploaded
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="project-stat-row">
+
+                    <span>
+                        ATS Compatibility
+                    </span>
+
+                    {% if project.ats_score is not none %}
+
+                        <strong>
+                            {{ project.ats_score }}%
+                        </strong>
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            —
+                        </span>
+
+                    {% endif %}
 
                 </div>
 
             </div>
 
-        {% endif %}
+
+            <div class="project-card-footer">
+
+                <a
+                    href="{{ url_for('project.workspace', project_id=project.id) }}"
+                    class="btn btn-primary btn-sm">
+
+                    Open Project
+
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
+
+    {% endfor %}
 
 </div>
 
 
-<!-- ========================= -->
+{% else %}
+
+<div class="empty-state">
+
+    <div class="empty-state-icon">
+        +
+    </div>
+
+    <h4>
+        No projects yet
+    </h4>
+
+    <p class="text-muted">
+        Create a project to upload a resume and job description.
+    </p>
+
+    <button
+        class="btn btn-primary btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#projectModal">
+
+        Create Project
+
+    </button>
+
+</div>
+
+{% endif %}
+
+
+
 <!-- Create Project Modal -->
-<!-- ========================= -->
 
-<div class="modal fade"
-     id="projectModal"
-     tabindex="-1">
+<div
+    class="modal fade"
+    id="projectModal"
+    tabindex="-1"
+    aria-hidden="true">
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
 
         <div class="modal-content">
 
@@ -112,9 +222,7 @@
                 <div class="modal-header">
 
                     <h5 class="modal-title">
-
                         Create New Project
-
                     </h5>
 
                     <button
@@ -125,22 +233,42 @@
 
                 </div>
 
+
                 <div class="modal-body">
+
+                    <label
+                        for="project_name"
+                        class="form-label">
+
+                        Project Name
+
+                    </label>
 
                     <input
                         type="text"
-                        class="form-control"
+                        id="project_name"
                         name="project_name"
-                        placeholder="Enter Project Name"
+                        class="form-control"
+                        placeholder="e.g. Quality Manager - ABC Foods"
                         required>
 
                 </div>
 
+
                 <div class="modal-footer">
 
                     <button
+                        type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <button
                         type="submit"
-                        class="btn btn-success">
+                        class="btn btn-primary">
 
                         Create Project
 

@@ -542,25 +542,43 @@ class RepositoryLoader:
         ontology_name: str,
     ) -> str:
         """
-        Derive the default entity type from ontology name.
+        Derive the canonical entity type from ontology name.
 
-        Examples:
-
-        actions      -> action
-        skills       -> skill
-        standards    -> standard
-        technologies -> technologie
-
-        The repository JSON should normally provide
-        the explicit entity_type.
+        Ontology names are plural collection names.
+        Entity types are canonical singular semantic types.
         """
 
-        if ontology_name.endswith("s"):
+        ontology_name = (
+            str(ontology_name)
+            .strip()
+            .casefold()
+        )
 
-            return ontology_name[:-1]
+        ontology_entity_types = {
+            "actions": "action",
+            "skills": "skill",
+            "technologies": "technology",
+            "certifications": "certification",
+            "standards": "standard",
+            "methodologies": "methodology",
+            "metrics": "metric",
+            "measurements": "measurement",
+            "domains": "domain",
+            "targets": "target",
+            "modifiers": "modifier",
+            "practices": "practice",
+            "kpis": "kpi",
+            "business_kpis": "business_kpi",
+        }
 
-        return ontology_name
-
+        return ontology_entity_types.get(
+            ontology_name,
+            (
+                ontology_name[:-1]
+                if ontology_name.endswith("s")
+                else ontology_name
+            ),
+        )
     ####################################################################
     # SAFE STRING
     ####################################################################
