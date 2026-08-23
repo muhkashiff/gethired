@@ -49,8 +49,8 @@ class TechnologyParserModel(ParserModel):
     # Enterprise V5 repository architecture intentionally uses
     # ontology_name[:-1] for plural ontologies.
     #
-    # technologies -> technologie
-    entity_type: str = "technologie"
+    # technologies -> technology
+    entity_type: str = "technology"
 
     ontology_name: str = "technologies"
 

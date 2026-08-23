@@ -129,6 +129,10 @@ DEFAULT_ONTOLOGIES = (
     "domains",
     "metrics",
     "standards",
+    "technologies",
+    "methodologies",
+    "certifications",
+    "business_kpis",
 )
 
 
@@ -645,7 +649,7 @@ class EnterpriseResumePipeline:
         result.statistics["graph_edges"] = len(edges)
         result.stages["knowledge_graph"] = True
 
-        # =================================================================
+    # =================================================================
     # STAGE 7: KNOWLEDGE PROFILE - FIXED
     # =================================================================
 
@@ -798,6 +802,10 @@ class EnterpriseResumePipeline:
             "metrics": "metric",
             "skills": "skill",
             "standards": "standard",
+            "technologies": "technology",
+            "methodologies": "methodology",
+            "certifications": "certification",
+            "business_kpis": "business_kpi",
         }
 
         grouped = {}
@@ -894,7 +902,7 @@ class EnterpriseResumePipeline:
             if isinstance(embedded, (list, tuple)):
                 entities.extend(embedded)
 
-            for attribute in ("skill", "action", "target", "domain", "metric", "measurement", "practice", "standard"):
+            for attribute in ("skill", "action", "target", "domain", "metric", "measurement", "practice", "standard","technology","methodology","certification","business_kpi"):
                 value = getattr(interpretation, attribute, None)
                 if value is not None:
                     found = getattr(value, "found", True)

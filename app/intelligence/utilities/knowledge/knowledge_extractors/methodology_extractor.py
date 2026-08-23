@@ -62,7 +62,7 @@ class MethodologyExtractor(
 
     knowledge_class = MethodologyKnowledge
 
-    entity_type = "methodologie"
+    entity_type = "methodology"
 
     # ================================================================
     # METHODOLOGY-SPECIFIC FIELDS

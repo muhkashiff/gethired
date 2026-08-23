@@ -2,7 +2,8 @@
 Enterprise Extraction Pipeline
 Enterprise V5
 
-Responsibility:
+Responsibility
+--------------
 
 Sentence
     ↓
@@ -10,20 +11,24 @@ KnowledgeV5Pipeline
     ↓
 Ontology-specific extraction
     ↓
+Entity conversion
+    ↓
 Entity deduplication
     ↓
 Unified ExtractionResult
 
 This layer does NOT:
+
 - tokenize
 - normalize
-- match
+- fuzzy match
 - calculate confidence
 - resolve overlaps
 - rank
 - reason
 
-Those responsibilities belong to other layers.
+Those responsibilities belong to KnowledgeV5Pipeline
+and later reasoning layers.
 """
 
 from __future__ import annotations
@@ -31,7 +36,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import KnowledgeV5Pipeline
+from app.intelligence.utilities.knowledge.knowledge_pipeline_v5.knowledgev5_pipeline import (
+    KnowledgeV5Pipeline,
+)
 
 
 # =====================================================================
@@ -45,6 +52,10 @@ DEFAULT_ONTOLOGIES = (
     "domains",
     "metrics",
     "standards",
+    "technologies",
+    "methodologies",
+    "business_kpis",
+    "certifications",
 )
 
 
@@ -91,9 +102,8 @@ class ExtractedEntity:
     end_char: int = 0
 
     # Repository metadata
-    metadata: dict = field(
-        default_factory=dict
-    )
+    metadata: dict = field(default_factory=dict)
+
 
 # =====================================================================
 # EXTRACTION RESULT
@@ -128,6 +138,22 @@ class ExtractionResult:
         default_factory=list
     )
 
+    technologies: List[ExtractedEntity] = field(
+        default_factory=list
+    )
+
+    methodologies: List[ExtractedEntity] = field(
+        default_factory=list
+    )
+
+    business_kpis: List[ExtractedEntity] = field(
+        default_factory=list
+    )
+
+    certifications: List[ExtractedEntity] = field(
+        default_factory=list
+    )
+
     all_entities: List[ExtractedEntity] = field(
         default_factory=list
     )
@@ -140,22 +166,17 @@ class ExtractionResult:
     def counts(self) -> Dict[str, int]:
 
         return {
-
             "skills": len(self.skills),
-
             "actions": len(self.actions),
-
             "targets": len(self.targets),
-
             "domains": len(self.domains),
-
             "metrics": len(self.metrics),
-
             "standards": len(self.standards),
-
-            "all_entities": len(
-                self.all_entities
-            ),
+            "technologies": len(self.technologies),
+            "methodologies": len(self.methodologies),
+            "business_kpis": len(self.business_kpis),
+            "certifications": len(self.certifications),
+            "all_entities": len(self.all_entities),
         }
 
     # =================================================================
@@ -192,15 +213,22 @@ class ExtractionResult:
 class ExtractionCoordinator:
 
     """
-    Coordinates KnowledgeV5Pipeline across ontology collections.
+    Coordinates KnowledgeV5Pipeline across all ontology collections.
 
-    The V5 pipeline remains the single source of truth for:
+    KnowledgeV5Pipeline remains the single source of truth for:
 
         Tokenization
         Matching
         Confidence
         Overlap resolution
         Ranking
+
+    This coordinator only:
+
+        1. invokes the V5 pipeline
+        2. converts MatchResult objects
+        3. stores them under the requested ontology
+        4. builds the unified entity list
     """
 
     def __init__(
@@ -208,7 +236,6 @@ class ExtractionCoordinator:
         knowledge_pipeline: Optional[
             KnowledgeV5Pipeline
         ] = None,
-
         ontologies=None,
     ) -> None:
 
@@ -231,10 +258,7 @@ class ExtractionCoordinator:
         sentence: str,
     ) -> ExtractionResult:
 
-        if not isinstance(
-            sentence,
-            str,
-        ):
+        if not isinstance(sentence, str):
 
             raise TypeError(
                 "sentence must be a string."
@@ -251,7 +275,7 @@ class ExtractionCoordinator:
             return result
 
         # =============================================================
-        # RUN V5 PIPELINE FOR EACH ONTOLOGY
+        # RUN V5 PIPELINE FOR EVERY ONTOLOGY
         # =============================================================
 
         for ontology in self.ontologies:
@@ -294,9 +318,9 @@ class ExtractionCoordinator:
         ontology: str,
     ) -> List[ExtractedEntity]:
 
-        entities = []
+        entities: List[ExtractedEntity] = []
 
-        for match in matches:
+        for match in matches or []:
 
             entity_id = getattr(
                 match,
@@ -314,7 +338,6 @@ class ExtractionCoordinator:
             )
 
             entities.append(
-
                 ExtractedEntity(
 
                     # -------------------------------------------------
@@ -331,6 +354,7 @@ class ExtractionCoordinator:
                             "canonical",
                             "",
                         )
+                        or ""
                     ),
 
                     phrase=str(
@@ -339,9 +363,15 @@ class ExtractionCoordinator:
                             "phrase",
                             "",
                         )
+                        or ""
                     ),
 
-                    ontology=ontology,
+                    # IMPORTANT:
+                    # The ontology passed to pipeline.run() is the
+                    # authoritative ontology for this extraction pass.
+                    ontology=str(
+                        ontology
+                    ),
 
                     # -------------------------------------------------
                     # Confidence
@@ -353,6 +383,7 @@ class ExtractionCoordinator:
                             "confidence",
                             0.0,
                         )
+                        or 0.0
                     ),
 
                     # -------------------------------------------------
@@ -365,6 +396,7 @@ class ExtractionCoordinator:
                             "entity_type",
                             "",
                         )
+                        or ""
                     ),
 
                     category=str(
@@ -373,6 +405,7 @@ class ExtractionCoordinator:
                             "category",
                             "",
                         )
+                        or ""
                     ),
 
                     business_area=str(
@@ -381,6 +414,7 @@ class ExtractionCoordinator:
                             "business_area",
                             "",
                         )
+                        or ""
                     ),
 
                     domain=str(
@@ -389,6 +423,7 @@ class ExtractionCoordinator:
                             "domain",
                             "",
                         )
+                        or ""
                     ),
 
                     impact_weight=float(
@@ -397,6 +432,7 @@ class ExtractionCoordinator:
                             "impact_weight",
                             1.0,
                         )
+                        or 1.0
                     ),
 
                     # -------------------------------------------------
@@ -430,6 +466,7 @@ class ExtractionCoordinator:
                             "token_index",
                             0,
                         )
+                        or 0
                     ),
 
                     token_count=int(
@@ -438,6 +475,7 @@ class ExtractionCoordinator:
                             "token_count",
                             0,
                         )
+                        or 0
                     ),
 
                     start_char=int(
@@ -446,6 +484,7 @@ class ExtractionCoordinator:
                             "start_char",
                             0,
                         )
+                        or 0
                     ),
 
                     end_char=int(
@@ -454,6 +493,7 @@ class ExtractionCoordinator:
                             "end_char",
                             0,
                         )
+                        or 0
                     ),
 
                     # -------------------------------------------------
@@ -468,9 +508,7 @@ class ExtractionCoordinator:
                         )
                         or {}
                     ),
-
                 )
-
             )
 
         return entities
@@ -486,41 +524,35 @@ class ExtractionCoordinator:
         entities: List[ExtractedEntity],
     ) -> None:
 
-        if ontology == "skills":
+        # Normalize ontology name once.
+        ontology = str(
+            ontology
+        ).strip().lower()
 
-            result.skills.extend(
-                entities
-            )
+        # Explicit ontology → result field mapping.
+        ontology_map = {
+            "skills": result.skills,
+            "actions": result.actions,
+            "targets": result.targets,
+            "domains": result.domains,
+            "metrics": result.metrics,
+            "standards": result.standards,
+            "technologies": result.technologies,
+            "methodologies": result.methodologies,
+            "business_kpis": result.business_kpis,
+            "certifications": result.certifications,
+        }
 
-        elif ontology == "actions":
+        target = ontology_map.get(
+            ontology
+        )
 
-            result.actions.extend(
-                entities
-            )
+        if target is None:
+            return
 
-        elif ontology == "targets":
-
-            result.targets.extend(
-                entities
-            )
-
-        elif ontology == "domains":
-
-            result.domains.extend(
-                entities
-            )
-
-        elif ontology == "metrics":
-
-            result.metrics.extend(
-                entities
-            )
-
-        elif ontology == "standards":
-
-            result.standards.extend(
-                entities
-            )
+        target.extend(
+            entities
+        )
 
     # =================================================================
     # BUILD GLOBAL ENTITY LIST
@@ -531,22 +563,40 @@ class ExtractionCoordinator:
         result: ExtractionResult,
     ) -> List[ExtractedEntity]:
 
+        # IMPORTANT:
+        # Include ALL ontology collections.
+        #
+        # The previous implementation only included:
+        #   skills
+        #   actions
+        #   targets
+        #   domains
+        #   metrics
+        #   standards
+        #
+        # That silently discarded:
+        #   technologies
+        #   methodologies
+        #   business_kpis
+        #   certifications
+
         groups = (
-
             result.skills,
-
             result.actions,
-
             result.targets,
-
             result.domains,
-
             result.metrics,
-
             result.standards,
+            result.technologies,
+            result.methodologies,
+            result.business_kpis,
+            result.certifications,
         )
 
-        entity_map = {}
+        entity_map: Dict[
+            str,
+            ExtractedEntity
+        ] = {}
 
         for group in groups:
 
@@ -587,9 +637,7 @@ class ExtractionCoordinator:
         # =============================================================
 
         return sorted(
-
             entity_map.values(),
-
             key=lambda entity: (
                 -entity.confidence,
                 entity.entity_id,
@@ -610,7 +658,6 @@ class ExtractionCoordinator:
         )
 
         if not result.all_entities:
-
             return None
 
         return result.all_entities[0]

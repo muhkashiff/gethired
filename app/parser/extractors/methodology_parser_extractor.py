@@ -47,7 +47,7 @@ class MethodologyParserExtractor(
 
     # IMPORTANT:
     # This must match RepositoryEntity.entity_type.
-    entity_type = "methodologie"
+    entity_type = "methodology"
 
     # ================================================================
     # INITIALIZATION

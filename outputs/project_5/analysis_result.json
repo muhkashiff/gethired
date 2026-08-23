@@ -1,0 +1,438 @@
+{
+  "project_id": 5,
+  "scores": {
+    "overall_match": 86.8,
+    "ats_compatibility": 78.8,
+    "evidence_strength": 59.1
+  },
+  "matches": {
+    "strong": [
+      {
+        "requirement_id": "jdreq:domain:domain-food-safety",
+        "subject": "Food Safety",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TGT_FSMS"
+        ],
+        "evidence": [
+          "True"
+        ],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:qualification:std-food-safety",
+        "subject": "Food Safety",
+        "requirement_type": "qualification",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TGT_FSMS"
+        ],
+        "evidence": [
+          "True"
+        ],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-food-safety",
+        "subject": "Food Safety Management",
+        "requirement_type": "skill",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_MANAGE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-sanitation",
+        "subject": "Sanitation Management",
+        "requirement_type": "skill",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_MANAGE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-hire",
+        "subject": "Hire",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_HIRE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-quality-assurance",
+        "subject": "Quality Assurance",
+        "requirement_type": "skill",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "SKILL_QUALITY_ASSURANCE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.65
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-quality-management",
+        "subject": "Quality Management",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_QUALITY_MANAGEMENT"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.6
+      },
+      {
+        "requirement_id": "jdreq:metric:kpi-capa",
+        "subject": "Corrective Actions",
+        "requirement_type": "metric",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "KPI_CAPA"
+        ],
+        "evidence": [
+          "True"
+        ],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-retail",
+        "subject": "Retail",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_RETAIL"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-perform",
+        "subject": "Perform",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_PERFORM"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-compliance",
+        "subject": "Compliance",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_COMPLIANCE"
+        ],
+        "evidence": [
+          "True"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-maintain",
+        "subject": "Maintain",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_MAINTAIN"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      }
+    ],
+    "partial": [],
+    "missing": [
+      {
+        "requirement_id": "jdreq:responsibility:act-monitor",
+        "subject": "Monitor",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      }
+    ]
+  },
+  "experience_gap": [],
+  "recommendations": [
+    "Surface Food Safety evidence clearly in the resume.",
+    "Surface Food Safety Management evidence clearly in the resume.",
+    "Consider Monitor only if genuinely possessed; do not add unsupported keywords."
+  ],
+  "categories": {
+    "skills": [
+      "Business Analytics",
+      "Business Intelligence",
+      "Coaching",
+      "Communication",
+      "Data Analysis",
+      "Internal Auditing",
+      "Leadership",
+      "Machine Learning",
+      "Operational Excellence",
+      "Process Improvement",
+      "Quality Assurance",
+      "Quality Control",
+      "Six Sigma",
+      "Statistical Analysis",
+      "Supplier Management",
+      "Warehouse Management"
+    ],
+    "standards": [
+      "Six Sigma"
+    ],
+    "certifications": [],
+    "methodologies": [],
+    "technologies": [],
+    "actions": [
+      "Audit",
+      "Clean",
+      "Coach",
+      "Control",
+      "Count",
+      "Cycle",
+      "Fill",
+      "Hire",
+      "Implement",
+      "Increase",
+      "Inventory",
+      "Lead",
+      "Maintain",
+      "Manage",
+      "Market",
+      "Perform",
+      "Release",
+      "Report",
+      "Schedule",
+      "Secure",
+      "Store",
+      "Support",
+      "Train",
+      "Transform",
+      "Utilize"
+    ],
+    "domains": [
+      "Audit",
+      "Business Intelligence",
+      "Compliance",
+      "Customer Experience",
+      "Data Analytics",
+      "Inventory",
+      "Leadership",
+      "Maintenance",
+      "Operational Excellence",
+      "Operations",
+      "Production",
+      "Quality Control",
+      "Quality Management",
+      "Retail",
+      "Sales",
+      "Six Sigma",
+      "Supply Chain",
+      "Training",
+      "Warehousing"
+    ],
+    "metrics": [
+      "Business Growth",
+      "Corrective Actions",
+      "Customer Satisfaction",
+      "Downtime",
+      "Production Efficiency",
+      "Production Yield",
+      "Waste"
+    ],
+    "jd_requirements": [
+      "Compliance",
+      "Corrective Actions",
+      "Employees",
+      "Food Safety",
+      "Food Safety Management",
+      "Hire",
+      "Maintain",
+      "Monitor",
+      "Perform",
+      "Product Quality",
+      "Quality Assurance",
+      "Quality Management",
+      "Retail",
+      "Sanitation Management"
+    ]
+  },
+  "requirements_summary": {
+    "total": 13,
+    "required": 0,
+    "preferred": 0,
+    "contextual": 13
+  },
+  "ats": {
+    "available": false,
+    "score": 78.8,
+    "confidence": 60.0,
+    "keyword_analysis": {
+      "required_keywords": [
+        "Food Safety",
+        "Food Safety",
+        "Food Safety Management",
+        "Sanitation Management",
+        "Hire",
+        "Quality Assurance",
+        "Quality Management",
+        "Corrective Actions",
+        "Retail",
+        "Monitor",
+        "Perform",
+        "Compliance",
+        "Maintain"
+      ],
+      "matched_keywords": [
+        "Food Safety",
+        "Food Safety",
+        "Food Safety Management",
+        "Corrective Actions",
+        "Retail",
+        "Perform",
+        "Compliance",
+        "Maintain"
+      ],
+      "missing_keywords": [
+        "Sanitation Management",
+        "Hire",
+        "Quality Assurance",
+        "Quality Management",
+        "Monitor"
+      ],
+      "keyword_coverage_score": 61.5
+    },
+    "section_analysis": {
+      "detected_sections": [
+        "summary",
+        "experience",
+        "skills",
+        "education"
+      ],
+      "missing_sections": [],
+      "section_completeness_score": 100.0
+    },
+    "quantification_analysis": {
+      "quantified_achievement_count": 7,
+      "quantification_score": 100.0
+    },
+    "parseability_analysis": {
+      "parseable": true,
+      "parseability_score": 100.0
+    }
+  },
+  "pipeline": {
+    "resume_entities": 89,
+    "jd_entities": 16,
+    "resume_semantic_entities": 192,
+    "jd_semantic_entities": 32,
+    "resume_business_statements": 27,
+    "jd_business_statements": 8,
+    "typed_phase4_profile": true
+  },
+  "repository_gaps": [],
+  "completed_at": "2026-08-23T11:48:49.702364+00:00"
+}

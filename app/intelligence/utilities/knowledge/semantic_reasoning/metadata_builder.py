@@ -213,7 +213,7 @@ class MetadataBuilder:
             # Your architecture keeps technology
             # as one entity type.
             "technologies": counts.get(
-                "technologie",
+                "technology",
                 0,
             ),
 
@@ -234,7 +234,7 @@ class MetadataBuilder:
             # entity_type value even though the
             # concept may contain many methodologies.
             "methodologies": counts.get(
-                "methodologie",
+                "methodology",
                 0,
             ),
 

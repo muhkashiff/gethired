@@ -1,0 +1,673 @@
+{
+  "project_id": 1,
+  "scores": {
+    "overall_match": 89.4,
+    "ats_compatibility": 100.0,
+    "evidence_strength": 63.8
+  },
+  "matches": {
+    "strong": [
+      {
+        "requirement_id": "jdreq:domain:domain-sales",
+        "subject": "Sales",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "TGT_SALES"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-retail",
+        "subject": "Retail",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_RETAIL"
+        ],
+        "evidence": [
+          "True"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-customer-experience",
+        "subject": "Customer Experience",
+        "requirement_type": "domain",
+        "priority": "preferred",
+        "mandatory": false,
+        "preferred": true,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_CUSTOMER_EXPERIENCE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-identify",
+        "subject": "Identify",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_IDENTIFY"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-schedule",
+        "subject": "Schedule",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_SCHEDULE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-support",
+        "subject": "Support",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_SUPPORT"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-market",
+        "subject": "Market",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_MARKET"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-serve",
+        "subject": "Serve",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-collaborate",
+        "subject": "Collaborate",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_COLLABORATE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-respond",
+        "subject": "Respond",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-inventory",
+        "subject": "Inventory",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_INVENTORY"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-maintain",
+        "subject": "Maintain",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_MAINTAIN"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.6
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-inventory",
+        "subject": "Inventory",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_INVENTORY"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-compliance",
+        "subject": "Compliance",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_COMPLIANCE"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-standardize",
+        "subject": "Standardize",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-approve",
+        "subject": "Approve",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-measure",
+        "subject": "Measure",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-problem-solving",
+        "subject": "Problem Solving",
+        "requirement_type": "skill",
+        "priority": "required",
+        "mandatory": true,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "SKILL_PROBLEM_SOLVING"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-communication",
+        "subject": "Communication",
+        "requirement_type": "skill",
+        "priority": "required",
+        "mandatory": true,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "SKILL_COMMUNICATION"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-risk-management",
+        "subject": "Risk Management",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_RISK_MANAGEMENT"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:methodology:meth-iso31000",
+        "subject": "ISO 31000 Risk Management",
+        "requirement_type": "methodology",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_MANAGE"
+        ],
+        "evidence": [
+          "True"
+        ],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:qualification:std-iso-31000",
+        "subject": "ISO 31000",
+        "requirement_type": "qualification",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "STD_ISO_31000"
+        ],
+        "evidence": [
+          "False"
+        ],
+        "evidence_confidence": 0.6
+      }
+    ],
+    "partial": [],
+    "missing": [
+      {
+        "requirement_id": "jdreq:responsibility:act-assign",
+        "subject": "Assign",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-escalate",
+        "subject": "Escalate",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      }
+    ]
+  },
+  "experience_gap": [],
+  "recommendations": [
+    "Surface Sales evidence clearly in the resume.",
+    "Surface Retail evidence clearly in the resume.",
+    "Surface Customer Experience evidence clearly in the resume.",
+    "Consider Assign only if genuinely possessed; do not add unsupported keywords.",
+    "Consider Escalate only if genuinely possessed; do not add unsupported keywords."
+  ],
+  "categories": {
+    "skills": [
+      "Business Analytics",
+      "Business Intelligence",
+      "Communication",
+      "Continuous Improvement",
+      "Customer Service Management",
+      "Data Analysis",
+      "Food Safety Management",
+      "Internal Auditing",
+      "Leadership",
+      "Machine Learning",
+      "Problem Solving",
+      "Process Improvement",
+      "Procurement Management",
+      "Quality Assurance",
+      "Regulatory Compliance",
+      "Six Sigma",
+      "Statistical Analysis"
+    ],
+    "standards": [
+      "BRCGS Food Safety",
+      "Food Safety",
+      "ISO 31000",
+      "Six Sigma"
+    ],
+    "certifications": [
+      "CQI IRCA Certified",
+      "FSPCA",
+      "Organic Certification",
+      "Six Sigma Black Belt"
+    ],
+    "methodologies": [
+      "Business Intelligence",
+      "Extract Transform Load",
+      "Kaizen",
+      "Machine Learning",
+      "Six Sigma"
+    ],
+    "technologies": [
+      "CSS",
+      "Flask",
+      "Git",
+      "GitHub",
+      "HTML",
+      "Java",
+      "JavaScript",
+      "Microsoft Excel",
+      "Microsoft Power BI",
+      "Minitab",
+      "MySQL",
+      "Pandas",
+      "PostgreSQL",
+      "Python",
+      "R",
+      "SQL",
+      "Seaborn",
+      "Tableau"
+    ],
+    "actions": [
+      "Analyze",
+      "Audit",
+      "Clean",
+      "Collaborate",
+      "Control",
+      "Count",
+      "Cycle",
+      "Evaluate",
+      "Execute",
+      "Facilitate",
+      "Guide",
+      "Identify",
+      "Inventory",
+      "Lead",
+      "Maintain",
+      "Manage",
+      "Market",
+      "Operate",
+      "Optimize",
+      "Perform",
+      "Promote",
+      "Purchase",
+      "Reconcile",
+      "Report",
+      "Review",
+      "Schedule",
+      "Sell",
+      "Store",
+      "Support",
+      "Train",
+      "Transform"
+    ],
+    "domains": [
+      "Audit",
+      "Business Intelligence",
+      "Compliance",
+      "Continuous Improvement",
+      "Customer Experience",
+      "Customer Service",
+      "Data Analytics",
+      "Food Safety",
+      "Inventory",
+      "Leadership",
+      "Operations",
+      "Quality Management",
+      "Retail",
+      "Risk Management",
+      "Sales",
+      "Six Sigma",
+      "Training"
+    ],
+    "metrics": [
+      "Business Growth",
+      "Production Yield"
+    ],
+    "jd_requirements": [
+      "Approve",
+      "Assets",
+      "Assign",
+      "Business Operations",
+      "Business Processes",
+      "Business Reports",
+      "Business Strategy",
+      "Collaborate",
+      "Communication",
+      "Compliance",
+      "Customer Experience",
+      "Escalate",
+      "ISO 31000",
+      "ISO 31000 Risk Management",
+      "Identify",
+      "Inventory",
+      "Maintain",
+      "Market",
+      "Measure",
+      "Problem Solving",
+      "Procedures",
+      "Production Line",
+      "Requirements",
+      "Respond",
+      "Retail",
+      "Risk Management",
+      "Sales",
+      "Schedule",
+      "Serve",
+      "Standardize",
+      "Support",
+      "Team"
+    ]
+  },
+  "requirements_summary": {
+    "total": 24,
+    "required": 2,
+    "preferred": 1,
+    "contextual": 21
+  },
+  "ats": {
+    "available": false,
+    "score": 100.0,
+    "confidence": 60.0,
+    "keyword_analysis": {
+      "required_keywords": [
+        "Problem Solving",
+        "Communication"
+      ],
+      "matched_keywords": [
+        "Problem Solving",
+        "Communication"
+      ],
+      "missing_keywords": [],
+      "keyword_coverage_score": 100.0
+    },
+    "section_analysis": {
+      "detected_sections": [
+        "summary",
+        "experience",
+        "skills",
+        "education"
+      ],
+      "missing_sections": [],
+      "section_completeness_score": 100.0
+    },
+    "quantification_analysis": {
+      "quantified_achievement_count": 8,
+      "quantification_score": 100.0
+    },
+    "parseability_analysis": {
+      "parseable": true,
+      "parseability_score": 100.0
+    }
+  },
+  "pipeline": {
+    "resume_entities": 119,
+    "jd_entities": 37,
+    "resume_semantic_entities": 244,
+    "jd_semantic_entities": 76,
+    "resume_business_statements": 32,
+    "jd_business_statements": 20,
+    "typed_phase4_profile": true
+  },
+  "repository_gaps": [],
+  "completed_at": "2026-08-23T16:59:19.967318+00:00"
+}

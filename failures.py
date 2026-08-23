@@ -127,4 +127,40 @@ EnterpriseKnowledgeProfileBuilder
 | 4        | `EnterpriseResumePipeline`                  | Pass actual `MatchResult[]` → `SemanticResolver` → Graph                                             |
 | 5        | `ProfileBuilder`                            | Replace old evidence/score-engine orchestration with graph-aware `EnterpriseKnowledgeProfileBuilder` |
 
+
+
+
+
+
+Resume + JD
+     │
+     ▼
+Core Analysis Pipeline
+     │
+     ├── Matching
+     ├── Evidence
+     ├── Gaps
+     ├── KnowledgeMatchProfile
+     ├── ATS
+     └── Recommendations
+     │
+     ▼
+Candidate Results Dashboard
+     │
+     └── [ Generate Cover Letter ]
+                         │
+                         ▼
+              Linguistic Generation Layer
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+          Resume                     JD
+             │                       │
+             └──── Candidate Evidence
+                         │
+                         ▼
+                Natural Cover Letter
+                         │
+                         ▼
+                    DOCX output
 """

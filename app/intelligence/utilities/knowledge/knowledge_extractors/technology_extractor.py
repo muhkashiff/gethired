@@ -30,7 +30,7 @@ class TechnologyExtractor(GenericOntologyExtractor[Technology]):
 
     knowledge_class = Technology
 
-    entity_type = "technologie"
+    entity_type = "technology"
 
     ####################################################################
     # TECHNOLOGY SPECIFIC FIELDS

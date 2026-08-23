@@ -182,11 +182,9 @@ class SemanticStatistics:
 
             "measurement": "measurements",
 
-            "methodologie": "methodologies",
+            "methodology": "methodologies",
 
-            "technologie": "technologies",
-
-            "technologie": "technologies",
+            "technology": "technologies",
 
             "standard": "standards",
 

@@ -53,7 +53,7 @@ class TechnologyParserExtractor(
     #
     # technologies -> technologie
     #
-    entity_type = "technologie"
+    entity_type = "technology"
 
     # ================================================================
     # INITIALIZATION

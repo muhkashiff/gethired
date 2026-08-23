@@ -1,0 +1,6 @@
+GETHIRED REPOSITORY / ONTOLOGY GAP REPORT
+===========================================
+Project: 5
+Generated: 2026-08-23T11:48:49.710364+00:00
+
+No explicit repository/ontology gaps were reported by the pipeline.

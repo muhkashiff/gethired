@@ -1,8 +1,11 @@
+# Repository Loader
+
 """
 Enterprise Repository Loader
 Enterprise V5
 
-Responsibility:
+Responsibility
+--------------
 
 Ontology JSON
     ↓
@@ -15,6 +18,46 @@ The loader does NOT generate surface forms.
 It only converts repository JSON records into
 RepositoryEntity objects while preserving
 ontology-specific information in metadata.
+
+Canonical Entity Types
+----------------------
+
+RepositoryLoader is the canonical boundary between
+repository JSON and the runtime knowledge system.
+
+Therefore repository entity types are normalized here.
+
+Examples:
+
+    actions         -> action
+    skills          -> skill
+    technologies    -> technology
+    certifications  -> certification
+    standards       -> standard
+    methodologies   -> methodology
+    metrics         -> metric
+    measurements    -> measurement
+    domains         -> domain
+    targets         -> target
+    modifiers       -> modifier
+    practices       -> practice
+    kpis            -> kpi
+    business_kpis   -> business_kpi
+
+Legacy values are also normalized:
+
+    technologie    -> technology
+    methodologie   -> methodology
+
+This prevents vocabulary conflicts between:
+
+    repository
+    matcher
+    technology extractor
+    interpretation model
+    metadata builder
+    semantic statistics
+    knowledge profile
 """
 
 from __future__ import annotations
@@ -25,19 +68,25 @@ from typing import Any
 
 from .repository_entity import RepositoryEntity
 
-from .relation_repository_record import (
-    RelationRepositoryRecord,
-)
-
 
 class RepositoryLoader:
     """
     Converts ontology JSON data into RepositoryEntity objects.
+
+    This class is intentionally responsible only for repository
+    loading and normalization.
+
+    It does not:
+
+    - perform matching
+    - build matcher indexes
+    - generate surface forms
+    - calculate profile scores
     """
 
-    ####################################################################
+    # ==============================================================
     # STANDARD REPOSITORY ENTITY FIELDS
-    ####################################################################
+    # ==============================================================
 
     _STANDARD_FIELDS = frozenset(
         {
@@ -67,7 +116,7 @@ class RepositoryLoader:
             "business_area",
             "description",
 
-            # Business KPI relationships 
+            # Business KPI relationships
             "related_metrics",
 
             # Scoring
@@ -89,76 +138,120 @@ class RepositoryLoader:
         }
     )
 
-    ####################################################################
+    # ==============================================================
+    # CANONICAL ONTOLOGY -> ENTITY TYPE MAP
+    # ==============================================================
+
+    _ONTOLOGY_ENTITY_TYPES = {
+        "actions": "action",
+        "skills": "skill",
+        "technologies": "technology",
+        "certifications": "certification",
+        "standards": "standard",
+        "methodologies": "methodology",
+        "metrics": "metric",
+        "measurements": "measurement",
+        "domains": "domain",
+        "targets": "target",
+        "modifiers": "modifier",
+        "practices": "practice",
+        "kpis": "kpi",
+        "business_kpis": "business_kpi",
+    }
+
+    # ==============================================================
+    # LEGACY ENTITY TYPE ALIASES
+    # ==============================================================
+    #
+    # These exist only for backward compatibility with older
+    # repository JSON records or previously generated objects.
+    #
+    # Runtime code should use only the canonical values.
+    # ==============================================================
+
+    _ENTITY_TYPE_ALIASES = {
+        "technologie": "technology",
+        "methodologie": "methodology",
+    }
+
+    # ==============================================================
     # LOAD
-    ####################################################################
+    # ==============================================================
 
     def load(
         self,
         ontology_name: str,
         path: str | Path,
     ) -> list[RepositoryEntity]:
+        """
+        Load ontology JSON and convert every record into
+        a RepositoryEntity.
 
-        ################################################################
-        # READ JSON
-        ################################################################
+        Supports both:
+
+            [
+                {...},
+                {...}
+            ]
+
+        and:
+
+            {
+                "ENTITY_001": {...},
+                "ENTITY_002": {...}
+            }
+        """
+
+        # ----------------------------------------------------------
+        # Normalize ontology name
+        # ----------------------------------------------------------
+
+        normalized_ontology = self._normalize_ontology_name(
+            ontology_name
+        )
+
+        # ----------------------------------------------------------
+        # Read JSON
+        # ----------------------------------------------------------
 
         with open(
             path,
             "r",
             encoding="utf8",
         ) as file:
-
             raw = json.load(file)
 
-        ################################################################
-        # SUPPORT BOTH:
-        #
-        # [
-        #     {...},
-        #     {...}
-        # ]
-        #
-        # AND:
-        #
-        # {
-        #     "ACTION_001": {...},
-        #     "ACTION_002": {...}
-        # }
-        ################################################################
+        # ----------------------------------------------------------
+        # Support object or array
+        # ----------------------------------------------------------
 
         if isinstance(raw, dict):
-
             iterator = raw.values()
 
         elif isinstance(raw, list):
-
             iterator = raw
 
         else:
-
             raise ValueError(
-                "Ontology JSON must contain "
-                "either an object or an array."
+                "Ontology JSON must contain either "
+                "an object or an array."
             )
 
-        ################################################################
-        # BUILD ENTITIES
-        ################################################################
+        # ----------------------------------------------------------
+        # Build entities
+        # ----------------------------------------------------------
 
         entities: list[RepositoryEntity] = []
 
         for item in iterator:
 
             if not isinstance(item, dict):
-
                 raise ValueError(
-                    "Every ontology entry must "
-                    "be a JSON object."
+                    "Every ontology entry must be a JSON object."
                 )
 
             entity = self._build_entity(
-                ontology_name=ontology_name,
+                ontology_name=normalized_ontology,
                 item=item,
             )
 
@@ -166,9 +259,9 @@ class RepositoryLoader:
 
         return entities
 
-    ####################################################################
+    # ==============================================================
     # BUILD ENTITY
-    ####################################################################
+    # ==============================================================
 
     def _build_entity(
         self,
@@ -179,25 +272,28 @@ class RepositoryLoader:
         Convert one JSON record into RepositoryEntity.
         """
 
-        ################################################################
-        # METADATA
-        ################################################################
+        # ----------------------------------------------------------
+        # Metadata
+        # ----------------------------------------------------------
 
         metadata = self._build_metadata(
             item
         )
 
-        ################################################################
-        # CANONICAL
-        ################################################################
+        # ----------------------------------------------------------
+        # Canonical
+        # ----------------------------------------------------------
 
         canonical = self._string_value(
-            item.get("canonical", "")
+            item.get(
+                "canonical",
+                "",
+            )
         )
 
-        ################################################################
-        # NORMALIZED
-        ################################################################
+        # ----------------------------------------------------------
+        # Normalized
+        # ----------------------------------------------------------
 
         normalized = self._string_value(
             item.get(
@@ -206,39 +302,51 @@ class RepositoryLoader:
             )
         )
 
-        ################################################################
-        # ALIASES
-        ################################################################
+        # ----------------------------------------------------------
+        # Aliases
+        # ----------------------------------------------------------
 
         aliases = self._build_aliases(
-            item.get("aliases", [])
-        )
-
-        ################################################################
-        # ENTITY TYPE
-        ################################################################
-
-        entity_type = self._string_value(
             item.get(
-                "entity_type",
-                self._default_entity_type(
-                    ontology_name
-                ),
+                "aliases",
+                [],
             )
         )
 
-        ################################################################
-        # BUILD RepositoryEntity
-        ################################################################
+        # ----------------------------------------------------------
+        # Entity type
+        #
+        # IMPORTANT:
+        #
+        # This is where "technologie" becomes "technology".
+        # ----------------------------------------------------------
+
+        raw_entity_type = item.get(
+            "entity_type",
+            self._default_entity_type(
+                ontology_name
+            ),
+        )
+
+        entity_type = self._normalize_entity_type(
+            raw_entity_type
+        )
+
+        # ----------------------------------------------------------
+        # Build RepositoryEntity
+        # ----------------------------------------------------------
 
         return RepositoryEntity(
 
-            ############################################################
+            # ======================================================
             # IDENTITY
-            ############################################################
+            # ======================================================
 
             entity_id=self._string_value(
-                item.get("entity_id", "")
+                item.get(
+                    "entity_id",
+                    "",
+                )
             ),
 
             canonical=canonical,
@@ -247,75 +355,113 @@ class RepositoryLoader:
 
             aliases=aliases,
 
-            ############################################################
+            # ======================================================
             # LINGUISTICS
-            ############################################################
+            # ======================================================
 
             base=self._string_value(
-                item.get("base", "")
+                item.get(
+                    "base",
+                    "",
+                )
             ),
 
             past=self._string_value(
-                item.get("past", "")
+                item.get(
+                    "past",
+                    "",
+                )
             ),
 
             gerund=self._string_value(
-                item.get("gerund", "")
+                item.get(
+                    "gerund",
+                    "",
+                )
             ),
 
             plural=self._string_value(
-                item.get("plural", "")
+                item.get(
+                    "plural",
+                    "",
+                )
             ),
 
             singular=self._string_value(
-                item.get("singular", "")
+                item.get(
+                    "singular",
+                    "",
+                )
             ),
 
-            ############################################################
+            # ======================================================
             # NAMING
-            ############################################################
+            # ======================================================
 
             abbreviation=self._string_value(
-                item.get("abbreviation", "")
+                item.get(
+                    "abbreviation",
+                    "",
+                )
             ),
 
             short_name=self._string_value(
-                item.get("short_name", "")
+                item.get(
+                    "short_name",
+                    "",
+                )
             ),
 
-            ############################################################
+            # ======================================================
             # CLASSIFICATION
-            ############################################################
+            # ======================================================
 
             category=self._string_value(
-                item.get("category", "")
+                item.get(
+                    "category",
+                    "",
+                )
             ),
 
             entity_type=entity_type,
 
             ontology_name=ontology_name,
 
-            ############################################################
+            # ======================================================
             # ENTERPRISE CONTEXT
-            ############################################################
+            # ======================================================
 
             domain=self._string_value(
-                item.get("domain", "")
+                item.get(
+                    "domain",
+                    "",
+                )
             ),
 
             business_area=self._string_value(
-                item.get("business_area", "")
+                item.get(
+                    "business_area",
+                    "",
+                )
             ),
 
             description=self._string_value(
-                item.get("description", "")
+                item.get(
+                    "description",
+                    "",
+                )
             ),
 
-            related_metrics=self._build_related_metrics( item.get("related_metrics", []) ),
+            related_metrics=self._build_related_metrics(
+                item.get(
+                    "related_metrics",
+                    [],
+                )
+            ),
 
-            ############################################################
+            # ======================================================
             # SCORING
-            ############################################################
+            # ======================================================
 
             impact_weight=self._float_value(
                 item.get(
@@ -324,12 +470,15 @@ class RepositoryLoader:
                 )
             ),
 
-            ############################################################
+            # ======================================================
             # SEMANTIC
-            ############################################################
+            # ======================================================
 
             business_meaning=self._string_value(
-                item.get("business_meaning", "")
+                item.get(
+                    "business_meaning",
+                    "",
+                )
             ),
 
             preferred_direction=self._string_value(
@@ -353,9 +502,9 @@ class RepositoryLoader:
                 )
             ),
 
-            ############################################################
+            # ======================================================
             # REPOSITORY CONTROL
-            ############################################################
+            # ======================================================
 
             searchable=self._bool_value(
                 item.get(
@@ -378,16 +527,16 @@ class RepositoryLoader:
                 )
             ),
 
-            ############################################################
+            # ======================================================
             # ONTOLOGY-SPECIFIC DATA
-            ############################################################
+            # ======================================================
 
             metadata=metadata,
         )
 
-    ####################################################################
+    # ==============================================================
     # METADATA
-    ####################################################################
+    # ==============================================================
 
     def _build_metadata(
         self,
@@ -401,22 +550,19 @@ class RepositoryLoader:
         preserved ontology-specific fields.
         """
 
-        ################################################################
-        # AUTOMATIC EXTRA FIELDS
-        ################################################################
+        # ----------------------------------------------------------
+        # Automatic extra fields
+        # ----------------------------------------------------------
 
         extra_fields = {
-
             key: value
-
             for key, value in item.items()
-
             if key not in self._STANDARD_FIELDS
         }
 
-        ################################################################
-        # EXPLICIT METADATA
-        ################################################################
+        # ----------------------------------------------------------
+        # Explicit metadata
+        # ----------------------------------------------------------
 
         explicit_metadata = item.get(
             "metadata",
@@ -427,24 +573,22 @@ class RepositoryLoader:
             explicit_metadata,
             dict,
         ):
-
             raise ValueError(
-                "Ontology metadata must be "
-                "a JSON object."
+                "Ontology metadata must be a JSON object."
             )
 
-        ################################################################
-        # EXPLICIT METADATA WINS
-        ################################################################
+        # ----------------------------------------------------------
+        # Explicit metadata wins
+        # ----------------------------------------------------------
 
         return {
             **extra_fields,
             **explicit_metadata,
         }
 
-    ####################################################################
+    # ==============================================================
     # ALIASES
-    ####################################################################
+    # ==============================================================
 
     @staticmethod
     def _build_aliases(
@@ -461,12 +605,11 @@ class RepositoryLoader:
             value,
             list,
         ):
-
             raise ValueError(
                 "Ontology aliases must be a JSON array."
             )
 
-        aliases = []
+        aliases: list[str] = []
 
         for alias in value:
 
@@ -482,9 +625,9 @@ class RepositoryLoader:
 
         return aliases
 
-    ####################################################################
+    # ==============================================================
     # RELATED METRICS
-    ####################################################################
+    # ==============================================================
 
     @staticmethod
     def _build_related_metrics(
@@ -492,17 +635,6 @@ class RepositoryLoader:
     ) -> list[str]:
         """
         Normalize related metrics into a clean list of strings.
-
-        Business KPI ontology records may contain:
-
-            "related_metrics": [
-                "Production Yield",
-                "Throughput",
-                "Downtime"
-            ]
-
-        The loader preserves these values as a first-class
-        RepositoryEntity field.
         """
 
         if value is None:
@@ -517,7 +649,7 @@ class RepositoryLoader:
                 "a JSON array."
             )
 
-        metrics = []
+        metrics: list[str] = []
 
         for metric in value:
 
@@ -533,106 +665,184 @@ class RepositoryLoader:
 
         return metrics
 
-    ####################################################################
+    # ==============================================================
     # DEFAULT ENTITY TYPE
-    ####################################################################
+    # ==============================================================
 
-    @staticmethod
+    @classmethod
     def _default_entity_type(
+        cls,
         ontology_name: str,
     ) -> str:
         """
         Derive the canonical entity type from ontology name.
 
-        Ontology names are plural collection names.
-        Entity types are canonical singular semantic types.
+        Examples:
+
+            actions        -> action
+            skills         -> skill
+            technologies   -> technology
+            certifications -> certification
+            methodologies  -> methodology
+            metrics        -> metric
+            business_kpis  -> business_kpi
         """
 
-        ontology_name = (
-            str(ontology_name)
+        normalized_ontology = (
+            cls._normalize_ontology_name(
+                ontology_name
+            )
+        )
+
+        # ----------------------------------------------------------
+        # Explicit canonical mapping
+        # ----------------------------------------------------------
+
+        entity_type = cls._ONTOLOGY_ENTITY_TYPES.get(
+            normalized_ontology
+        )
+
+        if entity_type:
+            return entity_type
+
+        # ----------------------------------------------------------
+        # Generic fallback
+        # ----------------------------------------------------------
+
+        if normalized_ontology.endswith("s"):
+            return normalized_ontology[:-1]
+
+        return normalized_ontology
+
+    # ==============================================================
+    # NORMALIZE ENTITY TYPE
+    # ==============================================================
+
+    @classmethod
+    def _normalize_entity_type(
+        cls,
+        entity_type: Any,
+    ) -> str:
+        """
+        Normalize a repository entity type to the canonical
+        runtime vocabulary.
+
+        This protects the runtime from legacy repository values.
+
+        Examples:
+
+            technologie  -> technology
+            methodologie -> methodology
+            technology   -> technology
+            methodology  -> methodology
+        """
+
+        normalized = (
+            cls._string_value(
+                entity_type
+            )
+            .casefold()
+        )
+
+        if not normalized:
+            return ""
+
+        return cls._ENTITY_TYPE_ALIASES.get(
+            normalized,
+            normalized,
+        )
+
+    # ==============================================================
+    # NORMALIZE ONTOLOGY NAME
+    # ==============================================================
+
+    @staticmethod
+    def _normalize_ontology_name(
+        ontology_name: Any,
+    ) -> str:
+        """
+        Normalize ontology collection names.
+
+        Ontology names remain plural collection names.
+
+        Example:
+
+            technologies
+            methodologies
+            business_kpis
+        """
+
+        return (
+            str(
+                ontology_name
+                if ontology_name is not None
+                else ""
+            )
             .strip()
             .casefold()
         )
 
-        ontology_entity_types = {
-            "actions": "action",
-            "skills": "skill",
-            "technologies": "technology",
-            "certifications": "certification",
-            "standards": "standard",
-            "methodologies": "methodology",
-            "metrics": "metric",
-            "measurements": "measurement",
-            "domains": "domain",
-            "targets": "target",
-            "modifiers": "modifier",
-            "practices": "practice",
-            "kpis": "kpi",
-            "business_kpis": "business_kpi",
-        }
-
-        return ontology_entity_types.get(
-            ontology_name,
-            (
-                ontology_name[:-1]
-                if ontology_name.endswith("s")
-                else ontology_name
-            ),
-        )
-    ####################################################################
+    # ==============================================================
     # SAFE STRING
-    ####################################################################
+    # ==============================================================
 
     @staticmethod
     def _string_value(
         value: Any,
     ) -> str:
+        """
+        Convert a repository value safely into a string.
+        """
 
         if value is None:
             return ""
 
         return str(value).strip()
 
-    ####################################################################
+    # ==============================================================
     # SAFE FLOAT
-    ####################################################################
+    # ==============================================================
 
     @staticmethod
     def _float_value(
         value: Any,
     ) -> float:
+        """
+        Convert a repository value safely into a float.
+        """
 
         if value is None:
             return 0.0
 
         try:
-
             return float(value)
 
         except (
             TypeError,
             ValueError,
-        ):
+        ) as error:
 
             raise ValueError(
-                f"Invalid numeric repository value: "
+                "Invalid numeric repository value: "
                 f"{value!r}"
-            )
+            ) from error
 
-    ####################################################################
+    # ==============================================================
     # SAFE BOOLEAN
-    ####################################################################
+    # ==============================================================
 
     @staticmethod
     def _bool_value(
         value: Any,
     ) -> bool:
+        """
+        Convert a repository value safely into a boolean.
+        """
 
         if isinstance(
             value,
             bool,
         ):
-
             return value
 
         if isinstance(
@@ -640,14 +850,17 @@ class RepositoryLoader:
             str,
         ):
 
-            normalized = value.casefold().strip()
+            normalized = (
+                value
+                .casefold()
+                .strip()
+            )
 
             if normalized in {
                 "true",
                 "yes",
                 "1",
             }:
-
                 return True
 
             if normalized in {
@@ -655,118 +868,6 @@ class RepositoryLoader:
                 "no",
                 "0",
             }:
-
                 return False
 
         return bool(value)
-    ####################################################################
-    # LOAD RELATIONS
-    ####################################################################
-
-    def load_relations(
-        self,
-        path,
-    ) -> None:
-
-        relations = self.loader.load_relations(
-            path
-        )
-
-        relation_index = {}
-
-        relation_type_index = {}
-
-        relation_source_index = {}
-
-        relation_target_index = {}
-
-        ################################################################
-        # BUILD RELATION INDEXES
-        ################################################################
-
-        for relation in relations:
-
-            # ==========================================================
-            # RELATION ID
-            # ==========================================================
-
-            relation_index[
-                relation.relation_id
-            ] = relation
-
-            # ==========================================================
-            # RELATION TYPE
-            # ==========================================================
-
-            relation_type = (
-                self._normalize_lookup(
-                    relation.relation_type
-                )
-            )
-
-            if relation_type:
-
-                relation_type_index.setdefault(
-                    relation_type,
-                    []
-                ).append(
-                    relation
-                )
-
-            # ==========================================================
-            # SOURCE
-            # ==========================================================
-
-            source = (
-                self._normalize_lookup(
-                    relation.source
-                )
-            )
-
-            if source:
-
-                relation_source_index.setdefault(
-                    source,
-                    []
-                ).append(
-                    relation
-                )
-
-            # ==========================================================
-            # TARGET
-            # ==========================================================
-
-            target = (
-                self._normalize_lookup(
-                    relation.target
-                )
-            )
-
-            if target:
-
-                relation_target_index.setdefault(
-                    target,
-                    []
-                ).append(
-                    relation
-                )
-
-        ################################################################
-        # STORE
-        ################################################################
-
-        self.cache.relation_indexes = (
-            relation_index
-        )
-
-        self.cache.relation_type_indexes = (
-            relation_type_index
-        )
-
-        self.cache.relation_source_indexes = (
-            relation_source_index
-        )
-
-        self.cache.relation_target_indexes = (
-            relation_target_index
-        )

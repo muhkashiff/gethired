@@ -399,7 +399,7 @@ class KnowledgeInterpretation:
     ) -> list[KnowledgeEntity]:
 
         return self.entities_of_type(
-            "technologie"
+            "technology"
         )
 
     @property
@@ -426,7 +426,7 @@ class KnowledgeInterpretation:
     ) -> list[KnowledgeEntity]:
 
         return self.entities_of_type(
-            "methodologie"
+            "methodology"
         )
 
     @property
