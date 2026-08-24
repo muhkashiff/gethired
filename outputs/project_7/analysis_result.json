@@ -21,9 +21,7 @@
         "candidate_entity_ids": [
           "DOMAIN_QUALITY_MANAGEMENT"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.6
       },
       {
@@ -40,9 +38,7 @@
         "candidate_entity_ids": [
           "ACT_IMPROVE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -59,9 +55,7 @@
         "candidate_entity_ids": [
           "ACT_MANAGE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
@@ -78,9 +72,7 @@
         "candidate_entity_ids": [
           "TGT_PLANNING"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.73
       },
       {
@@ -97,9 +89,7 @@
         "candidate_entity_ids": [
           "ACT_MONITOR"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
@@ -116,9 +106,7 @@
         "candidate_entity_ids": [
           "ACT_COORDINATE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
@@ -135,9 +123,7 @@
         "candidate_entity_ids": [
           "ACT_IMPLEMENT"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
@@ -154,9 +140,7 @@
         "candidate_entity_ids": [
           "ACT_SUPPORT"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -173,9 +157,7 @@
         "candidate_entity_ids": [
           "SKILL_LEADERSHIP"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -192,9 +174,7 @@
         "candidate_entity_ids": [
           "DOMAIN_COMPLIANCE"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -211,9 +191,7 @@
         "candidate_entity_ids": [
           "TGT_FOOD_SAFETY_MANAGER"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -230,9 +208,7 @@
         "candidate_entity_ids": [
           "TGT_FOOD_SAFETY_MANAGER"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -249,9 +225,7 @@
         "candidate_entity_ids": [
           "TGT_FSMS"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.75
       },
       {
@@ -268,9 +242,7 @@
         "candidate_entity_ids": [
           "DOMAIN_OPERATIONS"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -287,9 +259,7 @@
         "candidate_entity_ids": [
           "TGT_PRODUCTION_EFFICIENCY"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -306,9 +276,7 @@
         "candidate_entity_ids": [
           "DOMAIN_PRODUCTION"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -325,9 +293,7 @@
         "candidate_entity_ids": [
           "SKILL_LEADERSHIP"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -344,9 +310,7 @@
         "candidate_entity_ids": [
           "ACT_MANAGE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
@@ -363,9 +327,7 @@
         "candidate_entity_ids": [
           "SKILL_PROCUREMENT"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.64
       },
       {
@@ -382,9 +344,7 @@
         "candidate_entity_ids": [
           "ACT_INVENTORY"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -401,9 +361,7 @@
         "candidate_entity_ids": [
           "KPI_WASTE"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.69
       },
       {
@@ -420,9 +378,7 @@
         "candidate_entity_ids": [
           "DOMAIN_MANUFACTURING"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -439,9 +395,7 @@
         "candidate_entity_ids": [
           "SKILL_MANUFACTURING_OPERATIONS"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -458,9 +412,7 @@
         "candidate_entity_ids": [
           "ACT_MANUFACTURE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
@@ -477,9 +429,7 @@
         "candidate_entity_ids": [
           "ACT_INVENTORY"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -496,9 +446,7 @@
         "candidate_entity_ids": [
           "TGT_PROCUREMENT"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.74
       },
       {
@@ -515,9 +463,7 @@
         "candidate_entity_ids": [
           "DOMAIN_OPERATIONS"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -534,9 +480,7 @@
         "candidate_entity_ids": [
           "TGT_REQUIREMENTS"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.726
       },
       {
@@ -553,9 +497,7 @@
         "candidate_entity_ids": [
           "TGT_PRODUCT_QUALITY"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -572,9 +514,7 @@
         "candidate_entity_ids": [
           "DOMAIN_COMPLIANCE"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -591,9 +531,7 @@
         "candidate_entity_ids": [
           "ACT_REPORT"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
@@ -610,9 +548,7 @@
         "candidate_entity_ids": [
           "SKILL_CAPA"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -629,9 +565,7 @@
         "candidate_entity_ids": [
           "ACT_IMPROVE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -648,9 +582,7 @@
         "candidate_entity_ids": [
           "TGT_REQUIREMENTS"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.726
       },
       {
@@ -694,7 +626,6 @@
           "ACT_MANAGE"
         ],
         "evidence": [
-          "False",
           "Structured resume evidence: Managing Director at Nutrain (Pvt) Ltd. — qualifies as a managerial/supervisory role. Structured resume evidence: Retail Store Manager at Shell Gas Station & Retail Store — qualifies as a managerial/supervisory role."
         ],
         "evidence_confidence": 0.98
@@ -713,9 +644,7 @@
         "candidate_entity_ids": [
           "TGT_PLANNING"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.73
       }
     ],
@@ -804,15 +733,11 @@
       "minimum_years": null,
       "status": "matched",
       "evidence": [
-        "False",
         "Structured resume evidence: Managing Director at Nutrain (Pvt) Ltd. — qualifies as a managerial/supervisory role. Structured resume evidence: Retail Store Manager at Shell Gas Station & Retail Store — qualifies as a managerial/supervisory role."
       ]
     }
   ],
   "recommendations": [
-    "Surface Quality Management evidence clearly in the resume.",
-    "Surface Improve evidence clearly in the resume.",
-    "Surface Manage evidence clearly in the resume.",
     "Consider Approve only if genuinely possessed; do not add unsupported keywords.",
     "Consider Preventive Actions only if genuinely possessed; do not add unsupported keywords.",
     "Consider Oversee only if genuinely possessed; do not add unsupported keywords.",
@@ -1712,7 +1637,7 @@
   "ats": {
     "available": true,
     "score": 97.3,
-    "confidence": 63.3,
+    "confidence": 49.5,
     "keyword_analysis": {
       "required_keywords": [],
       "matched_keywords": [],
@@ -1772,5 +1697,5 @@
     "typed_phase4_profile": true
   },
   "repository_gaps": [],
-  "completed_at": "2026-08-24T04:49:01.846405+00:00"
+  "completed_at": "2026-08-24T05:09:26.077143+00:00"
 }

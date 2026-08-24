@@ -3262,17 +3262,40 @@ class CandidateAnalysisService:
         entity: Any,
         *names: str,
     ) -> str:
+        """
+        Safely extract textual values from an entity.
 
-        if isinstance(
-            entity,
-            dict,
-        ):
+        Important:
+        ----------
+        Boolean values such as False must NEVER become textual evidence.
+
+        Without this protection:
+
+            evidence=False
+
+        becomes:
+
+            "False"
+
+        which then gets displayed as resume evidence.
+
+        This helper is used for canonical/entity/source/evidence fields,
+        so structured values must be converted conservatively.
+        """
+
+        # --------------------------------------------------------------
+        # DICTIONARY ENTITY
+        # --------------------------------------------------------------
+
+        if isinstance(entity, dict):
 
             for name in names:
 
-                value = entity.get(
-                    name
-                )
+                value = entity.get(name)
+
+                # Boolean values are not textual evidence.
+                if isinstance(value, bool):
+                    continue
 
                 if (
                     value is not None
@@ -3285,6 +3308,10 @@ class CandidateAnalysisService:
 
             return ""
 
+        # --------------------------------------------------------------
+        # OBJECT ENTITY
+        # --------------------------------------------------------------
+
         for name in names:
 
             value = getattr(
@@ -3292,6 +3319,17 @@ class CandidateAnalysisService:
                 name,
                 None,
             )
+
+            # Boolean values such as:
+            #
+            #     evidence=False
+            #
+            # must not become:
+            #
+            #     "False"
+            #
+            if isinstance(value, bool):
+                continue
 
             if (
                 value is not None
@@ -3303,7 +3341,6 @@ class CandidateAnalysisService:
                 ).strip()
 
         return ""
-
     # ==================================================================
     # STRUCTURED RESUME EVIDENCE
     # ==================================================================
