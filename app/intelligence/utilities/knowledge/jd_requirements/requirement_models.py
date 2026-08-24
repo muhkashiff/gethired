@@ -80,6 +80,22 @@ class RequirementType(str, Enum):
 
     METHODOLOGY = "methodology"
 
+    LANGUAGE = "language"
+
+    LOCATION = "location"
+
+    WORK_AUTHORIZATION = "work_authorization"
+
+    EMPLOYMENT_TYPE = "employment_type"
+
+    SCHEDULE = "schedule"
+
+    TRAVEL = "travel"
+
+    COMPENSATION = "compensation"
+
+    OTHER = "other"
+
     UNKNOWN = "unknown"
 
 
@@ -510,6 +526,23 @@ class JDRequirementProfile:
     confidence: float = 0.0
 
     # ------------------------------------------------------------------
+    # Additional interpretation metadata
+    # ------------------------------------------------------------------
+
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def type_counts(self) -> dict[str, int]:
+        """Return counts for every requirement type without maintaining extra state."""
+        return {
+            item.value: sum(
+                requirement.requirement_type == item
+                for requirement in self.requirements
+            )
+            for item in RequirementType
+        }
+
+    # ------------------------------------------------------------------
     # Validation
     # ------------------------------------------------------------------
 
@@ -822,6 +855,8 @@ class JDRequirementProfile:
     def from_requirements(
         cls,
         requirements: list[JDRequirement],
+        *,
+        metadata: dict[str, Any] | None = None,
     ) -> "JDRequirementProfile":
         """
         Build a complete profile from requirement objects.
@@ -865,6 +900,8 @@ class JDRequirementProfile:
                 general_experience_count=0,
 
                 confidence=0.0,
+
+                metadata=dict(metadata or {}),
             )
 
         confidence = (
@@ -986,6 +1023,8 @@ class JDRequirementProfile:
                 confidence,
                 4,
             ),
+
+            metadata=dict(metadata or {}),
         )
 
 

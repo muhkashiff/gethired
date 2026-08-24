@@ -65,6 +65,12 @@ from app.intelligence.utilities.knowledge.jd_requirements.requirement_classifier
     JDRequirementClassifier,
 )
 
+from app.parser.resume_parser import ResumeParser
+from app.parser.resume_builder import ResumeBuilder
+from app.intelligence.utilities.knowledge.education.education_equivalence import (
+    EducationEquivalence,
+)
+
 
 logger = logging.getLogger("GetHired")
 
@@ -95,6 +101,96 @@ class CandidateAnalysisService:
         "unmapped_terms",
     }
 
+    # Experience-role evidence is deliberately kept outside ontology matching.
+    # These title families answer requirements such as:
+    #   "previous experience in a supervisory or managerial position"
+    # using the candidate's structured employment history.
+    EXPERIENCE_ROLE_FAMILIES = {
+        "managerial_supervisory": (
+            "manager",
+            "managing director",
+            "general manager",
+            "store manager",
+            "operations manager",
+            "production manager",
+            "plant manager",
+            "quality manager",
+            "qa manager",
+            "food safety manager",
+            "managerial",
+            "director",
+            "supervisor",
+            "superintendent",
+            "team lead",
+            "team leader",
+            "shift lead",
+            "shift supervisor",
+            "head of",
+            "department head",
+            "chief",
+            "president",
+            "vice president",
+            "vp ",
+            "owner",
+            "founder",
+        ),
+        "managerial": (
+            "manager",
+            "managing director",
+            "general manager",
+            "director",
+            "managerial",
+            "chief",
+            "president",
+            "vice president",
+            "vp ",
+            "owner",
+            "founder",
+        ),
+        "supervisory": (
+            "supervisor",
+            "manager",
+            "store manager",
+            "team lead",
+            "team leader",
+            "shift lead",
+            "shift supervisor",
+            "foreman",
+            "head of",
+            "department head",
+        ),
+        "leadership": (
+            "manager",
+            "managing director",
+            "director",
+            "supervisor",
+            "team lead",
+            "team leader",
+            "head of",
+            "chief",
+            "president",
+            "vice president",
+            "vp ",
+            "owner",
+            "founder",
+        ),
+        "executive": (
+            "managing director",
+            "director",
+            "general manager",
+            "chief",
+            "president",
+            "vice president",
+            "vp ",
+            "owner",
+            "founder",
+            "ceo",
+            "coo",
+            "cfo",
+            "cto",
+        ),
+    }
+
     def __init__(self, app_config: dict[str, Any]):
         self.upload_folder = Path(app_config["UPLOAD_FOLDER"])
         self.output_folder = Path(app_config["OUTPUT_FOLDER"])
@@ -102,6 +198,8 @@ class CandidateAnalysisService:
         self.document_service = DocumentProcessingService()
         self.profile_builder = DocumentProfileBuilder()
         self.jd_classifier = JDRequirementClassifier()
+        self.resume_parser = ResumeParser()
+        self.resume_builder = ResumeBuilder()
 
     # ==================================================================
     # PUBLIC API
@@ -172,6 +270,10 @@ class CandidateAnalysisService:
             project_id,
             len(resume_text),
             len(jd_text),
+        )
+
+        structured_resume = self._build_structured_resume_evidence(
+            resume_path
         )
 
         # --------------------------------------------------------------
@@ -257,6 +359,7 @@ class CandidateAnalysisService:
             jd_profile=jd_profile,
             jd_requirements=jd_requirements,
             resume_text=resume_text,
+            structured_resume=structured_resume,
         )
 
         logger.info(
@@ -272,6 +375,8 @@ class CandidateAnalysisService:
         ats = self._run_latest_ats_if_available(
             resume_text=resume_text,
             matching=matching,
+            jd_requirements=jd_requirements,
+            structured_resume=structured_resume,
         )
 
         logger.info(
@@ -295,6 +400,7 @@ class CandidateAnalysisService:
             jd_requirements=jd_requirements,
             matching=matching,
             ats=ats,
+            structured_resume=structured_resume,
         )
 
         # --------------------------------------------------------------
@@ -470,6 +576,7 @@ class CandidateAnalysisService:
         jd_profile: Any,
         jd_requirements: Any,
         resume_text: str,
+        structured_resume: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """
         Build Phase 3 / Phase 4 matching objects when available.
@@ -509,6 +616,7 @@ class CandidateAnalysisService:
                     requirement,
                     resume_entities,
                     resume_text,
+                    structured_resume or {},
                 )
             )
 
@@ -789,6 +897,7 @@ class CandidateAnalysisService:
         requirement: Any,
         resume_entities: list[Any],
         resume_text: str,
+        structured_resume: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """
         Match one JD requirement against resume entities.
@@ -826,6 +935,68 @@ class CandidateAnalysisService:
         subject_tokens = set(
             subject_norm.split()
         )
+
+        # --------------------------------------------------------------
+        # Education equivalency
+        # --------------------------------------------------------------
+        # Education is intentionally handled outside ontology matching. A
+        # higher academic level satisfies a lower-level requirement when the
+        # JD does not impose a conflicting field constraint. For example, an
+        # M.Sc. satisfies a Bachelor's degree requirement.
+        # --------------------------------------------------------------
+        if requirement_type == "education":
+            education_records = (structured_resume or {}).get(
+                "education",
+                [],
+            )
+            education_match = EducationEquivalence.match_requirement(
+                requirement,
+                education_records,
+            )
+
+            evidence = []
+            if education_match.candidate_degree:
+                candidate_description = education_match.candidate_degree
+                if education_match.candidate_major:
+                    candidate_description += (
+                        f" ({education_match.candidate_major})"
+                    )
+                evidence.append(
+                    "Structured education evidence: "
+                    + candidate_description
+                )
+
+            if education_match.reason:
+                evidence.append(education_match.reason)
+
+            return {
+                "requirement_id": getattr(requirement, "requirement_id", ""),
+                "subject": subject,
+                "requirement_type": requirement_type,
+                "priority": priority,
+                "minimum_years": getattr(requirement, "minimum_years", None),
+                "status": "matched" if education_match.matched else (
+                    "partial" if education_match.score >= 0.45 else "unmatched"
+                ),
+                "score": round(education_match.score, 4),
+                "basis": "education_equivalence",
+                "candidate_entity_ids": [],
+                "evidence": evidence,
+                "evidence_confidence": round(
+                    0.96 if education_match.matched else max(0.55, education_match.score),
+                    4,
+                ),
+                "education_match": {
+                    "required_level": education_match.required_level,
+                    "candidate_level": education_match.candidate_level,
+                    "candidate_degree": education_match.candidate_degree,
+                    "candidate_major": education_match.candidate_major,
+                    "equivalent": education_match.equivalent,
+                    "field_required": education_match.field_required,
+                    "field_matched": education_match.field_matched,
+                    "reason": education_match.reason,
+                },
+            }
 
         candidates = []
 
@@ -995,6 +1166,76 @@ class CandidateAnalysisService:
                 evidence_confidence = 0.0
 
         # --------------------------------------------------------------
+        # Non-ontology experience-role evidence
+        # --------------------------------------------------------------
+        # A requirement such as "previous experience in a supervisory or
+        # managerial position" is not a literal keyword requirement.  It must
+        # be evaluated against employment titles.  Ontology overlap alone can
+        # produce false positives (for example Manager -> managerial) without
+        # proving that the candidate actually held that role.
+        if requirement_type == "experience":
+            role_match = self._experience_role_match(
+                subject=subject,
+                structured_resume=structured_resume or {},
+                resume_text=resume_text,
+            )
+            if role_match is not None:
+                role_score = float(role_match.get("score", 0.0))
+                if role_score >= 0.82:
+                    status = "matched"
+                    score = max(score, role_score)
+                elif role_score >= 0.55 and status != "matched":
+                    status = "partial"
+                    score = max(score, role_score)
+                evidence.append(role_match["evidence"])
+                evidence_confidence = max(
+                    evidence_confidence,
+                    float(role_match.get("confidence", 0.0)),
+                )
+
+                minimum_years = getattr(requirement, "minimum_years", None)
+                qualifying_years = role_match.get("qualifying_years")
+                if minimum_years is not None and qualifying_years is not None:
+                    minimum = float(minimum_years)
+                    if qualifying_years >= minimum:
+                        status = "matched"
+                        score = max(score, 1.0)
+                        evidence.append(
+                            f"Qualifying supervisory/managerial roles total approximately "
+                            f"{qualifying_years:g} years; JD asks for {minimum:g}+ years."
+                        )
+                    elif qualifying_years > 0 and status != "matched":
+                        status = "partial"
+                        score = max(score, min(qualifying_years / minimum, 0.79))
+                        evidence.append(
+                            f"Qualifying supervisory/managerial roles total approximately "
+                            f"{qualifying_years:g} years; JD asks for {minimum:g}+ years."
+                        )
+
+        # --------------------------------------------------------------
+        # Non-ontology structured candidate evidence
+        # --------------------------------------------------------------
+        structured_candidates = self._structured_resume_candidates(
+            requirement_type=requirement_type,
+            subject=subject,
+            structured_resume=structured_resume or {},
+        )
+        if structured_candidates:
+            best_structured = structured_candidates[0]
+            structured_score = best_structured["score"]
+            if structured_score >= 0.82:
+                status = "matched"
+                score = max(score, structured_score)
+            elif structured_score >= 0.55 and status != "matched":
+                status = "partial"
+                score = max(score, structured_score)
+            evidence.append(best_structured["evidence"])
+            evidence_confidence = max(
+                evidence_confidence,
+                float(best_structured.get("confidence", 0.0)),
+            )
+
+        # --------------------------------------------------------------
         # Experience requirements
         # --------------------------------------------------------------
 
@@ -1110,6 +1351,8 @@ class CandidateAnalysisService:
         *,
         resume_text: str,
         matching: dict[str, Any],
+        jd_requirements: Any = None,
+        structured_resume: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """
         Run the latest Phase 5 ATS analyzer when available.
@@ -1153,7 +1396,12 @@ class CandidateAnalysisService:
                     .ATSResumeAnalysisRequest(
                         resume_text=resume_text,
                         knowledge_match_profile=profile,
-                        policy=policy,
+                        resume_profile=getattr(profile, "resume_profile", None),
+                        jd_requirement_profile=jd_requirements,
+                        metadata={
+                            "structured_resume": structured_resume or {},
+                            "jd_requirement_profile": jd_requirements,
+                        },
                     )
                 )
 
@@ -1181,65 +1429,31 @@ class CandidateAnalysisService:
                     )
                 )
 
+                component_fields = {
+                    "keyword_analysis": "keyword_coverage_score",
+                    "section_analysis": "section_completeness_score",
+                    "formatting_analysis": "formatting_score",
+                    "readability_analysis": "readability_score",
+                    "terminology_analysis": "terminology_score",
+                    "quantification_analysis": "quantification_score",
+                    "parseability_analysis": "parseability_score",
+                }
+
+                ui_components: dict[str, dict[str, Any]] = {}
+                for component_name, score_field in component_fields.items():
+                    ui_components[component_name] = self._ats_component_for_ui(
+                        getattr(result, component_name, None),
+                        score_field,
+                    )
+
                 return {
                     "available": True,
-                    "score": round(
-                        score * 100,
-                        1,
-                    ),
+                    "score": round(score * 100, 1),
                     "confidence": round(
-                        float(
-                            getattr(
-                                result,
-                                "confidence",
-                                0.0,
-                            )
-                        )
-                        * 100,
+                        float(getattr(result, "confidence", 0.0)) * 100,
                         1,
                     ),
-                    "keyword_analysis": self._object_summary(
-                        getattr(
-                            result,
-                            "keyword_analysis",
-                            None,
-                        )
-                    ),
-                    "section_analysis": self._object_summary(
-                        getattr(
-                            result,
-                            "section_analysis",
-                            None,
-                        )
-                    ),
-                    "formatting_analysis": self._object_summary(
-                        getattr(
-                            result,
-                            "formatting_analysis",
-                            None,
-                        )
-                    ),
-                    "readability_analysis": self._object_summary(
-                        getattr(
-                            result,
-                            "readability_analysis",
-                            None,
-                        )
-                    ),
-                    "quantification_analysis": self._object_summary(
-                        getattr(
-                            result,
-                            "quantification_analysis",
-                            None,
-                        )
-                    ),
-                    "parseability_analysis": self._object_summary(
-                        getattr(
-                            result,
-                            "parseability_analysis",
-                            None,
-                        )
-                    ),
+                    **ui_components,
                 }
 
             except (
@@ -1438,6 +1652,11 @@ class CandidateAnalysisService:
             "jd_response"
         ]
 
+        structured_resume = kwargs.get(
+            "structured_resume",
+            {},
+        )
+
         # --------------------------------------------------------------
         # Experience gaps
         # --------------------------------------------------------------
@@ -1540,6 +1759,23 @@ class CandidateAnalysisService:
                     0,
                 ),
             },
+
+            "jd_requirement_details": [
+                {
+                    "requirement_id": getattr(item, "requirement_id", ""),
+                    "type": self._enum_value(getattr(item, "requirement_type", "unknown")),
+                    "priority": self._enum_value(getattr(item, "priority", "contextual")),
+                    "subject": getattr(item, "subject", ""),
+                    "minimum_years": getattr(item, "minimum_years", None),
+                    "evidence": getattr(item, "evidence", ""),
+                    "section": (getattr(item, "metadata", {}) or {}).get("section", ""),
+                    "evidence_kind": (getattr(item, "metadata", {}) or {}).get("evidence_kind", "ontology"),
+                    "confidence": getattr(item, "confidence", 0.0),
+                }
+                for item in (getattr(jd_requirements, "requirements", ()) or ())
+            ],
+
+            "structured_resume": structured_resume,
 
             "ats": ats,
 
@@ -2757,6 +2993,35 @@ class CandidateAnalysisService:
     # ==================================================================
 
     @staticmethod
+    def _ats_component_for_ui(
+        value: Any,
+        score_field: str,
+    ) -> dict[str, Any]:
+        """Serialize one typed ATS component using frontend percentage units.
+
+        Phase 5 typed models intentionally store scores in [0, 1].  The
+        candidate-analysis JSON, however, is a presentation boundary and the
+        existing frontend renders these fields with a literal ``%`` suffix.
+        Convert exactly once here so a normalized 1.0 becomes 100.0%, not
+        1.0%.
+        """
+        component = CandidateAnalysisService._object_summary(value)
+        if component and score_field in component:
+            try:
+                raw_score = float(component[score_field])
+                # Typed ATS models use [0, 1]. Older/fallback payloads may
+                # already use [0, 100]. Normalize exactly once.
+                if 0.0 <= raw_score <= 1.0:
+                    raw_score *= 100.0
+                component[score_field] = round(
+                    max(0.0, min(100.0, raw_score)),
+                    1,
+                )
+            except (TypeError, ValueError):
+                pass
+        return component
+
+    @staticmethod
     def _object_summary(
         value: Any,
     ) -> dict[str, Any]:
@@ -3038,6 +3303,254 @@ class CandidateAnalysisService:
                 ).strip()
 
         return ""
+
+    # ==================================================================
+    # STRUCTURED RESUME EVIDENCE
+    # ==================================================================
+
+    def _build_structured_resume_evidence(self, resume_path: Path) -> dict[str, Any]:
+        """Reuse the existing parser-layer non-ontology extractors."""
+        try:
+            sections = self.resume_parser.parse(str(resume_path))
+            resume = self.resume_builder.build(
+                sections,
+                source_file=str(resume_path),
+                source_format="docx",
+            )
+            return {
+                "education": self._json_safe(getattr(resume, "education", [])),
+                "experience": self._json_safe(getattr(resume, "experience", [])),
+                "languages": self._json_safe(getattr(resume, "languages", [])),
+                "projects": self._json_safe(getattr(resume, "projects", [])),
+                "awards": self._json_safe(getattr(resume, "awards", [])),
+                "references": self._json_safe(getattr(resume, "references", [])),
+                "contact": self._json_safe(getattr(getattr(resume, "personal_information", None), "__dict__", {})),
+            }
+        except Exception as exc:
+            logger.warning(
+                "Structured resume extraction unavailable; continuing with ontology evidence: %s",
+                exc,
+            )
+            return {
+                "education": [], "experience": [], "languages": [],
+                "projects": [], "awards": [], "references": [], "contact": {},
+                "error": f"{type(exc).__name__}: {exc}",
+            }
+
+    @classmethod
+    def _experience_role_match(
+        cls,
+        *,
+        subject: str,
+        structured_resume: dict[str, Any],
+        resume_text: str = "",
+    ) -> dict[str, Any] | None:
+        """Match role-family experience requirements against job titles.
+
+        This is deterministic and explainable.  It intentionally uses the
+        structured employment title as the primary evidence rather than
+        claiming that a generic word overlap proves management experience.
+        """
+        normalized = cls._normalize(subject)
+        if not normalized:
+            return None
+
+        role_family = None
+        if re.search(r"\bsupervisory\b|\bsupervisor\b", normalized) and re.search(
+            r"\bmanagerial\b|\bmanager\b|\bmanagement\b", normalized
+        ):
+            role_family = "managerial_supervisory"
+        elif re.search(r"\bmanagerial\b|\bmanagement\b|\bmanager\b", normalized):
+            role_family = "managerial"
+        elif re.search(r"\bsupervisory\b|\bsupervisor\b", normalized):
+            role_family = "supervisory"
+        elif re.search(r"\bleadership\b|\blead\b|\bteam management\b", normalized):
+            role_family = "leadership"
+        elif re.search(r"\bexecutive\b|\bdirector\b|\bchief\b", normalized):
+            role_family = "executive"
+        else:
+            return None
+
+        records = structured_resume.get("experience", []) or []
+        matches: list[tuple[float, Any, str, float]] = []
+
+        # The parser's canonical field is ``title``, but enterprise resume
+        # payloads can arrive through compatibility/legacy serializers with
+        # aliases such as position, job_title, designation, or role. Accept
+        # those aliases here so non-ontology experience evidence remains
+        # useful even when a serializer changes shape.
+        title_keys = (
+            "title",
+            "job_title",
+            "position",
+            "position_title",
+            "designation",
+            "role",
+            "job_role",
+        )
+
+        for record in records:
+            title = ""
+            if isinstance(record, dict):
+                for key in title_keys:
+                    candidate_title = cls._flatten_structured_value(record.get(key, ""))
+                    if candidate_title:
+                        title = candidate_title
+                        break
+                if not title:
+                    title = cls._flatten_structured_value(record.get("raw_header", ""))
+            else:
+                for key in title_keys:
+                    candidate_title = cls._flatten_structured_value(getattr(record, key, ""))
+                    if candidate_title:
+                        title = candidate_title
+                        break
+                if not title:
+                    title = cls._flatten_structured_value(getattr(record, "raw_header", ""))
+            company = cls._flatten_structured_value(
+                record.get("company", "") if isinstance(record, dict) else getattr(record, "company", "")
+            )
+            if not title:
+                continue
+
+            title_norm = cls._normalize(title)
+            matched_phrase = None
+            for phrase in cls.EXPERIENCE_ROLE_FAMILIES[role_family]:
+                phrase_norm = cls._normalize(phrase)
+                if phrase_norm and phrase_norm in title_norm:
+                    matched_phrase = phrase
+                    break
+
+            if matched_phrase is None:
+                continue
+
+            duration = 0.0
+            raw_duration = record.get("duration", 0.0) if isinstance(record, dict) else getattr(record, "duration", 0.0)
+            try:
+                duration = max(0.0, float(raw_duration or 0.0))
+            except (TypeError, ValueError):
+                duration = 0.0
+
+            if duration <= 0.0:
+                start = record.get("start_year", 0) if isinstance(record, dict) else getattr(record, "start_year", 0)
+                end = record.get("end_year", 0) if isinstance(record, dict) else getattr(record, "end_year", 0)
+                current = record.get("current_job", False) if isinstance(record, dict) else getattr(record, "current_job", False)
+                try:
+                    start_i = int(start or 0)
+                    end_i = int(end or 0)
+                    if start_i > 0:
+                        if current:
+                            from datetime import datetime
+                            end_i = datetime.now().year
+                        if end_i >= start_i:
+                            duration = float(end_i - start_i)
+                except (TypeError, ValueError):
+                    duration = 0.0
+
+            evidence = f"Structured resume evidence: {title}"
+            if company:
+                evidence += f" at {company}"
+            evidence += f" — qualifies as a {role_family.replace('_', '/')} role."
+
+            matches.append((1.0, record, evidence, duration))
+
+        # Raw resume text is a secondary evidence source. It is intentionally
+        # exact-title based: seeing "Store Manager" or "Managing Director" in
+        # the resume is sufficient to establish role-family evidence, but we do
+        # not infer management experience merely from generic verbs such as
+        # "managed" or "supervised".
+        if not matches and resume_text:
+            text_norm = cls._normalize(resume_text)
+            for phrase in cls.EXPERIENCE_ROLE_FAMILIES[role_family]:
+                phrase_norm = cls._normalize(phrase)
+                if not phrase_norm:
+                    continue
+                if re.search(r"\b" + re.escape(phrase_norm).replace(r"\ ", r"\s+") + r"\b", text_norm):
+                    matches.append(
+                        (
+                            0.98,
+                            None,
+                            f"Resume text evidence: {phrase.title()} appears as a professional role, qualifying for the {role_family.replace('_', '/')} requirement.",
+                            0.0,
+                        )
+                    )
+
+        if not matches:
+            return None
+
+        qualifying_years = sum(item[3] for item in matches)
+        evidence_lines = [item[2] for item in matches]
+        return {
+            "score": 1.0,
+            "confidence": 0.98,
+            "evidence": " ".join(evidence_lines),
+            "qualifying_years": qualifying_years if qualifying_years > 0 else None,
+            "role_family": role_family,
+        }
+
+    def _structured_resume_candidates(
+        self,
+        *,
+        requirement_type: str,
+        subject: str,
+        structured_resume: dict[str, Any],
+    ) -> list[dict[str, Any]]:
+        """Truth-safe matching against structural resume evidence."""
+        buckets = {
+            "education": structured_resume.get("education", []),
+            "experience": structured_resume.get("experience", []),
+            "language": structured_resume.get("languages", []),
+        }
+        items = buckets.get(requirement_type, [])
+        if not items:
+            return []
+        target = self._normalize(subject)
+        if not target:
+            return []
+        target_tokens = set(target.split())
+        results = []
+        for item in items:
+            text = self._flatten_structured_value(item)
+            candidate = self._normalize(text)
+            if not candidate:
+                continue
+            tokens = set(candidate.split())
+            exact = target == candidate
+            substring = target in candidate or candidate in target
+            overlap = len(target_tokens & tokens) / max(len(target_tokens | tokens), 1)
+            score = 1.0 if exact else 0.88 if substring else 0.62 if overlap >= 0.5 else 0.0
+            if score <= 0:
+                continue
+            results.append({
+                "score": score,
+                "confidence": min(0.95, 0.75 + score * 0.20),
+                "evidence": f"Structured resume evidence: {text[:500]}",
+            })
+        results.sort(key=lambda item: item["score"], reverse=True)
+        return results
+
+    @staticmethod
+    def _flatten_structured_value(value: Any) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, dict):
+            allowed = {
+                "raw", "description", "responsibilities", "achievements",
+                "keywords", "skills", "technologies", "degree", "major",
+                "institution", "level", "name", "proficiency", "title",
+                "company", "industry", "location",
+            }
+            return " ".join(
+                CandidateAnalysisService._flatten_structured_value(item)
+                for key, item in value.items()
+                if key in allowed
+            )
+        if isinstance(value, (list, tuple, set)):
+            return " ".join(
+                CandidateAnalysisService._flatten_structured_value(item)
+                for item in value
+            )
+        return str(value)
 
     @staticmethod
     def _priority_weight(

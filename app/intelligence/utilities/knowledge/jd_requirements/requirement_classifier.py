@@ -119,6 +119,11 @@ from app.intelligence.utilities.knowledge.semantic_reasoning.semantic_models imp
     SemanticEntity,
 )
 
+from app.intelligence.utilities.knowledge.jd_requirements.jd_non_ontology_extractor import (
+    JDNonOntologyEvidence,
+    JDNonOntologyExtractor,
+)
+
 
 # ============================================================================
 # CLASSIFIER
@@ -233,6 +238,20 @@ class JDRequirementClassifier:
     }
 
     # =========================================================================
+    # INITIALIZATION
+    # =========================================================================
+
+    def __init__(
+        self,
+        non_ontology_extractor: JDNonOntologyExtractor | None = None,
+    ) -> None:
+        self.non_ontology_extractor = (
+            non_ontology_extractor
+            if non_ontology_extractor is not None
+            else JDNonOntologyExtractor()
+        )
+
+    # =========================================================================
     # PUBLIC API
     # =========================================================================
 
@@ -258,6 +277,11 @@ class JDRequirementClassifier:
             self._extract_business_statements(
                 document_profile
             )
+        )
+
+        source_text = self._source_text(document_profile)
+        structured_evidence = self.non_ontology_extractor.extract(
+            source_text
         )
 
         requirements: list[
@@ -289,10 +313,16 @@ class JDRequirementClassifier:
                 )
             )
 
+            section_context = self.non_ontology_extractor.context_for_text(
+                statement_text,
+                source_text,
+            )
+
             priority = (
                 self._priority(
                     statement_text,
                     statement,
+                    section_context=section_context,
                 )
             )
 
@@ -473,6 +503,16 @@ class JDRequirementClassifier:
                 )
 
         # =================================================================
+        # NON-ONTOLOGY REQUIREMENTS
+        # =================================================================
+
+        self._append_non_ontology_requirements(
+            structured_evidence=structured_evidence,
+            requirements=requirements,
+            seen=seen,
+        )
+
+        # =================================================================
         # PROFILE-DATA FALLBACK
         # =================================================================
 
@@ -484,11 +524,174 @@ class JDRequirementClassifier:
                 seen=seen,
             )
 
+        type_counts = {}
+        for requirement in requirements:
+            key = requirement.requirement_type.value
+            type_counts[key] = type_counts.get(key, 0) + 1
+
+        non_ontology_counts = {}
+        for evidence in structured_evidence:
+            non_ontology_counts[evidence.kind] = (
+                non_ontology_counts.get(evidence.kind, 0) + 1
+            )
+
         return (
             JDRequirementProfile.from_requirements(
-                requirements
+                requirements,
+                metadata={
+                    "source": "jd_requirement_classifier",
+                    "non_ontology_evidence_count": len(structured_evidence),
+                    "non_ontology_type_counts": non_ontology_counts,
+                    "requirement_type_counts": type_counts,
+                },
             )
         )
+
+    # =========================================================================
+    # SOURCE TEXT
+    # =========================================================================
+
+    @staticmethod
+    def _source_text(document_profile: DocumentKnowledgeProfile) -> str:
+        source_result = getattr(document_profile, "source_result", None)
+        text = getattr(source_result, "resume_text", "") if source_result is not None else ""
+        if isinstance(text, str) and text.strip():
+            return text.strip()
+        return ""
+
+    # =========================================================================
+    # NON-ONTOLOGY REQUIREMENTS
+    # =========================================================================
+
+    def _append_non_ontology_requirements(
+        self,
+        *,
+        structured_evidence: list[JDNonOntologyEvidence],
+        requirements: list[JDRequirement],
+        seen: set[tuple[str, str, str]],
+    ) -> None:
+        """Add only evidence that the ontology layer cannot safely supply."""
+        if not structured_evidence:
+            return
+
+        ontology_evidence = {
+            self._normalize_evidence(requirement.evidence)
+            for requirement in requirements
+            if requirement.evidence
+        }
+
+        for evidence in structured_evidence:
+            normalized = self._normalize_evidence(evidence.evidence)
+
+            # If the exact source sentence already produced an ontology-backed
+            # requirement, keep the ontology object as the canonical concept.
+            # Education/language/location/etc. are still added when the line has
+            # no equivalent requirement type.
+            if normalized in ontology_evidence and evidence.kind not in {
+                "education",
+                "language",
+                "location",
+                "work_authorization",
+                "employment_type",
+                "schedule",
+                "travel",
+                "compensation",
+            }:
+                continue
+
+            # Generic non-ontology qualification/certification/experience
+            # evidence should not duplicate a strong ontology-backed concept
+            # from the same source sentence.  Education/language/location and
+            # other structural kinds remain additive because they are not
+            # reliably represented by ontology JSON.
+            if evidence.kind in {"qualification", "certification", "experience"}:
+                subject_norm = self._normalize_evidence(evidence.subject)
+                target_tokens = set(subject_norm.split())
+                duplicate = False
+                if target_tokens:
+                    for existing in requirements:
+                        existing_type = existing.requirement_type.value
+                        if existing_type not in {
+                            "skill", "technology", "methodology", "certification",
+                            "domain", "qualification", "experience",
+                        }:
+                            continue
+                        existing_subject = self._normalize_evidence(existing.subject)
+                        existing_tokens = set(existing_subject.split())
+                        if subject_norm == existing_subject or subject_norm in existing_subject or existing_subject in subject_norm:
+                            duplicate = True
+                            break
+                        overlap = len(target_tokens & existing_tokens) / max(len(target_tokens | existing_tokens), 1)
+                        if overlap >= 0.65:
+                            duplicate = True
+                            break
+                if duplicate:
+                    continue
+
+            requirement_type = {
+                "education": RequirementType.EDUCATION,
+                "experience": RequirementType.EXPERIENCE,
+                "language": RequirementType.LANGUAGE,
+                "location": RequirementType.LOCATION,
+                "work_authorization": RequirementType.WORK_AUTHORIZATION,
+                "employment_type": RequirementType.EMPLOYMENT_TYPE,
+                "schedule": RequirementType.SCHEDULE,
+                "travel": RequirementType.TRAVEL,
+                "compensation": RequirementType.COMPENSATION,
+                "certification": RequirementType.CERTIFICATION,
+                "responsibility": RequirementType.RESPONSIBILITY,
+                "qualification": RequirementType.QUALIFICATION,
+            }.get(evidence.kind, RequirementType.OTHER)
+
+            # Avoid adding a generic responsibility when ontology extraction
+            # already produced an action-backed responsibility from the same
+            # sentence.
+            if evidence.kind == "responsibility":
+                if any(
+                    requirement.requirement_type == RequirementType.RESPONSIBILITY
+                    and self._normalize_evidence(requirement.evidence) == normalized
+                    for requirement in requirements
+                ):
+                    continue
+
+            requirement = JDRequirement(
+                requirement_id=self._structured_requirement_id(evidence),
+                requirement_type=requirement_type,
+                priority=RequirementPriority(evidence.priority),
+                subject=evidence.subject,
+                entity_id="",
+                domain="",
+                experience_domain=(evidence.subject if evidence.kind == "experience" else ""),
+                experience_category=(
+                    ExperienceCategory.GENERAL
+                    if evidence.kind == "experience"
+                    else ExperienceCategory.UNKNOWN
+                ),
+                evidence=evidence.evidence,
+                source_statement=evidence.evidence,
+                confidence=self._clamp(evidence.confidence),
+                mandatory=evidence.priority == "required",
+                preferred=evidence.priority == "preferred",
+                minimum_years=evidence.minimum_years,
+                metadata={
+                    **evidence.metadata,
+                    "section": evidence.section,
+                    "line_number": evidence.line_number,
+                    "evidence_kind": evidence.kind,
+                },
+            )
+
+            self._append_unique(requirements, seen, requirement)
+
+    @staticmethod
+    def _normalize_evidence(value: str) -> str:
+        return re.sub(r"\s+", " ", re.sub(r"[^\w+#]+", " ", str(value or "").casefold())).strip()
+
+    @classmethod
+    def _structured_requirement_id(cls, evidence: JDNonOntologyEvidence) -> str:
+        seed = cls._normalize_evidence(evidence.subject or evidence.evidence)
+        seed = re.sub(r"[^a-z0-9]+", "-", seed).strip("-") or "unknown"
+        return f"jdreq:nonontology:{evidence.kind}:{seed}"
 
     # =========================================================================
     # DOCUMENT VALIDATION
@@ -844,6 +1047,8 @@ class JDRequirementClassifier:
         self,
         text: str,
         statement: Any,
+        *,
+        section_context: Any = None,
     ) -> RequirementPriority:
 
         metadata = self._metadata(
@@ -885,6 +1090,24 @@ class JDRequirementClassifier:
         normalized = (
             text.casefold()
         )
+
+        # Responsibilities are contextual candidate-facing evidence even when
+        # the prose contains words such as "must".  Required/preferred
+        # qualification sections are handled below.
+        if section_context is not None and getattr(section_context, "kind", "") == "responsibility":
+            return RequirementPriority.CONTEXTUAL
+
+        if section_context is not None and getattr(section_context, "priority", "") == "preferred":
+            if any(term in normalized for term in self.PREFERRED_TERMS):
+                return RequirementPriority.PREFERRED
+
+        if section_context is not None and getattr(section_context, "priority", "") == "required":
+            # Explicit preferred language wins over a required section.
+            if any(term in normalized for term in self.PREFERRED_TERMS):
+                return RequirementPriority.PREFERRED
+            if any(term in normalized for term in self.REQUIRED_TERMS):
+                return RequirementPriority.REQUIRED
+            return RequirementPriority.REQUIRED
 
         if any(
             term in normalized

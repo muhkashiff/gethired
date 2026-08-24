@@ -19,6 +19,9 @@ from app.intelligence.utilities.knowledge.ats.ats_analysis_models import (
 from app.intelligence.utilities.knowledge.matching.knowledge_match_profile_models import (
     KnowledgeMatchProfile,
 )
+from app.intelligence.utilities.knowledge.education.education_equivalence import (
+    EducationEquivalence,
+)
 
 class ATSResumeAnalyzer:
     def __init__(self, policy: Any) -> None:
@@ -100,9 +103,57 @@ class ATSResumeAnalyzer:
 
     def _keyword_analysis(self, *, request: ATSResumeAnalysisRequest, profile: KnowledgeMatchProfile) -> ATSKeywordAnalysis:
         required = self._profile_keywords(profile)
-        text = request.source_text.lower()
-        matched = tuple(kw for kw in required if kw.lower() in text)
-        missing = tuple(kw for kw in required if kw not in matched)
+        text = request.source_text.casefold()
+
+        structured_resume = {}
+        metadata = getattr(request, "metadata", {})
+        if isinstance(metadata, dict):
+            structured_resume = metadata.get("structured_resume") or {}
+        education_records = structured_resume.get("education", []) if isinstance(structured_resume, dict) else []
+
+        jd_profile = getattr(request, "jd_requirement_profile", None)
+        education_requirements = {}
+        if jd_profile is not None:
+            for requirement in getattr(jd_profile, "requirements", ()) or ():
+                rtype = self._enum_value(getattr(requirement, "requirement_type", ""))
+                if rtype == "education":
+                    education_requirements[
+                        self._normalize_keyword(getattr(requirement, "subject", ""))
+                    ] = requirement
+
+        matched_list = []
+        missing_list = []
+
+        for keyword in required:
+            keyword_text = str(keyword or "").strip()
+            if not keyword_text:
+                continue
+
+            if keyword_text.casefold() in text:
+                matched_list.append(keyword_text)
+                continue
+
+            # A higher academic qualification satisfies a lower education
+            # keyword. This prevents an M.Sc. holder from being penalized
+            # merely because the literal word "Bachelor" is absent from the
+            # resume.
+            if EducationEquivalence.looks_like_education(keyword_text):
+                requirement = education_requirements.get(
+                    self._normalize_keyword(keyword_text)
+                )
+                education_match = EducationEquivalence.match_keyword(
+                    keyword_text,
+                    education_records,
+                    requirement=requirement,
+                )
+                if education_match.matched:
+                    matched_list.append(keyword_text)
+                    continue
+
+            missing_list.append(keyword_text)
+
+        matched = tuple(matched_list)
+        missing = tuple(missing_list)
         coverage = len(matched) / len(required) if required else 1.0
         return ATSKeywordAnalysis(
             required_keywords=required,
@@ -306,6 +357,14 @@ class ATSResumeAnalyzer:
     # --------------------------------------------------------------
     # Profile adapter (unchanged)
     # --------------------------------------------------------------
+
+    @staticmethod
+    def _normalize_keyword(value: Any) -> str:
+        return " ".join(str(value or "").casefold().split())
+
+    @staticmethod
+    def _enum_value(value: Any) -> str:
+        return getattr(value, "value", value).__str__().casefold()
 
     @staticmethod
     def _profile_keywords(profile: KnowledgeMatchProfile) -> tuple[str, ...]:

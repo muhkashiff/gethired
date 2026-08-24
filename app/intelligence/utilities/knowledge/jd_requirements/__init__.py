@@ -18,6 +18,12 @@ from .requirement_classifier import (
     JDRequirementClassifier,
 )
 
+from .jd_non_ontology_extractor import (
+    JDSectionContext,
+    JDNonOntologyEvidence,
+    JDNonOntologyExtractor,
+)
+
 from .requirement_models import (
     ExperienceCategory,
     JDRequirement,
@@ -34,4 +40,7 @@ __all__ = [
     "RequirementType",
     "RequirementPriority",
     "ExperienceCategory",
+    "JDSectionContext",
+    "JDNonOntologyEvidence",
+    "JDNonOntologyExtractor",
 ]
