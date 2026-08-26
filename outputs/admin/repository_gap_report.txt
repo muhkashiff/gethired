@@ -1,7 +1,7 @@
 GETHIRED REPOSITORY / ONTOLOGY GAP REPORT
 ===========================================
 
-Generated: 2026-08-24T05:09:26.173146+00:00
+Generated: 2026-08-26T10:40:04.020748+00:00
 Unique gaps: 0
 
 No repository / ontology gaps have been reported.

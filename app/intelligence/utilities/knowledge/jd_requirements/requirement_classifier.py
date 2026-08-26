@@ -190,7 +190,32 @@ class JDRequirementClassifier:
         "nice to have",
         "would be an advantage",
         "advantageous",
+        "highly prefer",
+        "highly preferred",
     )
+
+    # ------------------------------------------------------------------
+    # PREFERENCE ACTION GUARD
+    # ------------------------------------------------------------------
+    #
+    # Some upstream extraction paths may still produce an "action"
+    # SemanticEntity for words such as "prefer", even when those words
+    # have been removed from actions.json.
+    #
+    # These are requirement-priority signals, NOT candidate
+    # responsibilities.
+    #
+    PREFERENCE_ACTION_TERMS = {
+        "prefer",
+        "preferred",
+        "preferably",
+        "preferable",
+        "desired",
+        "desirable",
+        "advantageous",
+        "plus",
+        "bonus",
+    }
 
     # ------------------------------------------------------------------
     # ENTITY TYPE -> REQUIREMENT TYPE
@@ -956,89 +981,190 @@ class JDRequirementClassifier:
 
         return values
 
+        # =========================================================================
+    # PREFERENCE ACTION GUARD
+    # =========================================================================
+
+    @classmethod
+    def _is_preference_action(
+        cls,
+        entity: Any,
+    ) -> bool:
+        """
+        Return True when an action entity is actually a preference/prioritization
+        marker rather than a genuine candidate responsibility.
+
+        Example:
+
+            SemanticEntity(
+                entity_type="action",
+                canonical="Prefer",
+            )
+
+        must NOT become:
+
+            RequirementType.RESPONSIBILITY
+
+        because "Prefer" expresses requirement preference, not a job duty.
+        """
+
+        entity_type = cls._entity_type(entity)
+
+        if entity_type not in {
+            "action",
+            "responsibility",
+            "task",
+        }:
+            return False
+
+        subject = cls._entity_subject(entity)
+
+        if not subject:
+            return False
+
+        normalized = re.sub(
+            r"\s+",
+            " ",
+            subject.casefold().strip(),
+        )
+
+        return normalized in cls.PREFERENCE_ACTION_TERMS
+
     # =========================================================================
     # REQUIREMENT CLASSIFICATION
     # =========================================================================
 
     def _requirement_type(
-        self,
-        entity: Any,
-        statement: Any,
-    ) -> RequirementType | None:
-        """
-        Determine requirement type from an existing SemanticEntity.
-        """
+            self,
+            entity: Any,
+            statement: Any,
+        ) -> RequirementType | None:
+            """
+            Determine requirement type from an existing SemanticEntity.
 
-        metadata = self._metadata(
-            entity
-        )
+            IMPORTANT
+            ---------
+            Fix A:
+            Requirement classification must never be based on a malformed
+            action such as "Prefer" being treated as a responsibility.
 
-        explicit = (
-            self._first_text(
-                metadata,
-                entity,
-                "requirement_type",
-                "requirement_category",
-            )
-        )
+            The entity type is resolved FIRST and is then used consistently
+            throughout this method.
+            """
 
-        if explicit:
+            # ==============================================================
+            # 1. RESOLVE ENTITY TYPE FIRST
+            # ==============================================================
 
-            normalized = (
-                self._normalize_enum_text(
-                    explicit
+            entity_type = (
+                self._entity_type(
+                    entity
                 )
             )
 
-            for item in RequirementType:
+            # ==============================================================
+            # 2. IGNORE PREFERENCE MARKER AS AN ENTITY REQUIREMENT
+            # ==============================================================
 
-                if normalized in {
-                    item.value,
-                    item.name.casefold(),
-                }:
-                    return item
+            # Words such as "Prefer", "Preferred", "Desired", etc. are
+            # priority signals. They are NOT candidate responsibilities.
+            #
+            # IMPORTANT:
+            # We only suppress the malformed semantic ACTION entity here.
+            # The containing BusinessStatement is still processed normally.
+            #
+            # Therefore:
+            #
+            #     "Industry experience in restaurants is highly preferred."
+            #
+            # becomes a preferred EXPERIENCE/DOMAIN requirement rather than:
+            #
+            #     responsibility -> Prefer
+            #
+            if self._is_preference_action(entity):
+                return None
+            # ==============================================================
+            # 3. EXPLICIT REQUIREMENT TYPE FROM ENTITY METADATA
+            # ==============================================================
 
-        entity_type = (
-            self._entity_type(
+            metadata = self._metadata(
                 entity
             )
-        )
 
-        if entity_type in self.TYPE_BY_ENTITY:
-            return self.TYPE_BY_ENTITY[
-                entity_type
-            ]
-
-        semantic_type = (
-            self._first_text(
-                self._metadata(statement),
-                statement,
-                "semantic_type",
-                "statement_type",
-                "category",
+            explicit = (
+                self._first_text(
+                    metadata,
+                    entity,
+                    "requirement_type",
+                    "requirement_category",
+                )
             )
-            .casefold()
-        )
 
-        if (
-            semantic_type
-            in {
-                "responsibility",
-                "responsibilities",
-                "task",
-                "tasks",
-                "contribution",
-            }
-            and entity_type
-            in {
-                "action",
-                "responsibility",
-            }
-        ):
-            return RequirementType.RESPONSIBILITY
+            if explicit:
 
-        return None
+                normalized = (
+                    self._normalize_enum_text(
+                        explicit
+                    )
+                )
 
+                for item in RequirementType:
+
+                    if normalized in {
+                        item.value,
+                        item.name.casefold(),
+                    }:
+                        return item
+
+            # ==============================================================
+            # 4. ENTITY TYPE MAPPING
+            # ==============================================================
+
+            if entity_type in self.TYPE_BY_ENTITY:
+
+                return self.TYPE_BY_ENTITY[
+                    entity_type
+                ]
+
+            # ==============================================================
+            # 5. STATEMENT-LEVEL SEMANTIC TYPE
+            # ==============================================================
+
+            semantic_type = (
+                self._first_text(
+                    self._metadata(
+                        statement
+                    ),
+                    statement,
+                    "semantic_type",
+                    "statement_type",
+                    "category",
+                )
+                .casefold()
+            )
+
+            if (
+                semantic_type
+                in {
+                    "responsibility",
+                    "responsibilities",
+                    "task",
+                    "tasks",
+                    "contribution",
+                }
+                and entity_type
+                in {
+                    "action",
+                    "responsibility",
+                }
+            ):
+                return RequirementType.RESPONSIBILITY
+
+            # ==============================================================
+            # 6. NO SAFE CLASSIFICATION
+            # ==============================================================
+
+            return None
     # =========================================================================
     # PRIORITY
     # =========================================================================
@@ -1047,9 +1173,47 @@ class JDRequirementClassifier:
         self,
         text: str,
         statement: Any,
-        *,
+            *,
         section_context: Any = None,
-    ) -> RequirementPriority:
+        ) -> RequirementPriority:
+        """
+        Determine the priority/strictness of a JD requirement.
+
+        Priority resolution order:
+
+            1. Explicit non-contextual metadata
+            required / mandatory / essential
+            preferred / desired / desirable
+
+            2. Explicit priority language in the actual statement text
+
+            3. Explicit contextual metadata
+
+            4. Default CONTEXTUAL
+
+        IMPORTANT
+        ---------
+
+        The Enterprise knowledge pipeline may assign a default
+        ``contextual`` priority to a BusinessStatement.
+
+        That value must NOT override explicit language in the
+        actual JD text.
+
+        Example:
+
+            metadata:
+                priority = "contextual"
+
+            text:
+                "Industry experience in restaurants is highly preferred."
+
+        Result:
+
+            RequirementPriority.PREFERRED
+
+        This keeps the classifier faithful to the actual JD language.
+        """
 
         metadata = self._metadata(
             statement
@@ -1063,8 +1227,27 @@ class JDRequirementClassifier:
                 "importance",
                 "requirement_priority",
             )
+            .strip()
             .casefold()
         )
+
+        normalized = (
+            str(text or "")
+            .strip()
+            .casefold()
+        )
+
+        # =====================================================================
+        # 1. EXPLICIT NON-CONTEXTUAL METADATA
+        # =====================================================================
+        #
+        # If the upstream pipeline explicitly says REQUIRED or PREFERRED,
+        # respect that decision.
+        #
+        # We deliberately do NOT immediately return CONTEXTUAL here because
+        # contextual is often merely the default classification assigned by
+        # the upstream semantic layer.
+        # =====================================================================
 
         if explicit in {
             "required",
@@ -1075,56 +1258,161 @@ class JDRequirementClassifier:
 
         if explicit in {
             "preferred",
+            "preferable",
+            "preferably",
             "desired",
             "desirable",
         }:
             return RequirementPriority.PREFERRED
 
+        # =====================================================================
+        # 2. ACTUAL JD TEXT
+        # =====================================================================
+        #
+        # Textual language is authoritative when it explicitly communicates
+        # requirement strictness.
+        #
+        # REQUIRED must be checked before PREFERRED so that a sentence such as:
+        #
+        #     "Preferred candidates must have..."
+        #
+        # is interpreted according to the stronger explicit requirement.
+        #
+        # More importantly, a default metadata value of "contextual" must not
+        # hide phrases such as:
+        #
+        #     highly preferred
+        #     strongly preferred
+        #     must
+        #     required
+        #     mandatory
+        # =====================================================================
+
+        if self._contains_required_language(
+            normalized
+        ):
+            return RequirementPriority.REQUIRED
+
+        if self._contains_preferred_language(
+            normalized
+        ):
+            return RequirementPriority.PREFERRED
+
+        # =====================================================================
+        # 3. EXPLICIT CONTEXTUAL METADATA
+        # =====================================================================
+
         if explicit in {
             "contextual",
             "context",
             "informational",
+            "information",
+            "background",
         }:
             return RequirementPriority.CONTEXTUAL
 
-        normalized = (
-            text.casefold()
-        )
-
-        # Responsibilities are contextual candidate-facing evidence even when
-        # the prose contains words such as "must".  Required/preferred
-        # qualification sections are handled below.
-        if section_context is not None and getattr(section_context, "kind", "") == "responsibility":
-            return RequirementPriority.CONTEXTUAL
-
-        if section_context is not None and getattr(section_context, "priority", "") == "preferred":
-            if any(term in normalized for term in self.PREFERRED_TERMS):
-                return RequirementPriority.PREFERRED
-
-        if section_context is not None and getattr(section_context, "priority", "") == "required":
-            # Explicit preferred language wins over a required section.
-            if any(term in normalized for term in self.PREFERRED_TERMS):
-                return RequirementPriority.PREFERRED
-            if any(term in normalized for term in self.REQUIRED_TERMS):
-                return RequirementPriority.REQUIRED
-            return RequirementPriority.REQUIRED
-
-        if any(
-            term in normalized
-            for term
-            in self.REQUIRED_TERMS
-        ):
-            return RequirementPriority.REQUIRED
-
-        if any(
-            term in normalized
-            for term
-            in self.PREFERRED_TERMS
-        ):
-            return RequirementPriority.PREFERRED
+        # =====================================================================
+        # 4. DEFAULT
+        # =====================================================================
 
         return RequirementPriority.CONTEXTUAL
 
+
+    # =========================================================================
+    # PRIORITY LANGUAGE HELPERS
+    # =========================================================================
+
+    def _contains_required_language(
+        self,
+        text: str,
+    ) -> bool:
+        """
+        Return True when the text contains explicit mandatory language.
+
+        Word/phrase matching is used instead of raw substring matching where
+        possible so words such as "requirement" do not accidentally behave like
+        the phrase "required".
+        """
+
+        if not text:
+            return False
+
+        patterns = (
+            r"\brequired\b",
+            r"\bmandatory\b",
+            r"\bessential\b",
+            r"\bmust\b",
+            r"\bneed\s+to\b",
+            r"\bneeds\s+to\b",
+            r"\bshall\b",
+            r"\brequired\s+to\b",
+            r"\bminimum\b",
+            r"\bnon[-\s]?negotiable\b",
+            r"\bmust[-\s]?have\b",
+        )
+
+        return any(
+            re.search(
+                pattern,
+                text,
+                flags=re.IGNORECASE,
+            )
+            for pattern in patterns
+        )
+
+
+    def _contains_preferred_language(
+        self,
+        text: str,
+    ) -> bool:
+        """
+        Return True when the JD explicitly describes something as preferred.
+
+        Handles normal and strengthened wording such as:
+
+            preferred
+            highly preferred
+            strongly preferred
+            preferably
+            desired
+            desirable
+            nice to have
+            plus
+            a plus
+            advantage
+            advantageous
+            would be an advantage
+            considered an advantage
+        """
+
+        if not text:
+            return False
+
+        patterns = (
+            r"\bpreferred\b",
+            r"\bpreferably\b",
+            r"\bpreferable\b",
+            r"\bhighly\s+preferred\b",
+            r"\bstrongly\s+preferred\b",
+            r"\bdesired\b",
+            r"\bdesirable\b",
+            r"\bnice\s+to\s+have\b",
+            r"\bwould\s+be\s+an?\s+advantage\b",
+            r"\bconsidered\s+an?\s+advantage\b",
+            r"\ban?\s+advantage\b",
+            r"\badvantageous\b",
+            r"\bplus\b",
+            r"\bbonus\b",
+        )
+
+        return any(
+            re.search(
+                pattern,
+                text,
+                flags=re.IGNORECASE,
+            )
+            for pattern in patterns
+        )
     # =========================================================================
     # ENTITY PRIORITY
     # =========================================================================

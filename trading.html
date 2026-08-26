@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FVG Pro · Binance Futures</title>
+
     <style>
         * {
             box-sizing: border-box;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
         }
+
         body {
             background: #0b0e14;
             min-height: 100vh;
@@ -19,6 +21,7 @@
             padding: 10px;
             color: #eef2f7;
         }
+
         .card {
             max-width: 1150px;
             width: 100%;
@@ -28,6 +31,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.7);
             border: 1px solid #2b3543;
         }
+
         h1 {
             font-weight: 600;
             font-size: 1.4rem;
@@ -39,12 +43,14 @@
             flex-wrap: wrap;
             margin-bottom: 4px;
         }
+
         h1 small {
             font-size: 0.75rem;
             font-weight: 400;
             color: #8899bb;
             margin-left: 6px;
         }
+
         .sub {
             color: #9aabbf;
             font-size: 0.75rem;
@@ -56,7 +62,6 @@
             border-radius: 0 10px 10px 0;
         }
 
-        /* NEW: Trend Banner Styles */
         .trend-banner {
             display: flex;
             align-items: center;
@@ -70,21 +75,31 @@
             font-weight: 600;
             transition: all 0.25s ease;
         }
+
         .trend-banner.bullish {
             border-color: #16c784;
             background: rgba(22, 199, 132, 0.08);
             color: #16c784;
         }
+
         .trend-banner.bearish {
             border-color: #ea3943;
             background: rgba(234, 57, 67, 0.08);
             color: #ea3943;
         }
+
         .trend-banner.neutral {
             border-color: #f0b90b;
             background: rgba(240, 185, 11, 0.08);
             color: #f0b90b;
         }
+
+        .trend-banner.warning {
+            border-color: #ff9f43;
+            background: rgba(255, 159, 67, 0.08);
+            color: #ff9f43;
+        }
+
         .trend-badge {
             font-size: 0.7rem;
             padding: 2px 8px;
@@ -100,6 +115,7 @@
             gap: 10px;
             margin-bottom: 10px;
         }
+
         .candle-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -107,6 +123,7 @@
             flex: 3;
             min-width: 320px;
         }
+
         .field-group {
             background: #131b24;
             border-radius: 12px;
@@ -114,9 +131,11 @@
             border: 1px solid #28323f;
             transition: border 0.15s;
         }
+
         .field-group:hover {
             border-color: #f0b90b55;
         }
+
         .field-group label {
             display: flex;
             justify-content: space-between;
@@ -124,12 +143,14 @@
             text-transform: uppercase;
             letter-spacing: 0.3px;
             color: #98adc9;
-            margin-bottom: 0px;
+            margin-bottom: 0;
         }
+
         .field-group label span {
             color: #f0b90b;
             font-weight: 500;
         }
+
         .field-group input {
             width: 100%;
             background: #0e141c;
@@ -141,13 +162,16 @@
             font-weight: 500;
             outline: none;
         }
+
         .field-group input:focus {
             border-color: #f0b90b;
             box-shadow: 0 0 0 2px #f0b90b30;
         }
+
         .field-group input[type="number"] {
             -moz-appearance: textfield;
         }
+
         .field-group input[type="number"]::-webkit-outer-spin-button,
         .field-group input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -160,6 +184,7 @@
             flex: 3;
             min-width: 320px;
         }
+
         .params-grid .field-group {
             padding: 4px 8px;
         }
@@ -170,6 +195,7 @@
             gap: 12px;
             margin-top: 8px;
         }
+
         .side-card {
             background: #111b26;
             border-radius: 18px;
@@ -177,15 +203,23 @@
             border: 1px solid #2a3545;
             transition: border 0.2s, box-shadow 0.2s;
         }
+
         .side-card.favored {
             border-width: 2px;
             box-shadow: 0 0 15px rgba(240, 185, 11, 0.15);
         }
+
         .side-card.favored.long-fav {
             border-color: #16c784;
         }
+
         .side-card.favored.short-fav {
             border-color: #ea3943;
+        }
+
+        .side-card.invalid {
+            border-color: #ff9f43;
+            box-shadow: 0 0 12px rgba(255,159,67,0.08);
         }
 
         .side-card h3 {
@@ -196,8 +230,14 @@
             align-items: center;
             justify-content: space-between;
         }
-        .side-card h3 .badge-long { color: #16c784; }
-        .side-card h3 .badge-short { color: #ea3943; }
+
+        .side-card h3 .badge-long {
+            color: #16c784;
+        }
+
+        .side-card h3 .badge-short {
+            color: #ea3943;
+        }
 
         .fvg-display {
             background: #0d1622;
@@ -206,6 +246,7 @@
             margin-bottom: 6px;
             border: 1px solid #2a3545;
         }
+
         .fvg-display .fvg-row {
             display: flex;
             flex-wrap: wrap;
@@ -213,16 +254,24 @@
             justify-content: space-between;
             gap: 4px;
         }
+
         .fvg-display .fvg-status {
             font-size: 0.7rem;
             color: #98adc9;
         }
-        .fvg-display .fvg-status .status { font-weight: 600; }
+
+        .fvg-display .fvg-status .status {
+            font-weight: 600;
+        }
+
         .fvg-display .fvg-values {
             font-size: 0.65rem;
             color: #b7cbdf;
         }
-        .fvg-display .fvg-values .gap { color: #f0b90b; }
+
+        .fvg-display .fvg-values .gap {
+            color: #f0b90b;
+        }
 
         .result-row {
             display: flex;
@@ -231,12 +280,39 @@
             border-bottom: 1px solid #1d2838;
             font-size: 0.78rem;
         }
-        .result-row .label { color: #98adc9; }
-        .result-row .value { font-weight: 600; }
-        .value.green { color: #16c784; }
-        .value.red { color: #ea3943; }
-        .value.gold { color: #f0b90b; }
-        .value.cyan { color: #00d4ff; }
+
+        .result-row .label {
+            color: #98adc9;
+        }
+
+        .result-row .value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .value.green {
+            color: #16c784;
+        }
+
+        .value.red {
+            color: #ea3943;
+        }
+
+        .value.gold {
+            color: #f0b90b;
+        }
+
+        .value.cyan {
+            color: #00d4ff;
+        }
+
+        .value.orange {
+            color: #ff9f43;
+        }
+
+        .value.muted {
+            color: #8899bb;
+        }
 
         .slider-row {
             display: flex;
@@ -249,6 +325,7 @@
             margin-top: 6px;
             font-size: 0.75rem;
         }
+
         .slider-row input[type="range"] {
             flex: 1;
             background: #1d2838;
@@ -256,6 +333,7 @@
             border-radius: 4px;
             -webkit-appearance: none;
         }
+
         .slider-row input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 14px;
@@ -271,6 +349,7 @@
             margin: 6px 0;
             flex-wrap: wrap;
         }
+
         .example-btn {
             background: #1d2838;
             border: 1px solid #2a3545;
@@ -281,6 +360,7 @@
             cursor: pointer;
             transition: 0.2s;
         }
+
         .example-btn:hover {
             border-color: #f0b90b;
             background: #283544;
@@ -293,348 +373,2130 @@
             text-align: right;
             border-top: 1px dashed #26303d;
             padding-top: 8px;
+            line-height: 1.45;
         }
+
         @media (max-width: 780px) {
-            .candle-grid, .params-grid {
+            .candle-grid,
+            .params-grid {
                 grid-template-columns: repeat(3, 1fr);
                 min-width: unset;
             }
+
             .compare-grid {
                 grid-template-columns: 1fr;
             }
+
             .top-row {
                 flex-direction: column;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="card">
-        <h1>📊 FVG Pro <small>Binance Futures · 3-candle</small></h1>
-        <div class="sub">⚡ Precise Binance Futures calculation engine · Entry, SL, Binance Liq, Dynamic RR, Fees & Sizing</div>
 
-        <!-- NEW: Dynamic Trend Analysis Banner -->
-        <div class="trend-banner neutral" id="trendBanner">
-            <span id="trendText">📈 Favorable Trend Bias: Evaluating structure...</span>
-            <span class="trend-badge" id="trendBadge">NEUTRAL</span>
-        </div>
+<div class="card">
 
-        <div class="top-row">
-            <div class="candle-grid">
-                <div class="field-group"><label>C1 <span>High</span></label><input type="number" id="c1h" value="89.50" step="0.01"></div>
-                <div class="field-group"><label>C1 <span>Low</span></label><input type="number" id="c1l" value="88.90" step="0.01"></div>
-                <div class="field-group"><label>C2 <span>High</span></label><input type="number" id="c2h" value="91.20" step="0.01"></div>
-                <div class="field-group"><label>C2 <span>Low</span></label><input type="number" id="c2l" value="89.10" step="0.01"></div>
-                <div class="field-group"><label>C3 <span>High</span></label><input type="number" id="c3h" value="91.80" step="0.01"></div>
-                <div class="field-group"><label>C3 <span>Low</span></label><input type="number" id="c3l" value="90.20" step="0.01"></div>
-            </div>
-            <div class="params-grid">
-                <div class="field-group"><label>💰 Wallet</label><input type="number" id="wallet" value="1000" step="10"></div>
-                <div class="field-group"><label>⚡ Leverage</label><input type="number" id="leverage" value="10" step="1" min="1"></div>
-                <div class="field-group"><label>📉 Maker %</label><input type="number" id="makerFee" value="0.020" step="0.001"></div>
-                <div class="field-group"><label>📊 Taker %</label><input type="number" id="takerFee" value="0.050" step="0.001"></div>
-                <div class="field-group"><label>🛡️ MMR %</label><input type="number" id="mmr" value="0.5" step="0.1"></div>
-                <div class="field-group"><label>📊 Risk %</label><input type="number" id="riskPct" value="1.0" step="0.1"></div>
-            </div>
-        </div>
+    <h1>
+        📊 FVG Pro
+        <small>Binance Futures · 3-candle</small>
+    </h1>
 
-        <div class="fvg-examples">
-            <span style="font-size:0.7rem; color:#98adc9; display:flex; align-items:center;">Quick presets:</span>
-            <button class="example-btn" data-preset="bullish">Bullish FVG (Long)</button>
-            <button class="example-btn" data-preset="bearish">Bearish FVG (Short)</button>
-            <button class="example-btn" data-preset="none">No FVG</button>
-        </div>
+    <div class="sub">
+        ⚡ Precision Futures Risk Engine · FVG Entry, Stop Loss, Risk-Based Sizing, Margin, Fees, RR & Estimated Liquidation
+    </div>
 
-        <div class="compare-grid">
-            <!-- Long Card -->
-            <div class="side-card" id="longCard">
-                <h3>
-                    <span class="badge-long">🟢 LONG (Bullish FVG)</span>
-                    <span id="longFavTag" style="font-size:0.65rem; background:#16c78433; color:#16c784; padding:2px 6px; border-radius:6px; display:none;">FAVORED</span>
-                </h3>
-                <div class="fvg-display">
-                    <div class="fvg-row">
-                        <span class="fvg-status">FVG <span class="status" id="longFvgStatus">—</span></span>
-                        <span class="fvg-values">
-                            <span id="longFvgUpper">—</span> / <span id="longFvgLower">—</span> 
-                            <span class="gap">gap: <strong id="longFvgGap">0.00</strong></span>
-                        </span>
-                    </div>
-                </div>
-                <div class="result-row"><span class="label">Entry Price</span><span class="value gold" id="lEntry">—</span></div>
-                <div class="result-row"><span class="label">Stop Loss</span><span class="value red" id="lSL">—</span></div>
-                <div class="result-row"><span class="label">Est. Liquidation Price</span><span class="value red" id="lLiq">—</span></div>
-                <div class="result-row"><span class="label">Take Profit 1:2</span><span class="value green" id="lTP2">—</span></div>
-                <div class="result-row"><span class="label">Take Profit Dynamic</span><span class="value green" id="lTPDyn">—</span></div>
-                <div class="result-row"><span class="label">Position Size ($)</span><span class="value gold" id="lSize">—</span></div>
-                <div class="result-row"><span class="label">Margin Required</span><span class="value cyan" id="lMargin">—</span></div>
-                <div class="result-row"><span class="label">Contract Qty</span><span class="value" id="lQty">—</span></div>
-                <div class="result-row"><span class="label">Risk Amount ($)</span><span class="value red" id="lRisk">—</span></div>
-                <div class="result-row"><span class="label">Net Reward (1:2)</span><span class="value green" id="lReward2">—</span></div>
-                <div class="result-row"><span class="label">Net Reward Dynamic</span><span class="value green" id="lRewardDyn">—</span></div>
-                <div class="result-row"><span class="label">Total Round-trip Fees</span><span class="value" id="lFee" style="color:#8899bb;">—</span></div>
+    <div class="trend-banner neutral" id="trendBanner">
+        <span id="trendText">📊 FVG Bias: Evaluating market structure...</span>
+        <span class="trend-badge" id="trendBadge">NEUTRAL</span>
+    </div>
+
+    <div class="top-row">
+
+        <div class="candle-grid">
+
+            <div class="field-group">
+                <label>C1 <span>High</span></label>
+                <input type="number" id="c1h" value="89.50" step="0.01">
             </div>
 
-            <!-- Short Card -->
-            <div class="side-card" id="shortCard">
-                <h3>
-                    <span class="badge-short">🔴 SHORT (Bearish FVG)</span>
-                    <span id="shortFavTag" style="font-size:0.65rem; background:#ea394333; color:#ea3943; padding:2px 6px; border-radius:6px; display:none;">FAVORED</span>
-                </h3>
-                <div class="fvg-display">
-                    <div class="fvg-row">
-                        <span class="fvg-status">FVG <span class="status" id="shortFvgStatus">—</span></span>
-                        <span class="fvg-values">
-                            <span id="shortFvgUpper">—</span> / <span id="shortFvgLower">—</span> 
-                            <span class="gap">gap: <strong id="shortFvgGap">0.00</strong></span>
-                        </span>
-                    </div>
-                </div>
-                <div class="result-row"><span class="label">Entry Price</span><span class="value gold" id="sEntry">—</span></div>
-                <div class="result-row"><span class="label">Stop Loss</span><span class="value red" id="sSL">—</span></div>
-                <div class="result-row"><span class="label">Est. Liquidation Price</span><span class="value red" id="sLiq">—</span></div>
-                <div class="result-row"><span class="label">Take Profit 1:2</span><span class="value green" id="sTP2">—</span></div>
-                <div class="result-row"><span class="label">Take Profit Dynamic</span><span class="value green" id="sTPDyn">—</span></div>
-                <div class="result-row"><span class="label">Position Size ($)</span><span class="value gold" id="sSize">—</span></div>
-                <div class="result-row"><span class="label">Margin Required</span><span class="value cyan" id="sMargin">—</span></div>
-                <div class="result-row"><span class="label">Contract Qty</span><span class="value" id="sQty">—</span></div>
-                <div class="result-row"><span class="label">Risk Amount ($)</span><span class="value red" id="sRisk">—</span></div>
-                <div class="result-row"><span class="label">Net Reward (1:2)</span><span class="value green" id="sReward2">—</span></div>
-                <div class="result-row"><span class="label">Net Reward Dynamic</span><span class="value green" id="sRewardDyn">—</span></div>
-                <div class="result-row"><span class="label">Total Round-trip Fees</span><span class="value" id="sFee" style="color:#8899bb;">—</span></div>
+            <div class="field-group">
+                <label>C1 <span>Low</span></label>
+                <input type="number" id="c1l" value="88.90" step="0.01">
             </div>
+
+            <div class="field-group">
+                <label>C2 <span>High</span></label>
+                <input type="number" id="c2h" value="91.20" step="0.01">
+            </div>
+
+            <div class="field-group">
+                <label>C2 <span>Low</span></label>
+                <input type="number" id="c2l" value="89.10" step="0.01">
+            </div>
+
+            <div class="field-group">
+                <label>C3 <span>High</span></label>
+                <input type="number" id="c3h" value="91.80" step="0.01">
+            </div>
+
+            <div class="field-group">
+                <label>C3 <span>Low</span></label>
+                <input type="number" id="c3l" value="90.20" step="0.01">
+            </div>
+
         </div>
 
-        <div class="slider-row">
-            <span>🎯 Custom TP Ratio</span>
-            <input type="range" id="tpRatioSlider" min="1.0" max="5.0" step="0.1" value="3.0">
-            <span id="tpRatioLabel">1:3.0</span>
-        </div>
+        <div class="params-grid">
 
-        <div class="footnote">
-            * Long FVG: Candle 1 High &lt; Candle 3 Low. Short FVG: Candle 1 Low &gt; Candle 3 High. Liquidation uses Binance Isolated Margin math.
+            <div class="field-group">
+                <label>💰 Wallet</label>
+                <input type="number" id="wallet" value="1000" step="10" min="0">
+            </div>
+
+            <div class="field-group">
+                <label>⚡ Leverage</label>
+                <input type="number" id="leverage" value="10" step="1" min="1">
+            </div>
+
+            <div class="field-group">
+                <label>📉 Maker %</label>
+                <input type="number" id="makerFee" value="0.020" step="0.001" min="0">
+            </div>
+
+            <div class="field-group">
+                <label>📊 Taker %</label>
+                <input type="number" id="takerFee" value="0.050" step="0.001" min="0">
+            </div>
+
+            <div class="field-group">
+                <label>🛡️ MMR %</label>
+                <input type="number" id="mmr" value="0.5" step="0.1" min="0" max="20">
+            </div>
+
+            <div class="field-group">
+                <label>📊 Risk %</label>
+                <input type="number" id="riskPct" value="1.0" step="0.1" min="0" max="100">
+            </div>
+
         </div>
     </div>
 
-    <script>
-        (function() {
-            function getVal(id) {
-                return parseFloat(document.getElementById(id).value) || 0;
-            }
+    <div class="fvg-examples">
 
-            function setVal(id, val) {
-                document.getElementById(id).value = val;
-            }
+        <span style="font-size:0.7rem; color:#98adc9; display:flex; align-items:center;">
+            Quick presets:
+        </span>
 
-            // FVG Detectors
-            function computeLongFVG() {
-                const h1 = getVal('c1h');
-                const l3 = getVal('c3l');
-                if (l3 > h1) {
-                    return { upper: l3, lower: h1, gap: l3 - h1, exists: true };
-                }
-                return { upper: 0, lower: 0, gap: 0, exists: false };
-            }
+        <button class="example-btn" data-preset="bullish">
+            Bullish FVG (Long)
+        </button>
 
-            function computeShortFVG() {
-                const l1 = getVal('c1l');
-                const h3 = getVal('c3h');
-                if (l1 > h3) {
-                    return { upper: l1, lower: h3, gap: l1 - h3, exists: true };
-                }
-                return { upper: 0, lower: 0, gap: 0, exists: false };
-            }
+        <button class="example-btn" data-preset="bearish">
+            Bearish FVG (Short)
+        </button>
 
-            function updateTrendBias(longFvg, shortFvg) {
-                const banner = document.getElementById('trendBanner');
-                const text = document.getElementById('trendText');
-                const badge = document.getElementById('trendBadge');
-                const longCard = document.getElementById('longCard');
-                const shortCard = document.getElementById('shortCard');
-                const longFavTag = document.getElementById('longFavTag');
-                const shortFavTag = document.getElementById('shortFavTag');
+        <button class="example-btn" data-preset="none">
+            No FVG
+        </button>
 
-                // Reset classes & borders
-                banner.className = "trend-banner";
-                longCard.classList.remove('favored', 'long-fav');
-                shortCard.classList.remove('favored', 'short-fav');
-                longFavTag.style.display = 'none';
-                shortFavTag.style.display = 'none';
+    </div>
 
-                if (longFvg.exists && !shortFvg.exists) {
-                    banner.classList.add('bullish');
-                    text.textContent = '🚀 Bullish Trend Favorable — Valid Bullish FVG Imbalance detected';
-                    badge.textContent = 'BULLISH';
-                    longCard.classList.add('favored', 'long-fav');
-                    longFavTag.style.display = 'inline-block';
-                } else if (!longFvg.exists && shortFvg.exists) {
-                    banner.classList.add('bearish');
-                    text.textContent = '🔻 Bearish Trend Favorable — Valid Bearish FVG Imbalance detected';
-                    badge.textContent = 'BEARISH';
-                    shortCard.classList.add('favored', 'short-fav');
-                    shortFavTag.style.display = 'inline-block';
-                } else if (longFvg.exists && shortFvg.exists) {
-                    if (longFvg.gap > shortFvg.gap) {
-                        banner.classList.add('bullish');
-                        text.textContent = '🚀 Bullish Trend Favorable — Larger Bullish Gap Imbalance';
-                        badge.textContent = 'BULLISH BIAS';
-                        longCard.classList.add('favored', 'long-fav');
-                        longFavTag.style.display = 'inline-block';
-                    } else if (shortFvg.gap > longFvg.gap) {
-                        banner.classList.add('bearish');
-                        text.textContent = '🔻 Bearish Trend Favorable — Larger Bearish Gap Imbalance';
-                        badge.textContent = 'BEARISH BIAS';
-                        shortCard.classList.add('favored', 'short-fav');
-                        shortFavTag.style.display = 'inline-block';
-                    } else {
-                        banner.classList.add('neutral');
-                        text.textContent = '⚖️ Neutral Trend — Dual Gaps of equal size detected';
-                        badge.textContent = 'NEUTRAL';
-                    }
-                } else {
-                    banner.classList.add('neutral');
-                    text.textContent = '⚖️ Neutral Market — No active Fair Value Gap identified';
-                    badge.textContent = 'NO GAP';
-                }
-            }
+    <div class="compare-grid">
 
-            function calculateSide(side) {
-                const balance = getVal('wallet');
-                const lev = getVal('leverage');
-                const riskPercent = getVal('riskPct') / 100;
-                const tpRatio = parseFloat(document.getElementById('tpRatioSlider').value) || 2.0;
-                const maker = getVal('makerFee') / 100;
-                const mmrRate = getVal('mmr') / 100;
+        <!-- LONG -->
+        <div class="side-card" id="longCard">
 
-                const h1 = getVal('c1h'), l1 = getVal('c1l');
-                const h2 = getVal('c2h'), l2 = getVal('c2l');
-                const h3 = getVal('c3h'), l3 = getVal('c3l');
+            <h3>
+                <span class="badge-long">
+                    🟢 LONG (Bullish FVG)
+                </span>
 
-                let isLong = (side === 'Long');
-                let entry, stopLoss, liqPrice;
-                let fvg = isLong ? computeLongFVG() : computeShortFVG();
+                <span
+                    id="longFavTag"
+                    style="
+                        font-size:0.65rem;
+                        background:#16c78433;
+                        color:#16c784;
+                        padding:2px 6px;
+                        border-radius:6px;
+                        display:none;
+                    "
+                >
+                    FAVORED
+                </span>
+            </h3>
 
-                if (isLong) {
-                    entry = fvg.exists ? fvg.upper : l3;
-                    stopLoss = Math.min(l1, l2, l3) - 0.01;
-                    liqPrice = entry * (1 - (1 / lev) + mmrRate);
-                } else {
-                    entry = fvg.exists ? fvg.lower : h3;
-                    stopLoss = Math.max(h1, h2, h3) + 0.01;
-                    liqPrice = entry * (1 + (1 / lev) - mmrRate);
-                }
+            <div class="fvg-display">
 
-                const riskAmount = balance * riskPercent;
-                const priceDeltaSL = Math.abs(entry - stopLoss);
-                
-                let quantity = 0;
-                if (priceDeltaSL > 0) {
-                    quantity = riskAmount / priceDeltaSL;
-                }
+                <div class="fvg-row">
 
-                const positionSize = quantity * entry;
-                const margin = positionSize / lev;
+                    <span class="fvg-status">
+                        FVG
+                        <span class="status" id="longFvgStatus">—</span>
+                    </span>
 
-                const tp2 = isLong ? entry + priceDeltaSL * 2 : entry - priceDeltaSL * 2;
-                const tpDyn = isLong ? entry + priceDeltaSL * tpRatio : entry - priceDeltaSL * tpRatio;
+                    <span class="fvg-values">
 
-                const entryFee = positionSize * maker;
-                const exitFee2 = (quantity * tp2) * maker;
-                const exitFeeDyn = (quantity * tpDyn) * maker;
-                const totalFees = entryFee + exitFeeDyn;
+                        <span id="longFvgUpper">—</span>
+                        /
+                        <span id="longFvgLower">—</span>
 
-                const grossReward2 = Math.abs(tp2 - entry) * quantity;
-                const grossRewardDyn = Math.abs(tpDyn - entry) * quantity;
+                        <span class="gap">
+                            gap:
+                            <strong id="longFvgGap">0.00</strong>
+                        </span>
 
-                const netReward2 = Math.max(0, grossReward2 - (entryFee + exitFee2));
-                const netRewardDyn = Math.max(0, grossRewardDyn - totalFees);
+                    </span>
 
-                return {
-                    entry, stopLoss, liqPrice, tp2, tpDyn,
-                    positionSize, margin, quantity,
-                    riskAmount, netReward2, netRewardDyn,
-                    fvg, totalFees
-                };
-            }
+                </div>
 
-            function updateUI() {
-                const longFvg = computeLongFVG();
-                const shortFvg = computeShortFVG();
+            </div>
 
-                updateTrendBias(longFvg, shortFvg);
+            <div class="result-row">
+                <span class="label">Entry Price</span>
+                <span class="value gold" id="lEntry">—</span>
+            </div>
 
-                document.getElementById('longFvgStatus').textContent = longFvg.exists ? '✓ Bullish Gap' : '— No Gap';
-                document.getElementById('longFvgStatus').style.color = longFvg.exists ? '#16c784' : '#666';
-                document.getElementById('longFvgUpper').textContent = longFvg.exists ? longFvg.upper.toFixed(2) : '—';
-                document.getElementById('longFvgLower').textContent = longFvg.exists ? longFvg.lower.toFixed(2) : '—';
-                document.getElementById('longFvgGap').textContent = longFvg.gap.toFixed(2);
+            <div class="result-row">
+                <span class="label">Stop Loss</span>
+                <span class="value red" id="lSL">—</span>
+            </div>
 
-                document.getElementById('shortFvgStatus').textContent = shortFvg.exists ? '✓ Bearish Gap' : '— No Gap';
-                document.getElementById('shortFvgStatus').style.color = shortFvg.exists ? '#ea3943' : '#666';
-                document.getElementById('shortFvgUpper').textContent = shortFvg.exists ? shortFvg.upper.toFixed(2) : '—';
-                document.getElementById('shortFvgLower').textContent = shortFvg.exists ? shortFvg.lower.toFixed(2) : '—';
-                document.getElementById('shortFvgGap').textContent = shortFvg.gap.toFixed(2);
+            <div class="result-row">
+                <span class="label">Estimated Isolated Liq.</span>
+                <span class="value red" id="lLiq">—</span>
+            </div>
 
-                const long = calculateSide('Long');
-                const short = calculateSide('Short');
+            <div class="result-row">
+                <span class="label">Take Profit 1:2</span>
+                <span class="value green" id="lTP2">—</span>
+            </div>
 
-                // Render Long
-                document.getElementById('lEntry').textContent = long.entry.toFixed(2);
-                document.getElementById('lSL').textContent = long.stopLoss.toFixed(2);
-                document.getElementById('lLiq').textContent = long.liqPrice.toFixed(2);
-                document.getElementById('lTP2').textContent = long.tp2.toFixed(2);
-                document.getElementById('lTPDyn').textContent = long.tpDyn.toFixed(2);
-                document.getElementById('lSize').textContent = '$' + long.positionSize.toFixed(2);
-                document.getElementById('lMargin').textContent = '$' + long.margin.toFixed(2);
-                document.getElementById('lQty').textContent = long.quantity.toFixed(3);
-                document.getElementById('lRisk').textContent = '$' + long.riskAmount.toFixed(2);
-                document.getElementById('lReward2').textContent = '$' + long.netReward2.toFixed(2);
-                document.getElementById('lRewardDyn').textContent = '$' + long.netRewardDyn.toFixed(2);
-                document.getElementById('lFee').textContent = '$' + long.totalFees.toFixed(2);
+            <div class="result-row">
+                <span class="label">Take Profit Dynamic</span>
+                <span class="value green" id="lTPDyn">—</span>
+            </div>
 
-                // Render Short
-                document.getElementById('sEntry').textContent = short.entry.toFixed(2);
-                document.getElementById('sSL').textContent = short.stopLoss.toFixed(2);
-                document.getElementById('sLiq').textContent = short.liqPrice.toFixed(2);
-                document.getElementById('sTP2').textContent = short.tp2.toFixed(2);
-                document.getElementById('sTPDyn').textContent = short.tpDyn.toFixed(2);
-                document.getElementById('sSize').textContent = '$' + short.positionSize.toFixed(2);
-                document.getElementById('sMargin').textContent = '$' + short.margin.toFixed(2);
-                document.getElementById('sQty').textContent = short.quantity.toFixed(3);
-                document.getElementById('sRisk').textContent = '$' + short.riskAmount.toFixed(2);
-                document.getElementById('sReward2').textContent = '$' + short.netReward2.toFixed(2);
-                document.getElementById('sRewardDyn').textContent = '$' + short.netRewardDyn.toFixed(2);
-                document.getElementById('sFee').textContent = '$' + short.totalFees.toFixed(2);
+            <div class="result-row">
+                <span class="label">Position Notional</span>
+                <span class="value gold" id="lSize">—</span>
+            </div>
 
-                const val = parseFloat(document.getElementById('tpRatioSlider').value);
-                document.getElementById('tpRatioLabel').textContent = '1:' + val.toFixed(1);
-            }
+            <div class="result-row">
+                <span class="label">Initial Margin</span>
+                <span class="value cyan" id="lMargin">—</span>
+            </div>
 
-            const presets = {
-                bullish: { c1h: 89.50, c1l: 88.90, c2h: 91.20, c2l: 89.10, c3h: 91.80, c3l: 90.20 },
-                bearish: { c1h: 92.50, c1l: 91.00, c2h: 90.50, c2l: 88.40, c3h: 89.80, c3l: 88.10 },
-                none:    { c1h: 90.00, c1l: 88.00, c2h: 91.00, c2l: 89.00, c3h: 90.50, c3l: 88.50 }
+            <div class="result-row">
+                <span class="label">Contract Quantity</span>
+                <span class="value" id="lQty">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Risk Budget</span>
+                <span class="value red" id="lRisk">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Net Reward (1:2)</span>
+                <span class="value green" id="lReward2">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Net Reward Dynamic</span>
+                <span class="value green" id="lRewardDyn">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Total Round-trip Fees</span>
+                <span class="value muted" id="lFee">—</span>
+            </div>
+
+        </div>
+
+
+        <!-- SHORT -->
+        <div class="side-card" id="shortCard">
+
+            <h3>
+
+                <span class="badge-short">
+                    🔴 SHORT (Bearish FVG)
+                </span>
+
+                <span
+                    id="shortFavTag"
+                    style="
+                        font-size:0.65rem;
+                        background:#ea394333;
+                        color:#ea3943;
+                        padding:2px 6px;
+                        border-radius:6px;
+                        display:none;
+                    "
+                >
+                    FAVORED
+                </span>
+
+            </h3>
+
+            <div class="fvg-display">
+
+                <div class="fvg-row">
+
+                    <span class="fvg-status">
+                        FVG
+                        <span class="status" id="shortFvgStatus">—</span>
+                    </span>
+
+                    <span class="fvg-values">
+
+                        <span id="shortFvgUpper">—</span>
+                        /
+                        <span id="shortFvgLower">—</span>
+
+                        <span class="gap">
+                            gap:
+                            <strong id="shortFvgGap">0.00</strong>
+                        </span>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="result-row">
+                <span class="label">Entry Price</span>
+                <span class="value gold" id="sEntry">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Stop Loss</span>
+                <span class="value red" id="sSL">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Estimated Isolated Liq.</span>
+                <span class="value red" id="sLiq">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Take Profit 1:2</span>
+                <span class="value green" id="sTP2">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Take Profit Dynamic</span>
+                <span class="value green" id="sTPDyn">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Position Notional</span>
+                <span class="value gold" id="sSize">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Initial Margin</span>
+                <span class="value cyan" id="sMargin">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Contract Quantity</span>
+                <span class="value" id="sQty">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Risk Budget</span>
+                <span class="value red" id="sRisk">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Net Reward (1:2)</span>
+                <span class="value green" id="sReward2">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Net Reward Dynamic</span>
+                <span class="value green" id="sRewardDyn">—</span>
+            </div>
+
+            <div class="result-row">
+                <span class="label">Total Round-trip Fees</span>
+                <span class="value muted" id="sFee">—</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="slider-row">
+
+        <span>🎯 Custom TP Ratio</span>
+
+        <input
+            type="range"
+            id="tpRatioSlider"
+            min="1.0"
+            max="5.0"
+            step="0.1"
+            value="3.0"
+        >
+
+        <span id="tpRatioLabel">
+            1:3.0
+        </span>
+
+    </div>
+
+
+    <div class="footnote">
+
+        * Bullish FVG = C1 High &lt; C3 Low · Bearish FVG = C1 Low &gt; C3 High.
+        Position quantity is calculated from risk ÷ stop distance and adjusted for estimated entry/SL fees.
+        Initial margin ≈ notional ÷ leverage.
+        Liquidation is an estimated isolated-margin model using the supplied MMR, not an exact Binance account liquidation price.
+        Tick size and quantity step below are configurable in the calculation engine and should match the selected Binance contract.
+
+    </div>
+
+</div>
+
+
+<script>
+
+(function () {
+
+    'use strict';
+
+
+    /* =========================================================
+       CONFIGURATION
+       =========================================================
+
+       IMPORTANT:
+       These are generic defaults.
+
+       For exact Binance order precision, these should eventually
+       be populated automatically from the selected symbol's
+       exchange information.
+    ========================================================= */
+
+    const CONFIG = {
+
+        // Generic example precision.
+        // Change these for the actual Binance symbol.
+        priceTickSize: 0.01,
+        quantityStepSize: 0.001,
+
+        // Binance Futures minimum notional varies by contract.
+        // This is only a generic validation default.
+        minimumNotional: 5,
+
+        // One tick is used as the default structural SL buffer.
+        stopBufferTicks: 1,
+
+        // Conservative fee assumption:
+        // FVG entry is treated as maker.
+        // SL / TP exit is treated as taker.
+        entryFeeType: 'maker',
+        exitFeeType: 'taker'
+    };
+
+
+    /* =========================================================
+       BASIC HELPERS
+    ========================================================= */
+
+    function getVal(id) {
+
+        const element = document.getElementById(id);
+
+        if (!element) {
+            return 0;
+        }
+
+        const value = parseFloat(element.value);
+
+        return Number.isFinite(value) ? value : 0;
+    }
+
+
+    function setText(id, value) {
+
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
+
+    function roundToStep(value, step) {
+
+        if (!Number.isFinite(value) || step <= 0) {
+            return value;
+        }
+
+        return Math.floor((value + 1e-12) / step) * step;
+    }
+
+
+    function roundPrice(value) {
+
+        return roundToStep(
+            value,
+            CONFIG.priceTickSize
+        );
+    }
+
+
+    function roundQuantity(value) {
+
+        return roundToStep(
+            value,
+            CONFIG.quantityStepSize
+        );
+    }
+
+
+    function money(value) {
+
+        if (!Number.isFinite(value)) {
+            return '—';
+        }
+
+        return '$' + value.toFixed(2);
+    }
+
+
+    function price(value) {
+
+        if (!Number.isFinite(value)) {
+            return '—';
+        }
+
+        return value.toFixed(2);
+    }
+
+
+    function quantityDisplay(value) {
+
+        if (!Number.isFinite(value)) {
+            return '—';
+        }
+
+        return value.toFixed(3);
+    }
+
+
+    function percent(value) {
+
+        if (!Number.isFinite(value)) {
+            return '—';
+        }
+
+        return value.toFixed(2) + '%';
+    }
+
+
+    /* =========================================================
+       FEE HELPERS
+    ========================================================= */
+
+    function getFeeRates() {
+
+        return {
+
+            maker:
+                Math.max(0, getVal('makerFee')) / 100,
+
+            taker:
+                Math.max(0, getVal('takerFee')) / 100
+
+        };
+    }
+
+
+    function getEntryFeeRate() {
+
+        const fees = getFeeRates();
+
+        return CONFIG.entryFeeType === 'maker'
+            ? fees.maker
+            : fees.taker;
+    }
+
+
+    function getExitFeeRate() {
+
+        const fees = getFeeRates();
+
+        return CONFIG.exitFeeType === 'maker'
+            ? fees.maker
+            : fees.taker;
+    }
+
+
+    /* =========================================================
+       FVG DETECTION
+    ========================================================= */
+
+    function computeLongFVG() {
+
+        const h1 = getVal('c1h');
+        const l3 = getVal('c3l');
+
+        if (
+            h1 > 0 &&
+            l3 > 0 &&
+            l3 > h1
+        ) {
+
+            return {
+
+                exists: true,
+
+                upper: l3,
+                lower: h1,
+
+                gap: l3 - h1,
+
+                midpoint:
+                    (l3 + h1) / 2
+
             };
 
-            document.querySelectorAll('.example-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const data = presets[this.dataset.preset];
-                    if (data) {
-                        setVal('c1h', data.c1h); setVal('c1l', data.c1l);
-                        setVal('c2h', data.c2h); setVal('c2l', data.c2l);
-                        setVal('c3h', data.c3h); setVal('c3l', data.c3l);
-                        updateUI();
+        }
+
+        return {
+
+            exists: false,
+
+            upper: 0,
+            lower: 0,
+            gap: 0,
+            midpoint: 0
+
+        };
+    }
+
+
+    function computeShortFVG() {
+
+        const l1 = getVal('c1l');
+        const h3 = getVal('c3h');
+
+        if (
+            l1 > 0 &&
+            h3 > 0 &&
+            l1 > h3
+        ) {
+
+            return {
+
+                exists: true,
+
+                upper: l1,
+                lower: h3,
+
+                gap: l1 - h3,
+
+                midpoint:
+                    (l1 + h3) / 2
+
+            };
+
+        }
+
+        return {
+
+            exists: false,
+
+            upper: 0,
+            lower: 0,
+            gap: 0,
+            midpoint: 0
+
+        };
+    }
+
+
+    /* =========================================================
+       MARKET STRUCTURE VALIDATION
+    ========================================================= */
+
+    function validateCandles() {
+
+        const candles = [
+
+            {
+                high: getVal('c1h'),
+                low: getVal('c1l')
+            },
+
+            {
+                high: getVal('c2h'),
+                low: getVal('c2l')
+            },
+
+            {
+                high: getVal('c3h'),
+                low: getVal('c3l')
+            }
+
+        ];
+
+
+        for (const candle of candles) {
+
+            if (
+                candle.high <= 0 ||
+                candle.low <= 0 ||
+                candle.high < candle.low
+            ) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /* =========================================================
+       ESTIMATED ISOLATED LIQUIDATION
+       =========================================================
+
+       Constant-MMR approximation for a linear USDT-margined
+       isolated position.
+
+       LONG:
+           Pliq ≈ Entry × (1 - 1/L) / (1 - MMR)
+
+       SHORT:
+           Pliq ≈ Entry × (1 + 1/L) / (1 + MMR)
+
+       This is deliberately labeled ESTIMATED.
+
+       Exact Binance liquidation requires symbol/account-specific
+       maintenance-margin bracket information and position state.
+    ========================================================= */
+
+    function calculateEstimatedLiquidation(
+        side,
+        entry,
+        leverage,
+        mmr
+    ) {
+
+        if (
+            entry <= 0 ||
+            leverage <= 0 ||
+            mmr < 0
+        ) {
+
+            return 0;
+        }
+
+
+        let liquidation;
+
+
+        if (side === 'Long') {
+
+            const denominator =
+                1 - mmr;
+
+            if (denominator <= 0) {
+                return 0;
+            }
+
+            liquidation =
+                entry *
+                (1 - (1 / leverage)) /
+                denominator;
+
+        } else {
+
+            liquidation =
+                entry *
+                (1 + (1 / leverage)) /
+                (1 + mmr);
+
+        }
+
+
+        return roundPrice(liquidation);
+    }
+
+
+    /* =========================================================
+       STOP LOSS
+    ========================================================= */
+
+    function calculateStopLoss(side) {
+
+        const h1 = getVal('c1h');
+        const l1 = getVal('c1l');
+
+        const h2 = getVal('c2h');
+        const l2 = getVal('c2l');
+
+        const h3 = getVal('c3h');
+        const l3 = getVal('c3l');
+
+
+        const buffer =
+            CONFIG.priceTickSize *
+            CONFIG.stopBufferTicks;
+
+
+        if (side === 'Long') {
+
+            return roundPrice(
+                Math.min(l1, l2, l3) - buffer
+            );
+
+        }
+
+
+        return roundPrice(
+            Math.max(h1, h2, h3) + buffer
+        );
+    }
+
+
+    /* =========================================================
+       ENTRY
+    ========================================================= */
+
+    function calculateEntry(side, fvg) {
+
+        if (side === 'Long') {
+
+            // Bullish FVG upper edge = C3 Low.
+            return fvg.exists
+                ? roundPrice(fvg.upper)
+                : roundPrice(getVal('c3l'));
+
+        }
+
+
+        // Bearish FVG lower edge = C3 High.
+        return fvg.exists
+            ? roundPrice(fvg.lower)
+            : roundPrice(getVal('c3h'));
+    }
+
+
+    /* =========================================================
+       RISK-BASED POSITION SIZE
+       =========================================================
+
+       Risk budget:
+           wallet × risk %
+
+       Total stop-loss risk:
+
+           quantity × |entry - SL|
+           + entry fee
+           + SL exit fee
+
+       Therefore:
+
+           quantity =
+           riskBudget /
+           (
+               stopDistance
+               + entry × entryFeeRate
+               + SL × exitFeeRate
+           )
+
+       This makes the position size fee-aware.
+    ========================================================= */
+
+    function calculateRiskBasedQuantity(
+        riskBudget,
+        entry,
+        stopLoss,
+        entryFeeRate,
+        exitFeeRate
+    ) {
+
+        const stopDistance =
+            Math.abs(entry - stopLoss);
+
+
+        if (
+            riskBudget <= 0 ||
+            entry <= 0 ||
+            stopLoss <= 0 ||
+            stopDistance <= 0
+        ) {
+
+            return 0;
+        }
+
+
+        const riskPerUnit =
+            stopDistance +
+            (entry * entryFeeRate) +
+            (stopLoss * exitFeeRate);
+
+
+        if (riskPerUnit <= 0) {
+            return 0;
+        }
+
+
+        const theoreticalQuantity =
+            riskBudget / riskPerUnit;
+
+
+        return roundQuantity(
+            theoreticalQuantity
+        );
+    }
+
+
+    /* =========================================================
+       SIDE CALCULATION
+    ========================================================= */
+
+    function calculateSide(side) {
+
+        const wallet = getVal('wallet');
+
+        const leverage =
+            Math.max(1, getVal('leverage'));
+
+        const riskPct =
+            Math.max(0, getVal('riskPct')) / 100;
+
+        const mmr =
+            Math.max(0, getVal('mmr')) / 100;
+
+
+        const fvg =
+            side === 'Long'
+                ? computeLongFVG()
+                : computeShortFVG();
+
+
+        const entry =
+            calculateEntry(side, fvg);
+
+
+        const stopLoss =
+            calculateStopLoss(side);
+
+
+        const validDirection =
+            side === 'Long'
+                ? stopLoss < entry
+                : stopLoss > entry;
+
+
+        if (
+            wallet <= 0 ||
+            entry <= 0 ||
+            stopLoss <= 0 ||
+            !validDirection
+        ) {
+
+            return {
+
+                valid: false,
+
+                reason:
+                    'Invalid entry / stop-loss relationship',
+
+                entry,
+                stopLoss,
+                fvg
+
+            };
+        }
+
+
+        const riskBudget =
+            wallet * riskPct;
+
+
+        const entryFeeRate =
+            getEntryFeeRate();
+
+
+        const exitFeeRate =
+            getExitFeeRate();
+
+
+        const stopDistance =
+            Math.abs(entry - stopLoss);
+
+
+        /* -----------------------------------------------------
+           RISK-BASED QUANTITY
+        ----------------------------------------------------- */
+
+        const theoreticalQuantity =
+            calculateRiskBasedQuantity(
+                riskBudget,
+                entry,
+                stopLoss,
+                entryFeeRate,
+                exitFeeRate
+            );
+
+
+        const quantity =
+            theoreticalQuantity;
+
+
+        if (quantity <= 0) {
+
+            return {
+
+                valid: false,
+
+                reason:
+                    'Calculated quantity is zero',
+
+                entry,
+                stopLoss,
+                fvg
+
+            };
+        }
+
+
+        /* -----------------------------------------------------
+           NOTIONAL
+        ----------------------------------------------------- */
+
+        const positionNotional =
+            quantity * entry;
+
+
+        /* -----------------------------------------------------
+           INITIAL MARGIN
+        ----------------------------------------------------- */
+
+        const initialMargin =
+            positionNotional / leverage;
+
+
+        /* -----------------------------------------------------
+           MARGIN / NOTIONAL LIMIT
+        ----------------------------------------------------- */
+
+        const maximumApproxNotional =
+            wallet * leverage;
+
+
+        const marginExceeded =
+            initialMargin > wallet;
+
+
+        const notionalExceeded =
+            positionNotional >
+            maximumApproxNotional;
+
+
+        const marginUtilization =
+            wallet > 0
+                ? (initialMargin / wallet) * 100
+                : 0;
+
+
+        /* -----------------------------------------------------
+           LIQUIDATION
+        ----------------------------------------------------- */
+
+        const liquidationPrice =
+            calculateEstimatedLiquidation(
+                side,
+                entry,
+                leverage,
+                mmr
+            );
+
+
+        /* -----------------------------------------------------
+           TAKE PROFITS
+        ----------------------------------------------------- */
+
+        const tp2 =
+            side === 'Long'
+                ? roundPrice(
+                    entry +
+                    stopDistance * 2
+                )
+                : roundPrice(
+                    entry -
+                    stopDistance * 2
+                );
+
+
+        const tpRatio =
+            parseFloat(
+                document.getElementById(
+                    'tpRatioSlider'
+                ).value
+            ) || 3;
+
+
+        const tpDynamic =
+            side === 'Long'
+                ? roundPrice(
+                    entry +
+                    stopDistance *
+                    tpRatio
+                )
+                : roundPrice(
+                    entry -
+                    stopDistance *
+                    tpRatio
+                );
+
+
+        /* -----------------------------------------------------
+           ENTRY FEE
+        ----------------------------------------------------- */
+
+        const entryNotional =
+            quantity * entry;
+
+
+        const entryFee =
+            entryNotional *
+            entryFeeRate;
+
+
+        /* -----------------------------------------------------
+           STOP LOSS EXIT FEE
+        ----------------------------------------------------- */
+
+        const stopExitNotional =
+            quantity * stopLoss;
+
+
+        const stopExitFee =
+            stopExitNotional *
+            exitFeeRate;
+
+
+        /* -----------------------------------------------------
+           GROSS STOP LOSS
+        ----------------------------------------------------- */
+
+        const grossLossAtSL =
+            stopDistance *
+            quantity;
+
+
+        /* -----------------------------------------------------
+           TOTAL REALISTIC PLANNED RISK
+        ----------------------------------------------------- */
+
+        const totalRiskAtSL =
+            grossLossAtSL +
+            entryFee +
+            stopExitFee;
+
+
+        /* -----------------------------------------------------
+           TP2
+        ----------------------------------------------------- */
+
+        const grossReward2 =
+            Math.abs(tp2 - entry) *
+            quantity;
+
+
+        const tp2ExitNotional =
+            quantity * tp2;
+
+
+        const tp2ExitFee =
+            tp2ExitNotional *
+            exitFeeRate;
+
+
+        const netReward2 =
+            Math.max(
+                0,
+                grossReward2 -
+                entryFee -
+                tp2ExitFee
+            );
+
+
+        /* -----------------------------------------------------
+           DYNAMIC TP
+        ----------------------------------------------------- */
+
+        const grossRewardDynamic =
+            Math.abs(tpDynamic - entry) *
+            quantity;
+
+
+        const dynamicExitNotional =
+            quantity *
+            tpDynamic;
+
+
+        const dynamicExitFee =
+            dynamicExitNotional *
+            exitFeeRate;
+
+
+        const netRewardDynamic =
+            Math.max(
+                0,
+                grossRewardDynamic -
+                entryFee -
+                dynamicExitFee
+            );
+
+
+        /* -----------------------------------------------------
+           TOTAL ROUND-TRIP FEES
+           Based on dynamic TP.
+        ----------------------------------------------------- */
+
+        const totalRoundTripFees =
+            entryFee +
+            dynamicExitFee;
+
+
+        /* -----------------------------------------------------
+           RR
+        ----------------------------------------------------- */
+
+        const grossRR2 =
+            grossLossAtSL > 0
+                ? grossReward2 /
+                  grossLossAtSL
+                : 0;
+
+
+        const grossRRDynamic =
+            grossLossAtSL > 0
+                ? grossRewardDynamic /
+                  grossLossAtSL
+                : 0;
+
+
+        const netRR2 =
+            totalRiskAtSL > 0
+                ? netReward2 /
+                  totalRiskAtSL
+                : 0;
+
+
+        const netRRDynamic =
+            totalRiskAtSL > 0
+                ? netRewardDynamic /
+                  totalRiskAtSL
+                : 0;
+
+
+        /* -----------------------------------------------------
+           ACTUAL RISK PERCENT
+        ----------------------------------------------------- */
+
+        const actualRiskPct =
+            wallet > 0
+                ? (totalRiskAtSL / wallet) *
+                  100
+                : 0;
+
+
+        /* -----------------------------------------------------
+           MARGIN SAFETY
+        ----------------------------------------------------- */
+
+        let marginStatus =
+            'OK';
+
+
+        if (marginExceeded) {
+
+            marginStatus =
+                'MARGIN EXCEEDED';
+
+        } else if (marginUtilization > 90) {
+
+            marginStatus =
+                'VERY HIGH';
+
+        } else if (marginUtilization > 75) {
+
+            marginStatus =
+                'HIGH';
+
+        }
+
+
+        /* -----------------------------------------------------
+           MINIMUM NOTIONAL
+        ----------------------------------------------------- */
+
+        const minimumNotionalMet =
+            positionNotional >=
+            CONFIG.minimumNotional;
+
+
+        return {
+
+            valid: true,
+
+            side,
+
+            fvg,
+
+            entry,
+            stopLoss,
+            liquidationPrice,
+
+            stopDistance,
+
+            quantity,
+
+            positionNotional,
+
+            initialMargin,
+
+            maximumApproxNotional,
+
+            marginUtilization,
+
+            marginExceeded,
+            notionalExceeded,
+
+            marginStatus,
+
+            minimumNotionalMet,
+
+            riskBudget,
+            actualRiskPct,
+
+            grossLossAtSL,
+            totalRiskAtSL,
+
+            tp2,
+            tpDynamic,
+
+            grossReward2,
+            grossRewardDynamic,
+
+            netReward2,
+            netRewardDynamic,
+
+            grossRR2,
+            grossRRDynamic,
+
+            netRR2,
+            netRRDynamic,
+
+            entryFee,
+            stopExitFee,
+
+            tp2ExitFee,
+            dynamicExitFee,
+
+            totalRoundTripFees,
+
+            entryFeeRate,
+            exitFeeRate
+        };
+    }
+
+
+    /* =========================================================
+       TREND / FVG BIAS
+    ========================================================= */
+
+    function updateTrendBias(
+        longFvg,
+        shortFvg
+    ) {
+
+        const banner =
+            document.getElementById(
+                'trendBanner'
+            );
+
+        const text =
+            document.getElementById(
+                'trendText'
+            );
+
+        const badge =
+            document.getElementById(
+                'trendBadge'
+            );
+
+
+        const longCard =
+            document.getElementById(
+                'longCard'
+            );
+
+        const shortCard =
+            document.getElementById(
+                'shortCard'
+            );
+
+
+        const longFavTag =
+            document.getElementById(
+                'longFavTag'
+            );
+
+        const shortFavTag =
+            document.getElementById(
+                'shortFavTag'
+            );
+
+
+        banner.className =
+            'trend-banner neutral';
+
+
+        longCard.classList.remove(
+            'favored',
+            'long-fav'
+        );
+
+
+        shortCard.classList.remove(
+            'favored',
+            'short-fav'
+        );
+
+
+        longFavTag.style.display =
+            'none';
+
+        shortFavTag.style.display =
+            'none';
+
+
+        if (
+            longFvg.exists &&
+            !shortFvg.exists
+        ) {
+
+            banner.className =
+                'trend-banner bullish';
+
+            text.textContent =
+                '🟢 Bullish FVG Bias — Valid bullish imbalance detected';
+
+            badge.textContent =
+                'BULLISH FVG';
+
+
+            longCard.classList.add(
+                'favored',
+                'long-fav'
+            );
+
+            longFavTag.style.display =
+                'inline-block';
+
+
+            return;
+        }
+
+
+        if (
+            shortFvg.exists &&
+            !longFvg.exists
+        ) {
+
+            banner.className =
+                'trend-banner bearish';
+
+            text.textContent =
+                '🔴 Bearish FVG Bias — Valid bearish imbalance detected';
+
+            badge.textContent =
+                'BEARISH FVG';
+
+
+            shortCard.classList.add(
+                'favored',
+                'short-fav'
+            );
+
+            shortFavTag.style.display =
+                'inline-block';
+
+
+            return;
+        }
+
+
+        if (
+            longFvg.exists &&
+            shortFvg.exists
+        ) {
+
+            if (
+                longFvg.gap >
+                shortFvg.gap
+            ) {
+
+                banner.className =
+                    'trend-banner bullish';
+
+                text.textContent =
+                    '🟢 Bullish FVG Bias — Larger detected imbalance';
+
+                badge.textContent =
+                    'BULLISH';
+
+
+                longCard.classList.add(
+                    'favored',
+                    'long-fav'
+                );
+
+                longFavTag.style.display =
+                    'inline-block';
+
+
+                return;
+            }
+
+
+            if (
+                shortFvg.gap >
+                longFvg.gap
+            ) {
+
+                banner.className =
+                    'trend-banner bearish';
+
+                text.textContent =
+                    '🔴 Bearish FVG Bias — Larger detected imbalance';
+
+                badge.textContent =
+                    'BEARISH';
+
+
+                shortCard.classList.add(
+                    'favored',
+                    'short-fav'
+                );
+
+                shortFavTag.style.display =
+                    'inline-block';
+
+
+                return;
+            }
+
+
+            banner.className =
+                'trend-banner neutral';
+
+            text.textContent =
+                '⚖️ Neutral FVG Bias — Equal imbalance size';
+
+            badge.textContent =
+                'NEUTRAL';
+
+            return;
+        }
+
+
+        banner.className =
+            'trend-banner neutral';
+
+        text.textContent =
+            '⚖️ Neutral — No valid Fair Value Gap detected';
+
+        badge.textContent =
+            'NO FVG';
+    }
+
+
+    /* =========================================================
+       RENDER SIDE
+    ========================================================= */
+
+    function renderSide(
+        side,
+        data
+    ) {
+
+        const prefix =
+            side === 'Long'
+                ? 'l'
+                : 's';
+
+
+        const card =
+            document.getElementById(
+                side === 'Long'
+                    ? 'longCard'
+                    : 'shortCard'
+            );
+
+
+        card.classList.remove(
+            'invalid'
+        );
+
+
+        if (!data.valid) {
+
+            card.classList.add(
+                'invalid'
+            );
+
+
+            setText(
+                prefix + 'Entry',
+                'INVALID'
+            );
+
+            setText(
+                prefix + 'SL',
+                'INVALID'
+            );
+
+            setText(
+                prefix + 'Liq',
+                '—'
+            );
+
+            setText(
+                prefix + 'TP2',
+                '—'
+            );
+
+            setText(
+                prefix + 'TPDyn',
+                '—'
+            );
+
+            setText(
+                prefix + 'Size',
+                '—'
+            );
+
+            setText(
+                prefix + 'Margin',
+                '—'
+            );
+
+            setText(
+                prefix + 'Qty',
+                '—'
+            );
+
+            setText(
+                prefix + 'Risk',
+                '—'
+            );
+
+            setText(
+                prefix + 'Reward2',
+                '—'
+            );
+
+            setText(
+                prefix + 'RewardDyn',
+                '—'
+            );
+
+            setText(
+                prefix + 'Fee',
+                data.reason || 'Invalid setup'
+            );
+
+            return;
+        }
+
+
+        setText(
+            prefix + 'Entry',
+            price(data.entry)
+        );
+
+
+        setText(
+            prefix + 'SL',
+            price(data.stopLoss)
+        );
+
+
+        setText(
+            prefix + 'Liq',
+            price(data.liquidationPrice)
+        );
+
+
+        setText(
+            prefix + 'TP2',
+            price(data.tp2)
+        );
+
+
+        setText(
+            prefix + 'TPDyn',
+            price(data.tpDynamic)
+        );
+
+
+        setText(
+            prefix + 'Size',
+            money(data.positionNotional)
+        );
+
+
+        setText(
+            prefix + 'Margin',
+            money(data.initialMargin)
+        );
+
+
+        setText(
+            prefix + 'Qty',
+            quantityDisplay(data.quantity)
+        );
+
+
+        setText(
+            prefix + 'Risk',
+            money(data.riskBudget)
+        );
+
+
+        setText(
+            prefix + 'Reward2',
+            money(data.netReward2)
+        );
+
+
+        setText(
+            prefix + 'RewardDyn',
+            money(data.netRewardDynamic)
+        );
+
+
+        let feeText =
+            money(data.totalRoundTripFees);
+
+
+        if (
+            data.marginExceeded ||
+            data.notionalExceeded
+        ) {
+
+            feeText +=
+                ' · ⚠ MARGIN';
+
+        }
+
+
+        setText(
+            prefix + 'Fee',
+            feeText
+        );
+
+
+        /*
+         * Dynamic styling for risk/margin conditions.
+         */
+
+        const marginElement =
+            document.getElementById(
+                prefix + 'Margin'
+            );
+
+        const riskElement =
+            document.getElementById(
+                prefix + 'Risk'
+            );
+
+
+        marginElement.classList.remove(
+            'cyan',
+            'orange',
+            'red'
+        );
+
+
+        if (
+            data.marginExceeded ||
+            data.notionalExceeded
+        ) {
+
+            marginElement.classList.add(
+                'orange'
+            );
+
+        } else {
+
+            marginElement.classList.add(
+                'cyan'
+            );
+        }
+
+
+        riskElement.title =
+            'Risk budget: ' +
+            percent(
+                data.riskBudget /
+                getVal('wallet') *
+                100
+            ) +
+            ' | Estimated actual stop-loss risk including fees: ' +
+            money(data.totalRiskAtSL) +
+            ' (' +
+            percent(data.actualRiskPct) +
+            ')';
+
+
+        /*
+         * Make warnings visible in fee field without changing
+         * the overall UI dimensions.
+         */
+
+        if (
+            !data.minimumNotionalMet
+        ) {
+
+            setText(
+                prefix + 'Fee',
+                money(data.totalRoundTripFees) +
+                ' · ⚠ MIN NOTIONAL'
+            );
+        }
+    }
+
+
+    /* =========================================================
+       UPDATE FVG DISPLAY
+    ========================================================= */
+
+    function updateFVGDisplay(
+        longFvg,
+        shortFvg
+    ) {
+
+        const longStatus =
+            document.getElementById(
+                'longFvgStatus'
+            );
+
+
+        const shortStatus =
+            document.getElementById(
+                'shortFvgStatus'
+            );
+
+
+        longStatus.textContent =
+            longFvg.exists
+                ? '✓ Bullish Gap'
+                : '— No Gap';
+
+
+        longStatus.style.color =
+            longFvg.exists
+                ? '#16c784'
+                : '#666';
+
+
+        setText(
+            'longFvgUpper',
+            longFvg.exists
+                ? longFvg.upper.toFixed(2)
+                : '—'
+        );
+
+
+        setText(
+            'longFvgLower',
+            longFvg.exists
+                ? longFvg.lower.toFixed(2)
+                : '—'
+        );
+
+
+        setText(
+            'longFvgGap',
+            longFvg.gap.toFixed(2)
+        );
+
+
+        shortStatus.textContent =
+            shortFvg.exists
+                ? '✓ Bearish Gap'
+                : '— No Gap';
+
+
+        shortStatus.style.color =
+            shortFvg.exists
+                ? '#ea3943'
+                : '#666';
+
+
+        setText(
+            'shortFvgUpper',
+            shortFvg.exists
+                ? shortFvg.upper.toFixed(2)
+                : '—'
+        );
+
+
+        setText(
+            'shortFvgLower',
+            shortFvg.exists
+                ? shortFvg.lower.toFixed(2)
+                : '—'
+        );
+
+
+        setText(
+            'shortFvgGap',
+            shortFvg.gap.toFixed(2)
+        );
+    }
+
+
+    /* =========================================================
+       MAIN UPDATE
+    ========================================================= */
+
+    function updateUI() {
+
+        const validCandles =
+            validateCandles();
+
+
+        if (!validCandles) {
+
+            const banner =
+                document.getElementById(
+                    'trendBanner'
+                );
+
+            banner.className =
+                'trend-banner warning';
+
+
+            setText(
+                'trendText',
+                '⚠️ Invalid candle data — High must be ≥ Low for every candle'
+            );
+
+
+            setText(
+                'trendBadge',
+                'INVALID'
+            );
+
+            return;
+        }
+
+
+        const longFvg =
+            computeLongFVG();
+
+
+        const shortFvg =
+            computeShortFVG();
+
+
+        updateTrendBias(
+            longFvg,
+            shortFvg
+        );
+
+
+        updateFVGDisplay(
+            longFvg,
+            shortFvg
+        );
+
+
+        const long =
+            calculateSide('Long');
+
+
+        const short =
+            calculateSide('Short');
+
+
+        renderSide(
+            'Long',
+            long
+        );
+
+
+        renderSide(
+            'Short',
+            short
+        );
+
+
+        const slider =
+            parseFloat(
+                document.getElementById(
+                    'tpRatioSlider'
+                ).value
+            ) || 3;
+
+
+        setText(
+            'tpRatioLabel',
+            '1:' + slider.toFixed(1)
+        );
+    }
+
+
+    /* =========================================================
+       PRESETS
+    ========================================================= */
+
+    const presets = {
+
+        bullish: {
+
+            c1h: 89.50,
+            c1l: 88.90,
+
+            c2h: 91.20,
+            c2l: 89.10,
+
+            c3h: 91.80,
+            c3l: 90.20
+        },
+
+
+        bearish: {
+
+            c1h: 92.50,
+            c1l: 91.00,
+
+            c2h: 90.50,
+            c2l: 88.40,
+
+            c3h: 89.80,
+            c3l: 88.10
+        },
+
+
+        none: {
+
+            c1h: 90.00,
+            c1l: 88.00,
+
+            c2h: 91.00,
+            c2l: 89.00,
+
+            c3h: 90.50,
+            c3l: 88.50
+        }
+
+    };
+
+
+    document
+        .querySelectorAll('.example-btn')
+        .forEach(function (button) {
+
+            button.addEventListener(
+                'click',
+                function () {
+
+                    const preset =
+                        presets[
+                            this.dataset.preset
+                        ];
+
+
+                    if (!preset) {
+                        return;
                     }
-                });
-            });
 
-            document.getElementById('tpRatioSlider').addEventListener('input', updateUI);
-            document.querySelectorAll('input').forEach(inp => {
-                inp.addEventListener('input', updateUI);
-            });
 
-            window.addEventListener('load', updateUI);
-        })();
-    </script>
+                    Object.keys(preset)
+                        .forEach(function (key) {
+
+                            const input =
+                                document.getElementById(
+                                    key
+                                );
+
+
+                            if (input) {
+
+                                input.value =
+                                    preset[key];
+
+                            }
+
+                        });
+
+
+                    updateUI();
+                }
+            );
+
+        });
+
+
+    /* =========================================================
+       LIVE CALCULATION
+    ========================================================= */
+
+    document
+        .getElementById(
+            'tpRatioSlider'
+        )
+        .addEventListener(
+            'input',
+            updateUI
+        );
+
+
+    document
+        .querySelectorAll('input')
+        .forEach(function (input) {
+
+            input.addEventListener(
+                'input',
+                updateUI
+            );
+
+        });
+
+
+    /* =========================================================
+       INITIAL CALCULATION
+    ========================================================= */
+
+    window.addEventListener(
+        'load',
+        updateUI
+    );
+
+})();
+
+</script>
+
 </body>
 </html>

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FVG Pro V2 · Futures Confluence &amp; Risk Engine</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+        }
+
+        body {
+            background: #0b0e14;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            color: #eef2f7;
+        }
+
+        .card {
+            max-width: 1150px;
+            width: 100%;
+            background: #181e28;
+            border-radius: 28px;
+            padding: 16px 18px 18px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .7);
+            border: 1px solid #2b3543;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #f0b90b;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        h1 small {
+            font-size: .75rem;
+            font-weight: 400;
+            color: #8899bb;
+            margin-left: 6px;
+        }
+
+        .sub {
+            color: #9aabbf;
+            font-size: .75rem;
+            margin-bottom: 12px;
+            border-left: 3px solid #f0b90b;
+            line-height: 1.4;
+            padding: 4px 12px;
+            background: #1f2835;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* ---- TOP CONTROLS ---- */
+        .control-bar {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .control {
+            background: #111b26;
+            border: 1px solid #2a3545;
+            border-radius: 12px;
+            padding: 5px 8px;
+        }
+
+        .control label {
+            display: block;
+            font-size: .55rem;
+            color: #98adc9;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .control select,
+        .control input {
+            width: 100%;
+            background: #0d1520;
+            color: #eef2f7;
+            border: 0;
+            outline: 0;
+            border-radius: 7px;
+            padding: 4px;
+            font-size: .75rem;
+        }
+
+        /* ---- CANDLE + PARAMS ---- */
+        .top-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .candle-grid,
+        .params-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            flex: 3;
+            min-width: 320px;
+        }
+
+        .params-grid {
+            flex: 3;
+        }
+
+        .field-group {
+            background: #131b24;
+            border-radius: 12px;
+            padding: 4px 8px 4px 10px;
+            border: 1px solid #28323f;
+        }
+
+        .field-group:hover {
+            border-color: #f0b90b55;
+        }
+
+        .field-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: .55rem;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+            color: #98adc9;
+            margin-bottom: 1px;
+        }
+
+        .field-group label span {
+            color: #f0b90b;
+        }
+
+        .field-group input,
+        .field-group select {
+            width: 100%;
+            background: #0e141c;
+            border: none;
+            color: #f0f4fc;
+            padding: 3px 4px;
+            border-radius: 8px;
+            font-size: .8rem;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .field-group select {
+            cursor: pointer;
+        }
+
+        .field-group input:focus,
+        .field-group select:focus {
+            box-shadow: 0 0 0 2px #f0b90b30;
+        }
+
+        .field-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .field-group input[type="number"]::-webkit-inner-spin-button,
+        .field-group input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+        }
+
+        /* ---- TREND BANNER ---- */
+        .trend-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #131a24;
+            border: 1px solid #283445;
+            border-radius: 12px;
+            padding: 8px 14px;
+            margin-bottom: 10px;
+            font-size: .85rem;
+            font-weight: 600;
+        }
+
+        .trend-banner.bullish {
+            border-color: #16c784;
+            background: rgba(22, 199, 132, .08);
+            color: #16c784;
+        }
+        .trend-banner.bearish {
+            border-color: #ea3943;
+            background: rgba(234, 57, 67, .08);
+            color: #ea3943;
+        }
+        .trend-banner.neutral {
+            border-color: #f0b90b;
+            background: rgba(240, 185, 11, .08);
+            color: #f0b90b;
+        }
+        .trend-banner.warning {
+            border-color: #ff8a00;
+            background: rgba(255, 138, 0, .08);
+            color: #ff8a00;
+        }
+
+        .trend-badge {
+            font-size: .7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        /* ---- PRESETS ---- */
+        .fvg-examples {
+            display: flex;
+            gap: 8px;
+            margin: 6px 0 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .example-btn {
+            background: #1d2838;
+            border: 1px solid #2a3545;
+            color: #eef2f7;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: .7rem;
+            cursor: pointer;
+            transition: .2s;
+        }
+        .example-btn:hover {
+            border-color: #f0b90b;
+            background: #283544;
+        }
+
+        /* ---- SUMMARY ---- */
+        .setup-summary {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .summary-box {
+            background: #111b26;
+            border: 1px solid #2a3545;
+            border-radius: 14px;
+            padding: 7px 10px;
+        }
+
+        .summary-title {
+            font-size: .58rem;
+            color: #8899bb;
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .score-good {
+            color: #16c784;
+        }
+        .score-mid {
+            color: #f0b90b;
+        }
+        .score-bad {
+            color: #ea3943;
+        }
+
+        /* ---- COMPARE GRID ---- */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .side-card {
+            background: #111b26;
+            border-radius: 18px;
+            padding: 10px 14px;
+            border: 1px solid #2a3545;
+            transition: .25s;
+        }
+
+        .side-card.favored.long-fav {
+            border: 2px solid #16c784;
+            box-shadow: 0 0 18px rgba(22, 199, 132, .15);
+        }
+        .side-card.favored.short-fav {
+            border: 2px solid #ea3943;
+            box-shadow: 0 0 18px rgba(234, 57, 67, .15);
+        }
+
+        .side-card h3 {
+            font-size: .85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .badge-long {
+            color: #16c784;
+        }
+        .badge-short {
+            color: #ea3943;
+        }
+
+        .fvg-display {
+            background: #0d1622;
+            border-radius: 12px;
+            padding: 4px 10px;
+            margin-bottom: 6px;
+            border: 1px solid #2a3545;
+        }
+
+        .fvg-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+        }
+
+        .fvg-status {
+            font-size: .7rem;
+            color: #98adc9;
+        }
+        .fvg-values {
+            font-size: .65rem;
+            color: #b7cbdf;
+        }
+        .gap {
+            color: #f0b90b;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+            border-bottom: 1px solid #1d2838;
+            font-size: .76rem;
+        }
+
+        .result-row .label {
+            color: #98adc9;
+        }
+        .result-row .value {
+            font-weight: 600;
+        }
+
+        .green {
+            color: #16c784;
+        }
+        .red {
+            color: #ea3943;
+        }
+        .gold {
+            color: #f0b90b;
+        }
+        .cyan {
+            color: #00d4ff;
+        }
+        .orange {
+            color: #ff9f43;
+        }
+
+        .section-title {
+            font-size: .6rem;
+            color: #8899bb;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            margin-top: 7px;
+            margin-bottom: 3px;
+        }
+
+        /* ---- SCORE BARS ---- */
+        .score-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 40px;
+            gap: 5px;
+            align-items: center;
+            font-size: .6rem;
+            color: #98adc9;
+            margin: 2px 0;
+        }
+
+        .score-track {
+            height: 4px;
+            background: #202b39;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: #f0b90b;
+            border-radius: 10px;
+            transition: width .2s;
+        }
+
+        /* ---- SLIDER ---- */
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #0a111c;
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid #2a3545;
+            margin-top: 8px;
+            font-size: .75rem;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            accent-color: #f0b90b;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .footnote {
+            margin-top: 8px;
+            color: #6d839e;
+            font-size: .6rem;
+            text-align: right;
+            border-top: 1px dashed #26303d;
+            padding-top: 8px;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 780px) {
+            .candle-grid,
+            .params-grid {
+                grid-template-columns: repeat(3, 1fr);
+                min-width: unset;
+            }
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+            .control-bar,
+            .setup-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            .top-row {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .control-bar,
+            .setup-summary {
+                grid-template-columns: 1fr;
+            }
+            .score-row {
+                grid-template-columns: 50px 1fr 32px;
+                font-size: .55rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h1>
+            📊 FVG Pro V2
+            <small>Futures Confluence &amp; Risk Engine</small>
+        </h1>
+
+        <div class="sub">
+            ⚡ Structure · Liquidity · FVG · Fibonacci · ATR · Risk-Based Position Sizing
+        </div>
+
+        <!-- ===== CONTROL BAR ===== -->
+        <div class="control-bar">
+
+            <div class="control">
+                <label>Direction</label>
+                <select id="direction">
+                    <option value="AUTO">🤖 Smart Auto</option>
+                    <option value="LONG">🟢 Buy / Long</option>
+                    <option value="SHORT">🔴 Sell / Short</option>
+                </select>
+            </div>
+
+            <div class="control">
+                <label>Symbol</label>
+                <input id="symbol" value="BTCUSDT" />
+            </div>
+
+            <div class="control">
+                <label>Entry Mode</label>
+                <select id="entryMode">
+                    <option value="MARKET">Market / Current</option>
+                    <option value="FVG">FVG Retracement</option>
+                    <option value="FIB">Fib Retracement</option>
+                    <option value="STRUCTURE">Structure</option>
+                </select>
+            </div>
+
+            <div class="control">
+                <label>Margin Mode</label>
+                <select id="marginMode">
+                    <option value="ISOLATED">Isolated</option>
+                    <option value="CROSS">Cross</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- ===== CANDLES + PARAMS ===== -->
+        <div class="top-row">
+
+            <div class="candle-grid">
+                <div class="field-group"><label>C1 <span>High</span></label><input type="number" id="c1h" value="100500" step="any" /></div>
+                <div class="field-group"><label>C1 <span>Low</span></label><input type="number" id="c1l" value="99000" step="any" /></div>
+                <div class="field-group"><label>C2 <span>High</span></label><input type="number" id="c2h" value="101000" step="any" /></div>
+                <div class="field-group"><label>C2 <span>Low</span></label><input type="number" id="c2l" value="99500" step="any" /></div>
+                <div class="field-group"><label>C3 <span>High</span></label><input type="number" id="c3h" value="102000" step="any" /></div>
+                <div class="field-group"><label>C3 <span>Low</span></label><input type="number" id="c3l" value="100700" step="any" /></div>
+            </div>
+
+            <div class="params-grid">
+                <div class="field-group"><label>💰 Wallet</label><input type="number" id="wallet" value="1000" step="10" /></div>
+                <div class="field-group"><label>⚡ Leverage</label><input type="number" id="leverage" value="10" step="1" min="1" /></div>
+                <div class="field-group"><label>📊 Risk %</label><input type="number" id="riskPct" value="1" step=".1" min=".01" /></div>
+                <div class="field-group"><label>Maker %</label><input type="number" id="makerFee" value=".020" step=".001" /></div>
+                <div class="field-group"><label>Taker %</label><input type="number" id="takerFee" value=".050" step=".001" /></div>
+                <div class="field-group"><label>Slippage %</label><input type="number" id="slippage" value=".02" step=".01" /></div>
+            </div>
+
+        </div>
+
+        <!-- ===== TREND BANNER ===== -->
+        <div class="trend-banner neutral" id="trendBanner">
+            <span id="trendText">🤖 Evaluating market structure…</span>
+            <span class="trend-badge" id="trendBadge">ANALYZING</span>
+        </div>
+
+        <!-- ===== PRESETS ===== -->
+        <div class="fvg-examples">
+            <span style="font-size:.7rem;color:#98adc9">Test market:</span>
+            <button class="example-btn" data-preset="bullish">Bullish Setup</button>
+            <button class="example-btn" data-preset="bearish">Bearish Setup</button>
+            <button class="example-btn" data-preset="balanced">Balanced</button>
+        </div>
+
+        <!-- ===== SUMMARY ===== -->
+        <div class="setup-summary">
+            <div class="summary-box"><div class="summary-title">Engine Decision</div><div class="summary-value" id="decision">—</div></div>
+            <div class="summary-box"><div class="summary-title">Confluence Score</div><div class="summary-value" id="score">—</div></div>
+            <div class="summary-box"><div class="summary-title">Market Structure</div><div class="summary-value" id="structure">—</div></div>
+        </div>
+
+        <!-- ===== LONG / SHORT ===== -->
+        <div class="compare-grid">
+
+            <!-- LONG -->
+            <div class="side-card" id="longCard">
+                <h3>
+                    <span class="badge-long">🟢 LONG</span>
+                    <span id="longFavTag" style="font-size:.65rem;background:#16c78433;color:#16c784;padding:2px 6px;border-radius:6px;display:none">RECOMMENDED</span>
+                </h3>
+
+                <div class="fvg-display">
+                    <div class="fvg-row">
+                        <span class="fvg-status">FVG <span id="longFvgStatus">—</span></span>
+                        <span class="fvg-values"><span id="longFvgUpper">—</span> / <span id="longFvgLower">—</span> <span class="gap">gap: <strong id="longFvgGap">0</strong></span></span>
+                    </div>
+                </div>
+
+                <div class="result-row"><span class="label">Recommended Entry</span><span class="value gold" id="lEntry">—</span></div>
+                <div class="result-row"><span class="label">Stop Loss</span><span class="value red" id="lSL">—</span></div>
+                <div class="result-row"><span class="label">TP1 · 1R</span><span class="value green" id="lTP1">—</span></div>
+                <div class="result-row"><span class="label">TP2 · 2R</span><span class="value green" id="lTP2">—</span></div>
+                <div class="result-row"><span class="label">TP3 · 3R</span><span class="value green" id="lTP3">—</span></div>
+                <div class="result-row"><span class="label">Dynamic TP</span><span class="value cyan" id="lTPDyn">—</span></div>
+                <div class="result-row"><span class="label">Position Notional</span><span class="value gold" id="lSize">—</span></div>
+                <div class="result-row"><span class="label">Initial Margin</span><span class="value cyan" id="lMargin">—</span></div>
+                <div class="result-row"><span class="label">Quantity</span><span class="value" id="lQty">—</span></div>
+                <div class="result-row"><span class="label">Planned Risk</span><span class="value red" id="lRisk">—</span></div>
+                <div class="result-row"><span class="label">Net Reward @ 2R</span><span class="value green" id="lReward2">—</span></div>
+                <div class="result-row"><span class="label">Round Trip Fees</span><span class="value" id="lFee">—</span></div>
+
+                <div class="section-title">Confluence</div>
+                <div id="longScores"></div>
+            </div>
+
+            <!-- SHORT -->
+            <div class="side-card" id="shortCard">
+                <h3>
+                    <span class="badge-short">🔴 SHORT</span>
+                    <span id="shortFavTag" style="font-size:.65rem;background:#ea394333;color:#ea3943;padding:2px 6px;border-radius:6px;display:none">RECOMMENDED</span>
+                </h3>
+
+                <div class="fvg-display">
+                    <div class="fvg-row">
+                        <span class="fvg-status">FVG <span id="shortFvgStatus">—</span></span>
+                        <span class="fvg-values"><span id="shortFvgUpper">—</span> / <span id="shortFvgLower">—</span> <span class="gap">gap: <strong id="shortFvgGap">0</strong></span></span>
+                    </div>
+                </div>
+
+                <div class="result-row"><span class="label">Recommended Entry</span><span class="value gold" id="sEntry">—</span></div>
+                <div class="result-row"><span class="label">Stop Loss</span><span class="value red" id="sSL">—</span></div>
+                <div class="result-row"><span class="label">TP1 · 1R</span><span class="value green" id="sTP1">—</span></div>
+                <div class="result-row"><span class="label">TP2 · 2R</span><span class="value green" id="sTP2">—</span></div>
+                <div class="result-row"><span class="label">TP3 · 3R</span><span class="value green" id="sTP3">—</span></div>
+                <div class="result-row"><span class="label">Dynamic TP</span><span class="value cyan" id="sTPDyn">—</span></div>
+                <div class="result-row"><span class="label">Position Notional</span><span class="value gold" id="sSize">—</span></div>
+                <div class="result-row"><span class="label">Initial Margin</span><span class="value cyan" id="sMargin">—</span></div>
+                <div class="result-row"><span class="label">Quantity</span><span class="value" id="sQty">—</span></div>
+                <div class="result-row"><span class="label">Planned Risk</span><span class="value red" id="sRisk">—</span></div>
+                <div class="result-row"><span class="label">Net Reward @ 2R</span><span class="value green" id="sReward2">—</span></div>
+                <div class="result-row"><span class="label">Round Trip Fees</span><span class="value" id="sFee">—</span></div>
+
+                <div class="section-title">Confluence</div>
+                <div id="shortScores"></div>
+            </div>
+
+        </div>
+
+        <!-- ===== SLIDER ===== -->
+        <div class="slider-row">
+            <span>🎯 Dynamic RR</span>
+            <input type="range" id="tpRatioSlider" min="1" max="5" step=".1" value="3" />
+            <span id="tpRatioLabel">1:3.0</span>
+        </div>
+
+        <div class="footnote">
+            This engine generates a rules-based market plan. It is not a prediction engine.
+            Liquidation is an estimate until live Binance contract/bracket data is supplied.
+            Position sizing is risk-first: leverage affects margin, not the amount you should risk.
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            /* ============================================================
+               HELPERS
+            ============================================================ */
+            function val(id) {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                const n = parseFloat(el.value);
+                return Number.isFinite(n) ? n : 0;
+            }
+
+            function setText(id, value) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            }
+
+            function clamp(x, min, max) { return Math.max(min, Math.min(max, x)); }
+
+            function roundTo(v, d) { const p = Math.pow(10, d || 2); return Math.round(v * p) / p; }
+
+            function avg(a, b) { return (a + b) / 2; }
+
+            /* ============================================================
+               CANDLES
+            ============================================================ */
+            function candles() {
+                return {
+                    c1: { h: val("c1h"), l: val("c1l") },
+                    c2: { h: val("c2h"), l: val("c2l") },
+                    c3: { h: val("c3h"), l: val("c3l") }
+                };
+            }
+
+            /* ============================================================
+               ATR PROXY
+            ============================================================ */
+            function atrProxy() {
+                const c = candles();
+                const ranges = [
+                    Math.abs(c.c1.h - c.c1.l),
+                    Math.abs(c.c2.h - c.c2.l),
+                    Math.abs(c.c3.h - c.c3.l)
+                ].filter(x => x > 0);
+                if (!ranges.length) return 0;
+                return ranges.reduce((a, b) => a + b, 0) / ranges.length;
+            }
+
+            /* ============================================================
+               FVG
+            ============================================================ */
+            function bullishFVG() {
+                const c = candles();
+                if (c.c3.l > c.c1.h) {
+                    return { exists: true, lower: c.c1.h, upper: c.c3.l, midpoint: avg(c.c1.h, c.c3.l), gap: c.c3.l - c.c1.h };
+                }
+                return { exists: false, lower: 0, upper: 0, midpoint: 0, gap: 0 };
+            }
+
+            function bearishFVG() {
+                const c = candles();
+                if (c.c1.l > c.c3.h) {
+                    return { exists: true, lower: c.c3.h, upper: c.c1.l, midpoint: avg(c.c3.h, c.c1.l), gap: c.c1.l - c.c3.h };
+                }
+                return { exists: false, lower: 0, upper: 0, midpoint: 0, gap: 0 };
+            }
+
+            /* ============================================================
+               STRUCTURE
+            ============================================================ */
+            function structureAnalysis() {
+                const c = candles();
+                const bullish = c.c3.h > c.c2.h && c.c3.l > c.c2.l;
+                const bearish = c.c3.h < c.c2.h && c.c3.l < c.c2.l;
+                let direction = "NEUTRAL",
+                    label = "Range / Mixed";
+                if (bullish) { direction = "BULLISH";
+                    label = "HH + HL"; } else if (bearish) { direction = "BEARISH";
+                    label = "LH + LL"; }
+                return {
+                    direction,
+                    label,
+                    swingHigh: Math.max(c.c1.h, c.c2.h, c.c3.h),
+                    swingLow: Math.min(c.c1.l, c.c2.l, c.c3.l),
+                    previousHigh: Math.max(c.c1.h, c.c2.h),
+                    previousLow: Math.min(c.c1.l, c.c2.l)
+                };
+            }
+
+            /* ============================================================
+               LIQUIDITY
+            ============================================================ */
+            function liquidityAnalysis() {
+                const c = candles();
+                const th = Math.max(Math.abs(c.c1.h), Math.abs(c.c2.h), Math.abs(c.c3.h)) * 0.001;
+                const tl = th;
+                return {
+                    buySideLiquidity: Math.max(c.c1.h, c.c2.h, c.c3.h),
+                    sellSideLiquidity: Math.min(c.c1.l, c.c2.l, c.c3.l),
+                    equalHigh: Math.abs(c.c1.h - c.c2.h) <= th || Math.abs(c.c2.h - c.c3.h) <= th,
+                    equalLow: Math.abs(c.c1.l - c.c2.l) <= tl || Math.abs(c.c2.l - c.c3.l) <= tl
+                };
+            }
+
+            /* ============================================================
+               FIBONACCI
+            ============================================================ */
+            function fibonacciAnalysis() {
+                const s = structureAnalysis();
+                const range = s.swingHigh - s.swingLow;
+                if (range <= 0) return { range: 0, fib382: 0, fib50: 0, fib618: 0, fib705: 0, fib786: 0 };
+                return {
+                    range,
+                    fib382: s.swingHigh - range * 0.382,
+                    fib50: s.swingHigh - range * 0.50,
+                    fib618: s.swingHigh - range * 0.618,
+                    fib705: s.swingHigh - range * 0.705,
+                    fib786: s.swingHigh - range * 0.786
+                };
+            }
+
+            /* ============================================================
+               ENTRY ENGINE
+            ============================================================ */
+            function determineEntry(side) {
+                const c = candles();
+                const longFvg = bullishFVG(),
+                    shortFvg = bearishFVG();
+                const fib = fibonacciAnalysis();
+                const mode = document.getElementById("entryMode").value;
+                const current = side === "LONG" ? c.c3.l : c.c3.h;
+                let entry = current,
+                    reason = "Current market structure";
+
+                if (mode === "FVG") {
+                    if (side === "LONG" && longFvg.exists) { entry = longFvg.midpoint;
+                        reason = "Bullish FVG midpoint"; } else if (side === "SHORT" && shortFvg.exists) { entry = shortFvg
+                            .midpoint;
+                        reason = "Bearish FVG midpoint"; }
+                } else if (mode === "FIB") {
+                    entry = side === "LONG" ? fib.fib618 : fib.fib382;
+                    reason = "Fibonacci retracement (" + (side === "LONG" ? "0.618" : "0.382") + ")";
+                } else if (mode === "STRUCTURE") {
+                    entry = side === "LONG" ? c.c3.l : c.c3.h;
+                    reason = "Structure entry";
+                }
+                return { entry, reason };
+            }
+
+            /* ============================================================
+               STOP ENGINE
+            ============================================================ */
+            function determineStop(side, entry) {
+                const c = candles();
+                const atr = atrProxy();
+                const structure = structureAnalysis();
+                const fvg = side === "LONG" ? bullishFVG() : bearishFVG();
+                const liquidity = liquidityAnalysis();
+                const buffer = Math.max(atr * 0.15, entry * 0.0005);
+                let stop;
+
+                if (side === "LONG") {
+                    const structuralLow = Math.min(c.c1.l, c.c2.l, c.c3.l);
+                    let ref = structuralLow;
+                    if (fvg.exists) ref = Math.min(ref, fvg.lower);
+                    stop = ref - buffer;
+                    if (stop >= entry) stop = entry - Math.max(atr, entry * 0.005);
+                } else {
+                    const structuralHigh = Math.max(c.c1.h, c.c2.h, c.c3.h);
+                    let ref = structuralHigh;
+                    if (fvg.exists) ref = Math.max(ref, fvg.upper);
+                    stop = ref + buffer;
+                    if (stop <= entry) stop = entry + Math.max(atr, entry * 0.005);
+                }
+                return {
+                    stop,
+                    atr,
+                    buffer,
+                    structureLow: structure.swingLow,
+                    structureHigh: structure.swingHigh,
+                    liquidityLow: liquidity.sellSideLiquidity,
+                    liquidityHigh: liquidity.buySideLiquidity
+                };
+            }
+
+            /* ============================================================
+               TARGETS
+            ============================================================ */
+            function targets(side, entry, stop) {
+                const riskDistance = Math.abs(entry - stop);
+                const ratio = val("tpRatioSlider") || 3;
+                const sign = side === "LONG" ? 1 : -1;
+                return {
+                    riskDistance,
+                    tp1: entry + sign * riskDistance,
+                    tp2: entry + sign * riskDistance * 2,
+                    tp3: entry + sign * riskDistance * 3,
+                    dynamic: entry + sign * riskDistance * ratio
+                };
+            }
+
+            /* ============================================================
+               CONFLUENCE SCORING
+            ============================================================ */
+            function scoreSide(side, entry, stop) {
+                const structure = structureAnalysis();
+                const longFvg = bullishFVG(),
+                    shortFvg = bearishFVG();
+                const fvg = side === "LONG" ? longFvg : shortFvg;
+                const liquidity = liquidityAnalysis();
+                const fib = fibonacciAnalysis();
+                const atr = atrProxy();
+
+                let structureScore = 0,
+                    liquidityScore = 0,
+                    fvgScore = 0,
+                    fibScore = 0,
+                    volatilityScore = 0;
+
+                // Structure (25)
+                if ((side === "LONG" && structure.direction === "BULLISH") || (side === "SHORT" && structure.direction ===
+                        "BEARISH")) {
+                    structureScore = 25;
+                } else if (structure.direction === "NEUTRAL") {
+                    structureScore = 12;
+                } else {
+                    structureScore = 3;
+                }
+
+                // Liquidity (20)
+                if (side === "LONG" && liquidity.equalLow) liquidityScore += 12;
+                if (side === "SHORT" && liquidity.equalHigh) liquidityScore += 12;
+                if (side === "LONG" && entry > liquidity.sellSideLiquidity) liquidityScore += 8;
+                if (side === "SHORT" && entry < liquidity.buySideLiquidity) liquidityScore += 8;
+                liquidityScore = clamp(liquidityScore, 0, 20);
+
+                // FVG (20)
+                if (fvg.exists) {
+                    fvgScore = 15;
+                    const dist = Math.abs(entry - fvg.midpoint);
+                    if (fvg.gap > 0 && dist <= fvg.gap * 0.5) fvgScore = 20;
+                }
+
+                // Fibonacci (15)
+                const levels = [fib.fib382, fib.fib50, fib.fib618, fib.fib705, fib.fib786];
+                if (levels.some(l => l > 0 && Math.abs(entry - l) <= Math.max(atr * 0.35, entry * 0.001))) {
+                    fibScore = 15;
+                } else {
+                    fibScore = 5;
+                }
+
+                // Volatility (20)
+                if (atr > 0) {
+                    const ratio = Math.abs(entry - stop) / atr;
+                    if (ratio >= .7 && ratio <= 2.5) volatilityScore = 20;
+                    else if (ratio >= .4 && ratio <= 3.5) volatilityScore = 12;
+                    else volatilityScore = 5;
+                }
+
+                const total = structureScore + liquidityScore + fvgScore + fibScore + volatilityScore;
+                return {
+                    total: clamp(total, 0, 100),
+                    structure: structureScore,
+                    liquidity: liquidityScore,
+                    fvg: fvgScore,
+                    fibonacci: fibScore,
+                    volatility: volatilityScore
+                };
+            }
+
+            /* ============================================================
+               POSITION SIZING (risk-first)
+            ============================================================ */
+            function positionSizing(side, entry, stop) {
+                const wallet = val("wallet");
+                const leverage = Math.max(1, val("leverage"));
+                const riskBudget = wallet * (val("riskPct") / 100);
+                const maker = val("makerFee") / 100;
+                const taker = val("takerFee") / 100;
+                const slippage = val("slippage") / 100;
+                const distance = Math.abs(entry - stop);
+
+                if (wallet <= 0 || distance <= 0) {
+                    return { quantity: 0, notional: 0, margin: 0, actualRisk: 0, fees: 0, riskBudget: 0, entryFee: 0,
+                        exitFee: 0, estimatedSlippage: 0, priceLoss: 0 };
+                }
+
+                const entryCostPerUnit = entry * maker;
+                const stopCostPerUnit = stop * taker;
+                const slippageCostPerUnit = entry * slippage;
+                const totalRiskPerUnit = distance + entryCostPerUnit + stopCostPerUnit + slippageCostPerUnit;
+                let quantity = riskBudget / totalRiskPerUnit;
+                quantity = Math.floor(quantity * 1000) / 1000;
+
+                const notional = quantity * entry;
+                const margin = notional / leverage;
+                const entryFee = notional * maker;
+                const stopNotional = quantity * stop;
+                const exitFee = stopNotional * taker;
+                const estimatedSlippage = quantity * entry * slippage;
+                const priceLoss = quantity * distance;
+                const actualRisk = priceLoss + entryFee + exitFee + estimatedSlippage;
+                const fees = entryFee + exitFee;
+
+                return { quantity, notional, margin, riskBudget, actualRisk, fees, entryFee, exitFee, estimatedSlippage,
+                    priceLoss };
+            }
+
+            /* ============================================================
+               REWARD AT TARGET
+            ============================================================ */
+            function rewardAtTarget(side, entry, target, quantity) {
+                if (!quantity) return 0;
+                const maker = val("makerFee") / 100;
+                const taker = val("takerFee") / 100;
+                const entryFee = quantity * entry * maker;
+                const exitFee = quantity * target * taker;
+                const gross = quantity * Math.abs(target - entry);
+                return Math.max(0, gross - entryFee - exitFee);
+            }
+
+            /* ============================================================
+               LIQUIDATION ESTIMATE
+            ============================================================ */
+            function liquidationEstimate(side, entry) {
+                const lev = Math.max(1, val("leverage"));
+                const mmr = 0.005;
+                if (side === "LONG") return entry * (1 - 1 / lev + mmr);
+                return entry * (1 + 1 / lev - mmr);
+            }
+
+            /* ============================================================
+               SIDE ENGINE
+            ============================================================ */
+            function calculateSide(side) {
+                try {
+                    const entryData = determineEntry(side);
+                    const entry = entryData.entry;
+                    const stopData = determineStop(side, entry);
+                    const stop = stopData.stop;
+                    const targetData = targets(side, entry, stop);
+                    const sizing = positionSizing(side, entry, stop);
+                    const score = scoreSide(side, entry, stop);
+
+                    const tp1 = targetData.tp1,
+                        tp2 = targetData.tp2,
+                        tp3 = targetData.tp3,
+                        dynamic = targetData.dynamic;
+                    const reward2 = rewardAtTarget(side, entry, tp2, sizing.quantity);
+                    const rewardDynamic = rewardAtTarget(side, entry, dynamic, sizing.quantity);
+                    const liquidation = liquidationEstimate(side, entry);
+                    const rrDynamic = targetData.riskDistance > 0 ? Math.abs(dynamic - entry) / targetData.riskDistance : 0;
+
+                    return {
+                        side,
+                        entry,
+                        stop,
+                        tp1,
+                        tp2,
+                        tp3,
+                        dynamic,
+                        riskDistance: targetData.riskDistance,
+                        sizing,
+                        score,
+                        liquidation,
+                        reward2,
+                        rewardDynamic,
+                        rrDynamic,
+                        atr: stopData.atr,
+                        entryReason: entryData.reason
+                    };
+                } catch (e) {
+                    // Return a safe fallback so the UI doesn't break
+                    console.warn("calculateSide(" + side + ") error:", e);
+                    const fallback = {
+                        side: side,
+                        entry: 0,
+                        stop: 0,
+                        tp1: 0,
+                        tp2: 0,
+                        tp3: 0,
+                        dynamic: 0,
+                        riskDistance: 0,
+                        sizing: { quantity: 0, notional: 0, margin: 0, actualRisk: 0, fees: 0, riskBudget: 0,
+                            entryFee: 0, exitFee: 0, estimatedSlippage: 0, priceLoss: 0 },
+                        score: { total: 0, structure: 0, liquidity: 0, fvg: 0, fibonacci: 0, volatility: 0 },
+                        liquidation: 0,
+                        reward2: 0,
+                        rewardDynamic: 0,
+                        rrDynamic: 0,
+                        atr: 0,
+                        entryReason: "Error"
+                    };
+                    return fallback;
+                }
+            }
+
+            /* ============================================================
+               DECISION ENGINE
+            ============================================================ */
+            function determineDecision(long, short) {
+                const dir = document.getElementById("direction").value;
+                if (dir === "LONG") return { side: "LONG", score: long.score.total, reason: "Manual LONG selected" };
+                if (dir === "SHORT") return { side: "SHORT", score: short.score.total, reason: "Manual SHORT selected" };
+
+                const diff = Math.abs(long.score.total - short.score.total);
+                const maxScore = Math.max(long.score.total, short.score.total);
+                if (maxScore < 55) return { side: "NO TRADE", score: maxScore, reason: "Insufficient confluence" };
+                if (diff < 8) return { side: "NO TRADE", score: maxScore, reason: "Long and Short too close" };
+                if (long.score.total > short.score.total) return { side: "LONG", score: long.score.total,
+                    reason: "LONG has stronger confluence" };
+                return { side: "SHORT", score: short.score.total, reason: "SHORT has stronger confluence" };
+            }
+
+            /* ============================================================
+               SCORE HTML
+            ============================================================ */
+            function scoreHTML(score) {
+                const rows = [
+                    ["Structure", score.structure, 25],
+                    ["Liquidity", score.liquidity, 20],
+                    ["FVG", score.fvg, 20],
+                    ["Fibonacci", score.fibonacci, 15],
+                    ["Volatility", score.volatility, 20]
+                ];
+                return rows.map(row => {
+                    const pct = (row[1] / row[2]) * 100;
+                    return `<div class="score-row">
+                                <span>${row[0]}</span>
+                                <div class="score-track"><div class="score-fill" style="width:${pct}%"></div></div>
+                                <span>${row[1]}/${row[2]}</span>
+                            </div>`;
+                }).join("");
+            }
+
+            /* ============================================================
+               RENDER FVG
+            ============================================================ */
+            function renderFVG() {
+                const long = bullishFVG(),
+                    short = bearishFVG();
+                setText("longFvgStatus", long.exists ? "✓ Bullish" : "— None");
+                setText("longFvgUpper", long.exists ? long.upper.toFixed(2) : "—");
+                setText("longFvgLower", long.exists ? long.lower.toFixed(2) : "—");
+                setText("longFvgGap", long.gap.toFixed(2));
+
+                setText("shortFvgStatus", short.exists ? "✓ Bearish" : "— None");
+                setText("shortFvgUpper", short.exists ? short.upper.toFixed(2) : "—");
+                setText("shortFvgLower", short.exists ? short.lower.toFixed(2) : "—");
+                setText("shortFvgGap", short.gap.toFixed(2));
+            }
+
+            /* ============================================================
+               RENDER SIDE
+            ============================================================ */
+            function renderSide(prefix, result) {
+                const p = prefix === "l" ? "l" : "s";
+                const scoresId = prefix === "l" ? "longScores" : "shortScores";
+
+                // Safely format a number, fallback to "—"
+                const fmt = (v) => (v && Number.isFinite(v)) ? v.toFixed(2) : "—";
+                const fmtDollar = (v) => (v && Number.isFinite(v)) ? "$" + v.toFixed(2) : "—";
+                const fmtQty = (v) => (v && Number.isFinite(v)) ? v.toFixed(6) : "—";
+
+                setText(p + "Entry", fmt(result.entry));
+                setText(p + "SL", fmt(result.stop));
+                setText(p + "TP1", fmt(result.tp1));
+                setText(p + "TP2", fmt(result.tp2));
+                setText(p + "TP3", fmt(result.tp3));
+                setText(p + "TPDyn", fmt(result.dynamic));
+                setText(p + "Size", fmtDollar(result.sizing.notional));
+                setText(p + "Margin", fmtDollar(result.sizing.margin));
+                setText(p + "Qty", fmtQty(result.sizing.quantity));
+                setText(p + "Risk", fmtDollar(result.sizing.actualRisk));
+                setText(p + "Reward2", fmtDollar(result.reward2));
+                setText(p + "Fee", fmtDollar(result.sizing.fees));
+
+                const scoresEl = document.getElementById(scoresId);
+                if (scoresEl) scoresEl.innerHTML = scoreHTML(result.score);
+            }
+
+            /* ============================================================
+               RENDER DECISION
+            ============================================================ */
+            function renderDecision(decision, long, short) {
+                const banner = document.getElementById("trendBanner");
+                const text = document.getElementById("trendText");
+                const badge = document.getElementById("trendBadge");
+                const longCard = document.getElementById("longCard");
+                const shortCard = document.getElementById("shortCard");
+                const longTag = document.getElementById("longFavTag");
+                const shortTag = document.getElementById("shortFavTag");
+
+                banner.className = "trend-banner";
+                longCard.classList.remove("favored", "long-fav");
+                shortCard.classList.remove("favored", "short-fav");
+                longTag.style.display = "none";
+                shortTag.style.display = "none";
+
+                if (decision.side === "LONG") {
+                    banner.classList.add("bullish");
+                    text.textContent = "🚀 LONG setup has the strongest confluence";
+                    badge.textContent = "LONG";
+                    longCard.classList.add("favored", "long-fav");
+                    longTag.style.display = "inline-block";
+                } else if (decision.side === "SHORT") {
+                    banner.classList.add("bearish");
+                    text.textContent = "🔻 SHORT setup has the strongest confluence";
+                    badge.textContent = "SHORT";
+                    shortCard.classList.add("favored", "short-fav");
+                    shortTag.style.display = "inline-block";
+                } else {
+                    banner.classList.add("neutral");
+                    text.textContent = "⚖️ NO TRADE — market confluence is insufficient";
+                    badge.textContent = "NO TRADE";
+                }
+
+                const decisionEl = document.getElementById("decision");
+                const scoreEl = document.getElementById("score");
+                decisionEl.textContent = decision.side;
+                scoreEl.textContent = decision.score.toFixed(0) + "/100";
+
+                decisionEl.className = "summary-value " + (decision.side === "NO TRADE" ? "score-bad" : "score-good");
+                scoreEl.className = "summary-value " + (decision.score >= 70 ? "score-good" : decision.score >= 55 ?
+                    "score-mid" : "score-bad");
+            }
+
+            /* ============================================================
+               MAIN UPDATE
+            ============================================================ */
+            function update() {
+                try {
+                    renderFVG();
+                    const structure = structureAnalysis();
+                    const long = calculateSide("LONG");
+                    const short = calculateSide("SHORT");
+                    const decision = determineDecision(long, short);
+
+                    renderSide("l", long);
+                    renderSide("s", short);
+                    renderDecision(decision, long, short);
+
+                    setText("structure", structure.label);
+
+                    const ratio = val("tpRatioSlider");
+                    setText("tpRatioLabel", "1:" + ratio.toFixed(1));
+                } catch (e) {
+                    console.warn("Update error:", e);
+                    // Keep UI responsive: show a warning but don't break completely
+                    const banner = document.getElementById("trendBanner");
+                    if (banner) {
+                        banner.className = "trend-banner warning";
+                        document.getElementById("trendText").textContent = "⚠️ Update error — check console";
+                        document.getElementById("trendBadge").textContent = "ERROR";
+                    }
+                }
+            }
+
+            /* ============================================================
+               PRESETS
+            ============================================================ */
+            const presets = {
+                bullish: { c1h: 100000, c1l: 98500, c2h: 101500, c2l: 99500, c3h: 103000, c3l: 100800 },
+                bearish: { c1h: 103000, c1l: 101500, c2h: 101000, c2l: 99500, c3h: 99500, c3l: 98000 },
+                balanced: { c1h: 101000, c1l: 99000, c2h: 101500, c2l: 99500, c3h: 100800, c3l: 99200 }
+            };
+
+            document.querySelectorAll(".example-btn").forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const p = presets[this.dataset.preset];
+                    if (!p) return;
+                    Object.keys(p).forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.value = p[id];
+                    });
+                    update();
+                });
+            });
+
+            /* ============================================================
+               EVENTS
+            ============================================================ */
+            document.querySelectorAll("input, select").forEach(el => {
+                el.addEventListener("input", update);
+                el.addEventListener("change", update);
+            });
+
+            /* ============================================================
+               INIT
+            ============================================================ */
+            update();
+
+        })();
+    </script>
+
+</body>
+</html>

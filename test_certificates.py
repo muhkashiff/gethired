@@ -1,57 +1,51 @@
-from app.parser.readers.resume_reader import ResumeReader
-from app.parser.section_detector import SectionDetector
-from app.parser.resume_builder import ResumeBuilder
+from app.intelligence.utilities.knowledge.jd_requirements.requirement_classifier import (
+    JDRequirementClassifier,
+)
 
-# ----------------------------------------------------
-# Resume Path
-# ----------------------------------------------------
 
-resume_path = r"D:\Self Projects\gethired\gethired\uploads\project_2\resume_original.docx"
-# Replace the filename above with the exact filename if different.
+def test_prefer_diagnostic():
+    classifier = JDRequirementClassifier()
 
-# ----------------------------------------------------
-# Read Resume
-# ----------------------------------------------------
+    text = (
+        "Industry experience in restaurants, food manufacturing, "
+        "or central production facilities is highly preferred."
+    )
 
-reader = ResumeReader()
-lines = reader.read(resume_path)
+    print("\n" + "=" * 80)
+    print("PREFERENCE DIAGNOSTIC")
+    print("=" * 80)
 
-# ----------------------------------------------------
-# Detect Sections
-# ----------------------------------------------------
+    print("\nINPUT TEXT:")
+    print(text)
 
-detector = SectionDetector()
-sections = detector.detect(lines)
+    print("\nPREFERRED LANGUAGE:")
+    print(
+        classifier._contains_preferred_language(
+            text.casefold()
+        )
+    )
 
-# ----------------------------------------------------
-# Build Resume Object
-# ----------------------------------------------------
+    print("\nREQUIRED LANGUAGE:")
+    print(
+        classifier._contains_required_language(
+            text.casefold()
+        )
+    )
 
-builder = ResumeBuilder()
-resume = builder.build(sections)
+    print("\nPRIORITY:")
+    print(
+        classifier._priority(
+            text,
+            {},
+        )
+    )
 
-# ----------------------------------------------------
-# Print Certifications
-# ----------------------------------------------------
+    print("\nPRIORITY VALUE:")
+    print(
+        classifier._priority(
+            text,
+            {},
+        ).value
+    )
 
-print("=" * 70)
-print("TOTAL CERTIFICATIONS:", len(resume.certifications))
-print("=" * 70)
-
-for i, cert in enumerate(resume.certifications, start=1):
-
-    print(f"\nCertification #{i}")
-    print("-" * 50)
-    print("Name            :", cert.name)
-    print("Issuer          :", cert.issuer)
-    print("Category        :", cert.category)
-    print("Level           :", cert.level)
-    print("Year            :", cert.year)
-    print("Expiry          :", cert.expiry)
-    print("Credential ID   :", cert.credential_id)
-    print("Verification URL:", cert.verification_url)
-    print("Confidence      :", cert.confidence)
-    print("Matched         :", cert.matched)
-    print("Score           :", cert.score)
-    print("Normalized Name :", cert.normalized_name)
-    print("Raw Text        :", cert.raw_text)
+    print("=" * 80)

@@ -1014,6 +1014,7 @@
     "business_area": "Manufacturing",
     "impact_weight": 1.0
   },
+  
   "repair": {
     "entity_id": "ACT_REPAIR",
     "canonical": "Repair",

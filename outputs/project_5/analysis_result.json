@@ -1,12 +1,233 @@
 {
   "project_id": 5,
   "scores": {
-    "overall_match": 86.8,
-    "ats_compatibility": 78.8,
-    "evidence_strength": 59.1
+    "overall_match": 80.7,
+    "ats_compatibility": 97.2,
+    "evidence_strength": 65.1
   },
   "matches": {
     "strong": [
+      {
+        "requirement_id": "jdreq:domain:domain-quality-management",
+        "subject": "Quality Management",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_QUALITY_MANAGEMENT"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.6
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-approve",
+        "subject": "Approve",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:metric:kpi-preventive-actions",
+        "subject": "Preventive Actions",
+        "requirement_type": "metric",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-improve",
+        "subject": "Improve",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "SKILL_PROCESS_IMPROVEMENT"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-manage",
+        "subject": "Manage",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_MANAGE"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-oversee",
+        "subject": "Oversee",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-supervise",
+        "subject": "Supervise",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-monitor",
+        "subject": "Monitor",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-coordinate",
+        "subject": "Coordinate",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-implement",
+        "subject": "Implement",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_IMPLEMENT"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-support",
+        "subject": "Support",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "ACT_SUPPORT"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-leadership",
+        "subject": "Leadership",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "SKILL_LEADERSHIP"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-compliance",
+        "subject": "Compliance",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_COMPLIANCE"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
       {
         "requirement_id": "jdreq:domain:domain-food-safety",
         "subject": "Food Safety",
@@ -21,9 +242,7 @@
         "candidate_entity_ids": [
           "TGT_FSMS"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.75
       },
       {
@@ -40,9 +259,7 @@
         "candidate_entity_ids": [
           "TGT_FSMS"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.75
       },
       {
@@ -59,14 +276,80 @@
         "candidate_entity_ids": [
           "ACT_MANAGE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
-        "requirement_id": "jdreq:skill:skill-sanitation",
-        "subject": "Sanitation Management",
+        "requirement_id": "jdreq:domain:domain-operations",
+        "subject": "Operations",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_OPERATIONS"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:metric:kpi-production-efficiency",
+        "subject": "Production Efficiency",
+        "requirement_type": "metric",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "KPI_PRODUCTION_EFFICIENCY"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.698
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-production",
+        "subject": "Production",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "DOMAIN_PRODUCTION"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-leadership",
+        "subject": "Leadership",
+        "requirement_type": "skill",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "canonical",
+        "candidate_entity_ids": [
+          "SKILL_LEADERSHIP"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-people-management",
+        "subject": "People Management",
         "requirement_type": "skill",
         "priority": "contextual",
         "mandatory": false,
@@ -78,14 +361,29 @@
         "candidate_entity_ids": [
           "ACT_MANAGE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.45
       },
       {
-        "requirement_id": "jdreq:responsibility:act-hire",
-        "subject": "Hire",
+        "requirement_id": "jdreq:skill:skill-procurement",
+        "subject": "Procurement Management",
+        "requirement_type": "skill",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_MANAGE"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-inventory",
+        "subject": "Inventory",
         "requirement_type": "responsibility",
         "priority": "contextual",
         "mandatory": false,
@@ -95,54 +393,14 @@
         "score": 1.0,
         "basis": "canonical",
         "candidate_entity_ids": [
-          "ACT_HIRE"
+          "ACT_INVENTORY"
         ],
-        "evidence": [
-          "False"
-        ],
-        "evidence_confidence": 0.45
+        "evidence": [],
+        "evidence_confidence": 0.7
       },
       {
-        "requirement_id": "jdreq:skill:skill-quality-assurance",
-        "subject": "Quality Assurance",
-        "requirement_type": "skill",
-        "priority": "contextual",
-        "mandatory": false,
-        "preferred": false,
-        "minimum_years": null,
-        "status": "matched",
-        "score": 1.0,
-        "basis": "canonical",
-        "candidate_entity_ids": [
-          "SKILL_QUALITY_ASSURANCE"
-        ],
-        "evidence": [
-          "False"
-        ],
-        "evidence_confidence": 0.65
-      },
-      {
-        "requirement_id": "jdreq:domain:domain-quality-management",
-        "subject": "Quality Management",
-        "requirement_type": "domain",
-        "priority": "contextual",
-        "mandatory": false,
-        "preferred": false,
-        "minimum_years": null,
-        "status": "matched",
-        "score": 1.0,
-        "basis": "canonical",
-        "candidate_entity_ids": [
-          "DOMAIN_QUALITY_MANAGEMENT"
-        ],
-        "evidence": [
-          "False"
-        ],
-        "evidence_confidence": 0.6
-      },
-      {
-        "requirement_id": "jdreq:metric:kpi-capa",
-        "subject": "Corrective Actions",
+        "requirement_id": "jdreq:metric:kpi-waste",
+        "subject": "Waste",
         "requirement_type": "metric",
         "priority": "contextual",
         "mandatory": false,
@@ -152,16 +410,82 @@
         "score": 1.0,
         "basis": "canonical",
         "candidate_entity_ids": [
-          "KPI_CAPA"
+          "KPI_WASTE"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.69
       },
       {
-        "requirement_id": "jdreq:domain:domain-retail",
-        "subject": "Retail",
+        "requirement_id": "jdreq:domain:domain-manufacturing",
+        "subject": "Manufacturing",
+        "requirement_type": "domain",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:skill:skill-manufacturing-operations",
+        "subject": "Manufacturing Operations",
+        "requirement_type": "skill",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "DOMAIN_OPERATIONS"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-manufacture",
+        "subject": "Manufacture",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-prefer",
+        "subject": "Prefer",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:domain:domain-inventory",
+        "subject": "Inventory",
         "requirement_type": "domain",
         "priority": "contextual",
         "mandatory": false,
@@ -171,76 +495,206 @@
         "score": 1.0,
         "basis": "canonical",
         "candidate_entity_ids": [
-          "DOMAIN_RETAIL"
+          "ACT_INVENTORY"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
-        "requirement_id": "jdreq:responsibility:act-perform",
-        "subject": "Perform",
-        "requirement_type": "responsibility",
-        "priority": "contextual",
-        "mandatory": false,
-        "preferred": false,
-        "minimum_years": null,
-        "status": "matched",
-        "score": 1.0,
-        "basis": "canonical",
-        "candidate_entity_ids": [
-          "ACT_PERFORM"
-        ],
-        "evidence": [
-          "False"
-        ],
-        "evidence_confidence": 0.45
-      },
-      {
-        "requirement_id": "jdreq:domain:domain-compliance",
-        "subject": "Compliance",
+        "requirement_id": "jdreq:domain:domain-procurement",
+        "subject": "Procurement",
         "requirement_type": "domain",
         "priority": "contextual",
         "mandatory": false,
         "preferred": false,
         "minimum_years": null,
         "status": "matched",
-        "score": 1.0,
-        "basis": "canonical",
+        "score": 0.82,
+        "basis": "related",
         "candidate_entity_ids": [
-          "DOMAIN_COMPLIANCE"
+          "TECH_R"
         ],
-        "evidence": [
-          "True"
-        ],
-        "evidence_confidence": 0.7
+        "evidence": [],
+        "evidence_confidence": 0.69
       },
       {
-        "requirement_id": "jdreq:responsibility:act-maintain",
-        "subject": "Maintain",
+        "requirement_id": "jdreq:nonontology:responsibility:manage-and-oversee-daily-food-production-operations",
+        "subject": "Manage and oversee daily food production operations.",
         "requirement_type": "responsibility",
         "priority": "contextual",
         "mandatory": false,
         "preferred": false,
         "minimum_years": null,
         "status": "matched",
-        "score": 1.0,
-        "basis": "canonical",
+        "score": 0.82,
+        "basis": "related",
         "candidate_entity_ids": [
-          "ACT_MAINTAIN"
+          "DOMAIN_OPERATIONS"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:plan-production-schedules-based-on-operational-requirements-and-demand",
+        "subject": "Plan production schedules based on operational requirements and demand.",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_SCHEDULE"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:ensure-consistent-product-quality-and-compliance-with-approved-recipes-and-specifications",
+        "subject": "Ensure consistent product quality and compliance with approved recipes and specifications.",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TGT_PRODUCT_QUALITY"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.65
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:ensure-compliance-with-food-safety-hygiene-and-quality-standards",
+        "subject": "Ensure compliance with food safety, hygiene, and quality standards.",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:monitor-production-kpis-and-prepare-regular-operational-reports",
+        "subject": "Monitor production KPIs and prepare regular operational reports.",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_REPORT"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:identify-production-issues-and-implement-corrective-and-preventive-actions",
+        "subject": "Identify production issues and implement corrective and preventive actions.",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_IMPLEMENT"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.45
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:improve-production-efficiency-and-support-cost-and-waste-reduction-initiatives",
+        "subject": "Improve production efficiency and support cost and waste reduction initiatives.",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "KPI_PRODUCTION_EFFICIENCY"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.698
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:ensure-equipment-work-areas-and-production-processes-meet-operational-and-safety-requirements",
+        "subject": "Ensure equipment, work areas, and production processes meet operational and safety requirements.",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TGT_PROCESS"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.75
+      },
+      {
+        "requirement_id": "jdreq:nonontology:experience:previous-experience-in-a-supervisory-or-managerial-position",
+        "subject": "Previous experience in a supervisory or managerial position",
+        "requirement_type": "experience",
+        "priority": "required",
+        "mandatory": true,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 1.0,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_MANAGE"
         ],
         "evidence": [
-          "False"
+          "Resume text evidence: Manager appears as a professional role, qualifying for the managerial/supervisory requirement. Resume text evidence: Store Manager appears as a professional role, qualifying for the managerial/supervisory requirement."
         ],
-        "evidence_confidence": 0.45
+        "evidence_confidence": 0.98
+      },
+      {
+        "requirement_id": "jdreq:nonontology:qualification:good-planning-problem-solving-and-decision-making-skills",
+        "subject": "Good planning, problem-solving, and decision-making skills",
+        "requirement_type": "qualification",
+        "priority": "required",
+        "mandatory": true,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "TECH_R"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.69
       }
     ],
     "partial": [],
     "missing": [
       {
-        "requirement_id": "jdreq:responsibility:act-monitor",
-        "subject": "Monitor",
+        "requirement_id": "jdreq:responsibility:act-plan",
+        "subject": "Plan",
         "requirement_type": "responsibility",
         "priority": "contextual",
         "mandatory": false,
@@ -252,14 +706,64 @@
         "candidate_entity_ids": [],
         "evidence": [],
         "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:responsibility:act-identify",
+        "subject": "Identify",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:nonontology:education:relevant-bachelor-s-degree-or-equivalent-qualification",
+        "subject": "Relevant Bachelor's degree or equivalent qualification",
+        "requirement_type": "education",
+        "priority": "required",
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.2,
+        "basis": "education_equivalence",
+        "candidate_entity_ids": [],
+        "evidence": [
+          "Structured education evidence: Boot Camp Certificate: Data Analytics",
+          "Candidate's highest detected level (certificate) does not meet the required bachelor level."
+        ],
+        "evidence_confidence": 0.55,
+        "education_match": {
+          "required_level": "bachelor",
+          "candidate_level": "certificate",
+          "candidate_degree": "Boot Camp Certificate: Data Analytics",
+          "candidate_major": "",
+          "equivalent": false,
+          "field_required": false,
+          "field_matched": true,
+          "reason": "Candidate's highest detected level (certificate) does not meet the required bachelor level."
+        }
       }
     ]
   },
-  "experience_gap": [],
+  "experience_gap": [
+    {
+      "jd_requirement": "Previous experience in a supervisory or managerial position",
+      "minimum_years": null,
+      "status": "matched",
+      "evidence": [
+        "Resume text evidence: Manager appears as a professional role, qualifying for the managerial/supervisory requirement. Resume text evidence: Store Manager appears as a professional role, qualifying for the managerial/supervisory requirement."
+      ]
+    }
+  ],
   "recommendations": [
-    "Surface Food Safety evidence clearly in the resume.",
-    "Surface Food Safety Management evidence clearly in the resume.",
-    "Consider Monitor only if genuinely possessed; do not add unsupported keywords."
+    "Consider Plan only if genuinely possessed; do not add unsupported keywords.",
+    "Consider Identify only if genuinely possessed; do not add unsupported keywords.",
+    "Consider Relevant Bachelor's degree or equivalent qualification only if genuinely possessed; do not add unsupported keywords."
   ],
   "categories": {
     "skills": [
@@ -283,9 +787,38 @@
     "standards": [
       "Six Sigma"
     ],
-    "certifications": [],
-    "methodologies": [],
-    "technologies": [],
+    "certifications": [
+      "CQI IRCA Certified",
+      "Organic Certification",
+      "Six Sigma Black Belt"
+    ],
+    "methodologies": [
+      "Business Intelligence",
+      "Coaching",
+      "Extract Transform Load",
+      "Machine Learning",
+      "Six Sigma"
+    ],
+    "technologies": [
+      "CSS",
+      "Flask",
+      "Git",
+      "GitHub",
+      "HTML",
+      "Java",
+      "JavaScript",
+      "Microsoft Excel",
+      "Microsoft Power BI",
+      "Minitab",
+      "MySQL",
+      "Pandas",
+      "PostgreSQL",
+      "Python",
+      "R",
+      "SQL",
+      "Seaborn",
+      "Tableau"
+    ],
     "actions": [
       "Audit",
       "Clean",
@@ -344,95 +877,669 @@
       "Waste"
     ],
     "jd_requirements": [
+      "Approve",
+      "Business Operations",
+      "Business Processes",
+      "Business Reports",
       "Compliance",
-      "Corrective Actions",
+      "Coordinate",
+      "Costs",
       "Employees",
+      "Equipment",
       "Food Safety",
       "Food Safety Management",
-      "Hire",
-      "Maintain",
+      "Identify",
+      "Implement",
+      "Improve",
+      "Inventory",
+      "Laboratory",
+      "Leadership",
+      "Manage",
+      "Manufacture",
+      "Manufacturing",
+      "Manufacturing Operations",
       "Monitor",
-      "Perform",
+      "Operations",
+      "Oversee",
+      "People Management",
+      "Plan",
+      "Planning",
+      "Prefer",
+      "Preventive Actions",
+      "Procurement",
+      "Procurement Management",
       "Product Quality",
-      "Quality Assurance",
+      "Production",
+      "Production Efficiency",
+      "Productivity",
       "Quality Management",
-      "Retail",
-      "Sanitation Management"
+      "Requirements",
+      "Supervise",
+      "Support",
+      "Team",
+      "Waste",
+      "Waste Reduction"
     ]
   },
   "requirements_summary": {
-    "total": 13,
-    "required": 0,
+    "total": 43,
+    "required": 3,
     "preferred": 0,
-    "contextual": 13
+    "contextual": 40
+  },
+  "jd_requirement_details": [
+    {
+      "requirement_id": "jdreq:domain:domain-quality-management",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Quality Management",
+      "minimum_years": null,
+      "evidence": "Lab Maneger",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.6
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-approve",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Approve",
+      "minimum_years": null,
+      "evidence": "Lab Maneger",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.45
+    },
+    {
+      "requirement_id": "jdreq:metric:kpi-preventive-actions",
+      "type": "metric",
+      "priority": "contextual",
+      "subject": "Preventive Actions",
+      "minimum_years": null,
+      "evidence": "Lab Maneger",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.688
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-improve",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Improve",
+      "minimum_years": null,
+      "evidence": "Lab Maneger",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-manage",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Manage",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-oversee",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Oversee",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-plan",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Plan",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-supervise",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Supervise",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-monitor",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Monitor",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-coordinate",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Coordinate",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-identify",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Identify",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-implement",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Implement",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-support",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Support",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-leadership",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Leadership",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-compliance",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Compliance",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-food-safety",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Food Safety",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:qualification:std-food-safety",
+      "type": "qualification",
+      "priority": "contextual",
+      "subject": "Food Safety",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-food-safety",
+      "type": "skill",
+      "priority": "contextual",
+      "subject": "Food Safety Management",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.65
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-operations",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Operations",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:metric:kpi-production-efficiency",
+      "type": "metric",
+      "priority": "contextual",
+      "subject": "Production Efficiency",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.698
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-production",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Production",
+      "minimum_years": null,
+      "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-leadership",
+      "type": "skill",
+      "priority": "contextual",
+      "subject": "Leadership",
+      "minimum_years": null,
+      "evidence": "Supervise production teams and ensure effective workforce allocation.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.75
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-people-management",
+      "type": "skill",
+      "priority": "contextual",
+      "subject": "People Management",
+      "minimum_years": null,
+      "evidence": "Supervise production teams and ensure effective workforce allocation.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.65
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-procurement",
+      "type": "skill",
+      "priority": "contextual",
+      "subject": "Procurement Management",
+      "minimum_years": null,
+      "evidence": "Coordinate with Quality, Operations, Procurement, and Warehouse teams.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.64
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-inventory",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Inventory",
+      "minimum_years": null,
+      "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:metric:kpi-waste",
+      "type": "metric",
+      "priority": "contextual",
+      "subject": "Waste",
+      "minimum_years": null,
+      "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.59
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-manufacturing",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Manufacturing",
+      "minimum_years": null,
+      "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-manufacturing-operations",
+      "type": "skill",
+      "priority": "contextual",
+      "subject": "Manufacturing Operations",
+      "minimum_years": null,
+      "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.65
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-manufacture",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Manufacture",
+      "minimum_years": null,
+      "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.45
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-prefer",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Prefer",
+      "minimum_years": null,
+      "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.6
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-inventory",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Inventory",
+      "minimum_years": null,
+      "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-procurement",
+      "type": "domain",
+      "priority": "contextual",
+      "subject": "Procurement",
+      "minimum_years": null,
+      "evidence": "Coordinate with Quality, Operations, Procurement, and Warehouse teams.",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:manage-and-oversee-daily-food-production-operations",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Manage and oversee daily food production operations.",
+      "minimum_years": null,
+      "evidence": "Manage and oversee daily food production operations.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:plan-production-schedules-based-on-operational-requirements-and-demand",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Plan production schedules based on operational requirements and demand.",
+      "minimum_years": null,
+      "evidence": "Plan production schedules based on operational requirements and demand.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:ensure-consistent-product-quality-and-compliance-with-approved-recipes-and-specifications",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Ensure consistent product quality and compliance with approved recipes and specifications.",
+      "minimum_years": null,
+      "evidence": "Ensure consistent product quality and compliance with approved recipes and specifications.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:ensure-compliance-with-food-safety-hygiene-and-quality-standards",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Ensure compliance with food safety, hygiene, and quality standards.",
+      "minimum_years": null,
+      "evidence": "Ensure compliance with food safety, hygiene, and quality standards.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:monitor-production-kpis-and-prepare-regular-operational-reports",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Monitor production KPIs and prepare regular operational reports.",
+      "minimum_years": null,
+      "evidence": "Monitor production KPIs and prepare regular operational reports.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:identify-production-issues-and-implement-corrective-and-preventive-actions",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Identify production issues and implement corrective and preventive actions.",
+      "minimum_years": null,
+      "evidence": "Identify production issues and implement corrective and preventive actions.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:improve-production-efficiency-and-support-cost-and-waste-reduction-initiatives",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Improve production efficiency and support cost and waste reduction initiatives.",
+      "minimum_years": null,
+      "evidence": "Improve production efficiency and support cost and waste reduction initiatives.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:ensure-equipment-work-areas-and-production-processes-meet-operational-and-safety-requirements",
+      "type": "responsibility",
+      "priority": "contextual",
+      "subject": "Ensure equipment, work areas, and production processes meet operational and safety requirements.",
+      "minimum_years": null,
+      "evidence": "Ensure equipment, work areas, and production processes meet operational and safety requirements.",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84
+    },
+    {
+      "requirement_id": "jdreq:nonontology:education:relevant-bachelor-s-degree-or-equivalent-qualification",
+      "type": "education",
+      "priority": "required",
+      "subject": "Relevant Bachelor's degree or equivalent qualification",
+      "minimum_years": null,
+      "evidence": "Relevant Bachelor's degree or equivalent qualification.",
+      "section": "Requirements",
+      "evidence_kind": "education",
+      "confidence": 0.99
+    },
+    {
+      "requirement_id": "jdreq:nonontology:experience:previous-experience-in-a-supervisory-or-managerial-position",
+      "type": "experience",
+      "priority": "required",
+      "subject": "Previous experience in a supervisory or managerial position",
+      "minimum_years": null,
+      "evidence": "Previous experience in a supervisory or managerial position.",
+      "section": "Requirements",
+      "evidence_kind": "experience",
+      "confidence": 0.97
+    },
+    {
+      "requirement_id": "jdreq:nonontology:qualification:good-planning-problem-solving-and-decision-making-skills",
+      "type": "qualification",
+      "priority": "required",
+      "subject": "Good planning, problem-solving, and decision-making skills",
+      "minimum_years": null,
+      "evidence": "Good planning, problem-solving, and decision-making skills.",
+      "section": "Requirements",
+      "evidence_kind": "qualification",
+      "confidence": 0.81
+    }
+  ],
+  "structured_resume": {
+    "education": [
+      {
+        "degree": "Boot Camp Certificate: Data Analytics",
+        "major": "",
+        "institution": "University of Toronto, Toronto",
+        "location": "Ontario",
+        "description": "A 24-week intensive program focused on gaining technical programming skills in Excel, VBA, Python, R, JavaScript, SQL Databases, Tableau, Big Data, and Machine Learning.",
+        "graduation_year": 0,
+        "level": "certificate",
+        "keywords": [
+          "data analytics"
+        ]
+      },
+      {
+        "degree": "Post Graduation Diploma: Business Administration, Selkirk",
+        "major": "",
+        "institution": "College, Castlegar",
+        "location": "BC",
+        "description": "A 2 year program focused on gaining skills in Accounting, Economics, Business Mathematics, Leadership, Communication skills and Marketing. Four-year Bachelor's Degree Equivalency (WES), Master of Chemistry, University of the Punjab, Lahore, Pakistan 16 years level of Education obtained with focus on Major in Organic chemistry. Certifications & Accreditations Lead Auditor QMS-ISO 9001:2021 \tCQI/IRCA Certified Lead Auditor Global Standard for Food safety Ver.8\tBRCGS Certified Preventive Control Qualified Individual: Human Food \tFSPCA Certified Six Sigma Green & Black Belt \tSimplilearn",
+        "graduation_year": 0,
+        "level": "diploma",
+        "keywords": [
+          "business administration"
+        ]
+      }
+    ],
+    "experience": [],
+    "languages": [
+      {
+        "language": "Python, R, Java, HTML, CSS Behavioral: Leadership, Time Management, Communication, Trainer, Punctual, Consistent & Committed, Process Improvement, Entrepreneurial spirit, Sense of Ownership, supply chain management, Presentation, Data management, Process improvement, customer engagement, Attention to Detail. Relevant Experience Amazon products Sentiment Analysis and Products Recommendation by ML",
+        "proficiency": "",
+        "raw": "Python, R, Java, HTML, CSS Behavioral: Leadership, Time Management, Communication, Trainer, Punctual, Consistent & Committed, Process Improvement, Entrepreneurial spirit, Sense of Ownership, supply chain management, Presentation, Data management, Process improvement, customer engagement, Attention to Detail. Relevant Experience Amazon products Sentiment Analysis and Products Recommendation by ML"
+      },
+      {
+        "language": "Link to GitHub https://github.com/muhkashiff/amazon_products_sentimental_analysis Project is aimed at performing sentiment analysis and statistics analysis of amazon products based on their customers reviews. Products are recommended to customers based on their reviews by ML Models. Data cleaning, textBlob, Machine Learning, Pandas, PyPlot, Seaborn, Python, Statistics, Visual WebApp Development to determine Home Credit Default Risk Probability by ML",
+        "proficiency": "",
+        "raw": "Link to GitHub https://github.com/muhkashiff/amazon_products_sentimental_analysis Project is aimed at performing sentiment analysis and statistics analysis of amazon products based on their customers reviews. Products are recommended to customers based on their reviews by ML Models. Data cleaning, textBlob, Machine Learning, Pandas, PyPlot, Seaborn, Python, Statistics, Visual WebApp Development to determine Home Credit Default Risk Probability by ML"
+      },
+      {
+        "language": "Link to GitHub https://github.com/callmidrey/Project",
+        "proficiency": "4--Group-3 Project is aimed at performing analysis of Home credit default Risk data and determining probability of default of a customer using machine Learning Models and Webapp development. My core responsibility was ETL but was involved in WebApp development. Data cleaning, Machine Learning, Pandas, PyPlot, Seaborn, Flask, Python, Java, CSS, PostgreSQL Retail Store Manager 2016 – 2024 Shell Gas Station & Retail Store Canada Managing retail business by meeting and satisfying customer needs. Utilizing data analysis, marketing, and business management skills to increase sales revenue. Ordering Merchandise and maintaining cash flow. Fulfilling online orders, shift scheduling, Hiring, and training new staff and implementing Shell Business Principles of Customer satisfaction with great results in area management, equipment, and facility maintenance along with vendor management. Inventory and performance target achievement by upselling stale products. Key Accomplishments: Performing KPI analysis. Obtained 100% score for Shell Mystery Shopper program. Utilized customer traffic and product popularity data analysis to increase daily sales targets of 10% growth, exceeding corporate goals. Obtained 100% score in food safety surprise Audit. Additional Experience QA Chemist 2010 – 2016 Coca cola Beverages Pakistan Ltd. Lahore, Pakistan Spearheaded the implementation and compliance of the Quality and Food Safety Management System, driving corrective actions to maintain optimal standards. Oversaw product inspections and meticulously managed the product release program. Championed food safety by actively supporting the Food Safety Committee during audits. Led a high-performing team at the Toll Filling facility, ensuring seamless quality control, production efficiency, and timely delivery through streamlined warehousing and shipping operations. Key Achievements: • Led a team to streamline quality, safety, and food safety goals. By implementing waste reduction and downtime minimization initiatives, achieved a remarkable 99%+ yield, consistently surpassing production targets. • Maintained a stellar 99.5% quality rating at the plant through continuous promotion of quality initiatives and performance improvement programs. • Fostered a culture of safety and quality by achieving an impressive 98.6% staff participation in Food Safety and Quality Training programs.",
+        "raw": "Link to GitHub https://github.com/callmidrey/Project-4--Group-3 Project is aimed at performing analysis of Home credit default Risk data and determining probability of default of a customer using machine Learning Models and Webapp development. My core responsibility was ETL but was involved in WebApp development. Data cleaning, Machine Learning, Pandas, PyPlot, Seaborn, Flask, Python, Java, CSS, PostgreSQL Retail Store Manager 2016 – 2024 Shell Gas Station & Retail Store Canada Managing retail business by meeting and satisfying customer needs. Utilizing data analysis, marketing, and business management skills to increase sales revenue. Ordering Merchandise and maintaining cash flow. Fulfilling online orders, shift scheduling, Hiring, and training new staff and implementing Shell Business Principles of Customer satisfaction with great results in area management, equipment, and facility maintenance along with vendor management. Inventory and performance target achievement by upselling stale products. Key Accomplishments: Performing KPI analysis. Obtained 100% score for Shell Mystery Shopper program. Utilized customer traffic and product popularity data analysis to increase daily sales targets of 10% growth, exceeding corporate goals. Obtained 100% score in food safety surprise Audit. Additional Experience QA Chemist 2010 – 2016 Coca cola Beverages Pakistan Ltd. Lahore, Pakistan Spearheaded the implementation and compliance of the Quality and Food Safety Management System, driving corrective actions to maintain optimal standards. Oversaw product inspections and meticulously managed the product release program. Championed food safety by actively supporting the Food Safety Committee during audits. Led a high-performing team at the Toll Filling facility, ensuring seamless quality control, production efficiency, and timely delivery through streamlined warehousing and shipping operations. Key Achievements: • Led a team to streamline quality, safety, and food safety goals. By implementing waste reduction and downtime minimization initiatives, achieved a remarkable 99%+ yield, consistently surpassing production targets. • Maintained a stellar 99.5% quality rating at the plant through continuous promotion of quality initiatives and performance improvement programs. • Fostered a culture of safety and quality by achieving an impressive 98.6% staff participation in Food Safety and Quality Training programs."
+      }
+    ],
+    "projects": [],
+    "awards": [],
+    "references": [
+      {
+        "name": "",
+        "designation": "",
+        "company": "",
+        "relationship": "",
+        "email": "",
+        "phone": "",
+        "linkedin": "",
+        "address": "",
+        "years_known": null,
+        "available_on_request": true,
+        "notes": ""
+      }
+    ],
+    "contact": {
+      "name": "Muhammad Kashif",
+      "email": "muhkashiff@gmail.com",
+      "phone": "+923334940827",
+      "linkedin": "linkedin.com/in/muhkashiff1",
+      "github": "https://github.com/muhkashiff",
+      "website": "",
+      "address": "",
+      "city": "",
+      "province": "",
+      "country": "",
+      "postal_code": ""
+    }
   },
   "ats": {
-    "available": false,
-    "score": 78.8,
-    "confidence": 60.0,
+    "available": true,
+    "score": 97.2,
+    "confidence": 49.4,
     "keyword_analysis": {
-      "required_keywords": [
-        "Food Safety",
-        "Food Safety",
-        "Food Safety Management",
-        "Sanitation Management",
-        "Hire",
-        "Quality Assurance",
-        "Quality Management",
-        "Corrective Actions",
-        "Retail",
-        "Monitor",
-        "Perform",
-        "Compliance",
-        "Maintain"
-      ],
-      "matched_keywords": [
-        "Food Safety",
-        "Food Safety",
-        "Food Safety Management",
-        "Corrective Actions",
-        "Retail",
-        "Perform",
-        "Compliance",
-        "Maintain"
-      ],
-      "missing_keywords": [
-        "Sanitation Management",
-        "Hire",
-        "Quality Assurance",
-        "Quality Management",
-        "Monitor"
-      ],
-      "keyword_coverage_score": 61.5
+      "required_keywords": [],
+      "matched_keywords": [],
+      "missing_keywords": [],
+      "additional_keywords": [],
+      "keyword_coverage_score": 100.0
     },
     "section_analysis": {
       "detected_sections": [
         "summary",
         "experience",
+        "education",
         "skills",
-        "education"
+        "certifications"
       ],
       "missing_sections": [],
+      "section_order_valid": true,
       "section_completeness_score": 100.0
     },
+    "formatting_analysis": {
+      "has_complex_layout": true,
+      "has_tables": true,
+      "has_columns": true,
+      "has_graphics": false,
+      "formatting_score": 75.0
+    },
+    "readability_analysis": {
+      "estimated_word_count": 692,
+      "long_sentence_count": 2,
+      "average_sentence_length": 17.743589743589745,
+      "readability_score": 97.4
+    },
+    "terminology_analysis": {
+      "aligned_terms": [],
+      "missing_terms": [],
+      "terminology_score": 100.0
+    },
     "quantification_analysis": {
-      "quantified_achievement_count": 7,
+      "quantified_achievement_count": 19,
+      "quantified_bullet_count": 3,
       "quantification_score": 100.0
     },
     "parseability_analysis": {
       "parseable": true,
+      "extraction_warning_count": 0,
+      "warnings": [],
       "parseability_score": 100.0
     }
   },
   "pipeline": {
-    "resume_entities": 89,
-    "jd_entities": 16,
-    "resume_semantic_entities": 192,
-    "jd_semantic_entities": 32,
-    "resume_business_statements": 27,
-    "jd_business_statements": 8,
+    "resume_entities": 122,
+    "jd_entities": 49,
+    "resume_semantic_entities": 260,
+    "jd_semantic_entities": 104,
+    "resume_business_statements": 30,
+    "jd_business_statements": 17,
     "typed_phase4_profile": true
   },
   "repository_gaps": [],
-  "completed_at": "2026-08-23T11:48:49.702364+00:00"
+  "completed_at": "2026-08-24T10:00:01.057976+00:00"
 }
