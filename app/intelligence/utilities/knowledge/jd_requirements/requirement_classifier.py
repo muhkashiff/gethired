@@ -316,6 +316,9 @@ class JDRequirementClassifier:
                 ),
             )
 
+            created_for_statement = False
+            has_priority_requirement = False
+
             # --------------------------------------------------------------
             # EXPERIENCE
             # --------------------------------------------------------------
@@ -388,6 +391,10 @@ class JDRequirementClassifier:
                     requirement,
                 )
 
+                created_for_statement = True
+                if requirement.priority == priority:
+                    has_priority_requirement = True
+
             # --------------------------------------------------------------
             # ENTITY-BACKED REQUIREMENTS
             # --------------------------------------------------------------
@@ -413,11 +420,6 @@ class JDRequirementClassifier:
                 if not subject:
                     continue
 
-                # ----------------------------------------------------------
-                # A domain already represented by a specific experience
-                # requirement should not be duplicated.
-                # ----------------------------------------------------------
-
                 if (
                     years is not None
                     and requirement_type
@@ -428,11 +430,6 @@ class JDRequirementClassifier:
                     )
                 ):
                     continue
-
-                # ----------------------------------------------------------
-                # A functional role/job family inside a years statement is
-                # already represented by the EXPERIENCE requirement.
-                # ----------------------------------------------------------
 
                 if (
                     years is not None
@@ -486,6 +483,42 @@ class JDRequirementClassifier:
                     requirement,
                 )
 
+                created_for_statement = True
+                if requirement.priority == priority:
+                    has_priority_requirement = True
+
+            # --------------------------------------------------------------
+            # FALLBACK: statement has explicit priority but no requirement with that priority
+            # --------------------------------------------------------------
+
+            if (
+                priority != RequirementPriority.CONTEXTUAL
+                and not has_priority_requirement
+            ):
+                fallback_subject = self._extract_priority_subject(
+                    statement_text
+                )
+                if fallback_subject:
+                    fallback_type = self._infer_requirement_type_from_text(
+                        fallback_subject
+                    )
+                    requirement = self._make_requirement(
+                        statement=statement,
+                        requirement_type=fallback_type,
+                        priority=priority,
+                        subject=fallback_subject,
+                        entity_id="",
+                        domain="",
+                        confidence=self._clamp(
+                            self._confidence(statement, 0.60)
+                        ),
+                    )
+                    self._append_unique(
+                        requirements,
+                        seen,
+                        requirement,
+                    )
+
         # =====================================================================
         # NON-ONTOLOGY REQUIREMENTS
         # =====================================================================
@@ -507,6 +540,16 @@ class JDRequirementClassifier:
                 requirements=requirements,
                 seen=seen,
             )
+
+        # =====================================================================
+        # GLOBAL FALLBACK: scan raw source text for any priority language
+        # =====================================================================
+
+        self._extract_priority_requirements_from_text(
+            source_text=source_text,
+            requirements=requirements,
+            seen=seen,
+        )
 
         # =====================================================================
         # METADATA
@@ -582,7 +625,7 @@ class JDRequirementClassifier:
         )
 
     # =========================================================================
-    # PRIORITY
+    # PRIORITY (text first, metadata fallback)
     # =========================================================================
 
     def _priority(
@@ -593,16 +636,11 @@ class JDRequirementClassifier:
         """
         Determine requirement priority.
 
-        Order:
-
-            explicit required language -> REQUIRED
-            explicit preferred language -> PREFERRED
-            otherwise -> CONTEXTUAL
-
-        This method intentionally exists because existing diagnostics/tests
-        directly call:
-
-            classifier._priority(text, metadata)
+        ORDER:
+            1. Explicit required language in the text -> REQUIRED
+            2. Explicit preferred language in the text -> PREFERRED
+            3. Metadata priority (if provided) -> as mapped
+            4. Otherwise -> CONTEXTUAL
         """
 
         normalized = (
@@ -612,6 +650,16 @@ class JDRequirementClassifier:
             .casefold()
             .strip()
         )
+
+        if self._contains_required_language(
+            normalized
+        ):
+            return RequirementPriority.REQUIRED
+
+        if self._contains_preferred_language(
+            normalized
+        ):
+            return RequirementPriority.PREFERRED
 
         metadata = metadata or {}
 
@@ -630,27 +678,12 @@ class JDRequirementClassifier:
             )
         )
 
-        metadata_priority = (
-            self._priority_from_value(
+        if metadata_value is not None:
+            metadata_priority = self._priority_from_value(
                 metadata_value
             )
-            if metadata_value is not None
-            else None
-        )
-
-        # Actual JD language is authoritative.
-        if self._contains_required_language(
-            normalized
-        ):
-            return RequirementPriority.REQUIRED
-
-        if self._contains_preferred_language(
-            normalized
-        ):
-            return RequirementPriority.PREFERRED
-
-        if metadata_priority is not None:
-            return metadata_priority
+            if metadata_priority is not None:
+                return metadata_priority
 
         return RequirementPriority.CONTEXTUAL
 
@@ -1399,7 +1432,7 @@ class JDRequirementClassifier:
             },
         )
 
-        # =========================================================================
+    # =========================================================================
     # DUPLICATE PROTECTION / PRIORITY PRESERVATION
     # =========================================================================
 
@@ -1426,10 +1459,6 @@ class JDRequirementClassifier:
         priorities, the strongest priority is retained:
 
             REQUIRED > PREFERRED > CONTEXTUAL
-
-        This prevents a later preferred/required occurrence from being
-        silently discarded simply because an equivalent requirement was
-        already encountered.
         """
 
         key = (
@@ -1445,20 +1474,10 @@ class JDRequirementClassifier:
             ),
         )
 
-        # -------------------------------------------------------------
-        # First occurrence
-        # -------------------------------------------------------------
-
         if key not in seen:
             seen.add(key)
             requirements.append(requirement)
             return
-
-        # -------------------------------------------------------------
-        # Existing requirement found.
-        #
-        # Locate the existing object and compare priority.
-        # -------------------------------------------------------------
 
         priority_rank = {
             RequirementPriority.CONTEXTUAL: 0,
@@ -1494,22 +1513,11 @@ class JDRequirementClassifier:
                 0,
             )
 
-            # ---------------------------------------------------------
-            # New requirement has stronger priority.
-            #
-            # Replace the existing requirement.
-            # ---------------------------------------------------------
-
             if new_rank > existing_rank:
                 requirements[index] = requirement
 
-            # ---------------------------------------------------------
-            # Existing requirement is already stronger or equal.
-            #
-            # Keep it.
-            # ---------------------------------------------------------
-
             return
+
     # =========================================================================
     # REQUIREMENT ID
     # =========================================================================
@@ -1855,10 +1863,6 @@ class JDRequirementClassifier:
             ):
                 continue
 
-            # --------------------------------------------------------------
-            # Determine requirement type.
-            # --------------------------------------------------------------
-
             requirement_type = {
                 "education": RequirementType.EDUCATION,
                 "experience": RequirementType.EXPERIENCE,
@@ -1885,18 +1889,12 @@ class JDRequirementClassifier:
                 RequirementType.OTHER,
             )
 
-            priority = (
-                self._priority(
-                    evidence.evidence,
-                    {
-                        "priority": evidence.priority,
-                    },
-                )
+            priority = self._priority(
+                evidence.evidence,
+                {
+                    "priority": evidence.priority,
+                },
             )
-
-            # --------------------------------------------------------------
-            # Duplicate subject protection.
-            # --------------------------------------------------------------
 
             if evidence.kind in {
                 "qualification",
@@ -1976,10 +1974,6 @@ class JDRequirementClassifier:
 
                 if duplicate:
                     continue
-
-            # --------------------------------------------------------------
-            # Avoid duplicate responsibilities.
-            # --------------------------------------------------------------
 
             if evidence.kind == "responsibility":
 
@@ -2171,12 +2165,6 @@ class JDRequirementClassifier:
                     statement
                 ),
             )
-            print(
-                "\n[JD PRIORITY DEBUG]"
-                f"\n  statement_text: {statement_text!r}"
-                f"\n  priority: {priority.value}"
-                f"\n  metadata: {self._metadata(statement)}"
-            )
 
             years = (
                 self._minimum_years(
@@ -2186,6 +2174,9 @@ class JDRequirementClassifier:
             )
 
             experience_subject = ""
+
+            created_for_statement = False
+            has_priority_requirement = False
 
             if years is not None:
 
@@ -2239,21 +2230,16 @@ class JDRequirementClassifier:
                         ),
                     )
                 )
-                
-                print(
-                    "[JD REQUIREMENT DEBUG]"
-                    f"\n  type: {requirement.requirement_type.value}"
-                    f"\n  subject: {requirement.subject!r}"
-                    f"\n  priority: {requirement.priority.value}"
-                    f"\n  preferred: {requirement.preferred}"
-                    f"\n  mandatory: {requirement.mandatory}"
-                )
 
                 self._append_unique(
                     requirements,
                     seen,
                     requirement,
                 )
+
+                created_for_statement = True
+                if requirement.priority == priority:
+                    has_priority_requirement = True
 
             for entity in statement_entities:
 
@@ -2335,6 +2321,38 @@ class JDRequirementClassifier:
                     seen,
                     requirement,
                 )
+
+                created_for_statement = True
+                if requirement.priority == priority:
+                    has_priority_requirement = True
+
+            if (
+                priority != RequirementPriority.CONTEXTUAL
+                and not has_priority_requirement
+            ):
+                fallback_subject = self._extract_priority_subject(
+                    statement_text
+                )
+                if fallback_subject:
+                    fallback_type = self._infer_requirement_type_from_text(
+                        fallback_subject
+                    )
+                    requirement = self._make_requirement(
+                        statement=statement,
+                        requirement_type=fallback_type,
+                        priority=priority,
+                        subject=fallback_subject,
+                        entity_id="",
+                        domain="",
+                        confidence=self._clamp(
+                            self._confidence(statement, 0.60)
+                        ),
+                    )
+                    self._append_unique(
+                        requirements,
+                        seen,
+                        requirement,
+                    )
 
     # =========================================================================
     # PROFILE ENTITY MATCHING
@@ -2823,6 +2841,166 @@ class JDRequirementClassifier:
             value
             or "professional experience"
         )
+
+    # =========================================================================
+    # EXTRACT SUBJECT FROM PRIORITY STATEMENT
+    # =========================================================================
+
+    @classmethod
+    def _extract_priority_subject(
+        cls,
+        text: str,
+    ) -> str:
+        """
+        Remove common priority phrases (required, preferred, etc.) and return
+        a cleaned subject.
+        """
+        if not text:
+            return ""
+
+        cleaned = re.sub(
+            r"\b(?:is\s+)?(?:highly\s+|strongly\s+)?(?:required|preferred|preferable|desired|desirable|advantageous|mandatory|essential|nice to have|an advantage|considered an advantage|would be an advantage)\b",
+            "",
+            text,
+            flags=re.IGNORECASE,
+        )
+        cleaned = re.sub(r"\s+", " ", cleaned).strip(" .,;:-")
+        return cleaned or text
+
+    # =========================================================================
+    # INFER REQUIREMENT TYPE FROM TEXT
+    # =========================================================================
+
+    @classmethod
+    def _infer_requirement_type_from_text(
+        cls,
+        text: str,
+    ) -> RequirementType:
+        """
+        Heuristically choose a requirement type based on keywords in the text.
+        """
+        text_lower = text.casefold()
+        if "experience" in text_lower or "years" in text_lower:
+            return RequirementType.EXPERIENCE
+        if "skill" in text_lower or "ability" in text_lower:
+            return RequirementType.SKILL
+        if "education" in text_lower or "degree" in text_lower:
+            return RequirementType.EDUCATION
+        if "certification" in text_lower or "certified" in text_lower:
+            return RequirementType.CERTIFICATION
+        return RequirementType.QUALIFICATION
+
+    # =========================================================================
+    # GLOBAL FALLBACK: scan raw source text for priority sentences
+    # =========================================================================
+
+    def _extract_priority_requirements_from_text(
+        self,
+        source_text: str,
+        requirements: list[JDRequirement],
+        seen: set,
+    ) -> None:
+        """
+        Ultimate fallback: scan the entire source text for any sentence
+        containing explicit priority language and create a requirement.
+        This ensures that even if the statement extraction or non-ontology
+        extractor missed it, we still capture it.
+        """
+        if not source_text:
+            return
+
+        # Check if we already have at least one REQUIRED and one PREFERRED
+        has_required = any(
+            req.priority == RequirementPriority.REQUIRED
+            for req in requirements
+        )
+        has_preferred = any(
+            req.priority == RequirementPriority.PREFERRED
+            for req in requirements
+        )
+
+        # If both are already present, no need to scan.
+        if has_required and has_preferred:
+            return
+
+        # Split into sentences (simple split on period, but keep periods in numbers)
+        # We'll use a more robust approach: split on '. ' and handle cases.
+        sentences = re.split(r'(?<=[.!?])\s+', source_text)
+        for sentence in sentences:
+            sentence = sentence.strip()
+            if not sentence:
+                continue
+
+            # Determine priority from text
+            priority = self._priority_from_text(sentence)
+            if priority == RequirementPriority.CONTEXTUAL:
+                continue
+
+            # Skip if we already have this priority and we are not missing it
+            if priority == RequirementPriority.REQUIRED and has_required:
+                continue
+            if priority == RequirementPriority.PREFERRED and has_preferred:
+                continue
+
+            # Extract subject
+            subject = self._extract_priority_subject(sentence)
+            if not subject:
+                continue
+
+            # Infer type
+            req_type = self._infer_requirement_type_from_text(subject)
+
+            # Create a dummy statement object to satisfy _make_requirement
+            # We'll use a simple dict with the required fields.
+            dummy_statement = {
+                "source_text": sentence,
+                "text": sentence,
+                "metadata": {},
+                "statement_id": f"global_fallback_{hash(sentence)}",
+            }
+
+            requirement = self._make_requirement(
+                statement=dummy_statement,
+                requirement_type=req_type,
+                priority=priority,
+                subject=subject,
+                entity_id="",
+                domain="",
+                confidence=self._clamp(0.60),
+            )
+
+            self._append_unique(requirements, seen, requirement)
+
+            # Update flags after adding
+            if priority == RequirementPriority.REQUIRED:
+                has_required = True
+            elif priority == RequirementPriority.PREFERRED:
+                has_preferred = True
+
+            # If we now have both, we can stop scanning
+            if has_required and has_preferred:
+                break
+
+    # =========================================================================
+    # PRIORITY FROM TEXT (direct, no metadata)
+    # =========================================================================
+
+    def _priority_from_text(
+        self,
+        text: str,
+    ) -> RequirementPriority:
+        """
+        Determine priority solely from the text content.
+        """
+        if not text:
+            return RequirementPriority.CONTEXTUAL
+
+        normalized = text.casefold().strip()
+        if self._contains_required_language(normalized):
+            return RequirementPriority.REQUIRED
+        if self._contains_preferred_language(normalized):
+            return RequirementPriority.PREFERRED
+        return RequirementPriority.CONTEXTUAL
 
     # =========================================================================
     # DOCUMENT VALIDATION

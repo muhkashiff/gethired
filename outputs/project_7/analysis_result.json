@@ -1,9 +1,9 @@
 {
   "project_id": 7,
   "scores": {
-    "overall_match": 83.1,
+    "overall_match": 83.0,
     "ats_compatibility": 97.3,
-    "evidence_strength": 65.7
+    "evidence_strength": 65.8
   },
   "matches": {
     "strong": [
@@ -646,6 +646,23 @@
         ],
         "evidence": [],
         "evidence_confidence": 0.73
+      },
+      {
+        "requirement_id": "jdreq:experience:global-fallback-8073312118999261116",
+        "subject": "Industry experience in restaurants, food manufacturing, or central production facilities .ation skills",
+        "requirement_type": "experience",
+        "priority": "preferred",
+        "mandatory": false,
+        "preferred": true,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "DOMAIN_MANUFACTURING"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
       }
     ],
     "partial": [],
@@ -735,6 +752,12 @@
       "evidence": [
         "Structured resume evidence: Managing Director at Nutrain (Pvt) Ltd. — qualifies as a managerial/supervisory role. Structured resume evidence: Retail Store Manager at Shell Gas Station & Retail Store — qualifies as a managerial/supervisory role."
       ]
+    },
+    {
+      "jd_requirement": "Industry experience in restaurants, food manufacturing, or central production facilities .ation skills",
+      "minimum_years": null,
+      "status": "matched",
+      "evidence": []
     }
   ],
   "recommendations": [
@@ -934,473 +957,994 @@
     ]
   },
   "requirements_summary": {
-    "total": 42,
+    "total": 43,
     "required": 3,
-    "preferred": 0,
-    "contextual": 39
+    "preferred": 1,
+    "contextual": 39,
+    "required_count": 3,
+    "preferred_count": 1,
+    "contextual_count": 39
+  },
+  "jd_requirement_summary": {
+    "total": 43,
+    "required": 3,
+    "preferred": 1,
+    "contextual": 39,
+    "required_count": 3,
+    "preferred_count": 1,
+    "contextual_count": 39
   },
   "jd_requirement_details": [
     {
       "requirement_id": "jdreq:domain:domain-quality-management",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Quality Management",
       "minimum_years": null,
       "evidence": "Lab Maneger",
+      "source_statement": "Lab Maneger",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.6
+      "confidence": 0.6,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-38ca19fb",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-approve",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Approve",
       "minimum_years": null,
       "evidence": "Lab Maneger",
+      "source_statement": "Lab Maneger",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.45
+      "confidence": 0.45,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-38ca19fb",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:metric:kpi-preventive-actions",
       "type": "metric",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Preventive Actions",
       "minimum_years": null,
       "evidence": "Lab Maneger",
+      "source_statement": "Lab Maneger",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.688
+      "confidence": 0.688,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-38ca19fb",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-improve",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Improve",
       "minimum_years": null,
       "evidence": "Lab Maneger",
+      "source_statement": "Lab Maneger",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-38ca19fb",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-manage",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Manage",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-oversee",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Oversee",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-plan",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Plan",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-supervise",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Supervise",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-monitor",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Monitor",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-coordinate",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Coordinate",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-identify",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Identify",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-implement",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Implement",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-support",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Support",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-leadership",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Leadership",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-762aab80",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-compliance",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Compliance",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-05a2c8f0",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-food-safety",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Food Safety",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-eaa60827",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:qualification:std-food-safety",
       "type": "qualification",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Food Safety",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-eaa60827",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:skill:skill-food-safety",
       "type": "skill",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Food Safety Management",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.65
+      "confidence": 0.65,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-eaa60827",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-operations",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Operations",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-17fa0db8",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:metric:kpi-production-efficiency",
       "type": "metric",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Production Efficiency",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.698
+      "confidence": 0.698,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-17fa0db8",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-production",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Production",
       "minimum_years": null,
       "evidence": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
+      "source_statement": "Asl Al Burger is seeking an experienced Food Production Lab Manager to oversee and manage daily food production operations, ensuring efficiency, product consistency, quality, and compliance with food safety standards.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-194e4c2b",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:skill:skill-leadership",
       "type": "skill",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Leadership",
       "minimum_years": null,
       "evidence": "Supervise production teams and ensure effective workforce allocation.",
+      "source_statement": "Supervise production teams and ensure effective workforce allocation.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.75
+      "confidence": 0.75,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-98676267",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:skill:skill-people-management",
       "type": "skill",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "People Management",
       "minimum_years": null,
       "evidence": "Supervise production teams and ensure effective workforce allocation.",
+      "source_statement": "Supervise production teams and ensure effective workforce allocation.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.65
+      "confidence": 0.65,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-98676267",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:skill:skill-procurement",
       "type": "skill",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Procurement Management",
       "minimum_years": null,
       "evidence": "Coordinate with Quality, Operations, Procurement, and Warehouse teams.",
+      "source_statement": "Coordinate with Quality, Operations, Procurement, and Warehouse teams.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.64
+      "confidence": 0.64,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-eeb12a28",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-inventory",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Inventory",
       "minimum_years": null,
       "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "source_statement": "Monitor raw material usage, inventory, production waste, and productivity.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-2a163360",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:metric:kpi-waste",
       "type": "metric",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Waste",
       "minimum_years": null,
       "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "source_statement": "Monitor raw material usage, inventory, production waste, and productivity.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.59
+      "confidence": 0.59,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-2a163360",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-manufacturing",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Manufacturing",
       "minimum_years": null,
       "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "source_statement": "Monitor raw material usage, inventory, production waste, and productivity.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-2a163360",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:skill:skill-manufacturing-operations",
       "type": "skill",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Manufacturing Operations",
       "minimum_years": null,
       "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "source_statement": "Monitor raw material usage, inventory, production waste, and productivity.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.65
+      "confidence": 0.65,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-2a163360",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:responsibility:act-manufacture",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Manufacture",
       "minimum_years": null,
       "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "source_statement": "Monitor raw material usage, inventory, production waste, and productivity.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.45
+      "confidence": 0.45,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-2a163360",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-inventory",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Inventory",
       "minimum_years": null,
       "evidence": "Monitor raw material usage, inventory, production waste, and productivity.",
+      "source_statement": "Monitor raw material usage, inventory, production waste, and productivity.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-9549ed0e",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:domain:domain-procurement",
       "type": "domain",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Procurement",
       "minimum_years": null,
       "evidence": "Coordinate with Quality, Operations, Procurement, and Warehouse teams.",
+      "source_statement": "Coordinate with Quality, Operations, Procurement, and Warehouse teams.",
       "section": "",
       "evidence_kind": "ontology",
-      "confidence": 0.7
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-2caa869b",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:manage-and-oversee-daily-food-production-operations",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Manage and oversee daily food production operations.",
       "minimum_years": null,
       "evidence": "Manage and oversee daily food production operations.",
+      "source_statement": "Manage and oversee daily food production operations.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 10,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:plan-production-schedules-based-on-operational-requirements-and-demand",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Plan production schedules based on operational requirements and demand.",
       "minimum_years": null,
       "evidence": "Plan production schedules based on operational requirements and demand.",
+      "source_statement": "Plan production schedules based on operational requirements and demand.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 11,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:ensure-consistent-product-quality-and-compliance-with-approved-recipes-and-specifications",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Ensure consistent product quality and compliance with approved recipes and specifications.",
       "minimum_years": null,
       "evidence": "Ensure consistent product quality and compliance with approved recipes and specifications.",
+      "source_statement": "Ensure consistent product quality and compliance with approved recipes and specifications.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 13,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:ensure-compliance-with-food-safety-hygiene-and-quality-standards",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Ensure compliance with food safety, hygiene, and quality standards.",
       "minimum_years": null,
       "evidence": "Ensure compliance with food safety, hygiene, and quality standards.",
+      "source_statement": "Ensure compliance with food safety, hygiene, and quality standards.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 15,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:monitor-production-kpis-and-prepare-regular-operational-reports",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Monitor production KPIs and prepare regular operational reports.",
       "minimum_years": null,
       "evidence": "Monitor production KPIs and prepare regular operational reports.",
+      "source_statement": "Monitor production KPIs and prepare regular operational reports.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 17,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:identify-production-issues-and-implement-corrective-and-preventive-actions",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Identify production issues and implement corrective and preventive actions.",
       "minimum_years": null,
       "evidence": "Identify production issues and implement corrective and preventive actions.",
+      "source_statement": "Identify production issues and implement corrective and preventive actions.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 18,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:improve-production-efficiency-and-support-cost-and-waste-reduction-initiatives",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Improve production efficiency and support cost and waste reduction initiatives.",
       "minimum_years": null,
       "evidence": "Improve production efficiency and support cost and waste reduction initiatives.",
+      "source_statement": "Improve production efficiency and support cost and waste reduction initiatives.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 19,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:responsibility:ensure-equipment-work-areas-and-production-processes-meet-operational-and-safety-requirements",
       "type": "responsibility",
       "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
       "subject": "Ensure equipment, work areas, and production processes meet operational and safety requirements.",
       "minimum_years": null,
       "evidence": "Ensure equipment, work areas, and production processes meet operational and safety requirements.",
+      "source_statement": "Ensure equipment, work areas, and production processes meet operational and safety requirements.",
       "section": "Key Responsibilities",
       "evidence_kind": "responsibility",
-      "confidence": 0.84
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 20,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:education:relevant-bachelor-s-degree-or-equivalent-qualification",
       "type": "education",
       "priority": "required",
+      "requirement_class": "required",
+      "mandatory": true,
+      "preferred": false,
       "subject": "Relevant Bachelor's degree or equivalent qualification",
       "minimum_years": null,
       "evidence": "Relevant Bachelor's degree or equivalent qualification.",
+      "source_statement": "Relevant Bachelor's degree or equivalent qualification.",
       "section": "Requirements",
       "evidence_kind": "education",
-      "confidence": 0.99
+      "confidence": 0.99,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "required",
+        "education_level": "bachelor",
+        "education_field_terms": [],
+        "accept_higher_levels": true,
+        "section": "Requirements",
+        "line_number": 22,
+        "evidence_kind": "education",
+        "priority": "required",
+        "requirement_class": "required"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:experience:previous-experience-in-a-supervisory-or-managerial-position",
       "type": "experience",
       "priority": "required",
+      "requirement_class": "required",
+      "mandatory": true,
+      "preferred": false,
       "subject": "Previous experience in a supervisory or managerial position",
       "minimum_years": null,
       "evidence": "Previous experience in a supervisory or managerial position.",
+      "source_statement": "Previous experience in a supervisory or managerial position.",
       "section": "Requirements",
       "evidence_kind": "experience",
-      "confidence": 0.97
+      "confidence": 0.97,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "required",
+        "section": "Requirements",
+        "line_number": 24,
+        "evidence_kind": "experience",
+        "priority": "required",
+        "requirement_class": "required"
+      }
     },
     {
       "requirement_id": "jdreq:nonontology:qualification:good-planning-problem-solving-and-decision-making-skills",
       "type": "qualification",
       "priority": "required",
+      "requirement_class": "required",
+      "mandatory": true,
+      "preferred": false,
       "subject": "Good planning, problem-solving, and decision-making skills",
       "minimum_years": null,
       "evidence": "Good planning, problem-solving, and decision-making skills.",
+      "source_statement": "Good planning, problem-solving, and decision-making skills.",
       "section": "Requirements",
       "evidence_kind": "qualification",
-      "confidence": 0.81
+      "confidence": 0.81,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "required",
+        "section": "Requirements",
+        "line_number": 27,
+        "evidence_kind": "qualification",
+        "priority": "required",
+        "requirement_class": "required"
+      }
+    },
+    {
+      "requirement_id": "jdreq:experience:global-fallback-8073312118999261116",
+      "type": "experience",
+      "priority": "preferred",
+      "requirement_class": "preferred",
+      "mandatory": false,
+      "preferred": true,
+      "subject": "Industry experience in restaurants, food manufacturing, or central production facilities .ation skills",
+      "minimum_years": null,
+      "evidence": "Industry experience in restaurants, food manufacturing, or central production facilities is highly preferred.ation skills",
+      "source_statement": "Industry experience in restaurants, food manufacturing, or central production facilities is highly preferred.ation skills",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.6,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "global_fallback_-8073312118999261116",
+        "statement_type": "dict",
+        "priority": "preferred",
+        "requirement_class": "preferred"
+      }
     }
   ],
   "structured_resume": {
@@ -1637,7 +2181,7 @@
   "ats": {
     "available": true,
     "score": 97.3,
-    "confidence": 49.5,
+    "confidence": 49.4,
     "keyword_analysis": {
       "required_keywords": [],
       "matched_keywords": [],
@@ -1697,5 +2241,5 @@
     "typed_phase4_profile": true
   },
   "repository_gaps": [],
-  "completed_at": "2026-08-26T10:40:03.986717+00:00"
+  "completed_at": "2026-08-28T02:30:51.402622+00:00"
 }

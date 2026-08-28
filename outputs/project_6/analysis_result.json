@@ -1,9 +1,9 @@
 {
   "project_id": 6,
   "scores": {
-    "overall_match": 60.2,
-    "ats_compatibility": 51.2,
-    "evidence_strength": 68.1
+    "overall_match": 53.1,
+    "ats_compatibility": 98.3,
+    "evidence_strength": 68.8
   },
   "matches": {
     "strong": [
@@ -21,9 +21,7 @@
         "candidate_entity_ids": [
           "DOMAIN_FOOD_SAFETY"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -40,9 +38,7 @@
         "candidate_entity_ids": [
           "DOMAIN_FOOD_SAFETY"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -59,9 +55,7 @@
         "candidate_entity_ids": [
           "SKILL_FOOD_SAFETY"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.65
       },
       {
@@ -78,9 +72,7 @@
         "candidate_entity_ids": [
           "ACT_MANAGE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -97,9 +89,7 @@
         "candidate_entity_ids": [
           "DOMAIN_QUALITY_MANAGEMENT"
         ],
-        "evidence": [
-          "True"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.6
       },
       {
@@ -116,9 +106,7 @@
         "candidate_entity_ids": [
           "DOMAIN_RETAIL"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -135,9 +123,7 @@
         "candidate_entity_ids": [
           "DOMAIN_COMPLIANCE"
         ],
-        "evidence": [
-          "False"
-        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       },
       {
@@ -154,9 +140,75 @@
         "candidate_entity_ids": [
           "ACT_MAINTAIN"
         ],
-        "evidence": [
-          "False"
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:conduct-regular-food-safety-audits-at-retail-outlets-as-per-company-sops",
+        "subject": "Conduct regular food safety audits at retail outlets as per company SOPs",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "DOMAIN_RETAIL"
         ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:monitor-cleanliness-sanitation-and-hygiene-standards-of-stores-and-staff",
+        "subject": "Monitor cleanliness, sanitation, and hygiene standards of stores and staff",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "ACT_STORE"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:must-have-own-bike-and-willingness-to-work-in-field-retail-audits",
+        "subject": "Must have own bike and willingness to work in field/retail audits",
+        "requirement_type": "responsibility",
+        "priority": "required",
+        "mandatory": true,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "DOMAIN_RETAIL"
+        ],
+        "evidence": [],
+        "evidence_confidence": 0.7
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:fresh-graduates-to-2-years-of-relevant-experience-in-food-safety-qa-or-retail-audits",
+        "subject": "Fresh graduates to 2 years of relevant experience in food safety, QA, or retail audits",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": 2.0,
+        "status": "matched",
+        "score": 0.82,
+        "basis": "related",
+        "candidate_entity_ids": [
+          "DOMAIN_RETAIL"
+        ],
+        "evidence": [],
         "evidence_confidence": 0.7
       }
     ],
@@ -236,19 +288,91 @@
         "candidate_entity_ids": [],
         "evidence": [],
         "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:check-product-expiry-dates-and-ensure-timely-removal-corrective-actions",
+        "subject": "Check product expiry dates and ensure timely removal & corrective actions",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:perform-food-sampling-and-basic-analysis-to-detect-contamination-or-quality-issues",
+        "subject": "Perform food sampling and basic analysis to detect contamination or quality issues",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:education-experience",
+        "subject": "Education & Experience",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:bs-food-technology-bs-dairy-technology-bs-chemistry",
+        "subject": "BS Food Technology / BS Dairy Technology / BS Chemistry",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": null,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
+      },
+      {
+        "requirement_id": "jdreq:nonontology:responsibility:age-22-30-years",
+        "subject": "Age: 22–30 years",
+        "requirement_type": "responsibility",
+        "priority": "contextual",
+        "mandatory": false,
+        "preferred": false,
+        "minimum_years": 30.0,
+        "status": "unmatched",
+        "score": 0.0,
+        "basis": "none",
+        "candidate_entity_ids": [],
+        "evidence": [],
+        "evidence_confidence": 0.0
       }
     ]
   },
   "experience_gap": [],
   "recommendations": [
-    "Surface Food Safety evidence clearly in the resume.",
-    "Surface Food Safety Management evidence clearly in the resume.",
     "Consider Hire only if genuinely possessed; do not add unsupported keywords.",
     "Consider Quality Assurance only if genuinely possessed; do not add unsupported keywords.",
     "Consider Corrective Actions only if genuinely possessed; do not add unsupported keywords.",
     "Consider Monitor only if genuinely possessed; do not add unsupported keywords.",
-    "Consider Perform only if genuinely possessed; do not add unsupported keywords.",
-    "Add measurable outcomes to genuine achievements where the resume currently lacks quantified evidence."
+    "Consider Perform only if genuinely possessed; do not add unsupported keywords."
   ],
   "categories": {
     "skills": [
@@ -321,66 +445,745 @@
     ]
   },
   "requirements_summary": {
-    "total": 13,
-    "required": 0,
+    "total": 22,
+    "required": 1,
     "preferred": 0,
-    "contextual": 13
+    "contextual": 21,
+    "required_count": 1,
+    "preferred_count": 0,
+    "contextual_count": 21
+  },
+  "jd_requirement_summary": {
+    "total": 22,
+    "required": 1,
+    "preferred": 0,
+    "contextual": 21,
+    "required_count": 1,
+    "preferred_count": 0,
+    "contextual_count": 21
+  },
+  "jd_requirement_details": [
+    {
+      "requirement_id": "jdreq:domain:domain-food-safety",
+      "type": "domain",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Food Safety",
+      "minimum_years": null,
+      "evidence": "Food Safety Auditor",
+      "source_statement": "Food Safety Auditor",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-e3a67bb0",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:qualification:std-food-safety",
+      "type": "qualification",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Food Safety",
+      "minimum_years": null,
+      "evidence": "Food Safety Auditor",
+      "source_statement": "Food Safety Auditor",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-e3a67bb0",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-food-safety",
+      "type": "skill",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Food Safety Management",
+      "minimum_years": null,
+      "evidence": "Food Safety Auditor",
+      "source_statement": "Food Safety Auditor",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.65,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-e3a67bb0",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-sanitation",
+      "type": "skill",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Sanitation Management",
+      "minimum_years": null,
+      "evidence": "Food Safety Auditor",
+      "source_statement": "Food Safety Auditor",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.63,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-e3a67bb0",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-hire",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Hire",
+      "minimum_years": null,
+      "evidence": "📢 Hiring – Food Safety Auditor",
+      "source_statement": "📢 Hiring – Food Safety Auditor",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.45,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-1340bcaf",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:skill:skill-quality-assurance",
+      "type": "skill",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Quality Assurance",
+      "minimum_years": null,
+      "evidence": "Department: Quality Assurance",
+      "source_statement": "Department: Quality Assurance",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.75,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-4ec4ce82",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-quality-management",
+      "type": "domain",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Quality Management",
+      "minimum_years": null,
+      "evidence": "Department: Quality Assurance",
+      "source_statement": "Department: Quality Assurance",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.6,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-4ec4ce82",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:metric:kpi-capa",
+      "type": "metric",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Corrective Actions",
+      "minimum_years": null,
+      "evidence": "Department: Quality Assurance",
+      "source_statement": "Department: Quality Assurance",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.69,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-4ec4ce82",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-retail",
+      "type": "domain",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Retail",
+      "minimum_years": null,
+      "evidence": "📍 Location: Retail Outlets – Lahore, Faisalabad & Islamabad",
+      "source_statement": "📍 Location: Retail Outlets – Lahore, Faisalabad & Islamabad",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-5ec0f91d",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-monitor",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Monitor",
+      "minimum_years": null,
+      "evidence": "Monitor compliance with food safety and hygiene practices",
+      "source_statement": "Monitor compliance with food safety and hygiene practices",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-30cd0e22",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-perform",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Perform",
+      "minimum_years": null,
+      "evidence": "Monitor compliance with food safety and hygiene practices",
+      "source_statement": "Monitor compliance with food safety and hygiene practices",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-30cd0e22",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:domain:domain-compliance",
+      "type": "domain",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Compliance",
+      "minimum_years": null,
+      "evidence": "Monitor compliance with food safety and hygiene practices",
+      "source_statement": "Monitor compliance with food safety and hygiene practices",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-6f3cc699",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:responsibility:act-maintain",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Maintain",
+      "minimum_years": null,
+      "evidence": "Maintain and update food safety checklists on time",
+      "source_statement": "Maintain and update food safety checklists on time",
+      "section": "",
+      "evidence_kind": "ontology",
+      "confidence": 0.7,
+      "metadata": {
+        "source": "document_knowledge_profile",
+        "statement_id": "BS-fb5c23fc",
+        "statement_type": "BusinessStatement",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:conduct-regular-food-safety-audits-at-retail-outlets-as-per-company-sops",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Conduct regular food safety audits at retail outlets as per company SOPs",
+      "minimum_years": null,
+      "evidence": "Conduct regular food safety audits at retail outlets as per company SOPs",
+      "source_statement": "Conduct regular food safety audits at retail outlets as per company SOPs",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 7,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:check-product-expiry-dates-and-ensure-timely-removal-corrective-actions",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Check product expiry dates and ensure timely removal & corrective actions",
+      "minimum_years": null,
+      "evidence": "Check product expiry dates and ensure timely removal & corrective actions",
+      "source_statement": "Check product expiry dates and ensure timely removal & corrective actions",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 9,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:monitor-cleanliness-sanitation-and-hygiene-standards-of-stores-and-staff",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Monitor cleanliness, sanitation, and hygiene standards of stores and staff",
+      "minimum_years": null,
+      "evidence": "Monitor cleanliness, sanitation, and hygiene standards of stores and staff",
+      "source_statement": "Monitor cleanliness, sanitation, and hygiene standards of stores and staff",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 10,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:perform-food-sampling-and-basic-analysis-to-detect-contamination-or-quality-issues",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Perform food sampling and basic analysis to detect contamination or quality issues",
+      "minimum_years": null,
+      "evidence": "Perform food sampling and basic analysis to detect contamination or quality issues",
+      "source_statement": "Perform food sampling and basic analysis to detect contamination or quality issues",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 12,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:education-experience",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Education & Experience",
+      "minimum_years": null,
+      "evidence": "Education & Experience",
+      "source_statement": "Education & Experience",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 13,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:bs-food-technology-bs-dairy-technology-bs-chemistry",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "BS Food Technology / BS Dairy Technology / BS Chemistry",
+      "minimum_years": null,
+      "evidence": "BS Food Technology / BS Dairy Technology / BS Chemistry",
+      "source_statement": "BS Food Technology / BS Dairy Technology / BS Chemistry",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 14,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:age-22-30-years",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Age: 22–30 years",
+      "minimum_years": 30.0,
+      "evidence": "Age: 22–30 years",
+      "source_statement": "Age: 22–30 years",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 15,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:must-have-own-bike-and-willingness-to-work-in-field-retail-audits",
+      "type": "responsibility",
+      "priority": "required",
+      "requirement_class": "required",
+      "mandatory": true,
+      "preferred": false,
+      "subject": "Must have own bike and willingness to work in field/retail audits",
+      "minimum_years": null,
+      "evidence": "Must have own bike and willingness to work in field/retail audits",
+      "source_statement": "Must have own bike and willingness to work in field/retail audits",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 16,
+        "evidence_kind": "responsibility",
+        "priority": "required",
+        "requirement_class": "required"
+      }
+    },
+    {
+      "requirement_id": "jdreq:nonontology:responsibility:fresh-graduates-to-2-years-of-relevant-experience-in-food-safety-qa-or-retail-audits",
+      "type": "responsibility",
+      "priority": "contextual",
+      "requirement_class": "contextual",
+      "mandatory": false,
+      "preferred": false,
+      "subject": "Fresh graduates to 2 years of relevant experience in food safety, QA, or retail audits",
+      "minimum_years": 2.0,
+      "evidence": "Fresh graduates to 2 years of relevant experience in food safety, QA, or retail audits",
+      "source_statement": "Fresh graduates to 2 years of relevant experience in food safety, QA, or retail audits",
+      "section": "Key Responsibilities",
+      "evidence_kind": "responsibility",
+      "confidence": 0.84,
+      "metadata": {
+        "source": "jd_non_ontology_extractor",
+        "section_kind": "responsibility",
+        "section": "Key Responsibilities",
+        "line_number": 17,
+        "evidence_kind": "responsibility",
+        "priority": "contextual",
+        "requirement_class": "contextual"
+      }
+    }
+  ],
+  "structured_resume": {
+    "education": [
+      {
+        "degree": "M.A. Islamic Studies",
+        "major": "",
+        "institution": "University of the Punjab, Lahore",
+        "location": "Pakistan | 2013",
+        "description": "Bachelor of Arts (Education & Journalism) | University of the Punjab, Lahore, Pakistan | 2008 PROFESSIONAL CERTIFICATION & ACCREDITATIONS Safe-Check Advanced Food Safety Certification Program IT SKILLS Microsoft Office Suite (Excel, Word, PowerPoint), In-page Urdu",
+        "graduation_year": 0,
+        "level": "master",
+        "keywords": []
+      }
+    ],
+    "experience": [
+      {
+        "title": "Supervisor",
+        "company": "Freshii Restaurant Jan- – Feb",
+        "location": "Bowmanville, ON",
+        "start_year": 2023,
+        "end_year": 2024,
+        "current_job": false,
+        "duration": 1,
+        "responsibilities": [
+          "Handle high-volume customer transactions with accuracy and attention to detail.",
+          "Prepare, garnish and serve food according to customer requirements and company standards.",
+          "Resolve customer concerns and support repeat business through excellent service.",
+          "Maintain restaurant cleanliness and compliance with food safety procedures."
+        ],
+        "achievements": [
+          "Successfully managed over 500 customer transactions per shift while maintaining service quality.",
+          "Cashier | Shell Gas Station & Retail Store                2021 – 2022 | Oshawa, ON",
+          "Processed customer purchases and promoted merchandise sales.",
+          "Managed stocking activities and inventory rotation using FIFO/FEFO practices.",
+          "• Resolved customer issues and supported daily store operations.",
+          "Contributed to efficient store operations and customer satisfaction.",
+          "Cashier | Dollarama                2020 – 2021 | Powell River, BC",
+          "Provided customer service and handled cash transactions accurately.",
+          "Maintained merchandising and inventory standards."
+        ],
+        "skills": [],
+        "technologies": [],
+        "keywords": [],
+        "industry": "",
+        "seniority": "",
+        "seniority_level": 0,
+        "confidence": 0.0,
+        "raw_header": "Supervisor | Freshii Restaurant Jan-2023 – Feb 2024 | Bowmanville, ON",
+        "raw_lines": [
+          "Supervisor | Freshii Restaurant                Jan-2023 – Feb 2024 | Bowmanville, ON",
+          "Handle high-volume customer transactions with accuracy and attention to detail.",
+          "Prepare, garnish and serve food according to customer requirements and company standards.",
+          "Resolve customer concerns and support repeat business through excellent service.",
+          "Maintain restaurant cleanliness and compliance with food safety procedures.",
+          "Key Accomplishments",
+          "Successfully managed over 500 customer transactions per shift while maintaining service quality.",
+          "Cashier | Shell Gas Station & Retail Store                2021 – 2022 | Oshawa, ON",
+          "Processed customer purchases and promoted merchandise sales.",
+          "Managed stocking activities and inventory rotation using FIFO/FEFO practices.",
+          "• Resolved customer issues and supported daily store operations.",
+          "Key Accomplishments",
+          "Contributed to efficient store operations and customer satisfaction.",
+          "Cashier | Dollarama                2020 – 2021 | Powell River, BC",
+          "Provided customer service and handled cash transactions accurately.",
+          "Maintained merchandising and inventory standards."
+        ]
+      },
+      {
+        "title": "Early Childhood Assistant",
+        "company": "Shaheen Public High School",
+        "location": "Lahore, Pakistan",
+        "start_year": 2016,
+        "end_year": 2018,
+        "current_job": false,
+        "duration": 2,
+        "responsibilities": [
+          "Organized instructional materials and supported classroom activities.",
+          "Led activities promoting students’ social, emotional and physical development."
+        ],
+        "achievements": [],
+        "skills": [],
+        "technologies": [],
+        "keywords": [],
+        "industry": "",
+        "seniority": "",
+        "seniority_level": 0,
+        "confidence": 0.0,
+        "raw_header": "Early Childhood Assistant | Shaheen Public High School 2016 – 2018 | Lahore, Pakistan",
+        "raw_lines": [
+          "Early Childhood Assistant | Shaheen Public High School                2016 – 2018 | Lahore, Pakistan",
+          "Organized instructional materials and supported classroom activities.",
+          "Led activities promoting students’ social, emotional and physical development."
+        ]
+      },
+      {
+        "title": "Accountant",
+        "company": "Shaheen Public High School",
+        "location": "",
+        "start_year": 2015,
+        "end_year": 2016,
+        "current_job": false,
+        "duration": 1,
+        "responsibilities": [
+          "Managed record keeping, cash handling and fee reconciliation.",
+          "Supported administrative and financial operations."
+        ],
+        "achievements": [],
+        "skills": [],
+        "technologies": [],
+        "keywords": [],
+        "industry": "",
+        "seniority": "",
+        "seniority_level": 0,
+        "confidence": 0.0,
+        "raw_header": "Accountant | Shaheen Public High School 2015 – 2016",
+        "raw_lines": [
+          "Accountant | Shaheen Public High School                2015 – 2016",
+          "Managed record keeping, cash handling and fee reconciliation.",
+          "Supported administrative and financial operations."
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "language": "English",
+        "proficiency": "Medium Level",
+        "raw": "English – Medium Level"
+      },
+      {
+        "language": "Urdu",
+        "proficiency": "Native Speaker",
+        "raw": "Urdu – Native Speaker"
+      },
+      {
+        "language": "Punjabi",
+        "proficiency": "Native Speaker",
+        "raw": "Punjabi – Native Speaker"
+      }
+    ],
+    "projects": [],
+    "awards": [],
+    "references": [
+      {
+        "name": "",
+        "designation": "",
+        "company": "",
+        "relationship": "",
+        "email": "",
+        "phone": "",
+        "linkedin": "",
+        "address": "",
+        "years_known": null,
+        "available_on_request": true,
+        "notes": ""
+      }
+    ],
+    "contact": {
+      "name": "UZMA SABIR",
+      "email": "uzma.kasshif@gmail.com",
+      "phone": "(0303) 0234270",
+      "linkedin": "",
+      "github": "",
+      "website": "",
+      "address": "Lahore, Punjab, Pakistan",
+      "city": "",
+      "province": "",
+      "country": "",
+      "postal_code": ""
+    }
   },
   "ats": {
-    "available": false,
-    "score": 51.2,
-    "confidence": 60.0,
+    "available": true,
+    "score": 98.3,
+    "confidence": 49.1,
     "keyword_analysis": {
-      "required_keywords": [
-        "Food Safety",
-        "Food Safety",
-        "Food Safety Management",
-        "Sanitation Management",
-        "Hire",
-        "Quality Assurance",
-        "Quality Management",
-        "Corrective Actions",
-        "Retail",
-        "Monitor",
-        "Perform",
-        "Compliance",
-        "Maintain"
-      ],
-      "matched_keywords": [
-        "Food Safety",
-        "Food Safety",
-        "Retail",
-        "Compliance",
-        "Maintain"
-      ],
-      "missing_keywords": [
-        "Food Safety Management",
-        "Sanitation Management",
-        "Hire",
-        "Quality Assurance",
-        "Quality Management",
-        "Corrective Actions",
-        "Monitor",
-        "Perform"
-      ],
-      "keyword_coverage_score": 38.5
+      "required_keywords": [],
+      "matched_keywords": [],
+      "missing_keywords": [],
+      "additional_keywords": [],
+      "keyword_coverage_score": 100.0
     },
     "section_analysis": {
       "detected_sections": [
         "summary",
         "experience",
-        "skills",
-        "education"
+        "education",
+        "skills"
       ],
       "missing_sections": [],
+      "section_order_valid": true,
       "section_completeness_score": 100.0
     },
+    "formatting_analysis": {
+      "has_complex_layout": true,
+      "has_tables": true,
+      "has_columns": false,
+      "has_graphics": false,
+      "formatting_score": 85.0
+    },
+    "readability_analysis": {
+      "estimated_word_count": 388,
+      "long_sentence_count": 1,
+      "average_sentence_length": 16.869565217391305,
+      "readability_score": 97.8
+    },
+    "terminology_analysis": {
+      "aligned_terms": [],
+      "missing_terms": [],
+      "terminology_score": 100.0
+    },
     "quantification_analysis": {
-      "quantified_achievement_count": 0,
-      "quantification_score": 0.0
+      "quantified_achievement_count": 15,
+      "quantified_bullet_count": 1,
+      "quantification_score": 100.0
     },
     "parseability_analysis": {
       "parseable": true,
+      "extraction_warning_count": 0,
+      "warnings": [],
       "parseability_score": 100.0
     }
   },
@@ -394,5 +1197,5 @@
     "typed_phase4_profile": true
   },
   "repository_gaps": [],
-  "completed_at": "2026-08-23T17:24:00.986473+00:00"
+  "completed_at": "2026-08-28T02:09:17.519533+00:00"
 }
