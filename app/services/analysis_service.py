@@ -1734,46 +1734,19 @@ class CandidateAnalysisService:
                 jd_profile,
             ),
 
-            "requirements_summary": {
-                "total": len(
-                    getattr(
-                        jd_requirements,
-                        "requirements",
-                        (),
-                    )
-                    or ()
-                ),
-                "required": getattr(
-                    jd_requirements,
-                    "required_count",
-                    0,
-                ),
-                "preferred": getattr(
-                    jd_requirements,
-                    "preferred_count",
-                    0,
-                ),
-                "contextual": getattr(
-                    jd_requirements,
-                    "contextual_count",
-                    0,
-                ),
-            },
+            "requirements_summary": self._jd_requirements_summary(
+                jd_requirements
+            ),
 
-            "jd_requirement_details": [
-                {
-                    "requirement_id": getattr(item, "requirement_id", ""),
-                    "type": self._enum_value(getattr(item, "requirement_type", "unknown")),
-                    "priority": self._enum_value(getattr(item, "priority", "contextual")),
-                    "subject": getattr(item, "subject", ""),
-                    "minimum_years": getattr(item, "minimum_years", None),
-                    "evidence": getattr(item, "evidence", ""),
-                    "section": (getattr(item, "metadata", {}) or {}).get("section", ""),
-                    "evidence_kind": (getattr(item, "metadata", {}) or {}).get("evidence_kind", "ontology"),
-                    "confidence": getattr(item, "confidence", 0.0),
-                }
-                for item in (getattr(jd_requirements, "requirements", ()) or ())
-            ],
+            # Compatibility alias for frontend/API consumers that use the
+            # explicit JD-prefixed name.
+            "jd_requirement_summary": self._jd_requirements_summary(
+                jd_requirements
+            ),
+
+            "jd_requirement_details": self._jd_requirement_details(
+                jd_requirements
+            ),
 
             "structured_resume": structured_resume,
 
@@ -1850,6 +1823,101 @@ class CandidateAnalysisService:
                 ),
             },
         }
+
+    # ==================================================================
+    # JD REQUIREMENT PRESENTATION
+    # ==================================================================
+
+    @classmethod
+    def _jd_requirements_summary(
+        cls,
+        jd_requirements: Any,
+    ) -> dict[str, int]:
+        """Build the frontend JD summary from the actual requirement objects.
+
+        Phase 2 priority on each JDRequirement is authoritative. Profile-level
+        counters are retained for compatibility, but are not used as the
+        presentation source because they can be stale after classifier/model
+        changes.
+        """
+        requirements = list(
+            getattr(jd_requirements, "requirements", ()) or ()
+        )
+
+        counts = {
+            "required": 0,
+            "preferred": 0,
+            "contextual": 0,
+        }
+
+        for requirement in requirements:
+            priority = cls._enum_value(
+                getattr(requirement, "priority", "contextual")
+            )
+            if priority == "required":
+                counts["required"] += 1
+            elif priority == "preferred":
+                counts["preferred"] += 1
+            else:
+                counts["contextual"] += 1
+
+        return {
+            "total": len(requirements),
+        "required": counts["required"],
+            "preferred": counts["preferred"],
+            "contextual": counts["contextual"],
+            # Compatibility aliases for frontend versions using *_count.
+            "required_count": counts["required"],
+            "preferred_count": counts["preferred"],
+            "contextual_count": counts["contextual"],
+        }
+
+    @classmethod
+    def _jd_requirement_details(
+        cls,
+        jd_requirements: Any,
+    ) -> list[dict[str, Any]]:
+        """Serialize Phase-2 JD requirements with canonical priority flags."""
+        details: list[dict[str, Any]] = []
+
+        for item in (getattr(jd_requirements, "requirements", ()) or ()):
+            metadata = getattr(item, "metadata", {}) or {}
+            priority = cls._enum_value(
+                getattr(
+                    item,
+                    "priority",
+                    metadata.get("priority", "contextual"),
+                )
+            )
+
+            # Priority is the canonical Phase-2 source of truth.
+            mandatory = priority == "required"
+            preferred = priority == "preferred"
+
+            # Preserve explicit positive flags from the model as well.
+            if getattr(item, "mandatory", False) is True:
+                mandatory = True
+            if getattr(item, "preferred", False) is True:
+                preferred = True
+
+            details.append({
+                "requirement_id": getattr(item, "requirement_id", ""),
+                "type": cls._enum_value(getattr(item, "requirement_type", "unknown")),
+                "priority": priority,
+                "requirement_class": priority,
+                "mandatory": mandatory,
+                "preferred": preferred,
+                "subject": getattr(item, "subject", ""),
+                "minimum_years": getattr(item, "minimum_years", None),
+                "evidence": getattr(item, "evidence", ""),
+                "source_statement": getattr(item, "source_statement", ""),
+                "section": metadata.get("section", ""),
+                "evidence_kind": metadata.get("evidence_kind", "ontology"),
+                "confidence": getattr(item, "confidence", 0.0),
+                "metadata": cls._json_safe(metadata),
+            })
+
+        return details
 
     # ==================================================================
     # RECOMMENDATIONS

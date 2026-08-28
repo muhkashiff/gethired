@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block content %}
@@ -436,9 +435,9 @@
             </h3>
 
 
-            <!-- ========================= -->
-            <!-- SCORE CARDS                -->
-            <!-- ========================= -->
+            <!-- ================================================= -->
+            <!-- SCORE CARDS                                        -->
+            <!-- ================================================= -->
 
             <div class="row g-3 mb-4">
 
@@ -534,15 +533,11 @@
                                     <div class="border rounded p-2 h-100">
 
                                         <div class="fw-semibold">
-
                                             ✓ {{ item.subject }}
-
                                         </div>
 
                                         <div class="small text-muted mt-1">
-
                                             {{ item.requirement_type|title }}
-
                                         </div>
 
                                         {% if item.evidence %}
@@ -605,15 +600,11 @@
                                     <div class="border rounded p-2 h-100">
 
                                         <div class="fw-semibold">
-
                                             △ {{ item.subject }}
-
                                         </div>
 
                                         <div class="small text-muted mt-1">
-
                                             {{ item.requirement_type|title }}
-
                                         </div>
 
                                         {% if item.evidence %}
@@ -676,15 +667,11 @@
                                     <div class="border rounded p-2 h-100">
 
                                         <div class="fw-semibold">
-
                                             ✗ {{ item.subject }}
-
                                         </div>
 
                                         <div class="small text-muted mt-1">
-
                                             {{ item.requirement_type|title }}
-
                                         </div>
 
                                         <div class="small text-danger mt-2">
@@ -807,9 +794,7 @@
                             {% for recommendation in analysis.recommendations %}
 
                                 <li class="mb-2">
-
                                     {{ recommendation }}
-
                                 </li>
 
                             {% endfor %}
@@ -858,9 +843,7 @@
                                     <div class="border rounded p-3 h-100">
 
                                         <div class="fw-semibold mb-2">
-
                                             {{ category|replace("_", " ")|title }}
-
                                         </div>
 
                                         <div>
@@ -868,9 +851,7 @@
                                             {% for value in values %}
 
                                                 <span class="badge bg-light text-dark border me-1 mb-1">
-
                                                     {{ value }}
-
                                                 </span>
 
                                             {% endfor %}
@@ -895,7 +876,7 @@
 
 
             <!-- ================================================= -->
-            <!-- ATS DETAILS                                      -->
+            <!-- ATS DETAILS                                       -->
             <!-- ================================================= -->
 
             <div class="card shadow-sm mb-3">
@@ -941,9 +922,7 @@
                                 </div>
 
                                 <div class="h3 fw-bold mb-0">
-
                                     {{ analysis.ats.score }}%
-
                                 </div>
 
                             </div>
@@ -960,9 +939,7 @@
                                 </div>
 
                                 <div class="h3 fw-bold mb-0">
-
                                     {{ analysis.ats.confidence }}%
-
                                 </div>
 
                             </div>
@@ -995,7 +972,9 @@
                     </div>
 
 
-                    <!-- KEYWORD ANALYSIS -->
+                    <!-- ================================================= -->
+                    <!-- KEYWORD ANALYSIS                                  -->
+                    <!-- ================================================= -->
 
                     {% if analysis.ats.keyword_analysis %}
 
@@ -1025,7 +1004,11 @@
 
                                         <span class="small">
 
-                                            {{ (keyword.keyword_coverage_score * 100 if keyword.keyword_coverage_score <= 1 else keyword.keyword_coverage_score)|round(1) }}%
+                                            {{ (
+                                                keyword.keyword_coverage_score * 100
+                                                if keyword.keyword_coverage_score <= 1
+                                                else keyword.keyword_coverage_score
+                                            )|round(1) }}%
 
                                         </span>
 
@@ -1037,7 +1020,13 @@
 
                                         <div
                                             class="progress-bar bg-success"
-                                            style="width: {{ (keyword.keyword_coverage_score * 100 if keyword.keyword_coverage_score <= 1 else keyword.keyword_coverage_score)|round(1) }}%;">
+                                            style="width: {{
+                                                (
+                                                    keyword.keyword_coverage_score * 100
+                                                    if keyword.keyword_coverage_score <= 1
+                                                    else keyword.keyword_coverage_score
+                                                )|round(1)
+                                            }}%;">
 
                                         </div>
 
@@ -1057,17 +1046,13 @@
                                     <div class="border rounded p-3 h-100">
 
                                         <div class="fw-semibold text-success mb-2">
-
                                             ✓ Matched Keywords
-
                                         </div>
 
                                         {% for value in keyword.matched_keywords %}
 
                                             <span class="badge bg-success-subtle text-success border border-success-subtle me-1 mb-1">
-
                                                 {{ value }}
-
                                             </span>
 
                                         {% endfor %}
@@ -1086,17 +1071,13 @@
                                     <div class="border rounded p-3 h-100">
 
                                         <div class="fw-semibold text-danger mb-2">
-
                                             ✗ Missing Keywords
-
                                         </div>
 
                                         {% for value in keyword.missing_keywords %}
 
                                             <span class="badge bg-danger-subtle text-danger border border-danger-subtle me-1 mb-1">
-
                                                 {{ value }}
-
                                             </span>
 
                                         {% endfor %}
@@ -1115,17 +1096,13 @@
                                 <div class="mt-3">
 
                                     <div class="small fw-semibold mb-2">
-
                                         Required Keywords
-
                                     </div>
 
                                     {% for value in keyword.required_keywords %}
 
                                         <span class="badge bg-light text-dark border me-1 mb-1">
-
                                             {{ value }}
-
                                         </span>
 
                                     {% endfor %}
@@ -1141,7 +1118,9 @@
                     {% endif %}
 
 
-                    <!-- SECTION ANALYSIS -->
+                    <!-- ================================================= -->
+                    <!-- SECTION ANALYSIS                                  -->
+                    <!-- ================================================= -->
 
                     {% if analysis.ats.section_analysis %}
 
@@ -1170,7 +1149,13 @@
                                         </span>
 
                                         <span class="small">
-                                            {{ (sections.section_completeness_score * 100 if sections.section_completeness_score <= 1 else sections.section_completeness_score)|round(1) }}%
+
+                                            {{ (
+                                                sections.section_completeness_score * 100
+                                                if sections.section_completeness_score <= 1
+                                                else sections.section_completeness_score
+                                            )|round(1) }}%
+
                                         </span>
 
                                     </div>
@@ -1181,7 +1166,13 @@
 
                                         <div
                                             class="progress-bar"
-                                            style="width: {{ (sections.section_completeness_score * 100 if sections.section_completeness_score <= 1 else sections.section_completeness_score)|round(1) }}%;">
+                                            style="width: {{
+                                                (
+                                                    sections.section_completeness_score * 100
+                                                    if sections.section_completeness_score <= 1
+                                                    else sections.section_completeness_score
+                                                )|round(1)
+                                            }}%;">
 
                                         </div>
 
@@ -1201,17 +1192,13 @@
                                     <div class="border rounded p-3 h-100">
 
                                         <div class="fw-semibold text-success mb-2">
-
                                             ✓ Detected Sections
-
                                         </div>
 
                                         {% for value in sections.detected_sections %}
 
                                             <span class="badge bg-success-subtle text-success border border-success-subtle me-1 mb-1">
-
                                                 {{ value|title }}
-
                                             </span>
 
                                         {% endfor %}
@@ -1230,17 +1217,13 @@
                                     <div class="border rounded p-3 h-100">
 
                                         <div class="fw-semibold text-warning mb-2">
-
                                             △ Missing Sections
-
                                         </div>
 
                                         {% for value in sections.missing_sections %}
 
                                             <span class="badge bg-warning-subtle text-dark border border-warning-subtle me-1 mb-1">
-
                                                 {{ value|title }}
-
                                             </span>
 
                                         {% endfor %}
@@ -1260,7 +1243,9 @@
                     {% endif %}
 
 
-                    <!-- QUANTIFICATION ANALYSIS -->
+                    <!-- ================================================= -->
+                    <!-- QUANTIFICATION ANALYSIS                           -->
+                    <!-- ================================================= -->
 
                     {% if analysis.ats.quantification_analysis %}
 
@@ -1287,15 +1272,11 @@
                                     <div class="border rounded p-3">
 
                                         <div class="small text-muted">
-
                                             Quantified Achievements
-
                                         </div>
 
                                         <div class="h4 fw-bold mb-0">
-
                                             {{ quant.quantified_achievement_count }}
-
                                         </div>
 
                                     </div>
@@ -1312,15 +1293,11 @@
                                     <div class="border rounded p-3">
 
                                         <div class="small text-muted">
-
                                             Quantification Score
-
                                         </div>
 
                                         <div class="h4 fw-bold mb-0">
-
                                             {{ quant.quantification_score }}%
-
                                         </div>
 
                                     </div>
@@ -1338,7 +1315,9 @@
                     {% endif %}
 
 
-                    <!-- PARSEABILITY -->
+                    <!-- ================================================= -->
+                    <!-- PARSEABILITY                                      -->
+                    <!-- ================================================= -->
 
                     {% if analysis.ats.parseability_analysis %}
 
@@ -1394,7 +1373,13 @@
                                         </span>
 
                                         <span class="small">
-                                            {{ (parseability.parseability_score * 100 if parseability.parseability_score <= 1 else parseability.parseability_score)|round(1) }}%
+
+                                            {{ (
+                                                parseability.parseability_score * 100
+                                                if parseability.parseability_score <= 1
+                                                else parseability.parseability_score
+                                            )|round(1) }}%
+
                                         </span>
 
                                     </div>
@@ -1405,7 +1390,13 @@
 
                                         <div
                                             class="progress-bar bg-success"
-                                            style="width: {{ (parseability.parseability_score * 100 if parseability.parseability_score <= 1 else parseability.parseability_score)|round(1) }}%;">
+                                            style="width: {{
+                                                (
+                                                    parseability.parseability_score * 100
+                                                    if parseability.parseability_score <= 1
+                                                    else parseability.parseability_score
+                                                )|round(1)
+                                            }}%;">
 
                                         </div>
 
@@ -1422,7 +1413,9 @@
                     {% endif %}
 
 
-                    <!-- FORMATTING ANALYSIS -->
+                    <!-- ================================================= -->
+                    <!-- FORMATTING ANALYSIS                              -->
+                    <!-- ================================================= -->
 
                     {% if analysis.ats.formatting_analysis %}
 
@@ -1449,15 +1442,11 @@
                                         <div class="d-flex justify-content-between border-bottom py-2">
 
                                             <span class="small">
-
                                                 {{ key|replace("_", " ")|title }}
-
                                             </span>
 
                                             <span class="small fw-semibold">
-
                                                 {{ value }}
-
                                             </span>
 
                                         </div>
@@ -1469,9 +1458,7 @@
                             {% else %}
 
                                 <div class="small text-muted">
-
                                     Formatting analysis is available in the ATS engine.
-
                                 </div>
 
                             {% endif %}
@@ -1483,7 +1470,9 @@
                     {% endif %}
 
 
-                    <!-- READABILITY ANALYSIS -->
+                    <!-- ================================================= -->
+                    <!-- READABILITY ANALYSIS                              -->
+                    <!-- ================================================= -->
 
                     {% if analysis.ats.readability_analysis %}
 
@@ -1510,15 +1499,11 @@
                                         <div class="d-flex justify-content-between border-bottom py-2">
 
                                             <span class="small">
-
                                                 {{ key|replace("_", " ")|title }}
-
                                             </span>
 
                                             <span class="small fw-semibold">
-
                                                 {{ value }}
-
                                             </span>
 
                                         </div>
@@ -1530,9 +1515,7 @@
                             {% else %}
 
                                 <div class="small text-muted">
-
                                     Readability analysis is available in the ATS engine.
-
                                 </div>
 
                             {% endif %}
@@ -1543,15 +1526,14 @@
 
                     {% endif %}
 
-
                 </div>
 
             </div>
 
 
-            <!-- ================================================= -->
-            <!-- REQUIREMENTS SUMMARY                              -->
-            <!-- ================================================= -->
+            <!-- ========================================================= -->
+            <!-- REQUIREMENTS SUMMARY                                      -->
+            <!-- ========================================================= -->
 
             {% if analysis.requirements_summary %}
 
@@ -1578,9 +1560,7 @@
                                 </div>
 
                                 <div class="h4 mb-0">
-
                                     {{ analysis.requirements_summary.total }}
-
                                 </div>
 
                             </div>
@@ -1596,10 +1576,8 @@
                                     Required
                                 </div>
 
-                                <div class="h4 mb-0">
-
+                                <div class="h4 mb-0 text-danger">
                                     {{ analysis.requirements_summary.required }}
-
                                 </div>
 
                             </div>
@@ -1615,10 +1593,8 @@
                                     Preferred
                                 </div>
 
-                                <div class="h4 mb-0">
-
+                                <div class="h4 mb-0 text-warning">
                                     {{ analysis.requirements_summary.preferred }}
-
                                 </div>
 
                             </div>
@@ -1634,10 +1610,8 @@
                                     Contextual
                                 </div>
 
-                                <div class="h4 mb-0">
-
+                                <div class="h4 mb-0 text-secondary">
                                     {{ analysis.requirements_summary.contextual }}
-
                                 </div>
 
                             </div>
@@ -1653,54 +1627,364 @@
             {% endif %}
 
 
-            <!-- ================================================= -->
-            <!-- JD REQUIREMENT DETAILS                            -->
-            <!-- ================================================= -->
+            <!-- ========================================================= -->
+            <!-- PREFERRED REQUIREMENTS                                    -->
+            <!-- ========================================================= -->
+
+            {% if analysis.jd_requirement_details %}
+
+                {% set preferred_found = false %}
+
+                {% for item in analysis.jd_requirement_details %}
+
+                    {% if item.priority == "preferred" %}
+                        {% set preferred_found = true %}
+                    {% endif %}
+
+                {% endfor %}
+
+
+                {% if preferred_found %}
+
+                <div class="card shadow-sm border-warning mb-3">
+
+                    <div class="card-header bg-warning py-2">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <strong>
+                                Preferred Requirements
+                            </strong>
+
+                            <span class="badge bg-dark">
+                                Preferred
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="small text-muted mb-3">
+
+                            These requirements are desirable but are not classified
+                            as mandatory requirements by the Job Description.
+
+                        </div>
+
+                        <div class="row g-3">
+
+                            {% for item in analysis.jd_requirement_details %}
+
+                                {% if item.priority == "preferred" %}
+
+                                <div class="col-md-6 col-lg-4">
+
+                                    <div class="border border-warning rounded p-3 h-100">
+
+                                        <div class="d-flex justify-content-between align-items-start gap-2">
+
+                                            <div class="fw-semibold">
+                                                {{ item.subject }}
+                                            </div>
+
+                                            <span class="badge bg-warning text-dark">
+                                                Preferred
+                                            </span>
+
+                                        </div>
+
+
+                                        {% if item.type %}
+
+                                            <div class="small text-muted mt-2">
+
+                                                Type:
+                                                {{ item.type|replace("_", " ")|title }}
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        {% if item.experience_category %}
+
+                                            <div class="small text-muted mt-1">
+
+                                                Experience:
+                                                {{ item.experience_category|replace("_", " ")|title }}
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        {% if item.experience_domain %}
+
+                                            <div class="small text-muted mt-1">
+
+                                                Domain:
+                                                {{ item.experience_domain }}
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        {% if item.minimum_years is not none %}
+
+                                            <div class="small mt-2">
+
+                                                <strong>
+                                                    Minimum experience:
+                                                </strong>
+
+                                                {{ item.minimum_years }}+ years
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        {% if item.section %}
+
+                                            <div class="small mt-1">
+
+                                                <strong>
+                                                    Section:
+                                                </strong>
+
+                                                {{ item.section }}
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        {% if item.evidence %}
+
+                                            <div class="small mt-2">
+
+                                                <strong>
+                                                    JD Evidence:
+                                                </strong>
+
+                                                <div class="text-muted mt-1">
+                                                    {{ item.evidence }}
+                                                </div>
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endif %}
+
+
+            <!-- ========================================================= -->
+            <!-- JD REQUIREMENT DETAILS                                    -->
+            <!-- ========================================================= -->
 
             {% if analysis.jd_requirement_details %}
 
             <div class="card shadow-sm mb-3">
 
                 <div class="card-header py-2 d-flex justify-content-between align-items-center">
-                    <strong>Job Requirements & Preferences</strong>
-                    <span class="small text-muted">Structured JD interpretation</span>
+
+                    <strong>
+                        Job Requirements & Preferences
+                    </strong>
+
+                    <span class="small text-muted">
+                        Structured JD interpretation
+                    </span>
+
                 </div>
 
                 <div class="card-body p-0">
+
                     <div class="table-responsive">
+
                         <table class="table table-sm table-hover mb-0 align-middle">
+
                             <thead class="table-light">
+
                                 <tr>
-                                    <th>Priority</th>
-                                    <th>Type</th>
-                                    <th>Requirement</th>
-                                    <th>Section</th>
-                                    <th>Years</th>
-                                    <th>Evidence</th>
+
+                                    <th>
+                                        Priority
+                                    </th>
+
+                                    <th>
+                                        Type
+                                    </th>
+
+                                    <th>
+                                        Requirement
+                                    </th>
+
+                                    <th>
+                                        Section
+                                    </th>
+
+                                    <th>
+                                        Experience Category
+                                    </th>
+
+                                    <th>
+                                        Domain
+                                    </th>
+
+                                    <th>
+                                        Years
+                                    </th>
+
+                                    <th>
+                                        Evidence
+                                    </th>
+
                                 </tr>
+
                             </thead>
+
                             <tbody>
+
                                 {% for item in analysis.jd_requirement_details %}
+
                                 <tr>
+
+                                    <!-- PRIORITY -->
+
                                     <td>
+
                                         {% if item.priority == "required" %}
-                                            <span class="badge bg-danger-subtle text-danger">Required</span>
+
+                                            <span class="badge bg-danger-subtle text-danger">
+                                                Required
+                                            </span>
+
                                         {% elif item.priority == "preferred" %}
-                                            <span class="badge bg-warning-subtle text-dark">Preferred</span>
+
+                                            <span class="badge bg-warning-subtle text-dark">
+                                                Preferred
+                                            </span>
+
                                         {% else %}
-                                            <span class="badge bg-secondary-subtle text-secondary">Contextual</span>
+
+                                            <span class="badge bg-secondary-subtle text-secondary">
+                                                Contextual
+                                            </span>
+
                                         {% endif %}
+
                                     </td>
-                                    <td>{{ item.type|replace("_", " ")|title }}</td>
-                                    <td class="fw-semibold">{{ item.subject }}</td>
-                                    <td>{{ item.section or "—" }}</td>
-                                    <td>{{ item.minimum_years if item.minimum_years is not none else "—" }}</td>
-                                    <td class="small text-muted">{{ item.evidence }}</td>
+
+
+                                    <!-- TYPE -->
+
+                                    <td>
+
+                                        {{ item.type
+                                            |replace("_", " ")
+                                            |title
+                                        }}
+
+                                    </td>
+
+
+                                    <!-- SUBJECT -->
+
+                                    <td class="fw-semibold">
+
+                                        {{ item.subject }}
+
+                                    </td>
+
+
+                                    <!-- SECTION -->
+
+                                    <td>
+
+                                        {{ item.section or "—" }}
+
+                                    </td>
+
+
+                                    <!-- EXPERIENCE CATEGORY -->
+
+                                    <td>
+
+                                        {% if item.experience_category %}
+
+                                            {{ item.experience_category
+                                                |replace("_", " ")
+                                                |title
+                                            }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- EXPERIENCE DOMAIN -->
+
+                                    <td>
+
+                                        {{ item.experience_domain or "—" }}
+
+                                    </td>
+
+
+                                    <!-- YEARS -->
+
+                                    <td>
+
+                                        {{ item.minimum_years
+                                            if item.minimum_years is not none
+                                            else "—"
+                                        }}
+
+                                    </td>
+
+
+                                    <!-- EVIDENCE -->
+
+                                    <td class="small text-muted">
+
+                                        {{ item.evidence or "—" }}
+
+                                    </td>
+
                                 </tr>
+
                                 {% endfor %}
+
                             </tbody>
+
                         </table>
+
                     </div>
+
                 </div>
 
             </div>
@@ -1708,9 +1992,9 @@
             {% endif %}
 
 
-            <!-- ================================================= -->
-            <!-- PIPELINE SUMMARY                                  -->
-            <!-- ================================================= -->
+            <!-- ========================================================= -->
+            <!-- PIPELINE SUMMARY                                          -->
+            <!-- ========================================================= -->
 
             {% if analysis.pipeline %}
 
@@ -1839,4 +2123,3 @@
 </div>
 
 {% endblock %}
-

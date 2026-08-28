@@ -2,43 +2,53 @@
 JD Requirement Models
 =====================
 
-Phase 2 - JD-specific interpretation metadata.
+Enterprise Phase 2
+------------------
 
-These models define the structured requirement boundary between the existing
-DocumentKnowledgeProfile and the later matching/analyzing stages.
+Structured requirement boundary between:
 
-Architecture:
+    DocumentKnowledgeProfile
+                |
+                v
+        JDRequirementClassifier
+                |
+                v
+          JDRequirement
+                |
+                v
+       JDRequirementProfile
 
-    Existing Enterprise Knowledge Pipeline
-                    |
-                    v
-        DocumentKnowledgeProfile
-                    |
-                    v
-             JDRequirement
-                    |
-                    v
-          JDRequirementProfile
+Architecture
+------------
 
-Important:
+RequirementType
+    = WHAT the JD is asking for.
 
-    These models do NOT perform extraction, NLP, graph construction, or
-    resume/JD matching.
+RequirementPriority
+    = HOW important/strict the requirement is.
 
-Experience is deliberately modeled as domain-specific evidence.
+RequirementClass
+    = Backward-compatible alias for older Phase-2 code.
 
-Example:
+Experience is explicitly scoped by:
 
-    Food Safety
-        minimum_years = 5
+    - domain
+    - functional area
+    - technology
+    - methodology
+    - responsibility
+    - general
 
-is NOT equivalent to:
+This prevents the later matcher from incorrectly treating:
 
-    General Labor
-        years = 10
+    10 years general labor
 
-The future KnowledgeMatcher must compare experience by compatible domain,
-functional area, or experience category rather than using total career years.
+as equivalent to:
+
+    5 years Food Safety
+
+The models themselves do not perform extraction, NLP, matching, or ATS
+calculation.
 """
 
 from __future__ import annotations
@@ -55,7 +65,11 @@ from typing import Any, Optional
 
 class RequirementType(str, Enum):
     """
-    Semantic category of a Job Description requirement.
+    Canonical semantic type of a JD requirement.
+
+    This answers:
+
+        "WHAT is being requested?"
     """
 
     SKILL = "skill"
@@ -106,7 +120,18 @@ class RequirementType(str, Enum):
 
 class RequirementPriority(str, Enum):
     """
-    Importance of a requirement within the Job Description.
+    Importance / strictness of a requirement.
+
+    REQUIRED
+        The JD explicitly requires the item.
+
+    PREFERRED
+        The JD explicitly prefers/desires the item but does not make it
+        mandatory.
+
+    CONTEXTUAL
+        The statement is informative/background/context rather than an
+        explicit mandatory or preferred requirement.
     """
 
     REQUIRED = "required"
@@ -117,13 +142,98 @@ class RequirementPriority(str, Enum):
 
 
 # ============================================================================
+# REQUIREMENT CLASS - COMPATIBILITY LAYER
+# ============================================================================
+
+
+class RequirementClass(str, Enum):
+    """
+    Backward-compatible Phase-2 requirement classification.
+
+    IMPORTANT
+    ---------
+
+    Older classifier/test code used the name ``RequirementClass`` for
+    requirement priority.
+
+    The canonical model now uses:
+
+        RequirementPriority
+
+    However, removing RequirementClass would break older imports and tests.
+
+    Therefore RequirementClass intentionally represents the SAME semantic
+    dimension as RequirementPriority.
+
+    This is NOT the requirement semantic type.
+
+    Example:
+
+        RequirementType.EXPERIENCE
+        RequirementPriority.PREFERRED
+
+    may also be viewed through:
+
+        RequirementClass.REQUIRED_PREFERENCE
+
+    for compatibility with older Phase-2 code.
+    """
+
+    REQUIRED = "required"
+
+    REQUIRED_PREFERENCE = "preferred"
+
+    CONTEXTUAL = "contextual"
+
+    @classmethod
+    def from_priority(
+        cls,
+        priority: RequirementPriority,
+    ) -> "RequirementClass":
+        """
+        Convert canonical RequirementPriority to compatibility class.
+        """
+
+        if not isinstance(
+            priority,
+            RequirementPriority,
+        ):
+            raise TypeError(
+                "priority must be RequirementPriority."
+            )
+
+        if priority == RequirementPriority.REQUIRED:
+            return cls.REQUIRED
+
+        if priority == RequirementPriority.PREFERRED:
+            return cls.REQUIRED_PREFERENCE
+
+        return cls.CONTEXTUAL
+
+    def to_priority(
+        self,
+    ) -> RequirementPriority:
+        """
+        Convert compatibility RequirementClass into canonical priority.
+        """
+
+        if self == RequirementClass.REQUIRED:
+            return RequirementPriority.REQUIRED
+
+        if self == RequirementClass.REQUIRED_PREFERENCE:
+            return RequirementPriority.PREFERRED
+
+        return RequirementPriority.CONTEXTUAL
+
+
+# ============================================================================
 # EXPERIENCE CATEGORY
 # ============================================================================
 
 
 class ExperienceCategory(str, Enum):
     """
-    Classification of what kind of experience is being requested.
+    Semantic category of requested experience.
 
     DOMAIN
         Industry/domain experience.
@@ -140,23 +250,24 @@ class ExperienceCategory(str, Enum):
             Quality Assurance
             Customer Service
             Supply Chain
+            Store Management
 
     TECHNOLOGY
-        Experience specifically tied to a technology/platform.
+        Technology/platform experience.
 
         Examples:
             SAP
             Salesforce
 
     METHODOLOGY
-        Experience tied to a methodology/process.
+        Methodology/process experience.
 
         Examples:
             Lean
             Six Sigma
 
     RESPONSIBILITY
-        Experience performing a particular responsibility.
+        Experience performing a responsibility.
 
         Examples:
             Auditing
@@ -164,8 +275,8 @@ class ExperienceCategory(str, Enum):
             Regulatory Compliance
 
     GENERAL
-        Generic experience where the JD does not provide enough semantic
-        information to classify it more specifically.
+        Generic experience where no more specific semantic classification
+        can safely be established.
 
     UNKNOWN
         Classification could not be established.
@@ -196,30 +307,10 @@ class JDRequirement:
     """
     One structured requirement interpreted from an existing JD profile.
 
-    This is an interpretation object.
+    This object does not perform extraction.
 
-    It does not perform extraction.
-
-    It preserves evidence from the existing knowledge representation so that
-    later stages can explain why a requirement exists.
-
-    Experience requirements are explicitly scoped.
-
-    Example:
-
-        requirement_type = EXPERIENCE
-        subject = "Food Safety"
-        experience_domain = "Food Safety"
-        experience_category = DOMAIN
-        minimum_years = 5
-
-    This allows the later matcher to distinguish:
-
-        Food Safety - 5 years
-
-    from:
-
-        General Labor - 10 years
+    It preserves evidence so later matching/analyzing stages can explain
+    why the requirement exists.
     """
 
     # ------------------------------------------------------------------
@@ -229,7 +320,7 @@ class JDRequirement:
     requirement_id: str
 
     # ------------------------------------------------------------------
-    # Classification
+    # Canonical classification
     # ------------------------------------------------------------------
 
     requirement_type: RequirementType
@@ -243,7 +334,7 @@ class JDRequirement:
     subject: str
 
     # ------------------------------------------------------------------
-    # Existing Knowledge References
+    # Existing knowledge references
     # ------------------------------------------------------------------
 
     entity_id: str = ""
@@ -251,7 +342,7 @@ class JDRequirement:
     domain: str = ""
 
     # ------------------------------------------------------------------
-    # Experience-Specific Classification
+    # Experience classification
     # ------------------------------------------------------------------
 
     experience_domain: str = ""
@@ -261,7 +352,7 @@ class JDRequirement:
     )
 
     # ------------------------------------------------------------------
-    # Evidence / Explainability
+    # Evidence
     # ------------------------------------------------------------------
 
     evidence: str = ""
@@ -275,7 +366,7 @@ class JDRequirement:
     confidence: float = 0.0
 
     # ------------------------------------------------------------------
-    # Convenience Semantic Flags
+    # Convenience flags
     # ------------------------------------------------------------------
 
     mandatory: bool = False
@@ -283,13 +374,13 @@ class JDRequirement:
     preferred: bool = False
 
     # ------------------------------------------------------------------
-    # Experience Metadata
+    # Experience metadata
     # ------------------------------------------------------------------
 
     minimum_years: Optional[float] = None
 
     # ------------------------------------------------------------------
-    # Additional Metadata
+    # Additional metadata
     # ------------------------------------------------------------------
 
     metadata: dict[str, Any] = field(
@@ -297,10 +388,36 @@ class JDRequirement:
     )
 
     # ------------------------------------------------------------------
+    # Compatibility property
+    # ------------------------------------------------------------------
+
+    @property
+    def requirement_class(
+        self,
+    ) -> RequirementClass:
+        """
+        Backward-compatible view of priority.
+
+        New code should use:
+
+            requirement.priority
+
+        Older code may continue using:
+
+            requirement.requirement_class
+        """
+
+        return RequirementClass.from_priority(
+            self.priority
+        )
+
+    # ------------------------------------------------------------------
     # Validation
     # ------------------------------------------------------------------
 
-    def __post_init__(self) -> None:
+    def __post_init__(
+        self,
+    ) -> None:
         """
         Validate the requirement contract.
         """
@@ -357,39 +474,43 @@ class JDRequirement:
             )
 
         try:
-
             confidence = float(
                 self.confidence
             )
-
         except (
             TypeError,
             ValueError,
         ) as exc:
-
             raise ValueError(
                 "JDRequirement.confidence "
                 "must be numeric."
             ) from exc
 
         if not 0.0 <= confidence <= 1.0:
-
             raise ValueError(
                 "JDRequirement.confidence "
                 "must be between 0 and 1."
             )
 
-        if (
-            self.minimum_years is not None
-            and float(
-                self.minimum_years
-            ) < 0
-        ):
+        if self.minimum_years is not None:
+            try:
+                years = float(
+                    self.minimum_years
+                )
+            except (
+                TypeError,
+                ValueError,
+            ) as exc:
+                raise ValueError(
+                    "JDRequirement.minimum_years "
+                    "must be numeric."
+                ) from exc
 
-            raise ValueError(
-                "JDRequirement.minimum_years "
-                "cannot be negative."
-            )
+            if years < 0:
+                raise ValueError(
+                    "JDRequirement.minimum_years "
+                    "cannot be negative."
+                )
 
         expected_mandatory = (
             self.priority
@@ -405,7 +526,6 @@ class JDRequirement:
             self.mandatory
             != expected_mandatory
         ):
-
             raise ValueError(
                 "JDRequirement.mandatory "
                 "must match requirement priority."
@@ -415,42 +535,31 @@ class JDRequirement:
             self.preferred
             != expected_preferred
         ):
-
             raise ValueError(
                 "JDRequirement.preferred "
                 "must match requirement priority."
             )
 
         # --------------------------------------------------------------
-        # Experience-specific validation
+        # Experience validation
         # --------------------------------------------------------------
 
         if (
             self.requirement_type
             == RequirementType.EXPERIENCE
         ):
-
             if not (
-                self.experience_domain
-                or self.subject
-            ):
-
+                self.experience_domain.strip()
+                if isinstance(
+                    self.experience_domain,
+                    str,
+                )
+                else False
+            ) and not self.subject.strip():
                 raise ValueError(
                     "Experience requirements "
                     "must identify an experience domain "
                     "or subject."
-                )
-
-            if (
-                self.minimum_years is not None
-                and float(
-                    self.minimum_years
-                ) < 0
-            ):
-
-                raise ValueError(
-                    "Experience minimum_years "
-                    "cannot be negative."
                 )
 
 
@@ -466,8 +575,7 @@ class JDRequirementProfile:
 
     The underlying DocumentKnowledgeProfile remains untouched.
 
-    This profile is the formal output of Phase 2 requirement interpretation
-    and becomes the input boundary for later matching logic.
+    This profile is the formal Phase-2 output.
     """
 
     # ------------------------------------------------------------------
@@ -482,7 +590,7 @@ class JDRequirementProfile:
     )
 
     # ------------------------------------------------------------------
-    # Priority Counts
+    # Priority counts
     # ------------------------------------------------------------------
 
     required_count: int = 0
@@ -492,7 +600,7 @@ class JDRequirementProfile:
     contextual_count: int = 0
 
     # ------------------------------------------------------------------
-    # Requirement Type Counts
+    # Requirement type counts
     # ------------------------------------------------------------------
 
     qualification_count: int = 0
@@ -504,7 +612,7 @@ class JDRequirementProfile:
     responsibility_count: int = 0
 
     # ------------------------------------------------------------------
-    # Experience Classification Counts
+    # Experience category counts
     # ------------------------------------------------------------------
 
     domain_experience_count: int = 0
@@ -520,20 +628,43 @@ class JDRequirementProfile:
     general_experience_count: int = 0
 
     # ------------------------------------------------------------------
-    # Overall Interpretation Confidence
+    # Overall confidence
     # ------------------------------------------------------------------
 
     confidence: float = 0.0
 
     # ------------------------------------------------------------------
-    # Additional interpretation metadata
+    # Metadata
     # ------------------------------------------------------------------
 
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(
+        default_factory=dict
+    )
+
+    # ------------------------------------------------------------------
+    # Convenience
+    # ------------------------------------------------------------------
 
     @property
-    def type_counts(self) -> dict[str, int]:
-        """Return counts for every requirement type without maintaining extra state."""
+    def total_count(
+        self,
+    ) -> int:
+        """
+        Return total requirement count.
+        """
+
+        return len(
+            self.requirements
+        )
+
+    @property
+    def type_counts(
+        self,
+    ) -> dict[str, int]:
+        """
+        Return counts for every RequirementType.
+        """
+
         return {
             item.value: sum(
                 requirement.requirement_type == item
@@ -542,13 +673,65 @@ class JDRequirementProfile:
             for item in RequirementType
         }
 
+    @property
+    def priority_counts(
+        self,
+    ) -> dict[str, int]:
+        """
+        Return counts for every RequirementPriority.
+        """
+
+        return {
+            item.value: sum(
+                requirement.priority == item
+                for requirement in self.requirements
+            )
+            for item in RequirementPriority
+        }
+
+    @property
+    def class_counts(
+        self,
+    ) -> dict[str, int]:
+        """
+        Backward-compatible requirement-class counts.
+
+        Preferred requirements are represented using the legacy key:
+
+            "preferred"
+
+        which corresponds to:
+
+            RequirementClass.REQUIRED_PREFERENCE
+        """
+
+        return {
+            RequirementClass.REQUIRED.value: sum(
+                requirement.priority
+                == RequirementPriority.REQUIRED
+                for requirement in self.requirements
+            ),
+            RequirementClass.REQUIRED_PREFERENCE.value: sum(
+                requirement.priority
+                == RequirementPriority.PREFERRED
+                for requirement in self.requirements
+            ),
+            RequirementClass.CONTEXTUAL.value: sum(
+                requirement.priority
+                == RequirementPriority.CONTEXTUAL
+                for requirement in self.requirements
+            ),
+        }
+
     # ------------------------------------------------------------------
     # Validation
     # ------------------------------------------------------------------
 
-    def __post_init__(self) -> None:
+    def __post_init__(
+        self,
+    ) -> None:
         """
-        Validate all derived counters against the actual requirements.
+        Validate all derived counters.
         """
 
         requirements = tuple(
@@ -566,10 +749,8 @@ class JDRequirementProfile:
                 requirement,
                 JDRequirement,
             )
-            for requirement
-            in requirements
+            for requirement in requirements
         ):
-
             raise TypeError(
                 "JDRequirementProfile.requirements "
                 "must contain only JDRequirement objects."
@@ -582,29 +763,25 @@ class JDRequirementProfile:
         expected_required = sum(
             requirement.priority
             == RequirementPriority.REQUIRED
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         expected_preferred = sum(
             requirement.priority
             == RequirementPriority.PREFERRED
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         expected_contextual = sum(
             requirement.priority
             == RequirementPriority.CONTEXTUAL
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         if (
             self.required_count
             != expected_required
         ):
-
             raise ValueError(
                 "required_count does not "
                 "match requirements."
@@ -614,7 +791,6 @@ class JDRequirementProfile:
             self.preferred_count
             != expected_preferred
         ):
-
             raise ValueError(
                 "preferred_count does not "
                 "match requirements."
@@ -624,7 +800,6 @@ class JDRequirementProfile:
             self.contextual_count
             != expected_contextual
         ):
-
             raise ValueError(
                 "contextual_count does not "
                 "match requirements."
@@ -637,36 +812,31 @@ class JDRequirementProfile:
         expected_qualification = sum(
             requirement.requirement_type
             == RequirementType.QUALIFICATION
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         expected_skill = sum(
             requirement.requirement_type
             == RequirementType.SKILL
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         expected_experience = sum(
             requirement.requirement_type
             == RequirementType.EXPERIENCE
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         expected_responsibility = sum(
             requirement.requirement_type
             == RequirementType.RESPONSIBILITY
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         if (
             self.qualification_count
             != expected_qualification
         ):
-
             raise ValueError(
                 "qualification_count does not "
                 "match requirements."
@@ -676,7 +846,6 @@ class JDRequirementProfile:
             self.skill_count
             != expected_skill
         ):
-
             raise ValueError(
                 "skill_count does not "
                 "match requirements."
@@ -686,7 +855,6 @@ class JDRequirementProfile:
             self.experience_count
             != expected_experience
         ):
-
             raise ValueError(
                 "experience_count does not "
                 "match requirements."
@@ -696,7 +864,6 @@ class JDRequirementProfile:
             self.responsibility_count
             != expected_responsibility
         ):
-
             raise ValueError(
                 "responsibility_count does not "
                 "match requirements."
@@ -706,40 +873,36 @@ class JDRequirementProfile:
         # Experience category counts
         # --------------------------------------------------------------
 
-        expected_domain_experience = sum(
+        expected_domain = sum(
             requirement.requirement_type
             == RequirementType.EXPERIENCE
             and requirement.experience_category
             == ExperienceCategory.DOMAIN
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
-        expected_functional_experience = sum(
+        expected_functional = sum(
             requirement.requirement_type
             == RequirementType.EXPERIENCE
             and requirement.experience_category
             == ExperienceCategory.FUNCTIONAL
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
-        expected_technology_experience = sum(
+        expected_technology = sum(
             requirement.requirement_type
             == RequirementType.EXPERIENCE
             and requirement.experience_category
             == ExperienceCategory.TECHNOLOGY
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
-        expected_methodology_experience = sum(
+        expected_methodology = sum(
             requirement.requirement_type
             == RequirementType.EXPERIENCE
             and requirement.experience_category
             == ExperienceCategory.METHODOLOGY
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         expected_responsibility_experience = sum(
@@ -747,24 +910,21 @@ class JDRequirementProfile:
             == RequirementType.EXPERIENCE
             and requirement.experience_category
             == ExperienceCategory.RESPONSIBILITY
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
-        expected_general_experience = sum(
+        expected_general = sum(
             requirement.requirement_type
             == RequirementType.EXPERIENCE
             and requirement.experience_category
             == ExperienceCategory.GENERAL
-            for requirement
-            in requirements
+            for requirement in requirements
         )
 
         if (
             self.domain_experience_count
-            != expected_domain_experience
+            != expected_domain
         ):
-
             raise ValueError(
                 "domain_experience_count does not "
                 "match requirements."
@@ -772,9 +932,8 @@ class JDRequirementProfile:
 
         if (
             self.functional_experience_count
-            != expected_functional_experience
+            != expected_functional
         ):
-
             raise ValueError(
                 "functional_experience_count does not "
                 "match requirements."
@@ -782,9 +941,8 @@ class JDRequirementProfile:
 
         if (
             self.technology_experience_count
-            != expected_technology_experience
+            != expected_technology
         ):
-
             raise ValueError(
                 "technology_experience_count does not "
                 "match requirements."
@@ -792,9 +950,8 @@ class JDRequirementProfile:
 
         if (
             self.methodology_experience_count
-            != expected_methodology_experience
+            != expected_methodology
         ):
-
             raise ValueError(
                 "methodology_experience_count does not "
                 "match requirements."
@@ -804,7 +961,6 @@ class JDRequirementProfile:
             self.responsibility_experience_count
             != expected_responsibility_experience
         ):
-
             raise ValueError(
                 "responsibility_experience_count does not "
                 "match requirements."
@@ -812,9 +968,8 @@ class JDRequirementProfile:
 
         if (
             self.general_experience_count
-            != expected_general_experience
+            != expected_general
         ):
-
             raise ValueError(
                 "general_experience_count does not "
                 "match requirements."
@@ -825,23 +980,19 @@ class JDRequirementProfile:
         # --------------------------------------------------------------
 
         try:
-
             confidence = float(
                 self.confidence
             )
-
         except (
             TypeError,
             ValueError,
         ) as exc:
-
             raise ValueError(
                 "JDRequirementProfile.confidence "
                 "must be numeric."
             ) from exc
 
         if not 0.0 <= confidence <= 1.0:
-
             raise ValueError(
                 "JDRequirementProfile.confidence "
                 "must be between 0 and 1."
@@ -854,14 +1005,15 @@ class JDRequirementProfile:
     @classmethod
     def from_requirements(
         cls,
-        requirements: list[JDRequirement],
+        requirements: list[JDRequirement]
+        | tuple[JDRequirement, ...],
         *,
         metadata: dict[str, Any] | None = None,
     ) -> "JDRequirementProfile":
         """
         Build a complete profile from requirement objects.
 
-        All summary counters are derived here rather than maintained manually.
+        All counters are derived from the actual requirements.
         """
 
         items = tuple(
@@ -869,46 +1021,33 @@ class JDRequirementProfile:
         )
 
         if not items:
-
             return cls(
                 requirements=(),
-
                 required_count=0,
-
                 preferred_count=0,
-
                 contextual_count=0,
-
                 qualification_count=0,
-
                 skill_count=0,
-
                 experience_count=0,
-
                 responsibility_count=0,
-
                 domain_experience_count=0,
-
                 functional_experience_count=0,
-
                 technology_experience_count=0,
-
                 methodology_experience_count=0,
-
                 responsibility_experience_count=0,
-
                 general_experience_count=0,
-
                 confidence=0.0,
-
-                metadata=dict(metadata or {}),
+                metadata=dict(
+                    metadata or {}
+                ),
             )
 
         confidence = (
             sum(
-                requirement.confidence
-                for requirement
-                in items
+                float(
+                    requirement.confidence
+                )
+                for requirement in items
             )
             / len(items)
         )
@@ -919,50 +1058,43 @@ class JDRequirementProfile:
             required_count=sum(
                 requirement.priority
                 == RequirementPriority.REQUIRED
-                for requirement
-                in items
+                for requirement in items
             ),
 
             preferred_count=sum(
                 requirement.priority
                 == RequirementPriority.PREFERRED
-                for requirement
-                in items
+                for requirement in items
             ),
 
             contextual_count=sum(
                 requirement.priority
                 == RequirementPriority.CONTEXTUAL
-                for requirement
-                in items
+                for requirement in items
             ),
 
             qualification_count=sum(
                 requirement.requirement_type
                 == RequirementType.QUALIFICATION
-                for requirement
-                in items
+                for requirement in items
             ),
 
             skill_count=sum(
                 requirement.requirement_type
                 == RequirementType.SKILL
-                for requirement
-                in items
+                for requirement in items
             ),
 
             experience_count=sum(
                 requirement.requirement_type
                 == RequirementType.EXPERIENCE
-                for requirement
-                in items
+                for requirement in items
             ),
 
             responsibility_count=sum(
                 requirement.requirement_type
                 == RequirementType.RESPONSIBILITY
-                for requirement
-                in items
+                for requirement in items
             ),
 
             domain_experience_count=sum(
@@ -970,8 +1102,7 @@ class JDRequirementProfile:
                 == RequirementType.EXPERIENCE
                 and requirement.experience_category
                 == ExperienceCategory.DOMAIN
-                for requirement
-                in items
+                for requirement in items
             ),
 
             functional_experience_count=sum(
@@ -979,8 +1110,7 @@ class JDRequirementProfile:
                 == RequirementType.EXPERIENCE
                 and requirement.experience_category
                 == ExperienceCategory.FUNCTIONAL
-                for requirement
-                in items
+                for requirement in items
             ),
 
             technology_experience_count=sum(
@@ -988,8 +1118,7 @@ class JDRequirementProfile:
                 == RequirementType.EXPERIENCE
                 and requirement.experience_category
                 == ExperienceCategory.TECHNOLOGY
-                for requirement
-                in items
+                for requirement in items
             ),
 
             methodology_experience_count=sum(
@@ -997,8 +1126,7 @@ class JDRequirementProfile:
                 == RequirementType.EXPERIENCE
                 and requirement.experience_category
                 == ExperienceCategory.METHODOLOGY
-                for requirement
-                in items
+                for requirement in items
             ),
 
             responsibility_experience_count=sum(
@@ -1006,8 +1134,7 @@ class JDRequirementProfile:
                 == RequirementType.EXPERIENCE
                 and requirement.experience_category
                 == ExperienceCategory.RESPONSIBILITY
-                for requirement
-                in items
+                for requirement in items
             ),
 
             general_experience_count=sum(
@@ -1015,8 +1142,7 @@ class JDRequirementProfile:
                 == RequirementType.EXPERIENCE
                 and requirement.experience_category
                 == ExperienceCategory.GENERAL
-                for requirement
-                in items
+                for requirement in items
             ),
 
             confidence=round(
@@ -1024,7 +1150,9 @@ class JDRequirementProfile:
                 4,
             ),
 
-            metadata=dict(metadata or {}),
+            metadata=dict(
+                metadata or {}
+            ),
         )
 
 
@@ -1036,6 +1164,7 @@ class JDRequirementProfile:
 __all__ = [
     "RequirementType",
     "RequirementPriority",
+    "RequirementClass",
     "ExperienceCategory",
     "JDRequirement",
     "JDRequirementProfile",
