@@ -152,4 +152,123 @@ CoverLetterService
                            │
                  Generate Cover Letter
                        Download
+       
+                       
+                                                EXISTING PROJECT
+                              │
+          ┌───────────────────┼───────────────────┐
+          │                   │                   │
+       Resume             JD Profile        Match Profile
+          │                   │                   │
+          └───────────────────┼───────────────────┘
+                              │
+                    ATS / Recommendations
+                              │
+                              ▼
+                CoverLetterContextBuilder
+                              │
+                              ▼
+                CoverLetterEvidenceSelector
+                              │
+                              ▼
+                    CoverLetterContext
+                              │
+                              ▼
+                CoverLetterGenerationPlan
+                              │
+                              ▼
+                  CoverLetterGenerator
+                              │
+                              ▼
+                         AI / LLM
+                              │
+                              ▼
+                       Draft Letter
+                              │
+                              ▼
+                     CoverLetterFixer
+                              │
+                 ┌────────────┴────────────┐
+                 │                         │
+                 ▼                         ▼
+          Evidence Checker          Quality Checker
+                 │                         │
+                 └────────────┬────────────┘
+                              ▼
+                   CoverLetterValidator
+                              │
+                    ┌─────────┴─────────┐
+                    │                   │
+                  FAIL                 PASS
+                    │                   │
+                    ▼                   ▼
+              Regenerate/Fix      Final Letter
+                                        │
+                                        ▼
+                          CoverLetterDocxBuilder
+                                        │
+                                        ▼
+                               cover_letter.docx
+                                        │
+                                        ▼
+                                Flask Endpoint
+                                        │
+                                        ▼
+                         Generate Cover Letter
+                                        │
+                                        ▼
+                                   Download
        """
+#pipe Line#
+
+"""
+CoverLetterInput
+       │
+       ▼
+CoverLetterContextBuilder
+       │
+       ▼
+CoverLetterContext
+       │
+       ▼
+CoverLetterEvidenceSelector
+       │
+       ▼
+CoverLetterEvidenceProfile
+       │
+       ▼
+CoverLetterGenerationPlanner
+       │
+       ▼
+CoverLetterGenerationPlan
+       │
+       ▼
+CoverLetterGenerator
+       │
+       ▼
+CoverLetterDraft
+       │
+       ▼
+CoverLetterFixer
+       │
+       ▼
+CoverLetterDraft
+       │
+       ▼
+CoverLetterValidator
+       │
+       ▼
+CoverLetterValidationResult
+       │
+       ▼
+CoverLetterFinalizer
+       │
+       ▼
+CoverLetterResult
+       │
+       ▼
+CoverLetterDocxBuilder
+       │
+       ▼
+CoverLetterDocument
+"""

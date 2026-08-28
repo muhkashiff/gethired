@@ -1839,11 +1839,35 @@ class JDRequirementClassifier:
             if requirement.evidence
         }
 
+        # Typical action verbs that indicate a responsibility (not a requirement)
+        ACTION_VERBS = re.compile(
+            r'^(conduct|monitor|check|maintain|perform|ensure|implement|coordinate|oversee|manage|plan|supervise|support|identify|approve|improve|inventory|manufacture|execute|develop|establish|direct|lead|train|communicate|report|analyze|audit|budget|control|govern|operate|optimize|reduce|release|schedule|store|utilize|fill|forecast|integrate|market|onboard|cycle)',
+            re.IGNORECASE,
+        )
+
+        # Patterns that indicate a credential, qualification, or requirement
+        REQUIREMENT_PATTERNS = re.compile(
+            r'(?:\b(?:bs|b\.?s\.?|bachelor|master|m\.?sc\.?|phd|diploma|degree|certification|age must be|must have|own bike|years of experience|relevant experience|fresh graduates|qualification|education))\b',
+            re.IGNORECASE,
+        )
+
+        # Patterns that indicate a section heading (skip these)
+        HEADING_PATTERNS = re.compile(
+            r'^(?:education\s*&\s*experience\s*requirements|qualifications|experience\s*requirements|job\s*requirements|requirements|key\s+responsibilities|description|location|department)$',
+            re.IGNORECASE,
+        )
+
         for evidence in structured_evidence:
+
+            evidence_text = evidence.evidence or ""
+
+            # Skip obvious section headings
+            if HEADING_PATTERNS.match(evidence_text.strip()):
+                continue
 
             normalized = (
                 self._normalize_evidence(
-                    evidence.evidence
+                    evidence_text
                 )
             )
 
@@ -1863,7 +1887,12 @@ class JDRequirementClassifier:
             ):
                 continue
 
-            requirement_type = {
+            # --------------------------------------------------------------
+            # Determine requirement type with content-based refinement
+            # --------------------------------------------------------------
+
+            # Start with the mapping from evidence.kind
+            base_type = {
                 "education": RequirementType.EDUCATION,
                 "experience": RequirementType.EXPERIENCE,
                 "language": RequirementType.LANGUAGE,
@@ -1889,12 +1918,66 @@ class JDRequirementClassifier:
                 RequirementType.OTHER,
             )
 
+            # Override based on content if we have better clues
+            text_lower = evidence_text.lower()
+            if "bs " in text_lower or "b.s." in text_lower or "bachelor" in text_lower or "master" in text_lower or "phd" in text_lower or "diploma" in text_lower or "degree" in text_lower:
+                requirement_type = RequirementType.EDUCATION
+            elif "experience" in text_lower or "years" in text_lower:
+                requirement_type = RequirementType.EXPERIENCE
+            elif "certification" in text_lower or "certified" in text_lower:
+                requirement_type = RequirementType.CERTIFICATION
+            else:
+                # Keep the base type, but if it's RESPONSIBILITY and the text does not start with an action verb,
+                # we might want to change it to QUALIFICATION.
+                if base_type == RequirementType.RESPONSIBILITY:
+                    # If it looks like a qualification (credential, requirement), use QUALIFICATION.
+                    if REQUIREMENT_PATTERNS.search(evidence_text):
+                        requirement_type = RequirementType.QUALIFICATION
+                    else:
+                        requirement_type = base_type
+                else:
+                    requirement_type = base_type
+
             priority = self._priority(
-                evidence.evidence,
+                evidence_text,
                 {
                     "priority": evidence.priority,
                 },
             )
+
+            # --------------------------------------------------------------
+            # ENHANCEMENT: upgrade priority for requirements-section items
+            # --------------------------------------------------------------
+            if evidence.section:
+                section_lower = evidence.section.lower()
+                if re.search(
+                    r'\b(?:requirements|education\s*&\s*experience|qualifications|experience\s*requirements|job\s*requirements)\b',
+                    section_lower,
+                    re.IGNORECASE,
+                ):
+                    if self._contains_preferred_language(evidence_text):
+                        if priority == RequirementPriority.CONTEXTUAL:
+                            priority = RequirementPriority.PREFERRED
+                    else:
+                        if priority == RequirementPriority.CONTEXTUAL:
+                            priority = RequirementPriority.REQUIRED
+
+            # --------------------------------------------------------------
+            # SECONDARY HEURISTIC: upgrade based on content
+            # --------------------------------------------------------------
+            if priority == RequirementPriority.CONTEXTUAL:
+                # If the text looks like a credential/requirement and does NOT start with an action verb,
+                # promote to REQUIRED (unless it contains preference language).
+                if REQUIREMENT_PATTERNS.search(evidence_text):
+                    if not ACTION_VERBS.match(evidence_text.strip()):
+                        if self._contains_preferred_language(evidence_text):
+                            priority = RequirementPriority.PREFERRED
+                        else:
+                            priority = RequirementPriority.REQUIRED
+
+            # --------------------------------------------------------------
+            # Duplicate subject protection.
+            # --------------------------------------------------------------
 
             if evidence.kind in {
                 "qualification",
@@ -1975,6 +2058,10 @@ class JDRequirementClassifier:
                 if duplicate:
                     continue
 
+            # --------------------------------------------------------------
+            # Avoid duplicate responsibilities.
+            # --------------------------------------------------------------
+
             if evidence.kind == "responsibility":
 
                 if any(
@@ -2009,7 +2096,7 @@ class JDRequirementClassifier:
 
                 subject=(
                     evidence.subject
-                    or evidence.evidence
+                    or evidence_text
                 ),
 
                 entity_id="",
@@ -2027,11 +2114,11 @@ class JDRequirementClassifier:
                 ),
 
                 evidence=(
-                    evidence.evidence
+                    evidence_text
                 ),
 
                 source_statement=(
-                    evidence.evidence
+                    evidence_text
                 ),
 
                 confidence=self._clamp(
@@ -2086,7 +2173,6 @@ class JDRequirementClassifier:
                 seen,
                 requirement,
             )
-
     # =========================================================================
     # PROFILE FALLBACK
     # =========================================================================
